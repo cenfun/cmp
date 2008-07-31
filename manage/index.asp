@@ -80,7 +80,7 @@ sub login()
 		Exit Sub
 	End If
 	Session("verifycode")=""
-	set rs=conn.Execute("select * from cfadmin where username='"&username&"' and password='"&PassWord&"'")
+	set rs=conn.Execute("select * from cmp_admin where username='"&username&"' and password='"&PassWord&"'")
 	if rs.eof and rs.bof then
 		rs.close
 		set rs=nothing
@@ -93,7 +93,7 @@ sub login()
 		'session超时时间
 		Session.Timeout=45
 		ip=UserTrueIP
-		conn.Execute("Update cfadmin Set Lasttime="&SqlNowString&",LastIP='"&ip&"' Where UserName='"&UserName&"'")
+		conn.Execute("Update cmp_admin Set Lasttime="&SqlNowString&",LastIP='"&ip&"' Where UserName='"&UserName&"'")
 		rs.close
 		set rs=nothing
 		Response.Redirect "manage.asp"

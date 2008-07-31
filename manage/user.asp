@@ -22,7 +22,7 @@ sub savepass()
 	PassWord=md5(request("password"),16)
 	PassWord1=md5(request("password1"),16)
 	ip=UserTrueIP
-	set rs=conn.Execute("select * from cfadmin where password='"&PassWord&"'")
+	set rs=conn.Execute("select * from cmp_admin where password='"&PassWord&"'")
 	if rs.eof then
 		rs.close
 		set rs=nothing
@@ -34,7 +34,7 @@ sub savepass()
 		rs.close
 		set rs=nothing
 		'Response.write PassWord1
-		conn.Execute("Update cfadmin Set username='"&UserName&"',[password]='"&password1&"',Lasttime="&SqlNowString&",LastIP='"&ip&"' ")
+		conn.Execute("Update cmp_admin Set username='"&UserName&"',[password]='"&password1&"',Lasttime="&SqlNowString&",LastIP='"&ip&"' ")
 		Session(CookieName & "_UserName")=UserName
 		'session超时时间
 		Session.Timeout=45
