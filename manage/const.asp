@@ -25,7 +25,17 @@ site_email = Arr_system_info(2,0)
 
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
-	If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
+If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
+
+'过滤SQL非法字符
+Function Checkstr(Str)
+	If Isnull(Str) Then
+		CheckStr = ""
+		Exit Function 
+	End If
+	Str = Replace(Str,Chr(0),"")
+	CheckStr = Replace(Str,"'","''")
+End Function
 
 Sub showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
 	dim zh,en,str

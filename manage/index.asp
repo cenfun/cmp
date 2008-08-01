@@ -74,8 +74,8 @@ end sub
 sub reg()
 	menu()
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="420">
-  <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="450">
+  <form action="index.asp?action=login" method="post" onsubmit="return check_reg(this);">
     <tr>
       <th colspan="2">用户注册</th>
     </tr>
@@ -122,10 +122,11 @@ window.location = "./";
 end sub
 
 sub login()
-	Dim ip,UserName,PassWord
-	UserName=Replace(Request("username"),"'","")
-	PassWord=md5(request("password"),16)
-	If Request("verifycode")="" or Request("verifycode")<>session("verifycode") Then
+	Dim ip,UserName,PassWord,verifycode
+	UserName=Checkstr(Request.Form("username"))
+	PassWord=md5(request.Form("password")+UserName,16)
+	verifycode=Checkstr(Request.Form("verifycode"))
+	If verifycode="" or verifycode<>session("verifycode") Then
 		session("verifycode")=""
 		goback("验证码输入有误！请重新输入正确的信息。")
     	response.End
@@ -136,7 +137,7 @@ sub login()
 		Exit Sub
 	End If
 	Session("verifycode")=""
-	set rs=conn.Execute("select * from cmp_admin where username='"&username&"' and password='"&PassWord&"'")
+	set rs=conn.Execute("select * from cmp_user where username='"&UserName&"' and password='"&PassWord&"'")
 	if rs.eof and rs.bof then
 		rs.close
 		set rs=nothing
@@ -144,30 +145,19 @@ sub login()
     	response.End
 		Exit Sub
 	else
-		Session(CookieName & "_flag")="cfmaster"
-		Session(CookieName & "_UserName")=Rs("UserName")
+		Session(CookieName & "_flag")="cmp_admin"
+		Session(CookieName & "_username")=Rs("username")
 		'session超时时间
 		Session.Timeout=45
 		ip=UserTrueIP
-		conn.Execute("Update cmp_admin Set Lasttime="&SqlNowString&",LastIP='"&ip&"' Where UserName='"&UserName&"'")
+		sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&ip&"' Where username='"&UserName&"'"
+		response.Write(sql)
+		conn.Execute(sql)
 		rs.close
 		set rs=nothing
-		Response.Redirect "manage.asp"
+		Response.Redirect "index.asp"
 	end if	
 end sub
-
-function ChkLoginIP(AcceptIP,ChkIp)
-	Dim i,LoginIP,TempIP
-	ChkLoginIP = False
-	If Instr("|"&AcceptIP&"|","|"&ChkIp&"|") Then ChkLoginIP = True : Exit Function
-	LoginIP = Split(ChkIp,".")
-	TempIP = LoginIP(0)&"."&LoginIP(1)&"."&LoginIP(2)&".*"
-	If Instr("|"&AcceptIP&"|","|"&TempIP&"|") Then ChkLoginIP = True : Exit Function
-	TempIP = LoginIP(0)&"."&LoginIP(1)&".*.*"
-	If Instr("|"&AcceptIP&"|","|"&TempIP&"|") Then ChkLoginIP = True : Exit Function
-	TempIP = LoginIP(0)&".*.*.*"
-	If Instr("|"&AcceptIP&"|","|"&TempIP&"|") Then ChkLoginIP = True : Exit Function
-end function
 
 sub logout()
 	Session(CookieName & "_flag")=""
