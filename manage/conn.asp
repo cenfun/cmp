@@ -6,21 +6,22 @@ Server.ScriptTimeOut = 90
 Session.CodePage = 65001
 Session.LCID = 2057
 
-Dim sitename,siteurl
+Dim sitename,siteurl,siteemail,sitedb
+'站点名称
 sitename = "CMP在线管理系统"
+'站点网站
 siteurl = "http://bbs.cenfun.com/"
+'管理员邮箱
+siteemail = "cenfun@gmail.com"
+'站点数据库路径
+sitedb = "data/#cmp3_2008.mdb"
 
-Dim Startime
-Dim SqlNowString,SystemTime,Cenfun,template,UserOnline
-Dim Conn,Plus_Conn,Db,MyDbPath
-Dim FoundErr
+
+'/////////////////////////////////////////
+Dim Startime,SqlNowString,SystemTime
+Dim conn,rs,sql,FoundErr,ErrMsg,SucMsg
 FoundErr=False 
-Dim ErrMsg,SucMsg
-Dim Rs,sql,i,jc,jcs
 Startime = Timer()
-'数据库路径
-MyDbPath = ""
-Db = "data/#cmp3_2008.mdb"
 SqlNowString = "Now()"
 SystemTime=Now()
 '站点cookies唯一标识
@@ -28,7 +29,7 @@ Const CookieName="cenfun_cmp3"
 '数据连接
 Sub ConnectionDatabase
 	Dim ConnStr
-		ConnStr = "Provider = Microsoft.Jet.OLEDB.4.0;Data Source = " & Server.MapPath(MyDbPath & db)
+		ConnStr = "Provider = Microsoft.Jet.OLEDB.4.0;Data Source = " & Server.MapPath(sitedb)
 	On Error Resume Next
 	Set conn = Server.CreateObject("ADODB.Connection")
 	conn.open ConnStr
@@ -39,6 +40,5 @@ Sub ConnectionDatabase
 		Response.End
 	End If
 End Sub
-If Not IsObject(Conn) Then ConnectionDatabase
-'head
+If Not IsObject(conn) Then ConnectionDatabase
 %>

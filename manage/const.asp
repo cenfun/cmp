@@ -89,10 +89,19 @@ Sub header()
 end sub
 
 sub menu()
-If Session(CookieName & "_flag")<>"" then
-end if
+
+
 %>
-<div id="menu"><a href="manage.asp">播放器管理</a> | <a href="user.asp">管理密码修改</a> | <a href="login.asp?action=out">退出</a></div>
+<div id="menu">
+  <%If Session(CookieName & "_flag")<>"" then%>
+  <a href="manage.asp">播放器管理</a> |
+  <%end if%>
+  <%If Session(CookieName & "_user")<>"" then%>
+  <a href="user.asp">配置编辑</a> | <a href="user.asp">列表编辑</a> | <a href="user.asp">个人资料</a> | <a href="login.asp?action=out">退出</a>
+  <%else%>
+  <a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
+  <%end if%>
+</div>
 <%
 end sub
 
@@ -157,7 +166,9 @@ End Sub
 
 Sub footer()
 %>
-<div id="footer">Copyright &copy; <a href="<%=siteurl%>" target="_blank"><%=sitename%></a>. All Rights Reserved.</div>
+<div id="footer"><span>
+  <script src="http://js.users.51.la/805766.js" type="text/javascript"></script>
+  </span>Copyright &copy; <a href="<%=siteurl%>" target="_blank"><%=sitename%></a>. All Rights Reserved.</div>
 <%
 response.Write("</body></html>")
 End Sub
