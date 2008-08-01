@@ -8,6 +8,8 @@ label input { height:14px; }
 .tableborder { margin:0px auto; border:1px solid #CAD9EA; margin-bottom:10px; }
 .tableborder th { padding:5px 3px; border-bottom:1px solid #CAD9EA; }
 .tableborder td { padding:2px 2px; line-height:20px; }
+.list { }
+.list li { list-style:inside; }
 #menu { background:url(top_bg.gif); height:32px; line-height:32px; color:#FFFFFF; font-weight:bold; padding-left:10px; margin-bottom:10px; text-align:center; }
 #menu a:link, #menu a:visited { color:#FFFFFF; font-weight:bold; line-height:32px; padding:0px 10px; }
 #menu a:hover { text-decoration:underline; }

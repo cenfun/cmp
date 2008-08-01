@@ -59,7 +59,13 @@ sub main()
     <th>相关信息</th>
   </tr>
   <tr>
-    <td>&nbsp;</td>
+    <td><ul class="list">
+        <li>管理员的默认帐号密码都为：admin </li>
+        <li>安全起见，请在第一次登录后将管理员的用户名或密码修改，请在conn.asp文件中对数据库路径和名称进行修改(默认为data/#cmp3_2008.mdb，推荐数据库文件名中加#符号，防止被猜测下载)，站点名称地址email等信息也在conn.asp文件修改</li>
+        <li>管理员可以开启和关闭多用户注册，用户注册后需要管理员审核。管理员可以管理预存皮肤skins和插件plugins，以供普通用户选择使用</li>
+        <li>普通用户激活后(审核通过)，可以登录系统管理自己的配置config和列表list，修改用户信息以及获得播放器调用地址</li>
+        <li>更多信息请进CMP交流论坛:<a href="http://bbs.cenfun.com/" target="_blank">http://bbs.cenfun.com/</a></li>
+      </ul></td>
   </tr>
 </table>
 <%
