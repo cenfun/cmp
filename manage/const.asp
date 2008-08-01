@@ -1,4 +1,28 @@
 ﻿<%
+Dim Arr_system_info
+IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
+	set rs=conn.Execute("select * from cmp_config")
+	If rs.EOF And rs.BOF Then
+		Redim Arr_system_info(2,0)
+	Else
+		Arr_system_info=rs.GetRows
+	End If
+	rs.Close
+	Set rs=Nothing
+	Application.Lock
+	Application(CookieName&"_Arr_system_info")=Arr_system_info
+	Application.UnLock
+End IF
+
+Arr_system_info=Application(CookieName&"_Arr_system_info")
+Dim site_name,site_url,site_email
+'站点名称
+site_name = Arr_system_info(0,0)
+'站点网站
+site_url = Arr_system_info(1,0)
+'管理员邮箱
+site_email = Arr_system_info(2,0)
+
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 	If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
@@ -80,7 +104,7 @@ Sub header()
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="keywords" content="CMP,Cenfun">
 <meta name="description" content="Design By Cenfun.com">
-<title><%=sitename%></title>
+<title><%=site_name%></title>
 <link rel="stylesheet" type="text/css" href="images/main.css" />
 <script type="text/javascript" src="images/main.js"></script>
 </head>
@@ -168,7 +192,7 @@ Sub footer()
 %>
 <div id="footer"><span>
   <script src="http://js.users.51.la/805766.js" type="text/javascript"></script>
-  </span>Copyright &copy; <a href="<%=siteurl%>" target="_blank"><%=sitename%></a>. All Rights Reserved.</div>
+  </span>Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.</div>
 <%
 response.Write("</body></html>")
 End Sub
