@@ -5,6 +5,8 @@
 header()
 if Request.QueryString("action")="login" then
 	login()
+elseif Request.QueryString("action")="reg" then
+	reg()
 elseif Request.QueryString("action")="logout" then
 	logout()
 else
@@ -22,7 +24,6 @@ sub main()
 	loop
 	session("verifycode")=rndnum
 %>
-<div> </div>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="420">
   <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
     <tr>
@@ -60,6 +61,47 @@ sub main()
   <tr>
     <td>&nbsp;</td>
   </tr>
+</table>
+<%
+end sub
+
+sub reg()
+	menu()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="420">
+  <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
+    <tr>
+      <th colspan="2">用户注册</th>
+    </tr>
+    <tr>
+      <td align="right">用户名：</td>
+      <td><input name="username" type="text" id="admin" size="20" tabindex="1" /></td>
+    </tr>
+    <tr>
+      <td align="right">密　码：</td>
+      <td><input name="password" type="password" id="password" size="20" tabindex="2" /></td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><input name="submit" type="submit" value="登录" style="width:50px;" tabindex="4" /></td>
+    </tr>
+  </form>
 </table>
 <%
 end sub
