@@ -161,6 +161,7 @@ end sub
 
 sub logout()
 	Session(CookieName & "_flag")=""
-	Response.Redirect("./")
+	Session(CookieName & "_username")=""
+	Response.Redirect("index.asp")
 end sub
 %>

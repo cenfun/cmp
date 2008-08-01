@@ -130,8 +130,8 @@ sub menu()
   <%If Session(CookieName & "_flag")<>"" then%>
   <a href="manage.asp">播放器管理</a> |
   <%end if%>
-  <%If Session(CookieName & "_user")<>"" then%>
-  <a href="user.asp">配置编辑</a> | <a href="user.asp">列表编辑</a> | <a href="user.asp">个人资料</a> | <a href="login.asp?action=out">退出</a>
+  <%If Session(CookieName & "_username")<>"" then%>
+  <a href="user.asp">配置编辑</a> | <a href="user.asp">列表编辑</a> | <a href="user.asp">个人资料</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
   <a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
   <%end if%>
