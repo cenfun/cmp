@@ -24,19 +24,19 @@ sub main()
 	loop
 	session("verifycode")=rndnum
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="420">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="450">
   <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
     <tr>
       <th colspan="3">用户登录</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td><input name="username" type="text" id="admin" size="20" tabindex="1" /></td>
+      <td><input name="username" type="text" id="admin" size="25" tabindex="1" /></td>
       <td>还没有播放器？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">注册新用户</span></a></td>
     </tr>
     <tr>
       <td align="right">密　码：</td>
-      <td><input name="password" type="password" id="password" size="20" tabindex="2" /></td>
+      <td><input name="password" type="password" id="password" size="25" tabindex="2" /></td>
       <td><label for="autologin">
         <input type="checkbox" name="autologin" id="autologin" tabindex="6" />
         下次自动登录</label></td>
@@ -54,15 +54,15 @@ sub main()
     </tr>
   </form>
 </table>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="420">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="450">
   <tr>
     <th>相关信息</th>
   </tr>
   <tr>
     <td><ul class="list">
-        <li>管理员的默认帐号密码都为：admin </li>
+        <li>管理员的默认帐号和密码为：admin </li>
         <li>安全起见，请在第一次登录后将管理员的用户名或密码修改，请在conn.asp文件中对数据库路径和名称进行修改(默认为data/#cmp3_2008.mdb，推荐数据库文件名中加#符号，防止被猜测下载)，站点名称地址email等信息也在conn.asp文件修改</li>
-        <li>管理员可以开启和关闭多用户注册，用户注册后需要管理员审核。管理员可以管理预存皮肤skins和插件plugins，以供普通用户选择使用</li>
+        <li>管理员可以开启和关闭多用户注册，用户注册后需要管理员审核；管理员可以管理预存皮肤skins和插件plugins，以供普通用户选择使用；管理员可以删除普通用户以及修改站点信息等。</li>
         <li>普通用户激活后(审核通过)，可以登录系统管理自己的配置config和列表list，修改用户信息以及获得播放器调用地址</li>
         <li>更多信息请进CMP交流论坛:<a href="http://bbs.cenfun.com/" target="_blank">http://bbs.cenfun.com/</a></li>
       </ul></td>
