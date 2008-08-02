@@ -201,6 +201,7 @@ End Sub
 Sub footer()
 %>
 <div id="footer"><span>
+  <!--页底页面统计，请更换成您自己的： -->
   <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
   </span>Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.</div>
 <%
