@@ -201,7 +201,7 @@ End Sub
 Sub footer()
 %>
 <div id="footer"><span>
-  <script src="http://js.users.51.la/805766.js" type="text/javascript"></script>
+  <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
   </span>Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.</div>
 <%
 response.Write("</body></html>")
