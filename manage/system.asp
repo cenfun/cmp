@@ -57,15 +57,15 @@ sub config()
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td>生成文件的目录：</td>
-              <td><input name="xml_path" type="text" id="xml_path" value="xml" /></td>
+              <td><input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" /></td>
             </tr>
             <tr>
               <td>模板配置文件名：</td>
-              <td><input name="xml_config" type="text" id="xml_config" value="c.xml" /></td>
+              <td><input name="xml_config" type="text" id="xml_config" value="<%=xml_config%>" /></td>
             </tr>
             <tr>
               <td>模板列表文件名：</td>
-              <td><input name="xml_list" type="text" id="xml_list" value="l.xml" /></td>
+              <td><input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
             </tr>
           </table>
         </div></td>
@@ -90,6 +90,13 @@ function check(o){
 		alert("站点名称不能为空！");
 		o.site_name.focus();
 		return false;
+	}
+	if(o.xml_make.checked) {
+		if(o.xml_config.value == o.xml_list.value){
+			alert("模板配置和列表的名称不能相同！");
+			o.xml_config.focus();
+			return false;
+		}
 	}
 	return true;
 }
