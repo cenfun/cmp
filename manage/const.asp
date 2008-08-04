@@ -27,6 +27,12 @@ dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
 
+'检测用户登录
+function passport()
+	If Session(CookieName & "_username")="" Then
+		response.Redirect("index.asp")
+	end if
+end function
 '过滤SQL非法字符
 Function Checkstr(Str)
 	If Isnull(Str) Then
@@ -127,7 +133,7 @@ sub menu()
 
 %>
 <div id="menu">
-  <%If Session(CookieName & "_flag")<>"" then%>
+  <%If Session(CookieName & "_admin")<>"" then%>
   <a href="manage.asp">播放器管理</a> |
   <%end if%>
   <%If Session(CookieName & "_username")<>"" then%>
@@ -200,10 +206,10 @@ End Sub
 
 Sub footer()
 %>
-<div id="footer"><span>
+<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.<span>
   <!--页底页面统计，请更换成您自己的： -->
   <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
-  </span>Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.</div>
+  </span></div>
 <%
 response.Write("</body></html>")
 End Sub

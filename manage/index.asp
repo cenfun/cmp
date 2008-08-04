@@ -24,37 +24,32 @@ sub main()
 	loop
 	session("verifycode")=rndnum
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="450">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
   <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
     <tr>
-      <th colspan="3">用户登录</th>
+      <th colspan="2">用户登录</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td><input name="username" type="text" id="admin" size="25" tabindex="1" /></td>
-      <td>还没有播放器？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">注册新用户</span></a></td>
+      <td><input name="username" type="text" id="admin" size="25" tabindex="1" />
+        还没有播放器？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">注册新用户</span></a></td>
     </tr>
     <tr>
       <td align="right">密　码：</td>
       <td><input name="password" type="password" id="password" size="25" tabindex="2" /></td>
-      <td><label for="autologin">
-        <input type="checkbox" name="autologin" id="autologin" tabindex="6" />
-        下次自动登录</label></td>
     </tr>
     <tr>
       <td align="right">验证码：</td>
       <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" />
         <span class="verifycode"><%=session("verifycode")%></span></td>
-      <td>&nbsp;</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
       <td><input name="submit" type="submit" value="登录" style="width:50px;" tabindex="4" /></td>
-      <td>&nbsp;</td>
     </tr>
   </form>
 </table>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="450">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
   <tr>
     <th>相关信息</th>
   </tr>
@@ -74,7 +69,7 @@ end sub
 sub reg()
 	menu()
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="450">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
   <form action="index.asp?action=login" method="post" onsubmit="return check_reg(this);">
     <tr>
       <th colspan="2">用户注册</th>
@@ -122,7 +117,7 @@ window.location = "./";
 end sub
 
 sub login()
-	Dim ip,UserName,PassWord,verifycode
+	Dim UserName,PassWord,verifycode
 	UserName=Checkstr(Request.Form("username"))
 	PassWord=md5(request.Form("password")+UserName,16)
 	verifycode=Checkstr(Request.Form("verifycode"))
@@ -145,23 +140,26 @@ sub login()
     	response.End
 		Exit Sub
 	else
-		Session(CookieName & "_flag")="cmp_admin"
-		Session(CookieName & "_username")=Rs("username")
 		'session超时时间
 		Session.Timeout=45
-		ip=UserTrueIP
-		sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&ip&"' Where username='"&UserName&"'"
-		response.Write(sql)
+		Session(CookieName & "_username")=UserName
+		if rs("isadmin") = "1" then
+			Session(CookieName & "_admin")="cmp_admin"
+		else
+			Session(CookieName & "_admin")=""
+		end if
+		sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&UserTrueIP&"' Where username='"&UserName&"'"
+		'response.Write(sql)
 		conn.Execute(sql)
 		rs.close
 		set rs=nothing
-		Response.Redirect "index.asp"
+		Response.Redirect "manage.asp"
 	end if	
 end sub
 
 sub logout()
-	Session(CookieName & "_flag")=""
 	Session(CookieName & "_username")=""
+	Session(CookieName & "_admin")=""
 	Response.Redirect("index.asp")
 end sub
 %>

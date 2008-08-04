@@ -2,10 +2,8 @@
 <!--#include file="const.asp"-->
 <!--#include file="md5.asp"-->
 <%
-If Session(CookieName & "_flag")="" Then
-	ErrMsg=ErrMsg&"<li>超时退出或者尚未登录！请退出或重新<a href=login.asp target=_top>登录</a>页面。"
-	Cenfun_error()
-end if
+passport()
+
 Select Case Request("action")
 Case "savepass"
 	Call savepass()

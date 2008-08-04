@@ -14,6 +14,6 @@ label input { height:14px; }
 #menu a:link, #menu a:visited { color:#FFFFFF; font-weight:bold; line-height:32px; padding:0px 10px; }
 #menu a:hover { text-decoration:underline; }
 #footer { text-align:center; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; }
-#footer span { float:right; display:none; }
+#footer span { display:none; }
 #footer a:link, #footer a:visited { color:#666666; }
 .verifycode { font-size:14px; color:#ffffff; background-color:#000000; width:50px; font-weight:bold; padding:0px 5px; font-family:"Times New Roman", Times, serif; }
