@@ -118,8 +118,9 @@ Sub header()
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="keywords" content="CMP,Cenfun">
-<meta name="description" content="Design By Cenfun.com">
+<meta name="Keywords" content="CMP,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
+<meta name="Description" content="CenFun Music Player v3.0 - bbs.cenfun.com" />
+<meta name="copyright" content="2006-2008 Cenfun.Com" />
 <title><%=site_name%></title>
 <link rel="stylesheet" type="text/css" href="images/main.css" />
 <script type="text/javascript" src="images/main.js"></script>
@@ -134,10 +135,11 @@ sub menu()
 %>
 <div id="menu">
   <%If Session(CookieName & "_admin")<>"" then%>
-  <a href="manage.asp">播放器管理</a> |
+  <a href="system.asp?action=config">系统配置</a> |
+  <a href="system.asp?action=user">用户管理</a> |
   <%end if%>
   <%If Session(CookieName & "_username")<>"" then%>
-  <a href="user.asp">配置编辑</a> | <a href="user.asp">列表编辑</a> | <a href="user.asp">个人资料</a> | <a href="index.asp?action=logout">退出</a>
+  <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=userinfo">个人资料</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
   <a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
   <%end if%>
