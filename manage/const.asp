@@ -133,14 +133,14 @@ end sub
 
 sub menu()
 %>
-<div id="menu"><span><%=site_name%></span>
+<div id="menu">
   <%If Session(CookieName & "_username")<>"" then%>
   <%If Session(CookieName & "_admin")<>"" then%>
   <a href="system.asp?action=config">系统配置</a> | <a href="system.asp?action=user">用户管理</a> |
   <%end if%>
   <a href="manage.asp?action=userinfo">个人资料</a> | <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=show">调用地址</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
-  <a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
+  <span><%=site_name%></span><a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
   <%end if%>
 </div>
 <%
@@ -200,7 +200,7 @@ End Sub
 Sub footer()
 %>
 <div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.<span>
-  <!--页底页面统计，请更换成您自己的： -->
+  <!--页底站点统计，请更换成您自己的： -->
   <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
   </span></div>
 <%

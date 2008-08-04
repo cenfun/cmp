@@ -26,7 +26,7 @@ footer()
 
 sub main()
 %>
-
+<div align="center">登录成功！请选择以上功能菜单进行操作。</div>
 <%
 end sub
 
