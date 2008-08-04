@@ -1,56 +1,28 @@
 ﻿<!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
+<!--#include file="md5.asp"-->
 <%
-passport()
+'检测用户是否登录
+If Session(CookieName & "_username")="" Then
+	response.Redirect("index.asp")
+end if
 '//////////////////////////////
-Select Case Request("action")
-Case "manage"
-	Call guide()
-	Call manage()
-	Call Footer()
-Case "save_manage"
-	Call guide()
-	Call save_manage()	
-	Call Footer()
-Case "class_manage"
-	Call guide()
-	Call class_manage()
-	Call Footer()
-Case "save_class_manage"
-	Call guide()
-	Call save_class_manage()
-	Call Footer()
+header()
+menu()
+Select Case Request.QueryString("action")
+Case "userinfo"
+	userinfo()
 Case "config"
-	Call guide()
-	Call config()
-	Call Footer()
-Case "save_config"
-	Call guide()
-	Call save_config()
-	Call Footer()
-Case "make_xml"
-	Call guide()
-	Call make_xml()
-	Call Footer()
+	config()
+Case "list"
+	list()
 Case "show"
-	Call guide()
-	Call show()
-	Call Footer()
-Case "check_music_name"
-	Call check_music_name()
-Case "make_lrc"
-	Call make_lrc()
-	Call Footer()
+	show()
 Case Else
-	Call guide()
-	Call main()
-	Call Footer()
+	main()
 End Select
-If Errmsg<>"" Then cenfun_error()
+footer()
 
-sub guide()
-
-end sub
 
 sub main()
 %>
@@ -58,8 +30,16 @@ sub main()
 <%
 end sub
 
-sub manage()
+sub userinfo()
+end sub
 
+sub config()
+end sub
+
+sub list()
+end sub
+
+sub show()
 end sub
 
 Sub save_manage()
@@ -124,10 +104,6 @@ if saveaction="add" then
 end if
 end sub
 
-sub class_manage()
-
-end sub
-
 sub save_config()
 dim cflist,bg,scene,ads,readme,cfversion,copyright,other
 	cflist=request("cflist")
@@ -176,10 +152,6 @@ Function iCheckxml(Str)
 	iCheckxml = Str
 End Function
 
-sub make_xml()
-
-end sub
-
 function make_file(str,path)
     dim fs,fsowrite
 	on error resume next
@@ -215,16 +187,4 @@ function make_cflist_music(title,url,lrc,content,pic,x,y,w,h,s,a,c,u,scene)
 		str=str&"</m>"
 	make_cflist_music=str	
 end function
-
-sub check_music_name()
-
-end sub
-
-sub make_lrc()
-
-end sub
-
-sub show()
-
-end sub
 %>

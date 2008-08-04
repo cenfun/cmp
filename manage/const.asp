@@ -27,12 +27,6 @@ dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
 
-'检测用户登录
-function passport()
-	If Session(CookieName & "_username")="" Then
-		response.Redirect("index.asp")
-	end if
-end function
 '过滤SQL非法字符
 Function Checkstr(Str)
 	If Isnull(Str) Then
@@ -130,16 +124,13 @@ Sub header()
 end sub
 
 sub menu()
-
-
 %>
-<div id="menu">
-  <%If Session(CookieName & "_admin")<>"" then%>
-  <a href="system.asp?action=config">系统配置</a> |
-  <a href="system.asp?action=user">用户管理</a> |
-  <%end if%>
+<div id="menu"><span><%=site_name%></span>
   <%If Session(CookieName & "_username")<>"" then%>
-  <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=userinfo">个人资料</a> | <a href="index.asp?action=logout">退出</a>
+  <%If Session(CookieName & "_admin")<>"" then%>
+  <a href="system.asp?action=config">系统配置</a> | <a href="system.asp?action=user">用户管理</a> |
+  <%end if%>
+  <a href="manage.asp?action=userinfo">个人资料</a> | <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=show">预览效果</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
   <a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
   <%end if%>

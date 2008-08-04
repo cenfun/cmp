@@ -3,15 +3,16 @@
 <!--#include file="md5.asp"-->
 <% 
 header()
-if Request.QueryString("action")="login" then
+Select Case Request.QueryString("action")
+Case "login"
 	login()
-elseif Request.QueryString("action")="reg" then
+Case "reg"
 	reg()
-elseif Request.QueryString("action")="logout" then
+Case "logout"
 	logout()
-else
+Case Else
 	main()
-end if
+End Select
 footer()
 
 sub main()
@@ -32,11 +33,12 @@ sub main()
     <tr>
       <td align="right">用户名：</td>
       <td><input name="username" type="text" id="admin" size="25" tabindex="1" />
-        还没有播放器？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">注册新用户</span></a></td>
+        还没有CMP？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">注册新用户</span></a></td>
     </tr>
     <tr>
       <td align="right">密　码：</td>
-      <td><input name="password" type="password" id="password" size="25" tabindex="2" /></td>
+      <td><input name="password" type="password" id="password" size="25" tabindex="2" />
+        忘记密码？<a href="mailto:<%=site_email%>" target="_blank">联系管理员</a></td>
     </tr>
     <tr>
       <td align="right">验证码：</td>
@@ -111,7 +113,7 @@ sub goback(msg)
 %>
 <script type="text/javascript">
 alert("<%=msg%>");
-window.location = "./";
+window.location = "index.asp";
 </script>
 <%
 end sub

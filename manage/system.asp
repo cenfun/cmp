@@ -2,16 +2,56 @@
 <!--#include file="const.asp"-->
 <!--#include file="md5.asp"-->
 <%
-passport()
-
-Select Case Request("action")
-Case "savepass"
-	Call savepass()
+'检测管理员是否登录
+If Session(CookieName & "_username")="" or Session(CookieName & "_admin")="" Then
+	response.Redirect("index.asp")
+end if
+'//////////////////////////////
+header()
+menu()
+Select Case Request.QueryString("action")
+Case "config"
+	config()
+Case "user"
+	user()
 Case Else
-	Call main()
+	config()
 End Select
-If Errmsg<>"" Then cenfun_error()
-Call Footer()
+footer()
+
+
+sub config()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
+    <tr>
+      <th colspan="2">站点信息</th>
+    </tr>
+    <tr>
+      <td align="right">站点名称：</td>
+      <td><input name="site_name" type="text" id="admin" size="30" tabindex="1" /></td>
+    </tr>
+    <tr>
+      <td align="right">站点网址：</td>
+      <td><input name="site_url" type="text" id="admin2" size="30" tabindex="1" /></td>
+    </tr>
+    <tr>
+      <td align="right">管理员邮箱：</td>
+      <td><input name="site_email" type="text" id="admin3" size="30" tabindex="1" />
+        用户忘记密码等联系</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td><input name="submit" type="submit" value="登录" style="width:50px;" tabindex="4" /></td>
+    </tr>
+  </form>
+</table>
+<%
+end sub
+
+sub user()
+end sub
+
 
 sub savepass()
 	Dim UserName,ip
