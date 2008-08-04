@@ -1,9 +1,12 @@
 ﻿<%
+'Application.Lock
+'Application(CookieName&"_Arr_system_info")=""
+'Application.UnLock
 Dim Arr_system_info
 IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
 	set rs=conn.Execute("select * from cmp_config")
 	If rs.EOF And rs.BOF Then
-		Redim Arr_system_info(2,0)
+		Redim Arr_system_info(9,0)
 	Else
 		Arr_system_info=rs.GetRows
 	End If
@@ -15,13 +18,18 @@ IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
 End IF
 
 Arr_system_info=Application(CookieName&"_Arr_system_info")
-Dim site_name,site_url,site_email
-'站点名称
+'site_name,site_url,site_qq,site_email,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
+Dim site_name,site_url,site_qq,site_email,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
 site_name = Arr_system_info(0,0)
-'站点网站
 site_url = Arr_system_info(1,0)
-'管理员邮箱
-site_email = Arr_system_info(2,0)
+site_qq = Arr_system_info(2,0)
+site_email = Arr_system_info(3,0)
+user_reg = Arr_system_info(4,0)
+user_check = Arr_system_info(5,0)
+xml_make = Arr_system_info(6,0)
+xml_path = Arr_system_info(7,0)
+xml_config = Arr_system_info(8,0)
+xml_list = Arr_system_info(9,0)
 
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
@@ -130,7 +138,7 @@ sub menu()
   <%If Session(CookieName & "_admin")<>"" then%>
   <a href="system.asp?action=config">系统配置</a> | <a href="system.asp?action=user">用户管理</a> |
   <%end if%>
-  <a href="manage.asp?action=userinfo">个人资料</a> | <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=show">预览效果</a> | <a href="index.asp?action=logout">退出</a>
+  <a href="manage.asp?action=userinfo">个人资料</a> | <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=show">调用地址</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
   <a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
   <%end if%>
@@ -142,18 +150,16 @@ end sub
 Sub Cenfun_suc(url)
 %>
 <br />
-<table cellpadding="3" cellspacing="1" align="center" class="tableBorder" style="width:75%">
-  <tr align="center">
-    <th height="25">成功信息</th>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="75%">
+  <tr>
+    <th>成功信息</th>
   </tr>
   <tr>
-    <td class="cmsRow"><%=SucMsg%></td>
-  </tr>
-  <tr>
-    <td class="cmsRow"><%if url<>"" then%>
+    <td align="center"><%=SucMsg%>
+      <%if url<>"" then%>
       <meta http-equiv="Refresh" content="3;URL=<%=url%>" />
-      <li><b><span id="timeout">3</span>秒钟后自动返回...</b>
-        <script type="text/javascript">
+      <span id="timeout">3</span>秒钟后自动返回
+      <script type="text/javascript">
 	function countDown(secs){
 		document.getElementById('timeout').innerHTML=secs;
 		if(--secs>0){
@@ -162,11 +168,11 @@ Sub Cenfun_suc(url)
 	}
 	countDown(3);
     </script>
-        <%end if%>
-      </li></td>
+      <%end if%>
+    </td>
   </tr>
   <tr>
-    <td colspan="2" align="center" class="cmsRow">&lt;&lt;<a href="<%=Request.ServerVariables("HTTP_REFERER")%>">返回上一页</a></td>
+    <td align="center"><a href="<%=url%>">如果您的浏览器没有自动跳转，请点击这里</a></td>
   </tr>
 </table>
 <%
@@ -175,21 +181,15 @@ End Sub
 Sub Cenfun_error()
 %>
 <br />
-<table cellpadding="3" cellspacing="1" align="center" class="tableBorder" style="width:75%">
-  <tr align="center">
-    <th height="25" colspan="2">错误信息</th>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="75%">
+  <tr>
+    <th>您在操作时发生错误</th>
   </tr>
   <tr>
-    <td class="cmsRow" colspan="2">&nbsp;&nbsp;<strong>您在后台操作的时候发生错误,下面是可能的错误信息</strong></td>
+    <td align="center"><span style="color:#FF0000;"><%=ErrMsg%></span></td>
   </tr>
   <tr>
-    <td class="cmsRow" colspan="2" style="color:#0000ff"><%=ErrMsg%></td>
-  </tr>
-  <tr>
-    <td class="cmsRow" colspan="2"><li>请仔细阅读相关帮助文件，确保您有相应的操作权限，或者点击<a href="login.asp"><strong>重新登录</strong></a>!</li></td>
-  </tr>
-  <tr>
-    <td class="cmsRow" valign="middle" colspan="2" align="center"><a href="javascript:history.go(-1)">&lt;&lt; 返回上一页</a></td>
+    <td align="center"><a href="javascript:history.back();">&lt;&lt; 返回上一页</a></td>
   </tr>
 </table>
 <%

@@ -12,6 +12,8 @@ menu()
 Select Case Request.QueryString("action")
 Case "config"
 	config()
+Case "save_config"
+	save_config()
 Case "user"
 	user()
 Case Else
@@ -23,31 +25,104 @@ footer()
 sub config()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
-    <tr>
-      <th colspan="2">站点信息</th>
-    </tr>
+  <form action="system.asp?action=save_config" method="post" onsubmit="return check(this);">
     <tr>
       <td align="right">站点名称：</td>
-      <td><input name="site_name" type="text" id="admin" size="30" tabindex="1" /></td>
+      <td><input name="site_name" type="text" id="site_name" value="<%=site_name%>" size="50" /></td>
     </tr>
     <tr>
       <td align="right">站点网址：</td>
-      <td><input name="site_url" type="text" id="admin2" size="30" tabindex="1" /></td>
+      <td><input name="site_url" type="text" id="site_url" value="<%=site_url%>" size="50" /></td>
+    </tr>
+    <tr>
+      <td align="right">管理员QQ：</td>
+      <td><input name="site_qq" type="text" id="site_qq" value="<%=site_qq%>" size="50" /></td>
     </tr>
     <tr>
       <td align="right">管理员邮箱：</td>
-      <td><input name="site_email" type="text" id="admin3" size="30" tabindex="1" />
-        用户忘记密码等联系</td>
+      <td><input name="site_email" type="text" id="site_email" value="<%=site_email%>" size="50" /></td>
+    </tr>
+    <tr>
+      <td align="right">是否开启用户注册：</td>
+      <td align="left"><input name="user_reg" type="checkbox" id="user_reg" value="1" <%if user_reg="1" then%>checked="checked"<%end if%> /></td>
+    </tr>
+    <tr>
+      <td align="right">用户注册是否需要审核：</td>
+      <td align="left"><input name="user_check" type="checkbox" id="user_check" value="1" <%if user_check="1" then%>checked="checked"<%end if%> /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">是否生成静态XML数据文件：</td>
+      <td align="left"><input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onclick="xmlmake(this);" />
+        <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td>生成文件的目录：</td>
+              <td><input name="xml_path" type="text" id="xml_path" value="xml" /></td>
+            </tr>
+            <tr>
+              <td>模板配置文件名：</td>
+              <td><input name="xml_config" type="text" id="xml_config" value="c.xml" /></td>
+            </tr>
+            <tr>
+              <td>模板列表文件名：</td>
+              <td><input name="xml_list" type="text" id="xml_list" value="l.xml" /></td>
+            </tr>
+          </table>
+        </div></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td><input name="submit" type="submit" value="登录" style="width:50px;" tabindex="4" /></td>
+      <td><input name="submit" type="submit" value="修改" style="width:50px;" /></td>
     </tr>
   </form>
 </table>
+<script type="text/javascript">
+function xmlmake(o){
+	var xmloption = document.getElementById("xmloption");
+	if(o.checked){
+		xmloption.style.display = "";
+	}else{
+		xmloption.style.display = "none";
+	}
+}
+function check(o){
+	if(o.site_name.value==""){
+		alert("站点名称不能为空！");
+		o.site_name.focus();
+		return false;
+	}
+	return true;
+}
+</script>
 <%
 end sub
+
+sub save_config()
+	'site_name,site_url,site_qq,site_email,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
+	site_name=Checkstr(Request.Form("site_name"))
+	site_url=Checkstr(Request.Form("site_url"))
+	site_qq=Checkstr(Request.Form("site_qq"))
+	site_email=Checkstr(Request.Form("site_email"))
+	user_reg=Request.Form("user_reg")
+	user_check=Request.Form("user_check")
+	xml_make=Request.Form("xml_make")
+	xml_path=Checkstr(Request.Form("xml_path"))
+	xml_config=Checkstr(Request.Form("xml_config"))
+	xml_list=Checkstr(Request.Form("xml_list"))
+  	sql = "Update cmp_config Set site_name='"&site_name&"',site_url='"&site_url&"',site_qq='"&site_qq&"',site_email='"&site_email&"',"
+	sql = sql & "user_reg='"&user_reg&"',user_check='"&user_check&"',xml_make='"&xml_make&"',"
+	sql = sql & "xml_path='"&xml_path&"',xml_config='"&xml_config&"',xml_list='"&xml_list&"',lasttime="&SqlNowString&""
+	'response.Write(sql)
+	conn.execute(sql)
+	SucMsg=SucMsg&"修改成功！"
+	Cenfun_suc("system.asp?action=config")
+	'更新Application信息
+	Application.Lock
+	Application(CookieName&"_Arr_system_info")=""
+	Application.UnLock
+end sub
+
+
 
 sub user()
 end sub
@@ -79,82 +154,5 @@ sub savepass()
 		SucMsg=SucMsg&"<li>修改密码成功！"
 		Cenfun_suc("?")
 	end if	
-end sub
-
-sub main()
-%>
-<table border="0" cellspacing="1" cellpadding="5" align="center" width="95%" class="tableBorder">
-  <form action="?action=savepass" method="post" name="form_user_pass" id="form_user_pass">
-    <tr>
-      <th colspan="4" align="center" id="TableTitleLink">管理用户密码修改</th>
-    </tr>
-    <tr>
-      <td class="cmsRow" align="right"><strong>旧密码：</strong></td>
-      <td class="cmsRow"><input name="password" type="password" id="password" size="15" />
-          <font color="red">*</font></td>
-    </tr>
-    <tr>
-      <td class="cmsRow" align="right"><strong>用户名：</strong></td>
-      <td class="cmsRow"><input name="username" type="text" value="<%=Session(CookieName & "_UserName")%>" /></td>
-    </tr>
-    <tr>
-      <td class="cmsRow" align="right"><strong>新密码：</strong></td>
-      <td class="cmsRow"><input name="password1" type="password" id="password1" size="15" />
-          <font color="red">*</font></td>
-    </tr>
-    <tr>
-      <td class="cmsRow" align="right"><strong>新密码确认：</strong></td>
-      <td class="cmsRow"><input name="password2" type="password" id="password2" size="15" />
-          <font color="red">*</font></td>
-    </tr>
-    <tr>
-      <td class="cmsRow" colspan="4" align="center"><input type="submit" class="button" name="submit_user_pass" value=" 修 改 " onclick="return check();" />
-      </td>
-    </tr>
-  </form>
-</table>
-<script language="JavaScript" type="text/javascript">
-<!--
-function checkspace(checkstr) {
-  var str = '';
-  for(i = 0; i < checkstr.length; i++) {
-    str = str + ' ';
-  }
-  return (str == checkstr);
-}
-function check()
-{
-  if(checkspace(document.form_user_pass.username.value)) {
-	document.form_user_pass.username.focus();
-    alert("用户名不能为空！");
-	return false;
-  }
-  if(checkspace(document.form_user_pass.password.value)) {
-	document.form_user_pass.password.focus();
-    alert("旧密码不能为空！");
-	return false;
-  }
-  if(checkspace(document.form_user_pass.password1.value)) {
-	document.form_user_pass.password1.focus();
-    alert("新密码不能为空！");
-	return false;
-  }
-    if(checkspace(document.form_user_pass.password2.value)) {
-	document.form_user_pass.password2.focus();
-    alert("确认密码不能为空！");
-	return false;
-  }
-    if(document.form_user_pass.password1.value != document.form_user_pass.password2.value) {
-	document.form_user_pass.password1.focus();
-	document.form_user_pass.password1.value = '';
-	document.form_user_pass.password2.value = '';
-    alert("新密码和确认密码不相同，请重新输入");
-	return false;
-  }
-	document.form_user_pass.submit();
-  }
-//-->
-</script>
-<%
 end sub
 %>

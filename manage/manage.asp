@@ -40,6 +40,25 @@ sub list()
 end sub
 
 sub show()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+    <tr>
+      <td align="right">CMP地址：</td>
+      <td><input name="site_name" type="text" id="site_name" value="" size="50" /></td>
+    </tr>
+    <tr>
+      <td align="right">页面地址：</td>
+      <td><input name="site_url" type="text" id="site_url" value="" size="50" /></td>
+    </tr>
+    <tr>
+      <td align="right">预览效果：</td>
+      <td><input name="site_qq" type="text" id="site_qq" value="" size="50" /></td>
+    </tr>
+</table>
+<script type="text/javascript">
+
+</script>
+<%
 end sub
 
 Sub save_manage()

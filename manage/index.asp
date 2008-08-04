@@ -26,13 +26,13 @@ sub main()
 	session("verifycode")=rndnum
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
-  <form action="index.asp?action=login" method="post" onsubmit="return check_login(this);">
+  <form action="index.asp?action=login" method="post" onsubmit="return check(this);">
     <tr>
       <th colspan="2">用户登录</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td><input name="username" type="text" id="admin" size="25" tabindex="1" />
+      <td><input name="username" type="text" id="username" size="25" tabindex="1" />
         还没有CMP？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">注册新用户</span></a></td>
     </tr>
     <tr>
@@ -51,6 +51,26 @@ sub main()
     </tr>
   </form>
 </table>
+<script type="text/javascript">
+function check(o){
+	if(o.username.value==""){
+		alert("用户名不能为空！");
+		o.username.focus();
+		return false;
+	}
+	if(o.password.value==""){
+		alert("用户密码不能为空！");
+		o.password.focus();
+		return false;
+	}
+	if(o.verifycode.value==""){
+		alert("验证码不能为空！");
+		o.verifycode.focus();
+		return false;
+	}
+	return true;
+}
+</script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
   <tr>
     <th>相关信息</th>
