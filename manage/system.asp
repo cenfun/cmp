@@ -16,6 +16,16 @@ Case "save_config"
 	save_config()
 Case "user"
 	user()
+Case "saveuser"
+	saveuser()
+Case "skins"
+	skins()
+Case "saveskins"
+	saveskins()
+Case "plugins"
+	plugins()
+Case "saveplugins"
+	saveplugins()
 Case Else
 	config()
 End Select
@@ -152,13 +162,10 @@ sub save_config()
 	Application.UnLock
 end sub
 
-
-
 sub user()
 end sub
 
-
-sub savepass()
+sub saveuser()
 	Dim UserName,ip
 	Dim PassWord,PassWord1
 	UserName=Replace(Request("username"),"'","")
@@ -184,5 +191,17 @@ sub savepass()
 		SucMsg=SucMsg&"<li>修改密码成功！"
 		Cenfun_suc("?")
 	end if	
+end sub
+
+sub skins()
+end sub
+
+sub saveskins()
+end sub
+
+sub plugins()
+end sub
+
+sub saveplugins()
 end sub
 %>

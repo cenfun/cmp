@@ -138,7 +138,7 @@ sub menu()
 <div id="menu">
   <%If Session(CookieName & "_username")<>"" then%>
   <%If Session(CookieName & "_admin")<>"" then%>
-  <a href="system.asp?action=config">系统配置</a> | <a href="system.asp?action=pre">皮肤插件管理</a> | <a href="system.asp?action=user">用户管理</a> |
+  <a href="system.asp?action=config">系统配置</a> | <a href="system.asp?action=user">用户管理</a> | <a href="system.asp?action=skins">皮肤管理</a> | <a href="system.asp?action=plugins">插件管理</a> | 
   <%end if%>
   <a href="manage.asp?action=userinfo">个人资料</a> | <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=show">调用预览</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
