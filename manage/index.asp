@@ -222,7 +222,7 @@ end if
 end sub
 
 sub checkuser()
-	set rs=conn.Execute("select * from cmp_user where username='"&Checkstr(Request.QueryString("username"))&"'")
+	set rs=conn.Execute("select username from cmp_user where username='"&Checkstr(Request.QueryString("username"))&"'")
 	if not rs.eof then
     	response.Write("用户名已经存在")
 	end if
@@ -231,11 +231,38 @@ sub checkuser()
 end sub
 
 sub save_reg()
-
-
+	dim UserName,PassWord,email,qq
+	dim isactive
+	if user_check="1" then
+		isactive = "0"
+	else
+		isactive = "1"
+	end if
+	UserName=Checkstr(Request.Form("username"))
+	PassWord=md5(request.Form("password")+UserName,16)
+	email=Checkstr(Request.Form("email"))
+	qq=Checkstr(Request.Form("qq"))
+	
+	sql = "select username from cmp_user where username='"&UserName&"'"
+	set rs=conn.Execute(sql)
+		if rs.eof then
+			'id,username,password,isadmin,isactive,regtime,lasttime,lastip,email,qq,logins,cmp_name,cmp_url,config,list
+			sql = "insert into cmp_user "
+			sql = sql & "(username,[password],isadmin,isactive,regtime,lasttime,lastip,email,qq) values("
+			sql = sql & "'"&UserName&"','"&PassWord&"','0','"&isactive&"',"&SqlNowString&","&SqlNowString&",'"&UserTrueIP&"','"&email&"','"&qq&"')"
+			conn.execute(sql)
+			SucMsg = "您的注册信息已经提交成功。"
+			if user_check="1" then
+				SucMsg = SucMsg & "请等待管理员的审核！"
+			end if
+			cenfun_suc("index.asp")
+		else
+			ErrMsg = "用户名已经存在<br />"
+			cenfun_error()
+		end if
+	rs.close
+	set rs=nothing
 end sub
-
-
 
 sub goback(msg)
 %>
@@ -262,7 +289,8 @@ sub login()
 		Exit Sub
 	End If
 	Session("verifycode")=""
-	set rs=conn.Execute("select * from cmp_user where username='"&UserName&"' and password='"&PassWord&"'")
+	sql = "select isadmin,isactive from cmp_user where username='"&UserName&"' and password='"&PassWord&"'"
+	set rs=conn.Execute(sql)
 	if rs.eof and rs.bof then
 		rs.close
 		set rs=nothing
@@ -270,20 +298,25 @@ sub login()
     	response.End
 		Exit Sub
 	else
-		'session超时时间
-		Session.Timeout=45
-		Session(CookieName & "_username")=UserName
-		if rs("isadmin") = "1" then
-			Session(CookieName & "_admin")="cmp_admin"
+		if rs("isactive")="1" then
+			'session超时时间
+			Session.Timeout=45
+			Session(CookieName & "_username")=UserName
+			if rs("isadmin") = "1" then
+				Session(CookieName & "_admin")="cmp_admin"
+			else
+				Session(CookieName & "_admin")=""
+			end if
+			sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&UserTrueIP&"' Where username='"&UserName&"'"
+			'response.Write(sql)
+			conn.Execute(sql)
+			rs.close
+			set rs=nothing
+			Response.Redirect "manage.asp"
 		else
-			Session(CookieName & "_admin")=""
+			ErrMsg = "您的帐号还没有激活，请耐心等待管理员的审核或及时联系管理员。"
+			cenfun_error()
 		end if
-		sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&UserTrueIP&"' Where username='"&UserName&"'"
-		'response.Write(sql)
-		conn.Execute(sql)
-		rs.close
-		set rs=nothing
-		Response.Redirect "manage.asp"
 	end if	
 end sub
 

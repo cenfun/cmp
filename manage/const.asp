@@ -149,7 +149,7 @@ sub menu()
 end sub
 
 
-Sub Cenfun_suc(url)
+Sub cenfun_suc(url)
 %>
 <br />
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="75%">
@@ -180,7 +180,7 @@ Sub Cenfun_suc(url)
 <%
 End Sub
 
-Sub Cenfun_error()
+Sub cenfun_error()
 %>
 <br />
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="75%">
