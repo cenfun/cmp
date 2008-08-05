@@ -67,16 +67,18 @@ sub config()
     </tr>
     <tr>
       <td align="right">是否开启用户注册：</td>
-      <td align="left"><input name="user_reg" type="checkbox" id="user_reg" value="1" <%if user_reg="1" then%>checked="checked"<%end if%> /></td>
+      <td align="left"><input name="user_reg" type="checkbox" id="user_reg" value="1" <%if user_reg="1" then%>checked="checked"<%end if%> />
+        如果用户数过多导致服务器负担加重，可关闭注册</td>
     </tr>
     <tr>
       <td align="right">用户注册是否需要审核：</td>
-      <td align="left"><input name="user_check" type="checkbox" id="user_check" value="1" <%if user_check="1" then%>checked="checked"<%end if%> /></td>
+      <td align="left"><input name="user_check" type="checkbox" id="user_check" value="1" <%if user_check="1" then%>checked="checked"<%end if%> />
+        开启审核可防止用户恶意注册</td>
     </tr>
     <tr>
       <td align="right" valign="top">是否生成静态XML数据文件：</td>
       <td align="left"><input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onclick="xmlmake(this);" />
-        开启将减轻服务器负担，并增加一种更稳定的调用方式。
+        开启将减轻服务器负担，服务器必须支持FSO写文件
         <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
