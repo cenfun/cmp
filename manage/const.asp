@@ -142,7 +142,7 @@ sub menu()
   <%end if%>
   <a href="manage.asp?action=userinfo">个人资料</a> | <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=show">调用预览</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
-  <span><%=site_name%></span><a href="index.asp?action=reg">免费注册</a> | <a href="index.asp">登录</a> | <a href="userlist.asp">用户列表</a>
+  <span><%=site_name%></span><a href="index.asp">首页</a> | <a href="index.asp?action=reg">免费注册</a> | <a href="index.asp">登录</a> | <a href="userlist.asp">用户列表</a>
   <%end if%>
 </div>
 <%
