@@ -1,21 +1,27 @@
 ﻿<!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
 <!--#include file="md5.asp"-->
-<% 
-header()
-Select Case Request.QueryString("action")
-Case "login"
-	login()
-Case "reg"
-	reg()
-Case "save_reg"
-	save_reg()
-Case "logout"
-	logout()
-Case Else
-	main()
-End Select
-footer()
+<%
+if Request.QueryString("username")<>"" then
+	checkuser()
+else
+	header()
+	Select Case Request.QueryString("action")
+	Case "login"
+		login()
+	Case "reg"
+		reg()
+	Case "save_reg"
+		save_reg()
+	Case "logout"
+		logout()
+	Case Else
+		main()
+	End Select
+	footer()
+end if
+
+
 
 sub main()
 	menu()
@@ -110,7 +116,7 @@ if user_reg="1" then
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td><input name="username" type="text" id="username" size="30" onchange="check_username(this)" />
+      <td><input name="username" type="text" id="username" size="30" maxlength="200" onchange="check_username(this)" />
         <span id="reg_username" style="color:#FF0000;"></span></td>
     </tr>
     <tr>
@@ -123,11 +129,11 @@ if user_reg="1" then
     </tr>
     <tr>
       <td align="right">邮箱：</td>
-      <td><input name="email" type="text" id="email" size="30" /></td>
+      <td><input name="email" type="text" id="email" size="30" maxlength="50" /></td>
     </tr>
     <tr>
       <td align="right">QQ：</td>
-      <td><input name="qq" type="text" id="qq" size="30" /></td>
+      <td><input name="qq" type="text" id="qq" size="30" maxlength="50" /></td>
     </tr>
     <%if user_check="1" then%>
     <tr>
@@ -143,19 +149,29 @@ if user_reg="1" then
 </table>
 <script type="text/javascript">
 var username_err = "";
+var ru = document.getElementById("reg_username");
 function check_username(o){
 	username_err = "";
 	var un = o.value;
-	var ru = document.getElementById("reg_username");
 	if(un.length < 3){
 		username_err = "用户名的长度不能小于3";
 		ru.innerHTML = username_err;
 		return;
 	}
-
-	
-	
-	
+	//检测是否已经存在
+	ajaxSend("GET","index.asp?rd="+Math.round()+"&username="+un,true,null,completeHd,errorHd)
+}
+function completeHd(data){
+	//alert(data);
+	if(data != ""){
+		username_err = data;
+		ru.innerHTML = username_err;
+	} else {
+		ru.innerHTML = "";
+	}
+}
+function errorHd(errmsg){
+	alert(errmsg);
 }
 function check(o){
 	if(o.username.value==""){
@@ -165,7 +181,7 @@ function check(o){
 	}
 	if (username_err!=""){
 		alert(username_err);
-		o.username.focus();
+		o.username.select();
 		return false;
 	}
 	if(o.password.value==""){
@@ -203,6 +219,15 @@ else
 </table>
 <%
 end if
+end sub
+
+sub checkuser()
+	set rs=conn.Execute("select * from cmp_user where username='"&Checkstr(Request.QueryString("username"))&"'")
+	if not rs.eof then
+    	response.Write("用户名已经存在")
+	end if
+	rs.close
+	set rs=nothing
 end sub
 
 sub save_reg()
