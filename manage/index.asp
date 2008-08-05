@@ -27,7 +27,7 @@ sub main()
 	loop
 	session("verifycode")=rndnum
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
   <form action="index.asp?action=login" method="post" onsubmit="return check(this);">
     <tr>
       <th colspan="2">用户登录</th>
@@ -35,7 +35,7 @@ sub main()
     <tr>
       <td align="right">用户名：</td>
       <td><input name="username" type="text" id="username" size="25" tabindex="1" />
-        还没有CMP？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">注册新用户</span></a></td>
+        还没有CMP？<a href="index.asp?action=reg" tabindex="5"><span style="font-weight: bold">免费注册新用户</span></a></td>
     </tr>
     <tr>
       <td align="right">密　码：</td>
@@ -73,7 +73,15 @@ function check(o){
 	return true;
 }
 </script>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
+  <tr>
+    <th>系统公告</th>
+  </tr>
+  <tr>
+    <td><%=site_ads%></td>
+  </tr>
+</table>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
   <tr>
     <th>相关信息</th>
   </tr>
@@ -94,7 +102,7 @@ end sub
 sub reg()
 	menu()
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="500">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
   <form action="index.asp?action=save_reg" method="post" onsubmit="return check(this);">
     <tr>
       <th colspan="2">用户注册</th>

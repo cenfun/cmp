@@ -26,7 +26,15 @@ footer()
 
 sub main()
 %>
-<div align="center">登录成功！请选择以上功能菜单进行操作。</div>
+<div style="padding:30px 0px; text-align:center;">登录成功！请选择以上功能菜单进行操作。</div>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
+  <tr>
+    <th>系统公告</th>
+  </tr>
+  <tr>
+    <td><%=site_ads%></td>
+  </tr>
+</table>
 <%
 end sub
 
@@ -42,18 +50,18 @@ end sub
 sub show()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-    <tr>
-      <td align="right">CMP地址：</td>
-      <td><input name="site_name" type="text" id="site_name" value="" size="50" /></td>
-    </tr>
-    <tr>
-      <td align="right">页面地址：</td>
-      <td><input name="site_url" type="text" id="site_url" value="" size="50" /></td>
-    </tr>
-    <tr>
-      <td align="right">预览效果：</td>
-      <td><input name="site_qq" type="text" id="site_qq" value="" size="50" /></td>
-    </tr>
+  <tr>
+    <td align="right">CMP地址：</td>
+    <td><input name="site_name" type="text" id="site_name" value="" size="50" /></td>
+  </tr>
+  <tr>
+    <td align="right">页面地址：</td>
+    <td><input name="site_url" type="text" id="site_url" value="" size="50" /></td>
+  </tr>
+  <tr>
+    <td align="right">预览效果：</td>
+    <td><input name="site_qq" type="text" id="site_qq" value="" size="50" /></td>
+  </tr>
 </table>
 <script type="text/javascript">
 

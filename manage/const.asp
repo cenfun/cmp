@@ -6,7 +6,7 @@ Dim Arr_system_info
 IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
 	set rs=conn.Execute("select * from cmp_config")
 	If rs.EOF And rs.BOF Then
-		Redim Arr_system_info(9,0)
+		Redim Arr_system_info(12,0)
 	Else
 		Arr_system_info=rs.GetRows
 	End If
@@ -18,18 +18,20 @@ IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
 End IF
 
 Arr_system_info=Application(CookieName&"_Arr_system_info")
-'site_name,site_url,site_qq,site_email,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
-Dim site_name,site_url,site_qq,site_email,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
-site_name = Arr_system_info(0,0)
-site_url = Arr_system_info(1,0)
-site_qq = Arr_system_info(2,0)
-site_email = Arr_system_info(3,0)
-user_reg = Arr_system_info(4,0)
-user_check = Arr_system_info(5,0)
-xml_make = Arr_system_info(6,0)
-xml_path = Arr_system_info(7,0)
-xml_config = Arr_system_info(8,0)
-xml_list = Arr_system_info(9,0)
+Dim cmp_path,site_name,site_url,site_qq,site_email,site_count,site_ads,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
+cmp_path = Arr_system_info(0,0)
+site_name = Arr_system_info(1,0)
+site_url = Arr_system_info(2,0)
+site_qq = Arr_system_info(3,0)
+site_email = Arr_system_info(4,0)
+site_count = Arr_system_info(5,0)
+site_ads = Arr_system_info(6,0)
+user_reg = Arr_system_info(7,0)
+user_check = Arr_system_info(8,0)
+xml_make = Arr_system_info(9,0)
+xml_path = Arr_system_info(10,0)
+xml_config = Arr_system_info(11,0)
+xml_list = Arr_system_info(12,0)
 
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
@@ -140,7 +142,7 @@ sub menu()
   <%end if%>
   <a href="manage.asp?action=userinfo">个人资料</a> | <a href="manage.asp?action=config">配置编辑</a> | <a href="manage.asp?action=list">列表编辑</a> | <a href="manage.asp?action=show">调用地址</a> | <a href="index.asp?action=logout">退出</a>
   <%else%>
-  <span><%=site_name%></span><a href="index.asp?action=reg">注册</a> | <a href="index.asp">登录</a>
+  <span><%=site_name%></span><a href="index.asp?action=reg">免费注册</a> | <a href="index.asp">登录</a> | <a href="index.asp?action=userlist">用户列表</a>
   <%end if%>
 </div>
 <%
