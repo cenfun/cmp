@@ -101,6 +101,7 @@ end sub
 
 sub reg()
 	menu()
+if user_reg="1" then
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
   <form action="index.asp?action=save_reg" method="post" onsubmit="return check(this);">
@@ -109,35 +110,99 @@ sub reg()
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td><input name="username" type="text" id="admin" size="20" tabindex="1" /></td>
+      <td><input name="username" type="text" id="username" size="30" onchange="check_username(this)" />
+        <span id="reg_username" style="color:#FF0000;"></span></td>
     </tr>
     <tr>
-      <td align="right">密　码：</td>
-      <td><input name="password" type="password" id="password" size="20" tabindex="2" /></td>
+      <td align="right">密码：</td>
+      <td><input name="password" type="password" id="password" size="30" /></td>
     </tr>
     <tr>
-      <td align="right">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td align="right">确认密码：</td>
+      <td><input name="passwordcheck" type="password" id="passwordcheck" size="30" /></td>
     </tr>
     <tr>
-      <td align="right">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td align="right">邮箱：</td>
+      <td><input name="email" type="text" id="email" size="30" /></td>
     </tr>
     <tr>
-      <td align="right">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td align="right">QQ：</td>
+      <td><input name="qq" type="text" id="qq" size="30" /></td>
     </tr>
+    <%if user_check="1" then%>
     <tr>
-      <td align="right">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td align="right">注：</td>
+      <td>系统开启了新注册用户需要审核，请如实填写您的注册信息</td>
     </tr>
+    <%end if%>
     <tr>
       <td>&nbsp;</td>
       <td><input name="submit" type="submit" value="提交" style="width:50px;" tabindex="4" /></td>
     </tr>
   </form>
 </table>
+<script type="text/javascript">
+var username_err = "";
+function check_username(o){
+	username_err = "";
+	var un = o.value;
+	var ru = document.getElementById("reg_username");
+	if(un.length < 3){
+		username_err = "用户名的长度不能小于3";
+		ru.innerHTML = username_err;
+		return;
+	}
+
+	
+	
+	
+}
+function check(o){
+	if(o.username.value==""){
+		alert("用户名不能为空！");
+		o.username.focus();
+		return false;
+	}
+	if (username_err!=""){
+		alert(username_err);
+		o.username.focus();
+		return false;
+	}
+	if(o.password.value==""){
+		alert("用户密码不能为空！");
+		o.password.focus();
+		return false;
+	}
+	if(o.passwordcheck.value==""){
+		alert("确认密码不能为空！");
+		o.passwordcheck.focus();
+		return false;
+	}
+	if(o.password.value!=o.passwordcheck.value){
+		alert("确认密码和密码不一致，请重新输入！");
+		o.password.focus();
+		o.password.value = "";
+		o.passwordcheck.value = "";
+		return false;
+	}
+	return true;
+}
+</script>
 <%
+else
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
+  <tr>
+    <th>用户注册</th>
+  </tr>
+  <tr>
+    <td align="center">站点暂时关闭用户注册。如有任何问题，请查看<a href="index.asp">系统公告</a>或联系管理员：<br />
+      邮箱：<a href="mailto:<%=site_email%>" title="<%=site_email%>" target="_blank"><%=site_email%></a><br />
+      QQ：<a href="http://wpa.qq.com/msgrd?V=1&Uin=<%=site_qq%>&Exe=QQ&Site=<%=site_url%>&Menu=No" title="<%=site_qq%>" target="_blank"><%=site_qq%></a></td>
+  </tr>
+</table>
+<%
+end if
 end sub
 
 sub save_reg()
