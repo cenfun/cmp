@@ -47,7 +47,7 @@ sub config()
       <td><input name="site_email" type="text" id="site_email" value="<%=site_email%>" size="50" /></td>
     </tr>
     <tr>
-      <td align="right">系统统计(图片方式)：</td>
+      <td align="right">默认统计(图片方式)：</td>
       <td><input name="site_count" type="text" id="site_count" value="<%=site_count%>" size="50" /></td>
     </tr>
     <tr>
