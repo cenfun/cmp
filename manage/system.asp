@@ -165,6 +165,52 @@ sub save_config()
 end sub
 
 sub user()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <td><span style="float:right;">用户名
+      <input type="text" name="textfield" id="textfield" />
+      <input type="submit" name="search" id="search" value="搜索" />
+      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&amp;status=0" class="headlink">未审核用户</a> </td>
+  </tr>
+  <tr>
+    <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
+        <tr>
+          <th><input type="checkbox" name="checkbox" id="checkbox" /></th>
+          <th>ID</th>
+          <th>状态</th>
+          <th>用户名</th>
+          <th>Email</th>
+          <th>QQ</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th>最后登录</th>
+          <th>操作</th>
+        </tr>
+        <%
+	
+	%>
+        <tr align="center" onmouseover="highlight(this,'#F5FAFE','#ffffff');">
+          <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
+          <td>&nbsp;</td>
+          <td>管理员</td>
+          <td>admin</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+        <%
+	
+	%>
+      </table></td>
+  </tr>
+</table>
+<%
 end sub
 
 sub saveuser()
