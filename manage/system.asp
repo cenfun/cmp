@@ -214,19 +214,19 @@ end select
 '分页设置
 dim page,CurrentPage
 page=Checkstr(Request.QueryString("page"))
-If page<>Empty Then
-	CurrentPage=page
-	If IsInteger(CurrentPage)=False OR CurrentPage<0 Then CurrentPage=1
-Else
-	CurrentPage=1
-End If
-
+CurrentPage = 1
+if page <> "" then
+	if IsNumeric(page) then
+		if page > 0 and page < 32768 then
+			CurrentPage = cint(page)
+		end if
+	end if
+end if
 dim PageC,MaxPerPage
 	PageC=0
 	MaxPerPage=30
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
-
 IF not rs.EOF Then
 	rs.PageSize=MaxPerPage
 	rs.AbsolutePage=CurrentPage
