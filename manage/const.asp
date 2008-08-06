@@ -47,6 +47,16 @@ Function Checkstr(Str)
 	CheckStr = Replace(Str,"'","''")
 End Function
 
+'*************************************
+'检测是否有效的数字
+'*************************************
+Function IsInteger(Para) 
+	IsInteger=False
+	If Not (IsNull(Para) Or Trim(Para)="" Or Not IsNumeric(Para)) Then
+		IsInteger=True
+	End If
+End Function
+
 Sub showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
 	dim zh,en,str
 	zh="共,首页,上一页,下一页,尾页,页次：,页,页,转到："

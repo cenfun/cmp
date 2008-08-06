@@ -297,9 +297,12 @@ sub login()
     	response.End
 		Exit Sub
 	else
-		'用户状态，0未激活，5正常，9管理员
+		'用户状态 0未激活，1锁定，2删除，5正常，9管理员
 		if rs("userstatus") = 0 then
 			ErrMsg = "您的帐号还没有激活，请耐心等待管理员的审核或及时联系管理员。"
+			cenfun_error()
+		elseif rs("userstatus") = 1 then
+			ErrMsg = "您的帐号被管理员锁定，有任何问题请联系管理员。"
 			cenfun_error()
 		else
 			'session超时时间

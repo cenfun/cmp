@@ -25,6 +25,14 @@ function highlight(o,c1,c2){
 		o.style.background=c2;
 	}
 }
+function CheckAll(o,form){
+	for (var i=0;i<form.elements.length;i++){
+		var e = form.elements[i];
+		if (e.type=="checkbox" && e.name.indexOf("idlist")!=-1 && e.disabled==false){
+			e.checked = o.checked;
+		}
+	}
+}
 //open a new window
 function winopen(url,name,width,height,str){
 	var winopen = window.open(url,name,'width='+width+',height='+height+','+str+',menubar=0,status=0');

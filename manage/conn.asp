@@ -18,18 +18,14 @@ SystemTime=Now()
 '站点cookies唯一标识
 Const CookieName="cenfun_cmp3"
 '数据连接
-Sub ConnectionDatabase
-	Dim ConnStr
-		ConnStr = "Provider = Microsoft.Jet.OLEDB.4.0;Data Source = " & Server.MapPath(sitedb)
-	On Error Resume Next
-	Set conn = Server.CreateObject("ADODB.Connection")
-	conn.open ConnStr
-	If Err Then
-		err.Clear
-		Set Conn = Nothing
-		Response.Write "数据库连接出错，请检查连接字串。"
-		Response.End
-	End If
-End Sub
-If Not IsObject(conn) Then ConnectionDatabase
+on error resume next
+Set conn= Server.CreateObject("ADODB.Connection")
+conn.ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.MapPath(sitedb)
+conn.Open
+If Err Then
+	err.Clear
+	Set Conn = Nothing
+	Response.Write("<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />数据库连接出错，请检查连接字串")
+	Response.End
+end if
 %>

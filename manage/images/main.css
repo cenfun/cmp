@@ -13,6 +13,8 @@ label input { height:14px; }
 .tablelist { margin:0px auto; background-color:#CAD9EA; }
 .tablelist tr { background-color:#FFFFFF; }
 .tablelist th { padding:2px 2px; color:#428EFF; }
+.tablelist th a:link, .tablelist th a:visited { color:#428EFF; }
+.tablelist th a:hover { }
 .tablelist td { padding:2px 2px; }
 .list { }
 .list li { list-style:inside; }

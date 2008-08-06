@@ -16,6 +16,8 @@ Case "save_config"
 	save_config()
 Case "user"
 	user()
+Case "deluser"
+	deluser()
 Case "saveuser"
 	saveuser()
 Case "skins"
@@ -94,7 +96,8 @@ sub config()
               <td><input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
             </tr>
           </table>
-        </div></td>
+        </div>
+        修改后所有用户静态调用地址将改变，请务必通知</td>
     </tr>
     <tr>
       <td>&nbsp;</td>
@@ -165,52 +168,151 @@ sub save_config()
 end sub
 
 sub user()
+'action=user
+dim username,userstatus,order,by
+username=Checkstr(Request.QueryString("username"))
+userstatus=Checkstr(Request.QueryString("userstatus"))
+order=Checkstr(Request.QueryString("order"))
+by=Checkstr(Request.QueryString("by"))
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
     <td><span style="float:right;">用户名
-      <input type="text" name="textfield" id="textfield" />
-      <input type="submit" name="search" id="search" value="搜索" />
-      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&amp;status=0" class="headlink">未审核用户</a> </td>
+      <input type="text" name="username" id="username" value="<%=username%>" />
+      <input type="button" name="search" id="search" value="搜索" onclick="searcher();" />
+      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&userstatus=0" class="headlink">未审核用户</a> </td>
   </tr>
   <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
-        <tr>
-          <th><input type="checkbox" name="checkbox" id="checkbox" /></th>
-          <th>ID</th>
-          <th>状态</th>
-          <th>用户名</th>
-          <th>Email</th>
-          <th>QQ</th>
-          <th>&nbsp;</th>
-          <th>&nbsp;</th>
-          <th>&nbsp;</th>
-          <th>最后登录</th>
-          <th>操作</th>
-        </tr>
-        <%
-	
+        <form>
+          <%
+'查询串
+sql = "select id,username,userstatus,email,qq,lasttime from cmp_user where "
+if username <> "" then
+	sql = sql & " username like '%"&username&"%' and "
+end if
+if userstatus <> "" then
+	sql = sql & " userstatus="&userstatus&" and "
+end if
+sql = sql & " 1=1 "
+if order<>"desc" then
+	order = ""
+end if
+select case by
+	case "id"
+        sql = sql & " order by id " & order
+	case "userstatus"
+        sql = sql & " order by userstatus " & order
+	case "username"
+        sql = sql & " order by username " & order
+	case "lasttime"
+        sql = sql & " order by lasttime " & order
+	case else
+		sql = sql & " order by id desc"
+end select
+'response.Write(sql)
+'分页设置
+dim page,CurrentPage
+page=Checkstr(Request.QueryString("page"))
+If page<>Empty Then
+	CurrentPage=page
+	If IsInteger(CurrentPage)=False OR CurrentPage<0 Then CurrentPage=1
+Else
+	CurrentPage=1
+End If
+
+dim PageC,MaxPerPage
+	PageC=0
+	MaxPerPage=30
+set rs=Server.CreateObject("ADODB.RecordSet")
+rs.Open sql,conn,1,1
+
+IF not rs.EOF Then
+	rs.PageSize=MaxPerPage
+	rs.AbsolutePage=CurrentPage
+	Dim rs_nums
+	rs_nums=rs.RecordCount
 	%>
-        <tr align="center" onmouseover="highlight(this,'#F5FAFE','#ffffff');">
-          <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
-          <td>&nbsp;</td>
-          <td>管理员</td>
-          <td>admin</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <%
-	
-	%>
+          <tr>
+            <th><input type="checkbox" onclick="CheckAll(this,this.form);" /></th>
+            <th><a href="javascript:orderby('id');">ID</a></th>
+            <th><a href="javascript:orderby('userstatus');">状态</a></th>
+            <th><a href="javascript:orderby('username');">用户名</a></th>
+            <th>Email</th>
+            <th>QQ</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th><a href="javascript:orderby('lasttime');">最后登录</a></th>
+            <th>操作</th>
+          </tr>
+          <%Do Until rs.EOF OR PageC=rs.PageSize%>
+          <%
+		dim role,ustatus
+		ustatus = rs("userstatus")
+		select case ustatus
+		case 0
+			role = "<strong>未审核</strong>"
+		case 1
+			role = "被锁定"
+		case 5
+			role = "普通用户"
+		case 9
+			role = "管理员"
+		case else
+			role = "未定义"
+		end select
+		%>
+          <tr align="center" onmouseover="highlight(this,'#FbFbFb','#ffffff');">
+            <td><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" <%if ustatus=9 then%>disabled="disabled"<%end if%> /></td>
+            <td><%=rs("id")%></td>
+            <td><%=role%></td>
+            <td><%=rs("username")%></td>
+            <td><%=rs("email")%></td>
+            <td><%=rs("qq")%></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td><%=rs("lasttime")%></td>
+            <td>&nbsp;</td>
+          </tr>
+          <%rs.MoveNext%>
+          <%PageC=PageC+1%>
+          <%loop%>
+          <tr>
+            <td colspan="11">共<%=rs_nums%>页</td>
+          </tr>
+          <%
+else
+%>
+          <tr>
+            <td><span style="color:#FF0000;">没有找到任何相关记录</span></td>
+          </tr>
+          <%
+end if
+rs.Close
+Set rs=Nothing
+%>
+        </form>
       </table></td>
   </tr>
 </table>
+<script type="text/javascript">
+function searcher(){
+	var str = document.getElementById("username").value;
+	if(str != "<%=username%>"){
+		window.location = "system.asp?action=user&username="+str+"&userstatus=<%=userstatus%>&order=<%=order%>&by=<%=by%>&page=<%=page%>";
+	}
+}
+function orderby(by){
+	var order = "<%=order%>"=="desc"?"":"desc";
+	window.location = "system.asp?action=user&username=<%=username%>&userstatus=<%=userstatus%>&order="+order+"&by="+by+"&page=<%=page%>";
+}
+</script>
 <%
+end sub
+
+sub deluser()
 end sub
 
 sub saveuser()
