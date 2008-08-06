@@ -75,9 +75,9 @@ Function CheckStr(byVal ChkStr)
 	CheckStr=Str
 End Function
 
-Sub showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
+function showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
 	dim zh,en,str
-	zh="共,首页,上一页,下一页,尾页,页次：,页,页,转到："
+	zh="共,【首页】,【上一页】,【下一页】,【尾页】,页次：,页,页,转到："
 	en="Total,First,Previous,Next,Last,Page:,&nbsp;,Page,Turn To:"
 	if language="en" then
 		str=split(en,",")
@@ -90,11 +90,9 @@ Sub showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllP
 	else
 		n= totalnumber \ MaxPerPage+1
 	end if
-	strTemp="<table width='100%'>"
-	'strTemp=strTemp &  "<tr><td height='1' colspan='2' bgcolor='#4D8BEB'></td></tr>"
-	strTemp=strTemp &  "<tr align='right'><td>"
+	strTemp="<span>"
 	if ShowTotal=true then 
-		strTemp=strTemp&str(0)&" <b>" & totalnumber & "</b> " & strUnit & "&nbsp;&nbsp;"
+		strTemp=strTemp & "<span style='padding-right:10px;'>" & str(0) & "<strong>" & totalnumber & "</strong>" & strUnit & "</span>"
 	end if
 	strUrl=JoinChar(sfilename)
 	if CurrentPage<2 then
@@ -109,20 +107,21 @@ Sub showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllP
 			strTemp=strTemp & "<a href='" & strUrl & "page=" & (CurrentPage+1) & "'>"&str(3)&"</a>&nbsp;"
 			strTemp=strTemp & "<a href='" & strUrl & "page=" & n & "'>"&str(4)&"</a>"
 	end if
-	strTemp=strTemp & "&nbsp;"&str(5)&"<strong><font color=red>" & CurrentPage & "</font>/" & n & "</strong>"&str(6)
-	strTemp=strTemp & "&nbsp;<b>"&MaxPerPage&"</b>"&strUnit&"/"&str(7)
+	strTemp=strTemp & "<span style='padding:0px 10px;'>"&str(5)&"<strong><font color='#ff0000'>" & CurrentPage & "</font>/" & n & "</strong>"&str(6)&"</span>"
+	strTemp=strTemp & "<strong>"&MaxPerPage&"</strong>"&strUnit&"/"&str(7)
 	if ShowAllPages=True then
-		strTemp=strTemp & "&nbsp;"&str(8)&"<select name='page' size='1' onchange=""javascript:window.location='" & strUrl & "page=" & "'+this.options[this.selectedIndex].value;"">"   
+		strTemp=strTemp &"<span style='padding-left:10px;'>"&str(8)
+		strTemp=strTemp &"<select name='page' size='1' onchange=""javascript:window.location='" & strUrl & "page=" & "'+this.options[this.selectedIndex].value;"">"   
 		for i = 1 to n   
 			strTemp=strTemp & "<option value='" & i & "'"
 			if cint(CurrentPage)=cint(i) then strTemp=strTemp & " selected "
 			strTemp=strTemp & ">"&i&"</option>"   
 		next
-		strTemp=strTemp & "</select>"
+		strTemp=strTemp & "</select></span>"
 	end if
-	strTemp=strTemp & "</td></tr></table>"
-	response.write strTemp
-end sub
+	strTemp=strTemp & "</span>"
+	showpage = strTemp
+end function
 function JoinChar(strUrl)
 	if strUrl="" then
 		JoinChar=""

@@ -224,7 +224,7 @@ if page <> "" then
 end if
 dim PageC,MaxPerPage
 	PageC=0
-	MaxPerPage=30
+	MaxPerPage=1
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
 IF not rs.EOF Then
@@ -280,7 +280,9 @@ IF not rs.EOF Then
           <%PageC=PageC+1%>
           <%loop%>
           <tr>
-            <td colspan="11">共<%=rs_nums%>页</td>
+            <td colspan="11" align="right">
+			<%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%>
+            </td>
           </tr>
           <%
 else
