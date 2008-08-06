@@ -209,6 +209,8 @@ select case by
         sql = sql & " order by lasttime " & order
 	case else
 		sql = sql & " order by id desc"
+		by = "id"
+		order = "desc"
 end select
 'response.Write(sql)
 '分页设置
@@ -224,7 +226,7 @@ if page <> "" then
 end if
 dim PageC,MaxPerPage
 	PageC=0
-	MaxPerPage=1
+	MaxPerPage=3
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
 IF not rs.EOF Then
@@ -240,9 +242,7 @@ IF not rs.EOF Then
             <th><a href="javascript:orderby('username');">用户名</a></th>
             <th>Email</th>
             <th>QQ</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th>CMP</th>
             <th><a href="javascript:orderby('lasttime');">最后登录</a></th>
             <th>操作</th>
           </tr>
@@ -264,25 +264,27 @@ IF not rs.EOF Then
 		end select
 		%>
           <tr align="center" onmouseover="highlight(this,'#FbFbFb','#ffffff');">
-            <td><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" <%if ustatus=9 then%>disabled="disabled"<%end if%> /></td>
+            <td><%if ustatus<>9 then%><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" /><%end if%></td>
             <td><%=rs("id")%></td>
             <td><%=role%></td>
             <td><%=rs("username")%></td>
             <td><%=rs("email")%></td>
             <td><%=rs("qq")%></td>
             <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
             <td><%=rs("lasttime")%></td>
-            <td>&nbsp;</td>
+            <td><a href="system.asp?action=edituser&amp;id=">详情编辑</a> <a href="system.asp?action=deluser&amp;idlist=">删除</a> <a href="system.asp?action=lockuser&amp;idlist=">锁定</a> <a href="system.asp?action=enableuser&amp;idlist=">激活</a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
           <%loop%>
           <tr>
-            <td colspan="11" align="right">
-			<%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%>
-            </td>
+            <td colspan="11"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
+              <div style="padding:5px 5px;">
+                <input type="button" value="删除" style="width:50px;" onclick="del_user(this.form);" />
+                <input type="button" value="锁定" style="width:50px;" onclick="lock_user(this.form);" />
+                <input type="button" value="激活" style="width:50px;" onclick="enable_user(this.form);" />
+                (多选批量操作)
+              </div></td>
           </tr>
           <%
 else
@@ -309,6 +311,18 @@ function searcher(){
 function orderby(by){
 	var order = "<%=order%>"=="desc"?"":"desc";
 	window.location = "system.asp?action=user&username=<%=username%>&userstatus=<%=userstatus%>&order="+order+"&by="+by+"&page=<%=page%>";
+}
+function get_idlist(){
+	
+}
+function del_user(){
+	var idlist = get_idlist();
+}
+function lock_user(){
+	var idlist = get_idlist();
+}
+function enable_user(){
+	var idlist = get_idlist();
 }
 </script>
 <%
