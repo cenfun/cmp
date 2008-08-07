@@ -18,7 +18,7 @@ SystemTime=Now()
 '站点cookies唯一标识
 Const CookieName="cenfun_cmp3"
 '数据连接
-on error resume next
+'on error resume next
 Set conn= Server.CreateObject("ADODB.Connection")
 conn.ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.MapPath(sitedb)
 conn.Open

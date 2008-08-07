@@ -39,6 +39,9 @@ sub config()
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form action="system.asp?action=save_config" method="post" onSubmit="return check(this);">
     <tr>
+      <th colspan="2" align="left">系统配置：</th>
+    </tr>
+    <tr>
       <td align="right">CMP地址：</td>
       <td><input name="cmp_path" type="text" id="cmp_path" value="<%=cmp_path%>" size="50" /></td>
     </tr>
@@ -134,6 +137,54 @@ function check(o){
 	}
 	return true;
 }
+</script>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <th colspan="2" align="left">数据库：</th>
+  </tr>
+  <tr>
+    <td align="right">数据库路径：</td>
+    <td><%=Server.MapPath(sitedb)%></td>
+  </tr>
+  <tr>
+    <td align="right">数据库大小：</td>
+    <td><%=getFileInfo(sitedb)(0)%></td>
+  </tr>
+  <tr>
+    <td align="right">压缩和修复数据库：</td>
+    <td><form action="system.asp?action=config" method="post">
+        <input name="dbdo" type="hidden" value="compact" />
+        <input type="submit" value="开始" style="width:50px;" />
+        推荐经常操作，可以有效地释放无效空间，加快访问速度
+      </form>
+      <div style="color:#0000FF;">
+        <%
+if request.Form("dbdo") = "compact" then
+	Response.write "关闭所有连接...<br />"
+	conn.close
+	Response.write "开始压缩和修复数据...<br />"
+	dim AccessFSO,AccessEngine
+	Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
+	IF AccessFSO.FileExists(Server.Mappath(sitedb)) Then
+		Set AccessEngine = CreateObject("JRO.JetEngine")
+		AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb & ".temp")
+		AccessFSO.CopyFile Server.Mappath(sitedb & ".temp"),Server.Mappath(sitedb)
+		AccessFSO.DeleteFile(Server.Mappath(sitedb & ".temp"))
+		Set AccessFSO = Nothing
+		Set AccessEngine = Nothing
+		Response.write "压缩数据库完成！新的文件大小为："&getFileInfo(sitedb)(0)
+	end if
+end if
+	  %>
+      </div></td>
+  </tr>
+  <tr>
+    <td align="right">备份数据库：</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<script type="text/javascript">
+
 </script>
 <%
 end sub
@@ -287,7 +338,7 @@ IF not rs.EOF Then
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
-            <%end if%></td>
+              <%end if%></td>
             <td><%=role%></td>
             <td><%=rs("id")%></td>
             <td><%=rs("username")%></td>

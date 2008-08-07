@@ -110,6 +110,28 @@ Function UnCheckStr(ByVal Str)
         Str = Replace(Str, "&amp;", "&")
     	UnCheckStr=Str
 End Function
+
+'获取文件信息
+function getFileInfo(FileName)
+	dim FSO,File,FileInfo(3)
+	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+	if FSO.FileExists(Server.MapPath(FileName)) then
+		Set File=FSO.GetFile(Server.MapPath(FileName))
+		FileInfo(0)=File.Size
+		if FileInfo(0)/1000>1 then 
+			FileInfo(0)=int(FileInfo(0)/1000)&" KB"
+		else
+			FileInfo(0)=FileInfo(0)&" Bytes"
+		end if
+		FileInfo(1)=lcase(right(FileName,4))
+		FileInfo(2)=File.DateCreated
+		FileInfo(3)=File.Type 
+	end if
+	getFileInfo=FileInfo
+	Set FSO=Nothing
+end function
+
+'分页显示
 function showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
 	dim zh,en,str
 	zh="共,【首页】,【上一页】,【下一页】,【尾页】,页次：,页,页,转到："
@@ -277,6 +299,11 @@ Sub cenfun_error()
 End Sub
 
 Sub footer()
+'关闭连接
+If conn.State <> 0 Then 
+	conn.close
+	set conn = nothing
+end if
 %>
 <div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.<span>
   <!--页底站点统计，请更换成您自己的： 
