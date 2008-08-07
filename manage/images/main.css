@@ -5,15 +5,15 @@ body { background-color:#F5FAFE; }
 a:link, a:visited { color:#000000; text-decoration:none; }
 a:hover { color:#428EFF; text-decoration:underline; }
 label input { height:14px; }
-.tableborder { margin:0px auto; border:1px solid #CAD9EA; margin-bottom:10px; }
+.tableborder { margin:0px auto; border:1px solid #CAD9EA; margin-bottom:10px; background-color:#FFFFFF; }
 .tableborder th { padding:5px 3px; border-bottom:1px solid #CAD9EA; color:#428EFF; }
 .tableborder td { padding:2px 2px; line-height:20px; }
-.headlink:link, .headlink:visited { font-weight:bold; padding:1px 5px; }
+.headlink:link, .headlink:visited { font-weight:bold; padding:1px 5px; list-style:inside disc; }
 .headlink:hover { text-decoration:underline; color:#428EFF; }
 .tablelist { margin:0px auto; background-color:#CAD9EA; }
 .tablelist tr { background-color:#FFFFFF; }
-.tablelist th { padding:2px 2px; color:#428EFF; }
-.tablelist th a:link, .tablelist th a:visited { color:#428EFF; }
+.tablelist th { padding:2px 2px; color:#000000; font-weight:normal; border:none; background-color:#f5f5f5; }
+.tablelist th a:link, .tablelist th a:visited { color:#428EFF; text-decoration:underline; }
 .tablelist th a:hover { }
 .tablelist td { padding:2px 2px; }
 .list { }
@@ -22,7 +22,7 @@ label input { height:14px; }
 #menu a:link, #menu a:visited { color:#FFFFFF; line-height:32px; padding:0px 5px; font-weight:bold; }
 #menu a:hover { text-decoration:underline; }
 #menu span { padding-right:20px; }
-#menu span a:link, #menu span a:visited{ font-weight:normal; }
+#menu span a:link, #menu span a:visited { font-weight:normal; }
 #footer { text-align:center; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; }
 #footer span { display:none; }
 #footer a:link, #footer a:visited { color:#666666; }

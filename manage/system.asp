@@ -59,13 +59,13 @@ sub config()
       <td><input name="site_email" type="text" id="site_email" value="<%=site_email%>" size="50" /></td>
     </tr>
     <tr>
-      <td align="right">默认统计(图片方式)：</td>
+      <td align="right">CMP默认统计(图片方式)：</td>
       <td><input name="site_count" type="text" id="site_count" value="<%=site_count%>" size="50" /></td>
     </tr>
     <tr>
       <td align="right">系统公告：<br />
         (支持html)</td>
-      <td><textarea name="site_ads" cols="50" rows="8" id="site_ads"><%=site_ads%></textarea></td>
+      <td><textarea name="site_ads" cols="100" rows="10" id="site_ads"><%=site_ads%></textarea></td>
     </tr>
     <tr>
       <td align="right">是否开启用户注册：</td>
@@ -211,7 +211,9 @@ if username <> "" then
 	sql = sql & " username like '%"&username&"%' and "
 end if
 if userstatus <> "" then
-	sql = sql & " userstatus="&userstatus&" and "
+	if IsNumeric(userstatus) then
+		sql = sql & " userstatus="&userstatus&" and "
+	end if
 end if
 sql = sql & " 1=1 "
 if order<>"desc" then
@@ -256,10 +258,10 @@ IF not rs.EOF Then
 	%>
           <tr>
             <th><input type="checkbox" onClick="CheckAll(this,this.form);" /></th>
-            <th><a href="javascript:orderby('userstatus');">状态</a></th>
-            <th><a href="javascript:orderby('id');">ID</a></th>
-            <th><a href="javascript:orderby('username');">用户名</a></th>
-            <th><a href="javascript:orderby('lasttime');">最后登录</a></th>
+            <th><a href="javascript:orderby('userstatus');" title="点击按其排序">状态</a></th>
+            <th><a href="javascript:orderby('id');" title="点击按其排序">ID</a></th>
+            <th><a href="javascript:orderby('username');" title="点击按其排序">用户名</a></th>
+            <th><a href="javascript:orderby('lasttime');" title="点击按其排序">最后登录</a></th>
             <th>Email</th>
             <th>QQ</th>
             <th colspan="2">播放器名称</th>
@@ -282,10 +284,10 @@ IF not rs.EOF Then
 			role = "未定义"
 		end select
 		%>
-          <tr align="center" onMouseOver="highlight(this,'#FbFbFb','#ffffff');">
+          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
-              <%end if%></td>
+            <%end if%></td>
             <td><%=role%></td>
             <td><%=rs("id")%></td>
             <td><%=rs("username")%></td>

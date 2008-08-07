@@ -15,7 +15,7 @@ sub main()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
     <tr>
-      <th colspan="2">用户列表</th>
+      <th colspan="2" align="left">用户列表:</th>
     </tr>
 </table>
 <%

@@ -48,7 +48,7 @@ sub userinfo()
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form>
     <tr>
-      <th colspan="2">个人资料</th>
+      <th colspan="2" align="left">个人资料:</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>

@@ -33,10 +33,10 @@ sub main()
 	loop
 	session("verifycode")=rndnum
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form action="index.asp?action=login" method="post" onsubmit="return check(this);">
     <tr>
-      <th colspan="2">用户登录</th>
+      <th colspan="2" align="left">用户登录:</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>
@@ -79,27 +79,12 @@ function check(o){
 	return true;
 }
 </script>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th>系统公告</th>
+    <th align="left">系统公告:</th>
   </tr>
   <tr>
-    <td><%=site_ads%></td>
-  </tr>
-</table>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
-  <tr>
-    <th>相关信息</th>
-  </tr>
-  <tr>
-    <td><ul class="list">
-        <li>晨风在线音乐系统通过与 <a href="http://bbs.cenfun.com/" target="_blank">CMP v3.0</a> 的结合，可以轻松实现网上音乐的在线编辑和播放，并支持多用户管理，让你轻松建设自己的多用户音乐站</li>
-        <li>管理员的默认帐号和密码为：admin </li>
-        <li>安全起见，请在第一次登录后将管理员的用户名或密码修改，请在conn.asp文件中对数据库路径和名称进行修改(默认为data/#cmp3_2008.mdb，推荐数据库文件名中加#符号，防止被猜测下载)，进入系统请根据情况修改您的站点配置信息</li>
-        <li>管理员可以开启和关闭用户注册，以及用户注册后是否需要审核，并管理所有用户；管理员可以管理预存皮肤skins和插件plugins，以供普通用户选择使用</li>
-        <li>普通用户激活后(审核通过)，可以登录系统管理自己的配置config和列表list，修改用户信息以及获得播放器调用地址</li>
-        <li>更多信息请进CMP交流论坛:<a href="http://bbs.cenfun.com/" target="_blank">http://bbs.cenfun.com/</a></li>
-      </ul></td>
+    <td><%=UnCheckStr(site_ads)%></td>
   </tr>
 </table>
 <%
@@ -109,10 +94,10 @@ sub reg()
 	menu()
 if user_reg="1" then
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form action="index.asp?action=save_reg" method="post" onsubmit="return check(this);">
     <tr>
-      <th colspan="2">用户注册</th>
+      <th colspan="2" align="left">用户注册:</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>
@@ -220,9 +205,9 @@ function check(o){
 <%
 else
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th>用户注册</th>
+    <th align="left">用户注册:</th>
   </tr>
   <tr>
     <td align="center">站点暂时关闭用户注册。如有任何问题，请查看<a href="index.asp">系统公告</a>或联系管理员：<br />

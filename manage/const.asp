@@ -74,7 +74,42 @@ Function CheckStr(byVal ChkStr)
 	Set re=Nothing
 	CheckStr=Str
 End Function
-
+'*************************************
+'恢复特殊字符
+'*************************************
+Function UnCheckStr(ByVal Str)
+		If IsNull(Str) Then
+			UnCheckStr = ""
+			Exit Function 
+		End If
+	    Str = Replace(Str,"&#39;","'")
+        Str = Replace(Str,"&#34;","""")
+		Dim re
+		Set re=new RegExp
+		re.IgnoreCase =True
+		re.Global=True
+		re.Pattern="(w)(h&#101;re)"
+	    str = re.replace(str,"$1here")
+		re.Pattern="(s)(el&#101;ct)"
+	    str = re.replace(str,"$1elect")
+		re.Pattern="(i)(ns&#101;rt)"
+	    str = re.replace(str,"$1nsert")
+		re.Pattern="(c)(r&#101;ate)"
+	    str = re.replace(str,"$1reate")
+		re.Pattern="(d)(ro&#112;)"
+	    str = re.replace(str,"$1rop")
+		re.Pattern="(a)(lt&#101;r)"
+	    str = re.replace(str,"$1lter")
+		re.Pattern="(d)(el&#101;te)"
+	    str = re.replace(str,"$1elete")
+		re.Pattern="(u)(p&#100;ate)"
+	    str = re.replace(str,"$1pdate")
+		re.Pattern="(\s)(o&#114;)"
+	    Str = re.replace(Str,"$1or")
+		Set re=Nothing
+        Str = Replace(Str, "&amp;", "&")
+    	UnCheckStr=Str
+End Function
 function showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
 	dim zh,en,str
 	zh="共,【首页】,【上一页】,【下一页】,【尾页】,页次：,页,页,转到："
