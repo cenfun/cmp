@@ -16,27 +16,10 @@ Case "config"
 	config()
 Case "list"
 	list()
-Case "show"
-	show()
 Case Else
 	main()
 End Select
 footer()
-
-
-sub main()
-%>
-<div style="padding:30px 0px; text-align:center;">登录成功！请选择以上功能菜单进行操作。</div>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="700">
-  <tr>
-    <th>系统公告</th>
-  </tr>
-  <tr>
-    <td><%=site_ads%></td>
-  </tr>
-</table>
-<%
-end sub
 
 sub userinfo()
 end sub
@@ -47,7 +30,7 @@ end sub
 sub list()
 end sub
 
-sub show()
+sub main()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>

@@ -18,10 +18,11 @@ label input { height:14px; }
 .tablelist td { padding:2px 2px; }
 .list { }
 .list li { list-style:inside; }
-#menu { background:url(top_bg.gif); height:32px; line-height:32px; color:#FFFFFF; font-weight:bold; padding-left:10px; margin-bottom:10px; text-align:center; overflow:hidden; }
-#menu a:link, #menu a:visited { color:#FFFFFF; font-weight:bold; line-height:32px; padding:0px 10px; }
+#menu { background:url(top_bg.gif); height:32px; line-height:32px; color:#FFFFFF; padding:0px 10px; margin-bottom:10px; overflow:hidden; }
+#menu a:link, #menu a:visited { color:#FFFFFF; line-height:32px; padding:0px 5px; font-weight:bold; }
 #menu a:hover { text-decoration:underline; }
-#menu span { padding-right:10px; font-weight:normal; }
+#menu span { padding-right:20px; }
+#menu span a:link, #menu span a:visited{ font-weight:normal; }
 #footer { text-align:center; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; }
 #footer span { display:none; }
 #footer a:link, #footer a:visited { color:#666666; }
