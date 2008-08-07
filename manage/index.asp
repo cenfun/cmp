@@ -135,6 +135,14 @@ if user_reg="1" then
       <td align="right">QQ：</td>
       <td><input name="qq" type="text" id="qq" size="30" maxlength="50" /></td>
     </tr>
+    <tr>
+      <td align="right">播放器名称：</td>
+      <td><input name="cmp_name" type="text" id="cmp_name" size="50" maxlength="200" /></td>
+    </tr>
+    <tr>
+      <td align="right">网址：</td>
+      <td><input name="cmp_url" type="text" id="cmp_url" size="50" maxlength="200" /></td>
+    </tr>
     <%if user_check="1" then%>
     <tr>
       <td align="right">注：</td>
@@ -201,6 +209,11 @@ function check(o){
 		o.passwordcheck.value = "";
 		return false;
 	}
+	if(o.cmp_name.value==""){
+		alert("播放器名称不能为空！");
+		o.cmp_name.focus();
+		return false;
+	}
 	return true;
 }
 </script>
@@ -231,7 +244,7 @@ sub checkuser()
 end sub
 
 sub save_reg()
-	dim UserName,PassWord,email,qq
+	dim UserName,PassWord,email,qq,cmp_name,cmp_url
 	dim userstatus
 	if user_check="1" then
 		userstatus = "0"
@@ -242,13 +255,15 @@ sub save_reg()
 	PassWord=md5(request.Form("password")+UserName,16)
 	email=Checkstr(Request.Form("email"))
 	qq=Checkstr(Request.Form("qq"))
+	cmp_name=Checkstr(Request.Form("cmp_name"))
+	cmp_url=Checkstr(Request.Form("cmp_url"))
 	sql = "select username from cmp_user where username='"&UserName&"'"
 	set rs=conn.Execute(sql)
 		if rs.eof then
 			'id,username,password,userstatus,regtime,lasttime,lastip,email,qq,logins,cmp_name,cmp_url,config,list
 			sql = "insert into cmp_user "
-			sql = sql & "(username,[password],userstatus,regtime,lasttime,lastip,email,qq) values("
-			sql = sql & "'"&UserName&"','"&PassWord&"',"&userstatus&","&SqlNowString&","&SqlNowString&",'"&UserTrueIP&"','"&email&"','"&qq&"')"
+			sql = sql & "(username,[password],userstatus,regtime,lasttime,lastip,email,qq,cmp_name,cmp_url) values("
+			sql = sql & "'"&UserName&"','"&PassWord&"',"&userstatus&","&SqlNowString&","&SqlNowString&",'"&UserTrueIP&"','"&email&"','"&qq&"','"&cmp_name&"','"&cmp_url&"')"
 			conn.execute(sql)
 			SucMsg = "您的注册信息已经提交成功。"
 			if user_check="1" then

@@ -21,15 +21,6 @@ Case Else
 End Select
 footer()
 
-sub userinfo()
-end sub
-
-sub config()
-end sub
-
-sub list()
-end sub
-
 sub main()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
@@ -51,6 +42,72 @@ sub main()
 </script>
 <%
 end sub
+
+sub userinfo()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <form>
+    <tr>
+      <th colspan="2">个人资料</th>
+    </tr>
+    <tr>
+      <td align="right">用户名：</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">注册日期：</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">最后登录：</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">Email：</td>
+      <td><input name="email" type="text" id="email" size="30" maxlength="50" /></td>
+    </tr>
+    <tr>
+      <td align="right">QQ：</td>
+      <td><input name="qq" type="text" id="qq" size="30" maxlength="50" /></td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="right">&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </form>
+</table>
+<%
+end sub
+
+sub config()
+end sub
+
+sub list()
+end sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Sub save_manage()
 dim saveaction,sql
@@ -197,4 +254,5 @@ function make_cflist_music(title,url,lrc,content,pic,x,y,w,h,s,a,c,u,scene)
 		str=str&"</m>"
 	make_cflist_music=str	
 end function
+
 %>

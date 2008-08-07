@@ -206,7 +206,7 @@ by=Checkstr(Request.QueryString("by"))
         <form>
           <%
 '查询串
-sql = "select id,username,userstatus,email,qq,lasttime from cmp_user where "
+sql = "select id,username,userstatus,lasttime,email,qq,cmp_name from cmp_user where "
 if username <> "" then
 	sql = sql & " username like '%"&username&"%' and "
 end if
@@ -262,7 +262,7 @@ IF not rs.EOF Then
             <th><a href="javascript:orderby('lasttime');">最后登录</a></th>
             <th>Email</th>
             <th>QQ</th>
-            <th>CMP</th>
+            <th colspan="2">播放器名称</th>
             <th>操作</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
@@ -292,6 +292,7 @@ IF not rs.EOF Then
             <td><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><%=rs("email")%></td>
             <td><%=rs("qq")%></td>
+            <td><%=rs("cmp_name")%></td>
             <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank">查看</a></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>
           </tr>
@@ -299,7 +300,7 @@ IF not rs.EOF Then
           <%PageC=PageC+1%>
           <%loop%>
           <tr>
-            <td colspan="11"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div>
+            <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div>
               <div style="padding:5px 5px;">
                 <input type="button" value="删除" style="width:50px;" onClick="dealuser(this);" title="删除用户不能恢复" />
                 <input type="button" value="锁定" style="width:50px;" onClick="dealuser(this);" title="锁定用户" />
