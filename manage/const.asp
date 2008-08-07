@@ -142,6 +142,17 @@ function JoinChar(strUrl)
 	end if
 end function
 
+function geturl(id)
+	dim url
+	if xml_make = "1" then
+		url = xml_path & "/" & id & xml_config
+	else
+		'config.asp%3Fid%3D1 
+		'config.asp?  id=  1 
+		url = "config.asp%3Fid%3D" & id
+	end if
+	geturl = url
+end function
 
 Sub header()
 %>
@@ -229,8 +240,9 @@ End Sub
 Sub footer()
 %>
 <div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.<span>
-  <!--页底站点统计，请更换成您自己的： -->
+  <!--页底站点统计，请更换成您自己的： 
   <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
+  -->
   </span></div>
 <%
 response.Write("</body></html>")

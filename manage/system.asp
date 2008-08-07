@@ -97,7 +97,7 @@ sub config()
             </tr>
           </table>
         </div>
-        修改后所有用户静态调用地址将改变，请务必通知</td>
+        <div>修改后所有用户静态调用地址将改变，请务必通知</div></td>
     </tr>
     <tr>
       <td>&nbsp;</td>
@@ -180,7 +180,7 @@ by=Checkstr(Request.QueryString("by"))
     <td><span style="float:right;">用户名
       <input type="text" name="username" id="username" value="<%=username%>" />
       <input type="button" name="search" id="search" value="搜索" onclick="searcher();" />
-      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&userstatus=0" class="headlink">未审核用户</a> </td>
+      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&userstatus=0" class="headlink">未激活用户</a> </td>
   </tr>
   <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
@@ -237,13 +237,13 @@ IF not rs.EOF Then
 	%>
           <tr>
             <th><input type="checkbox" onclick="CheckAll(this,this.form);" /></th>
-            <th><a href="javascript:orderby('id');">ID</a></th>
             <th><a href="javascript:orderby('userstatus');">状态</a></th>
+            <th><a href="javascript:orderby('id');">ID</a></th>
             <th><a href="javascript:orderby('username');">用户名</a></th>
+            <th><a href="javascript:orderby('lasttime');">最后登录</a></th>
             <th>Email</th>
             <th>QQ</th>
             <th>CMP</th>
-            <th><a href="javascript:orderby('lasttime');">最后登录</a></th>
             <th>操作</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
@@ -252,27 +252,29 @@ IF not rs.EOF Then
 		ustatus = rs("userstatus")
 		select case ustatus
 		case 0
-			role = "<strong>未审核</strong>"
+			role = "<strong>未激活</strong>"
 		case 1
-			role = "被锁定"
+			role = "<strong style='color:#999999'>被锁定</strong>"
 		case 5
 			role = "普通用户"
 		case 9
-			role = "管理员"
+			role = "<strong style='color:#0000ff'>管理员</strong>"
 		case else
 			role = "未定义"
 		end select
 		%>
           <tr align="center" onmouseover="highlight(this,'#FbFbFb','#ffffff');">
-            <td><%if ustatus<>9 then%><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" /><%end if%></td>
-            <td><%=rs("id")%></td>
+            <td><%if ustatus<>9 then%>
+              <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
+              <%end if%></td>
             <td><%=role%></td>
+            <td><%=rs("id")%></td>
             <td><%=rs("username")%></td>
+            <td><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><%=rs("email")%></td>
             <td><%=rs("qq")%></td>
-            <td>&nbsp;</td>
-            <td><%=rs("lasttime")%></td>
-            <td><a href="system.asp?action=edituser&amp;id=">详情编辑</a> <a href="system.asp?action=deluser&amp;idlist=">删除</a> <a href="system.asp?action=lockuser&amp;idlist=">锁定</a> <a href="system.asp?action=enableuser&amp;idlist=">激活</a></td>
+            <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank">查看</a></td>
+            <td><a href="system.asp?action=edituser&amp;id=">详情编辑</a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
@@ -280,11 +282,10 @@ IF not rs.EOF Then
           <tr>
             <td colspan="11"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
               <div style="padding:5px 5px;">
-                <input type="button" value="删除" style="width:50px;" onclick="del_user(this.form);" />
-                <input type="button" value="锁定" style="width:50px;" onclick="lock_user(this.form);" />
-                <input type="button" value="激活" style="width:50px;" onclick="enable_user(this.form);" />
-                (多选批量操作)
-              </div></td>
+                <input type="button" value="删除" style="width:50px;" onclick="dealuser(this);" />
+                <input type="button" value="锁定" style="width:50px;" onclick="dealuser(this);" />
+                <input type="button" value="激活" style="width:50px;" onclick="dealuser(this);" />
+                (可多选批量操作) </div></td>
           </tr>
           <%
 else
@@ -305,24 +306,46 @@ Set rs=Nothing
 function searcher(){
 	var str = document.getElementById("username").value;
 	if(str != "<%=username%>"){
-		window.location = "system.asp?action=user&username="+str+"&userstatus=<%=userstatus%>&order=<%=order%>&by=<%=by%>&page=<%=page%>";
+		window.location = "system.asp?action=user&username="+str+"&userstatus=<%=userstatus%>&order=<%=order%>&by=<%=by%>";
 	}
 }
 function orderby(by){
 	var order = "<%=order%>"=="desc"?"":"desc";
-	window.location = "system.asp?action=user&username=<%=username%>&userstatus=<%=userstatus%>&order="+order+"&by="+by+"&page=<%=page%>";
+	window.location = "system.asp?action=user&username=<%=username%>&userstatus=<%=userstatus%>&order="+order+"&by="+by;
 }
-function get_idlist(){
-	
+function get_idlist(o){
+	var ids = new Array();
+	var arr = o.idlist;
+	if(arr){
+		var l = arr.length;
+		if(l){
+			for(var i = 0; i < l; i++){
+				if(arr[i].checked){
+					ids.push(arr[i].value);
+				}
+			}
+		}else if(arr.checked){
+			ids.push(arr.value);
+		}
+	}
+	return ids;
 }
-function del_user(){
-	var idlist = get_idlist();
-}
-function lock_user(){
-	var idlist = get_idlist();
-}
-function enable_user(){
-	var idlist = get_idlist();
+function dealuser(o){
+	var str = o.value;
+	var id_list = get_idlist(o.form);
+	if(id_list.length > 0){
+		if(confirm("确定要【"+str+"】以下id所在的项？\n\n"+id_list.toString())){
+			if(str == "删除"){
+				
+			}else if(str == "锁定"){
+				
+			}else if(str == "激活"){
+				
+			}
+		}
+	} else {
+		alert("请先选择要【"+str+"】的项");
+	}
 }
 </script>
 <%
