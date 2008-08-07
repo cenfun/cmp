@@ -87,7 +87,7 @@ sub config()
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td>生成文件的目录：</td>
-              <td><input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" /></td>
+              <td><input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" /> 当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
             </tr>
             <tr>
               <td>模板配置文件名：</td>

@@ -131,6 +131,32 @@ function getFileInfo(FileName)
 	Set FSO=Nothing
 end function
 
+'获取文件夹大小
+function getFolderSize(path)
+	dim FSO,folder,FolderSize,str
+	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+	if FSO.FolderExists(Server.MapPath(path)) then	 		
+		set folder=FSO.getfolder(Server.MapPath(path)) 		
+		FolderSize=folder.size
+		str=FolderSize & " Bytes" 
+		if FolderSize>1024 then
+		   FolderSize=(FolderSize/1024)
+		   str=formatnumber(FolderSize,2) & " KB"
+		end if
+		if FolderSize>1024 then
+		   FolderSize=(FolderSize/1024)
+		   str=formatnumber(FolderSize,2) & "MB"		
+		end if
+		if FolderSize>1024 then
+		   FolderSize=(FolderSize/1024)
+		   str=formatnumber(FolderSize,2) & "GB"	   
+		end if   
+	else
+		str = ""
+	end if
+	getFolderSize = str
+End function	
+
 '分页显示
 function showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
 	dim zh,en,str
