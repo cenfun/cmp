@@ -301,9 +301,9 @@ IF not rs.EOF Then
           <tr>
             <td colspan="11"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div>
               <div style="padding:5px 5px;">
-                <input type="button" value="删除" style="width:50px;" onClick="dealuser(this);" />
-                <input type="button" value="锁定" style="width:50px;" onClick="dealuser(this);" />
-                <input type="button" value="激活" style="width:50px;" onClick="dealuser(this);" />
+                <input type="button" value="删除" style="width:50px;" onClick="dealuser(this);" title="删除用户不能恢复" />
+                <input type="button" value="锁定" style="width:50px;" onClick="dealuser(this);" title="锁定用户" />
+                <input type="button" value="激活" style="width:50px;" onClick="dealuser(this);" title="设置为普通用户" />
                 (可多选批量操作) </div></td>
           </tr>
           <%

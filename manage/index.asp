@@ -302,7 +302,7 @@ sub login()
 			ErrMsg = "您的帐号还没有激活，请耐心等待管理员的审核或及时联系管理员。"
 			cenfun_error()
 		elseif rs("userstatus") = 1 then
-			ErrMsg = "您的帐号被管理员锁定，有任何问题请联系管理员。"
+			ErrMsg = "对不起！您的帐号被管理员【锁定】，有任何问题请联系管理员。"
 			cenfun_error()
 		else
 			'session超时时间
