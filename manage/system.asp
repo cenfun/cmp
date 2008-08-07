@@ -16,6 +16,8 @@ Case "save_config"
 	save_config()
 Case "user"
 	user()
+Case "edituser"
+	edituser()
 Case "saveuser"
 	saveuser()
 Case "skins"
@@ -197,7 +199,7 @@ by=Checkstr(Request.QueryString("by"))
         <input type="text" name="username" id="username" value="<%=username%>" />
         <input type="submit" name="search" id="search" value="搜索" />
       </form>
-      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&userstatus=0" class="headlink">未激活用户</a> </td>
+      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&userstatus=0" class="headlink">未激活用户</a> | <a href="system.asp?action=user&userstatus=1" class="headlink">被锁定用户</a> | <a href="system.asp?action=user&userstatus=5" class="headlink">正常用户</a> </td>
   </tr>
   <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
@@ -291,7 +293,7 @@ IF not rs.EOF Then
             <td><%=rs("email")%></td>
             <td><%=rs("qq")%></td>
             <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank">查看</a></td>
-            <td><a href="system.asp?action=edituser&amp;id=">详情编辑</a></td>
+            <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
@@ -367,6 +369,10 @@ function dealuser(o){
 }
 </script>
 <%
+end sub
+
+sub edituser()
+
 end sub
 
 sub saveuser()
