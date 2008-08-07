@@ -37,7 +37,7 @@ footer()
 sub config()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form action="system.asp?action=save_config" method="post" onsubmit="return check(this);">
+  <form action="system.asp?action=save_config" method="post" onSubmit="return check(this);">
     <tr>
       <td align="right">CMP地址：</td>
       <td><input name="cmp_path" type="text" id="cmp_path" value="<%=cmp_path%>" size="50" /></td>
@@ -79,7 +79,7 @@ sub config()
     </tr>
     <tr>
       <td align="right" valign="top">是否生成静态XML数据文件：</td>
-      <td align="left"><input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onclick="xmlmake(this);" />
+      <td align="left"><input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onClick="xmlmake(this);" />
         开启将减轻服务器负担，服务器必须支持FSO写文件
         <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
           <table border="0" cellspacing="0" cellpadding="0">
@@ -177,9 +177,12 @@ by=Checkstr(Request.QueryString("by"))
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td><span style="float:right;">用户名
-      <input type="text" name="username" id="username" value="<%=username%>" />
-      <input type="button" name="search" id="search" value="搜索" onclick="searcher();" />
+    <td><span style="float:right;">
+      <form onSubmit="return searcher();">
+        用户名
+        <input type="text" name="username" id="username" value="<%=username%>" />
+        <input type="submit" name="search" id="search" value="搜索" />
+      </form>
       </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&userstatus=0" class="headlink">未激活用户</a> </td>
   </tr>
   <tr>
@@ -236,7 +239,7 @@ IF not rs.EOF Then
 	rs_nums=rs.RecordCount
 	%>
           <tr>
-            <th><input type="checkbox" onclick="CheckAll(this,this.form);" /></th>
+            <th><input type="checkbox" onClick="CheckAll(this,this.form);" /></th>
             <th><a href="javascript:orderby('userstatus');">状态</a></th>
             <th><a href="javascript:orderby('id');">ID</a></th>
             <th><a href="javascript:orderby('username');">用户名</a></th>
@@ -263,7 +266,7 @@ IF not rs.EOF Then
 			role = "未定义"
 		end select
 		%>
-          <tr align="center" onmouseover="highlight(this,'#FbFbFb','#ffffff');">
+          <tr align="center" onMouseOver="highlight(this,'#FbFbFb','#ffffff');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
               <%end if%></td>
@@ -282,9 +285,9 @@ IF not rs.EOF Then
           <tr>
             <td colspan="11"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div>
               <div style="padding:5px 5px;">
-                <input type="button" value="删除" style="width:50px;" onclick="dealuser(this);" />
-                <input type="button" value="锁定" style="width:50px;" onclick="dealuser(this);" />
-                <input type="button" value="激活" style="width:50px;" onclick="dealuser(this);" />
+                <input type="button" value="删除" style="width:50px;" onClick="dealuser(this);" />
+                <input type="button" value="锁定" style="width:50px;" onClick="dealuser(this);" />
+                <input type="button" value="激活" style="width:50px;" onClick="dealuser(this);" />
                 (可多选批量操作) </div></td>
           </tr>
           <%
@@ -308,6 +311,7 @@ function searcher(){
 	if(str != "<%=username%>"){
 		window.location = "system.asp?action=user&username="+str+"&userstatus=<%=userstatus%>&order=<%=order%>&by=<%=by%>";
 	}
+	return false;
 }
 function orderby(by){
 	var order = "<%=order%>"=="desc"?"":"desc";

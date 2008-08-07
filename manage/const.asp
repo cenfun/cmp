@@ -109,15 +109,16 @@ function showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,Sho
 	end if
 	strTemp=strTemp & "<span style='padding:0px 10px;'>"&str(5)&"<strong><font color='#ff0000'>" & CurrentPage & "</font>/" & n & "</strong>"&str(6)&"</span>"
 	strTemp=strTemp & "<strong>"&MaxPerPage&"</strong>"&strUnit&"/"&str(7)
-	if ShowAllPages=True then
+	if ShowAllPages=True and n < 1000 then
 		strTemp=strTemp &"<span style='padding-left:10px;'>"&str(8)
-		strTemp=strTemp &"<select name='page' size='1' onchange=""javascript:window.location='" & strUrl & "page=" & "'+this.options[this.selectedIndex].value;"">"   
+		strTemp=strTemp &"<select name='page' size='1' onchange=""javascript:window.location='" & strUrl & "page=" & "'+this.options[this.selectedIndex].value;"">"
 		for i = 1 to n   
 			strTemp=strTemp & "<option value='" & i & "'"
 			if cint(CurrentPage)=cint(i) then strTemp=strTemp & " selected "
 			strTemp=strTemp & ">"&i&"</option>"   
 		next
-		strTemp=strTemp & "</select></span>"
+		strTemp=strTemp & "</select>"
+		strTemp=strTemp & "</span>"
 	end if
 	strTemp=strTemp & "</span>"
 	showpage = strTemp
