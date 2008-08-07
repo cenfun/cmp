@@ -16,8 +16,6 @@ Case "save_config"
 	save_config()
 Case "user"
 	user()
-Case "deluser"
-	deluser()
 Case "saveuser"
 	saveuser()
 Case "skins"
@@ -168,6 +166,22 @@ sub save_config()
 end sub
 
 sub user()
+'操作处理
+dim idlist
+idlist = Checkstr(Request.QueryString("idlist"))
+if idlist <> "" then
+	select case Request.QueryString("deal")
+	case "del"
+		conn.execute("delete from cmp_user where id in ("&idlist&")")
+	case "lock"
+		conn.execute("update cmp_user set userstatus=1 where id in ("&idlist&")")
+	case "enable"
+		conn.execute("update cmp_user set userstatus=5 where id in ("&idlist&")")
+	case else
+	end select
+	response.Redirect(Request.QueryString("referer"))
+	exit sub
+end if
 'action=user
 dim username,userstatus,order,by
 username=Checkstr(Request.QueryString("username"))
@@ -338,13 +352,13 @@ function dealuser(o){
 	var str = o.value;
 	var id_list = get_idlist(o.form);
 	if(id_list.length > 0){
-		if(confirm("确定要【"+str+"】以下id所在的项？\n\n"+id_list.toString())){
+		if(confirm("确定要【"+str+"】以下id所在的项？\n\n"+id_list)){
 			if(str == "删除"){
-				
+				window.location = "system.asp?action=user&deal=del&idlist="+id_list+"&referer="+escape(window.location);
 			}else if(str == "锁定"){
-				
+				window.location = "system.asp?action=user&deal=lock&idlist="+id_list+"&referer="+escape(window.location);
 			}else if(str == "激活"){
-				
+				window.location = "system.asp?action=user&deal=enable&idlist="+id_list+"&referer="+escape(window.location);
 			}
 		}
 	} else {
@@ -355,35 +369,8 @@ function dealuser(o){
 <%
 end sub
 
-sub deluser()
-end sub
-
 sub saveuser()
-	Dim UserName,ip
-	Dim PassWord,PassWord1
-	UserName=Replace(Request("username"),"'","")
-	PassWord=md5(request("password"),16)
-	PassWord1=md5(request("password1"),16)
-	ip=UserTrueIP
-	set rs=conn.Execute("select * from cmp_admin where password='"&PassWord&"'")
-	if rs.eof then
-		rs.close
-		set rs=nothing
-		Errmsg=Errmsg&"<li>原密码不正确,修改失败！"
-		cenfun_error()
-    	response.End
-		Exit Sub
-	else
-		rs.close
-		set rs=nothing
-		'Response.write PassWord1
-		conn.Execute("Update cmp_admin Set username='"&UserName&"',[password]='"&password1&"',Lasttime="&SqlNowString&",LastIP='"&ip&"' ")
-		Session(CookieName & "_UserName")=UserName
-		'session超时时间
-		Session.Timeout=45
-		SucMsg=SucMsg&"<li>修改密码成功！"
-		Cenfun_suc("?")
-	end if	
+
 end sub
 
 sub skins()
