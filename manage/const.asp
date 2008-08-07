@@ -78,7 +78,7 @@ End Function
 function showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
 	dim zh,en,str
 	zh="共,【首页】,【上一页】,【下一页】,【尾页】,页次：,页,页,转到："
-	en="Total,First,Previous,Next,Last,Page:,&nbsp;,Page,Turn To:"
+	en="Total,First,Previous,Next,Last,Page:,&nbsp;,Page,Go:"
 	if language="en" then
 		str=split(en,",")
 	else

@@ -226,7 +226,7 @@ if page <> "" then
 end if
 dim PageC,MaxPerPage
 	PageC=0
-	MaxPerPage=3
+	MaxPerPage=30
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
 IF not rs.EOF Then
@@ -280,7 +280,7 @@ IF not rs.EOF Then
           <%PageC=PageC+1%>
           <%loop%>
           <tr>
-            <td colspan="11"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
+            <td colspan="11"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div>
               <div style="padding:5px 5px;">
                 <input type="button" value="删除" style="width:50px;" onclick="dealuser(this);" />
                 <input type="button" value="锁定" style="width:50px;" onclick="dealuser(this);" />
