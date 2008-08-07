@@ -178,10 +178,6 @@ end if
 	  %>
       </div></td>
   </tr>
-  <tr>
-    <td align="right">备份数据库：</td>
-    <td>&nbsp;</td>
-  </tr>
 </table>
 <script type="text/javascript">
 
