@@ -299,11 +299,6 @@ Sub cenfun_error()
 End Sub
 
 Sub footer()
-'关闭连接
-If conn.State <> 0 Then 
-	conn.close
-	set conn = nothing
-end if
 %>
 <div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved.<span>
   <!--页底站点统计，请更换成您自己的： 
@@ -312,5 +307,10 @@ end if
   </span></div>
 <%
 response.Write("</body></html>")
+'关闭所有连接
+If conn.state <> 0 Then 
+	conn.close
+	set conn = nothing
+end if
 End Sub
 %>

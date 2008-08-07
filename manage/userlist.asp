@@ -3,10 +3,10 @@
 <% 
 header()
 Select Case Request.QueryString("action")
-Case "hot"
-	hot()
-Case Else
-	main()
+	Case "hot"
+		hot()
+	Case Else
+		main()
 End Select
 footer()
 

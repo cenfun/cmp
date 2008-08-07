@@ -5,21 +5,22 @@
 '检测用户是否登录
 If Session(CookieName & "_username")="" Then
 	response.Redirect("index.asp")
+else
+	header()
+	menu()
+	Select Case Request.QueryString("action")
+		Case "userinfo"
+			userinfo()
+		Case "config"
+			config()
+		Case "list"
+			list()
+		Case Else
+			main()
+	End Select
+	footer()
 end if
-'//////////////////////////////
-header()
-menu()
-Select Case Request.QueryString("action")
-Case "userinfo"
-	userinfo()
-Case "config"
-	config()
-Case "list"
-	list()
-Case Else
-	main()
-End Select
-footer()
+
 
 sub main()
 %>

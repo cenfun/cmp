@@ -5,34 +5,33 @@
 '检测管理员是否登录
 If Session(CookieName & "_username")="" or Session(CookieName & "_admin")="" Then
 	response.Redirect("index.asp")
+else
+	header()
+	menu()
+	Select Case Request.QueryString("action")
+		Case "config"
+			config()
+		Case "save_config"
+			save_config()
+		Case "user"
+			user()
+		Case "edituser"
+			edituser()
+		Case "saveuser"
+			saveuser()
+		Case "skins"
+			skins()
+		Case "saveskins"
+			saveskins()
+		Case "plugins"
+			plugins()
+		Case "saveplugins"
+			saveplugins()
+		Case Else
+			config()
+	End Select
+	footer()
 end if
-'//////////////////////////////
-header()
-menu()
-Select Case Request.QueryString("action")
-Case "config"
-	config()
-Case "save_config"
-	save_config()
-Case "user"
-	user()
-Case "edituser"
-	edituser()
-Case "saveuser"
-	saveuser()
-Case "skins"
-	skins()
-Case "saveskins"
-	saveskins()
-Case "plugins"
-	plugins()
-Case "saveplugins"
-	saveplugins()
-Case Else
-	config()
-End Select
-footer()
-
 
 sub config()
 %>

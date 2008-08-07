@@ -7,16 +7,16 @@ if Request.QueryString("username")<>"" then
 else
 	header()
 	Select Case Request.QueryString("action")
-	Case "login"
-		login()
-	Case "reg"
-		reg()
-	Case "save_reg"
-		save_reg()
-	Case "logout"
-		logout()
-	Case Else
-		main()
+		Case "login"
+			login()
+		Case "reg"
+			reg()
+		Case "save_reg"
+			save_reg()
+		Case "logout"
+			logout()
+		Case Else
+			main()
 	End Select
 	footer()
 end if
