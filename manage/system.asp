@@ -102,8 +102,8 @@ sub config()
         <div>修改后所有用户静态调用地址将改变，请务必通知</div></td>
     </tr>
     <tr>
-      <td>&nbsp;</td>
-      <td><input name="submit" type="submit" value="修改" style="width:50px;" /></td>
+      <td width="20%">&nbsp;</td>
+      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" /></td>
     </tr>
   </form>
 </table>
@@ -142,8 +142,8 @@ function check(o){
     <th colspan="2" align="left">数据库：</th>
   </tr>
   <tr>
-    <td align="right">数据库路径：</td>
-    <td><%=Server.MapPath(sitedb)%></td>
+    <td align="right" width="20%">数据库路径：</td>
+    <td width="80%"><%=Server.MapPath(sitedb)%></td>
   </tr>
   <tr>
     <td align="right">数据库大小：</td>
@@ -339,7 +339,7 @@ IF not rs.EOF Then
             <td><%=rs("username")%></td>
             <td><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
-            <td><a href="http://wpa.qq.com/msgrd?Uin=<%=rs("qq")%>" target="_blank"><%=rs("qq")%></a></td>
+            <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
             <td><%=rs("cmp_name")%></td>
             <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank">查看</a></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>

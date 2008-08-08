@@ -26,8 +26,8 @@ sub main()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td align="right">CMP地址：</td>
-    <td><input name="site_name" type="text" id="site_name" value="" size="50" /></td>
+    <td width="20%" align="right">CMP地址：</td>
+    <td width="80%"><input name="site_name" type="text" id="site_name" value="" size="50" /></td>
   </tr>
   <tr>
     <td align="right">页面地址：</td>
@@ -45,46 +45,115 @@ sub main()
 end sub
 
 sub userinfo()
+sql = "select * from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+set rs = conn.execute(sql)
+if not rs.eof then
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form>
+  <form method="post">
     <tr>
       <th colspan="2" align="left">个人资料:</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td>&nbsp;</td>
+      <td><%=rs("username")%></td>
     </tr>
     <tr>
       <td align="right">注册日期：</td>
-      <td>&nbsp;</td>
+      <td><%=rs("regtime")%></td>
     </tr>
     <tr>
-      <td align="right">最后登录：</td>
-      <td>&nbsp;</td>
+      <td align="right">最后登录日期：</td>
+      <td><%=rs("lasttime")%></td>
+    </tr>
+    <tr>
+      <td align="right">最后访问IP：</td>
+      <td><%=rs("lastip")%> <a href="<%=getIpUrl(rs("lastip"))%>" target="_blank">查询</a></td>
+    </tr>
+    <tr>
+      <td align="right">登录次数：</td>
+      <td><%=rs("logins")%></td>
     </tr>
     <tr>
       <td align="right">Email：</td>
-      <td><input name="email" type="text" id="email" size="30" maxlength="50" /></td>
+      <td><input name="email" type="text" id="email" size="30" maxlength="50" value="<%=rs("email")%>" /></td>
     </tr>
     <tr>
       <td align="right">QQ：</td>
-      <td><input name="qq" type="text" id="qq" size="30" maxlength="50" /></td>
+      <td><input name="qq" type="text" id="qq" size="30" maxlength="50" value="<%=rs("qq")%>" /></td>
     </tr>
     <tr>
-      <td align="right">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td align="right">播放器名称：</td>
+      <td><input name="cmp_name" type="text" id="cmp_name" size="50" maxlength="200" value="<%=rs("cmp_name")%>" /></td>
     </tr>
     <tr>
-      <td align="right">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td align="right">网址：</td>
+      <td><input name="cmp_url" type="text" id="cmp_url" size="50" maxlength="200" value="<%=rs("cmp_url")%>" /></td>
     </tr>
     <tr>
-      <td align="right">&nbsp;</td>
-      <td>&nbsp;</td>
+      <td width="20%">&nbsp;</td>
+      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" /></td>
     </tr>
   </form>
 </table>
+<%
+end if
+rs.close
+set rs = nothing
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <form method="post">
+    <tr>
+      <th colspan="2" align="left">修改密码:</th>
+    </tr>
+    <tr>
+      <td align="right">原有密码：</td>
+      <td><input name="oldpassword" type="password" id="oldpassword" size="20" /></td>
+    </tr>
+    <tr>
+      <td align="right">新密码：</td>
+      <td><input name="newpassword" type="password" id="newpassword" size="20" /></td>
+    </tr>
+    <tr>
+      <td align="right">确认密码：</td>
+      <td><input name="passwordcheck" type="password" id="passwordcheck" size="20" /></td>
+    </tr>
+    <tr>
+      <td width="20%">&nbsp;</td>
+      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" />
+        修改完需重新登录</td>
+    </tr>
+  </form>
+</table>
+<%if Session(CookieName & "_username") = Session(CookieName & "_admin") then%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <form method="post">
+    <tr>
+      <th colspan="2" align="left">修改用户名:</th>
+    </tr>
+    <tr>
+      <td align="right">密码：</td>
+      <td><input name="password" type="password" id="password" size="20" />
+        必须输入当前用户密码才能修改</td>
+    </tr>
+    <tr>
+      <td align="right">用户名：</td>
+      <td><input name="username" type="text" id="username" size="20" maxlength="200" value="<%=Session(CookieName & "_admin")%>" />
+        仅管理员可修改</td>
+    </tr>
+    <tr>
+      <td align="right">注：</td>
+      <td>请不要使用常见的管理员名，如admin等，以防止恶意破解；<br />
+        请务必牢记修改后的用户名，如果忘记请打开数据库查阅。</td>
+    </tr>
+    <tr>
+      <td width="20%">&nbsp;</td>
+      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" />
+        修改完需重新登录</td>
+    </tr>
+  </form>
+</table>
+<%end if%>
 <%
 end sub
 

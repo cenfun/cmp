@@ -37,6 +37,14 @@ dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
 
+function getIpUrl(ip)
+	getIpUrl = "http://www.baidu.com/s?wd=" & ip
+end function
+
+function getQqUrl(qq)
+	getQqUrl = "http://wpa.qq.com/msgrd?Uin=" & qq
+end function
+
 '*************************************
 '过滤特殊字符
 '*************************************

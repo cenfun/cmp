@@ -46,7 +46,7 @@ sub main()
     <tr>
       <td align="right">密　码：</td>
       <td><input name="password" type="password" id="password" size="25" tabindex="2" />
-        忘记密码？联系管理员(邮箱:<a href="mailto:<%=site_email%>" target="_blank"><%=site_email%></a> 或QQ:<a href="http://wpa.qq.com/msgrd?Uin=<%=site_qq%>" target="_blank"><%=site_qq%></a>)</td>
+        忘记密码？联系管理员(邮箱:<a href="mailto:<%=site_email%>" target="_blank"><%=site_email%></a> 或QQ:<a href="<%=getQqUrl(site_qq)%>" target="_blank"><%=site_qq%></a>)</td>
     </tr>
     <tr>
       <td align="right">验证码：</td>
@@ -136,7 +136,7 @@ if user_reg="1" then
     <%end if%>
     <tr>
       <td>&nbsp;</td>
-      <td><input name="submit" type="submit" value="提交" style="width:50px;" tabindex="4" /></td>
+      <td><input name="submit" type="submit" value="提交" style="width:50px;" /></td>
     </tr>
   </form>
 </table>
@@ -212,7 +212,7 @@ else
   <tr>
     <td align="center">站点暂时关闭用户注册。如有任何问题，请查看<a href="index.asp">系统公告</a>或联系管理员：<br />
       邮箱：<a href="mailto:<%=site_email%>" title="<%=site_email%>" target="_blank"><%=site_email%></a><br />
-      QQ：<a href="http://wpa.qq.com/msgrd?Uin=<%=site_qq%>" target="_blank"><%=site_qq%></a></td>
+      QQ：<a href="<%=getQqUrl(site_qq)%>" target="_blank"><%=site_qq%></a></td>
   </tr>
 </table>
 <%
@@ -309,11 +309,11 @@ sub login()
 			Session.Timeout = 45
 			Session(CookieName & "_username") = UserName
 			if rs("userstatus") = 9 then
-				Session(CookieName & "_admin") = "cmp_admin"
+				Session(CookieName & "_admin") = UserName
 			else
 				Session(CookieName & "_admin") = ""
 			end if
-			sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&UserTrueIP&"' Where username='"&UserName&"'"
+			sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&UserTrueIP&"',logins=logins+1 Where username='"&UserName&"'"
 			'response.Write(sql)
 			conn.Execute(sql)
 			rs.close
