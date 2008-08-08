@@ -243,7 +243,7 @@ sub save_reg()
 	if user_check="1" then
 		userstatus = "0"
 	else
-		userstatus = "1"
+		userstatus = "5"
 	end if
 	UserName=Checkstr(Request.Form("username"))
 	PassWord=md5(request.Form("password")+UserName,16)
@@ -322,9 +322,9 @@ sub login()
 			else
 				Session(CookieName & "_admin") = ""
 			end if
-			sql = "Update cmp_user Set Lasttime="&SqlNowString&",Lastip='"&UserTrueIP&"',logins=logins+1 Where username='"&UserName&"'"
+			sql = "update cmp_user set lasttime="&SqlNowString&",lastip='"&UserTrueIP&"',logins=logins+1 where username='"&UserName&"'"
 			'response.Write(sql)
-			conn.Execute(sql)
+			conn.execute(sql)
 			rs.close
 			set rs=nothing
 			Response.Redirect "manage.asp"
