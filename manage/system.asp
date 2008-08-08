@@ -338,8 +338,8 @@ IF not rs.EOF Then
             <td><%=rs("id")%></td>
             <td><%=rs("username")%></td>
             <td><%=FormatDateTime(rs("lasttime"),2)%></td>
-            <td><%=rs("email")%></td>
-            <td><%=rs("qq")%></td>
+            <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
+            <td><a href="http://wpa.qq.com/msgrd?Uin=<%=rs("qq")%>" target="_blank"><%=rs("qq")%></a></td>
             <td><%=rs("cmp_name")%></td>
             <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank">查看</a></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>
