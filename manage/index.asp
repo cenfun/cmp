@@ -51,7 +51,7 @@ sub main()
     <tr>
       <td align="right">验证码：</td>
       <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" />
-        <span class="verifycode"><%=session("verifycode")%></span></td>
+        <span class="verifycode" onselectstart="return false;" style="-moz-user-select:none; cursor:default;"><%=getCode(session("verifycode"))%></span></td>
     </tr>
     <tr>
       <td>&nbsp;</td>

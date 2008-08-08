@@ -37,12 +37,35 @@ dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
 
+'查询IP地址
 function getIpUrl(ip)
 	getIpUrl = "http://www.baidu.com/s?wd=" & ip
 end function
-
+'调用QQ地址
 function getQqUrl(qq)
 	getQqUrl = "http://wpa.qq.com/msgrd?Uin=" & qq
+end function
+'验证码简单混淆
+function getCode(code)
+	dim str,i,rd,num
+	for i = 0 to 3
+		rd = cint(rnd*9)
+		num = Mid(code, i + 1, 1)
+		if num > 5 then
+			str = str & "<span style=""color:#ffffff;font-size:" & (num - 5) & "px;"">" & num & "</span>"
+		end if
+		if rd > 5 then
+			str = str & "<span style=""color:#000000;"">" & rd & "</span>"
+			str = str & "<span style=""color:#ffffff;"">" & num & "</span>"
+		else
+			str = str & "<span style=""color:#ffffff;"">" & num & "</span>"
+			str = str & "<span style=""color:#000000;"">" & rd & "</span>"
+		end if
+		if num < 5 then
+			str = str & "<span style=""color:#ffffff;font-size:" & num & "px;"">" & rd & "</span>"
+		end if
+	next
+	getCode = str
 end function
 
 '*************************************
