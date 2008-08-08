@@ -100,7 +100,8 @@ sub config()
             </tr>
           </table>
         </div>
-        <div>修改后所有用户静态调用地址将改变，请务必通知</div></td>
+        <div style="color:#0000FF;">注：修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户<br />
+          请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源</div></td>
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
@@ -196,22 +197,37 @@ sub save_config()
 	site_ads=Checkstr(Request.Form("site_ads"))
 	user_reg=Request.Form("user_reg")
 	user_check=Request.Form("user_check")
-	xml_make=Request.Form("xml_make")
-	xml_path=Checkstr(Request.Form("xml_path"))
-	xml_config=Checkstr(Request.Form("xml_config"))
-	xml_list=Checkstr(Request.Form("xml_list"))
+	'静态数据设置
+	dim xmlmake,xmlpath,xmlconfig,xmllist
+	xmlmake=Request.Form("xml_make")
+	xmlpath=Checkstr(Request.Form("xml_path"))
+	xmlconfig=Checkstr(Request.Form("xml_config"))
+	xmllist=Checkstr(Request.Form("xml_list"))
   	sql = "Update cmp_config Set "
 	sql = sql & "cmp_path='"&cmp_path&"',site_name='"&site_name&"',site_url='"&site_url&"',site_qq='"&site_qq&"',site_email='"&site_email&"',site_count='"&site_count&"',site_ads='"&site_ads&"',"
-	sql = sql & "user_reg='"&user_reg&"',user_check='"&user_check&"',xml_make='"&xml_make&"',"
-	sql = sql & "xml_path='"&xml_path&"',xml_config='"&xml_config&"',xml_list='"&xml_list&"',lasttime="&SqlNowString&""
+	sql = sql & "user_reg='"&user_reg&"',user_check='"&user_check&"',xml_make='"&xmlmake&"',"
+	sql = sql & "xml_path='"&xmlpath&"',xml_config='"&xmlconfig&"',xml_list='"&xmllist&"',lasttime="&SqlNowString&""
 	'response.Write(sql)
 	conn.execute(sql)
-	SucMsg=SucMsg&"修改成功！"
-	Cenfun_suc("system.asp?action=config")
-	'更新Application信息
-	Application.Lock
-	Application(CookieName&"_Arr_system_info")=""
-	Application.UnLock
+	if xmlmake=xml_make and xmlpath=xml_path and xmlconfig=xml_config and xmllist=xml_list then
+		SucMsg=SucMsg&"修改成功！"
+		Cenfun_suc("system.asp?action=config")
+	else
+%>
+<div class="output">
+  <p>保存设置信息完成！</p>
+  <%%>
+  <p>开始重建新的静态数据...</p>
+  <p>
+    <input name="" type="button" value="&lt;&lt;返回系统设置" onclick="window.location='system.asp?action=config';" />
+  </p>
+</div>
+<%
+	end if
+'更新Application信息
+Application.Lock
+Application(CookieName&"_Arr_system_info")=""
+Application.UnLock
 end sub
 
 sub user()
@@ -429,7 +445,121 @@ function dealuser(o){
 end sub
 
 sub edituser()
-
+dim id
+id=Checkstr(Request.QueryString("id"))
+if id <> "" then
+	if IsNumeric(id) then
+		id = cint(id)
+	else
+		ErrMsg = "参数错误"
+	end if
+else
+	ErrMsg = "参数错误"
+end if
+if ErrMsg <> "" then
+	cenfun_error()
+else
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <th colspan="2" align="left"><input type="button" value="&lt;&lt;返回用户列表" onclick="window.location='<%=Request.ServerVariables("HTTP_REFERER")%>';" /></th>
+  </tr>
+  <%
+sql = "select * from cmp_user where id = " & id & " "
+set rs = conn.execute(sql)
+if not rs.eof then
+	dim role,ustatus
+	ustatus = rs("userstatus")
+	select case ustatus
+	case 0
+		role = "<strong>未激活</strong>"
+	case 1
+		role = "<strong style='color:#999999'>被锁定</strong>"
+	case 5
+		role = "普通用户"
+	case 9
+		role = "<strong style='color:#0000ff'>管理员</strong>"
+	case else
+		role = "未定义"
+	end select
+%>
+  <form method="post" action="manage.asp?action=saveinfo&do=info" onsubmit="return check_info(this);">
+    <tr>
+      <th colspan="2" align="left">详细资料:</th>
+    </tr>
+    <tr>
+      <td align="right">ID：</td>
+      <td><%=rs("id")%></td>
+    </tr>
+    <tr>
+      <td align="right">状态：</td>
+      <td><%=role%></td>
+    </tr>
+    <tr>
+      <td align="right">用户名：</td>
+      <td><%=rs("username")%></td>
+    </tr>
+    <%if ustatus <> 9 then%>
+    <tr>
+      <td align="right">密码：</td>
+      <td><input name="password" type="password" id="password" size="30" />
+        不修改请留空</td>
+    </tr>
+    <%end if%>
+    <tr>
+      <td align="right">注册日期：</td>
+      <td><%=rs("regtime")%></td>
+    </tr>
+    <tr>
+      <td align="right">最后登录日期：</td>
+      <td><%=rs("lasttime")%></td>
+    </tr>
+    <tr>
+      <td align="right">最后访问IP：</td>
+      <td><%=rs("lastip")%> <a href="<%=getIpUrl(rs("lastip"))%>" target="_blank">查询</a></td>
+    </tr>
+    <tr>
+      <td align="right">登录次数：</td>
+      <td><input name="logins" type="text" id="logins" size="30" maxlength="50" value="<%=rs("logins")%>" /></td>
+    </tr>
+    <tr>
+      <td align="right">点击次数：</td>
+      <td><input name="hits" type="text" id="hits" size="30" maxlength="50" value="<%=rs("hits")%>" /></td>
+    </tr>
+    <tr>
+      <td align="right">Email：</td>
+      <td><input name="email" type="text" id="email" size="30" maxlength="50" value="<%=rs("email")%>" /></td>
+    </tr>
+    <tr>
+      <td align="right">QQ：</td>
+      <td><input name="qq" type="text" id="qq" size="30" maxlength="50" value="<%=rs("qq")%>" /></td>
+    </tr>
+    <tr>
+      <td align="right">播放器名称：</td>
+      <td><input name="cmp_name" type="text" id="cmp_name" size="50" maxlength="200" value="<%=rs("cmp_name")%>" /></td>
+    </tr>
+    <tr>
+      <td align="right">网址：</td>
+      <td><input name="cmp_url" type="text" id="cmp_url" size="50" maxlength="200" value="<%=rs("cmp_url")%>" /></td>
+    </tr>
+    <tr>
+      <td align="right">播放器地址：</td>
+      <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank"><%=cmp_path%>?url=<%=geturl(rs("id"))%></a></td>
+    </tr>
+    <tr>
+      <td width="20%">&nbsp;</td>
+      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" />
+      </td>
+    </tr>
+  </form>
+  <%
+end if
+rs.close
+set rs = nothing
+%>
+</table>
+<%
+end if
 end sub
 
 sub saveuser()
