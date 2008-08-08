@@ -87,7 +87,8 @@ sub config()
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td>生成文件的目录：</td>
-              <td><input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" /> 当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
+              <td><input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" />
+                当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
             </tr>
             <tr>
               <td>模板配置文件名：</td>
@@ -245,7 +246,14 @@ by=Checkstr(Request.QueryString("by"))
         <input type="text" name="username" id="username" value="<%=username%>" />
         <input type="submit" name="search" id="search" value="搜索" />
       </form>
-      </span><a href="system.asp?action=user" class="headlink">所有用户</a> | <a href="system.asp?action=user&userstatus=0" class="headlink">未激活用户</a> | <a href="system.asp?action=user&userstatus=1" class="headlink">被锁定用户</a> | <a href="system.asp?action=user&userstatus=5" class="headlink">正常用户</a> </td>
+      </span>
+      <select onchange="window.location='system.asp?action=user&userstatus='+this.options[this.selectedIndex].value;">
+        <option value="">所有用户</option>
+        <option value="0" <%if userstatus="0" then%>selected="selected"<%end if%>>未激活用户</option>
+        <option value="1" <%if userstatus="1" then%>selected="selected"<%end if%>>被锁定用户</option>
+        <option value="5" <%if userstatus="5" then%>selected="selected"<%end if%>>正常用户</option>
+      </select>
+    </td>
   </tr>
   <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
