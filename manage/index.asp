@@ -50,12 +50,12 @@ sub main()
     </tr>
     <tr>
       <td align="right">验证码：</td>
-      <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" />
-        <span class="verifycode" onselectstart="return false;" style="-moz-user-select:none; cursor:default;"><%=getCode(session("verifycode"))%></span></td>
+      <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" onfocus="showcode();" />
+        <span id="verifycodeobj"></span></td>
     </tr>
     <tr>
-      <td>&nbsp;</td>
-      <td><input name="submit" type="submit" value="登录" style="width:50px;" tabindex="4" /></td>
+      <td width="10%">&nbsp;</td>
+      <td width="90%"><input name="submit" type="submit" value="登录" style="width:50px;" tabindex="4" /></td>
     </tr>
   </form>
 </table>
@@ -77,6 +77,15 @@ function check(o){
 		return false;
 	}
 	return true;
+}
+function showcode(){
+	var html = '<%=getCode(session("verifycode"))%>';
+	var obj = document.getElementById("verifycodeobj");
+	obj.style.background = "#000000";
+	obj.className = "verifycode";
+	obj.style.display = "";
+	obj.onselectstart = function(){return false;}
+	obj.innerHTML = html;
 }
 </script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">

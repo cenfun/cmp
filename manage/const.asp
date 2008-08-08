@@ -52,7 +52,7 @@ function getCode(code)
 		rd = cint(rnd*9)
 		num = Mid(code, i + 1, 1)
 		if num > 5 then
-			str = str & "<span style=""color:#ffffff;font-size:" & (num - 5) & "px;"">" & num & "</span>"
+			str = str & "<span style=""display:none;"">" & num & "</span>"
 		end if
 		if rd > 5 then
 			str = str & "<span style=""color:#000000;"">" & rd & "</span>"
@@ -62,7 +62,7 @@ function getCode(code)
 			str = str & "<span style=""color:#000000;"">" & rd & "</span>"
 		end if
 		if num < 5 then
-			str = str & "<span style=""color:#ffffff;font-size:" & num & "px;"">" & rd & "</span>"
+			str = str & "<span style=""display:none;"">" & rd & "</span>"
 		end if
 	next
 	getCode = str
