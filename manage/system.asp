@@ -351,7 +351,7 @@ IF not rs.EOF Then
             <th><a href="javascript:orderby('lasttime');" title="点击按其排序">最后登录</a></th>
             <th>Email</th>
             <th>QQ</th>
-            <th colspan="2">播放器名称</th>
+            <th>播放器</th>
             <th>操作</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
@@ -377,12 +377,11 @@ IF not rs.EOF Then
               <%end if%></td>
             <td><%=role%></td>
             <td><%=rs("id")%></td>
-            <td><%=rs("username")%></td>
+            <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>" title="点击查看和编辑详细资料"><%=rs("username")%></a></td>
             <td><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
             <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
-            <td><%=rs("cmp_name")%></td>
-            <td><a href="<%=getCmpUrl(rs("id"))%>" target="_blank">查看</a></td>
+            <td><a href="<%=getCmpUrl(rs("id"))%>" target="_blank" title="点击在新窗口中打开"><%=rs("cmp_name")%></a></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>
           </tr>
           <%rs.MoveNext%>
@@ -482,7 +481,7 @@ if ErrMsg <> "" then
 else
 	dim referer
 	referer = Request.ServerVariables("HTTP_REFERER")
-	if referer="" then
+	if referer="" or InStr(LCase(referer),"system.asp?action=user")=0 then
 		referer="system.asp?action=user"
 	end if
 %>
@@ -511,7 +510,7 @@ if not rs.eof then
 	dim cmpurl
 	cmpurl = getCmpUrl(rs("id"))
 %>
-  <form method="post" action="system.asp?action=saveuser" onSubmit="return check(this);">
+  <form method="post" action="system.asp?action=saveuser&id=<%=rs("id")%>" onSubmit="return check(this);">
     <tr>
       <th colspan="2" align="left">详细资料:</th>
     </tr>
@@ -531,7 +530,7 @@ if not rs.eof then
     <tr>
       <td align="right">密码：</td>
       <td><input name="password" type="password" id="password" size="30" />
-        不修改请留空</td>
+        一般用于帮用户重置密码，不修改请留空。</td>
     </tr>
     <%end if%>
     <tr>
@@ -588,6 +587,16 @@ set rs = nothing
 </table>
 <script type="text/javascript">
 function check(o){
+	if(o.logins.value=="" || isNaN(o.logins.value)){
+		alert("登录次数必须为数字！");
+		o.logins.focus();
+		return false;
+	}
+	if(o.hits.value=="" || isNaN(o.hits.value)){
+		alert("登录次数必须为数字！");
+		o.hits.focus();
+		return false;
+	}
 	if(o.cmp_name.value==""){
 		alert("播放器名称不能为空！");
 		o.cmp_name.focus();
@@ -601,7 +610,34 @@ end if
 end sub
 
 sub saveuser()
-
+dim id
+id=Checkstr(Request.QueryString("id"))
+if id <> "" then
+	if IsNumeric(id) then
+		'修改用户信息
+		sql = "select username from cmp_user where id="&id
+		set rs = conn.execute(sql)
+		if not rs.eof then
+			dim password,logins,hits,email,qq,cmp_name,cmp_url
+			if Request.Form("password")<>"" then
+				password=md5(Request.Form("password")+rs("username"),16)
+				conn.execute("update cmp_user set [password]='"&password&"' where username='"&rs("username")&"'")
+			end if
+			logins=Checkstr(Request.Form("logins"))
+			hits=Checkstr(Request.Form("hits"))
+			email=Checkstr(Request.Form("email"))
+			qq=Checkstr(Request.Form("qq"))
+			cmp_name=Checkstr(Request.Form("cmp_name"))
+			cmp_url=Checkstr(Request.Form("cmp_url"))
+			sql = "update cmp_user set logins="&logins&",hits="&hits&",email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"' "
+			sql = sql & " where username='"&rs("username")&"'"
+			'response.Write(sql)
+			conn.execute(sql)
+			SucMsg=SucMsg&"修改成功！"
+			Cenfun_suc(Request.ServerVariables("HTTP_REFERER"))
+		end if
+	end if
+end if
 end sub
 
 sub skins()
