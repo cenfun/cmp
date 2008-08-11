@@ -310,28 +310,41 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 	FSO.CreateFolder(Server.MapPath(xmlpath))
 	end if
 	'生成文件
-	dim config_file,list_file,num
+	dim num
 	num = 0
-	sql = "select id,config,list from cmp_user"
-	set rs = conn.execute(sql)
-  		do while not rs.eof
-			if rs("config")<>"" then
-				Set config_file = FSO.CreateTextFile(server.MapPath(xmlpath & "/" & rs("id") & xmlconfig),true)
-					config_file.Write rs("config")
-					config_file.close
-				set config_file=nothing
-			end if
-			if rs("list")<>"" then
-				Set list_file = FSO.CreateTextFile(server.MapPath(xmlpath & "/" & rs("id") & xmllist),true)
-					list_file.Write rs("list")
-					list_file.close
-				set list_file=nothing
-			end if
-			rs.movenext
-			num = num + 2
-		loop
-  	rs.close
-	set rs = nothing
+	dim objStream
+	Set objStream = Server.CreateObject("ADODB.Stream")
+	If Err.Number=-2147221005 Then 
+		ErrMsg = "服务器不支持ADODB.Stream"
+		cenfun_error()
+		Err.Clear
+	else
+		sql = "select id,config,list from cmp_user"
+		set rs = conn.execute(sql)
+			do while not rs.eof
+					With objStream
+					.Open
+					.Charset = "utf-8"
+					.Position = objStream.Size
+					.WriteText = rs("config")
+					.SaveToFile Server.Mappath(xmlpath & "/" & rs("id") & xmlconfig),2 
+					.Close
+					End With
+					With objStream
+					.Open
+					.Charset = "utf-8"
+					.Position = objStream.Size
+					.WriteText = rs("list")
+					.SaveToFile Server.Mappath(xmlpath & "/" & rs("id") & xmllist),2 
+					.Close
+					End With
+				rs.movenext
+				num = num + 2
+			loop
+		rs.close
+		set rs = nothing
+	end if
+	Set objStream = Nothing
   %>
   <p>重建数据完成！共生成<%=num%>个文件。</p>
   <%end if%>

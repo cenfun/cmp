@@ -15,51 +15,82 @@ else
 			saveinfo()	
 		Case "config"
 			config()
+		Case "saveconfig"
+			saveconfig()
 		Case "list"
 			list()
+		Case "savelist"
+			savelist()
 		Case Else
 			main()
 	End Select
 	footer()
 end if
 
-
-sub main()
-%>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <td width="20%" align="right">CMP地址：</td>
-    <td width="80%"><input name="site_name" type="text" id="site_name" value="" size="50" /></td>
-  </tr>
-  <tr>
-    <td align="right">页面地址：</td>
-    <td><input name="site_url" type="text" id="site_url" value="" size="50" /></td>
-  </tr>
-  <tr>
-    <td align="right">预览效果：</td>
-    <td><input name="site_qq" type="text" id="site_qq" value="" size="50" /></td>
-  </tr>
-</table>
-<script type="text/javascript">
-
-</script>
-<%
-end sub
-
-
-
-
-
-sub config()
-end sub
-
 sub list()
 end sub
 
+sub config()
+sql = "select id,config from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+set rs = conn.execute(sql)
+if not rs.eof then
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
+    <input name="id" type="hidden" value="<%=rs("id")%>" />
+    <tr>
+      <th align="left">CMP配置文件编辑:</th>
+    </tr>
+    <tr>
+      <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"><%=rs("config")%></textarea></td>
+    </tr>
+    <tr>
+      <td align="center"><input name="config_submit" type="submit" id="config_submit" style="width:50px;" value="提交" /></td>
+    </tr>
+  </form>
+</table>
+<script type="text/javascript">
+function check_config(o){
+	
 
 
+	return true;
+}
+</script>
+<%
+end if
+rs.close
+set rs = nothing
+end sub
 
-
+sub saveconfig()
+	dim config,id
+	config = request.Form("config")
+	id = Checkstr(request.Form("id"))
+	conn.execute("update cmp_user set config='"&config&"' where username='" & Session(CookieName & "_username") & "'")
+	SucMsg="修改成功！"
+	Cenfun_suc("manage.asp?action=config")
+	'重建静态数据
+	if xml_make="1" then
+		dim objStream
+		Set objStream = Server.CreateObject("ADODB.Stream")
+		If Err.Number=-2147221005 Then 
+			ErrMsg = "服务器不支持ADODB.Stream"
+			cenfun_error()
+			Err.Clear
+		else
+			With objStream
+			.Open
+			.Charset = "utf-8"
+			.Position = objStream.Size
+			.WriteText = config
+			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_config),2 
+			.Close
+			End With
+			Set objStream = Nothing
+		end if
+	end if
+end sub
 
 sub userinfo()
 sql = "select * from cmp_user where username = '" & Session(CookieName & "_username") & "' "
@@ -235,7 +266,7 @@ if Request.QueryString("do")="info" then
 	sql = "update cmp_user set email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"' where username='"&username&"'"
 	'response.Write(sql)
 	conn.execute(sql)
-	SucMsg=SucMsg&"修改成功！"
+	SucMsg="修改成功！"
 	Cenfun_suc("manage.asp?action=userinfo")
 elseif Request.QueryString("do")="pass" then
 	'修改用户密码
@@ -246,7 +277,7 @@ elseif Request.QueryString("do")="pass" then
 	if not rs.eof then
 		newpassword=md5(request.Form("newpassword")+username,16)
 		conn.execute("update cmp_user set [password]='"&newpassword&"' where username='"&username&"'")
-		SucMsg=SucMsg&"修改成功！"
+		SucMsg="修改成功！"
 		Cenfun_suc("manage.asp?action=userinfo")
 	else
 		ErrMsg = "您输入的原密码错误，请返回重试"
@@ -275,7 +306,7 @@ elseif Request.QueryString("do")="name" then
 					conn.execute("update cmp_user set username='"&newusername&"',[password]='"&updatepassword&"' where username='"&username&"'")
 					Session(CookieName & "_username") = newusername
 					Session(CookieName & "_admin") = newusername
-					SucMsg=SucMsg&"修改成功！"
+					SucMsg="修改成功！"
 					Cenfun_suc("manage.asp?action=userinfo")
 				else
 					ErrMsg = "您输入的用户名已经存在，请返回重试"
@@ -298,12 +329,40 @@ end if
 end sub
 
 
+sub main()
+sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+set rs = conn.execute(sql)
+if not rs.eof then
+	dim cmp_url,cmp_page_url
+	cmp_url = getCmpUrl(rs("id"))
+	cmp_page_url = getCmpPageUrl(rs("id"))
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <td width="20%" align="right">CMP调用地址：</td>
+    <td width="80%"><a href="<%=cmp_url%>" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%></strong></a></td>
+  </tr>
+  <tr>
+    <td align="right">论坛调用代码：</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right">HTML调用代码：</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="right">页面地址：</td>
+    <td><a href="<%=cmp_page_url%>" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_page_url%></strong></a></td>
+  </tr>
+</table>
+<script type="text/javascript">
 
-
-
-
-
-
+</script>
+<%
+end if
+rs.close
+set rs = nothing
+end sub
 
 
 
@@ -363,7 +422,7 @@ if saveaction="edit" then
 		cenfun_error()
 	else
 		conn.execute("Update cfplay_list Set classid="&classid&",title='"&title&"',url='"&url&"',lrc='"&lrc&"',content='"&content&"',pic='"&pic&"',x='"&x&"',y='"&y&"',w='"&w&"',h='"&h&"',s='"&s&"',a='"&a&"',c='"&c&"',u='"&u&"',scene='"&scene&"',isbest="&isbest&","&addtime_sql&""&lasttime_sql&"sn="&sn&" Where id="&id&"")
-		SucMsg=SucMsg&"<li>修改资料成功!"
+		SucMsg="<li>修改资料成功!"
 		Cenfun_suc("?")
 	end if
 end if
@@ -376,7 +435,7 @@ if saveaction="add" then
 		'response.write "classid="&classid&"/url="&url&"/isbest="&isbest
 		sql="insert into cfplay_list (classid,title,url,lrc,content,pic,x,y,w,h,s,a,c,u,scene,addtime,lasttime,isbest,sn) values("&classid&",'"&title&"','"&url&"','"&lrc&"','"&content&"','"&pic&"','"&x&"','"&y&"','"&w&"','"&h&"','"&s&"','"&a&"','"&c&"','"&u&"','"&scene&"',"&SqlNowString&","&SqlNowString&","&isbest&","&sn&")"
 		conn.execute(sql)
-		SucMsg=SucMsg&"<li>添加成功!"
+		SucMsg="<li>添加成功!"
 		Cenfun_suc("?")
 	end if
 end if
@@ -400,7 +459,7 @@ dim cflist,bg,scene,ads,readme,cfversion,copyright,other
 		cenfun_error()
 	else
 		conn.execute("Update cfplay_config Set cflist='"&cflist&"',bg='"&bg&"',scene='"&scene&"',ads='"&ads&"',readme='"&readme&"',cfversion='"&cfversion&"',copyright='"&copyright&"',other='"&other&"'")
-		SucMsg=SucMsg&"<li>修改资料成功!"
+		SucMsg="<li>修改资料成功!"
 		Cenfun_suc("?action=config")
 	end if
 end sub

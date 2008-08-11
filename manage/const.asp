@@ -60,6 +60,12 @@ function getCmpUrl(id)
 	end if
 	getCmpUrl = cmp
 end function
+'CMP页面地址
+function getCmpPageUrl(id)
+	dim this_path
+	this_path="http://"&Request.ServerVariables("HTTP_HOST")&left(Request.ServerVariables("PATH_INFO"),InStrRev(Request.ServerVariables("PATH_INFO"),"/"))
+	getCmpPageUrl = this_path & "cmp.asp?id=" & id
+end function
 '取得动静态地址
 function geturl(id)
 	dim url
