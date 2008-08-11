@@ -28,7 +28,67 @@ else
 end if
 
 sub list()
+sql = "select id,list from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+set rs = conn.execute(sql)
+if not rs.eof then
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
+    <input name="id" type="hidden" value="<%=rs("id")%>" />
+    <tr>
+      <th align="left">CMP列表文件编辑:</th>
+    </tr>
+    <tr>
+      <td align="center"><textarea name="list" rows="30" id="list" style="width:99%;"><%=rs("list")%></textarea></td>
+    </tr>
+    <tr>
+      <td align="center"><input name="list_submit" type="submit" id="list_submit" style="width:50px;" value="提交" /></td>
+    </tr>
+  </form>
+</table>
+<script type="text/javascript">
+function check_list(o){
+	
+
+
+	return true;
+}
+</script>
+<%
+end if
+rs.close
+set rs = nothing
 end sub
+
+sub savelist()
+	dim list,id
+	list = request.Form("list")
+	id = Checkstr(request.Form("id"))
+	conn.execute("update cmp_user set list='"&list&"' where username='" & Session(CookieName & "_username") & "'")
+	SucMsg="修改成功！"
+	Cenfun_suc("manage.asp?action=list")
+	'重建静态数据
+	if xml_make="1" then
+		dim objStream
+		Set objStream = Server.CreateObject("ADODB.Stream")
+		If Err.Number=-2147221005 Then 
+			ErrMsg = "服务器不支持ADODB.Stream"
+			cenfun_error()
+			Err.Clear
+		else
+			With objStream
+			.Open
+			.Charset = "utf-8"
+			.Position = objStream.Size
+			.WriteText = list
+			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_list),2 
+			.Close
+			End With
+			Set objStream = Nothing
+		end if
+	end if
+end sub
+
 
 sub config()
 sql = "select id,config from cmp_user where username = '" & Session(CookieName & "_username") & "' "
