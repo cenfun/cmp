@@ -176,16 +176,20 @@ if request.Form("dbdo") = "compact" then
 	conn.close
 	Response.write "开始压缩和修复数据...<br />"
 	dim AccessFSO,AccessEngine
-	Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
-	IF AccessFSO.FileExists(Server.Mappath(sitedb)) Then
-		Set AccessEngine = CreateObject("JRO.JetEngine")
-		AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb & ".temp")
-		AccessFSO.CopyFile Server.Mappath(sitedb & ".temp"),Server.Mappath(sitedb)
-		AccessFSO.DeleteFile(Server.Mappath(sitedb & ".temp"))
-		Set AccessFSO = Nothing
-		Set AccessEngine = Nothing
-		Response.write "压缩数据库完成！新的文件大小为："&getFileInfo(sitedb)(0)
-	end if
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
+		IF AccessFSO.FileExists(Server.Mappath(sitedb)) Then
+			Set AccessEngine = CreateObject("JRO.JetEngine")
+			AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb & ".temp")
+			AccessFSO.CopyFile Server.Mappath(sitedb & ".temp"),Server.Mappath(sitedb)
+			AccessFSO.DeleteFile(Server.Mappath(sitedb & ".temp"))
+			Set AccessFSO = Nothing
+			Set AccessEngine = Nothing
+			Response.write "压缩数据库完成！新的文件大小为："&getFileInfo(sitedb)(0)
+		end If
+	Else
+		Response.write "<span style=""color:#ff0000;"">压缩数据库失败，服务器不支持FSO</span>"
+	End if
 end if
 	  %>
       </div></td>
