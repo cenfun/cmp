@@ -13,6 +13,8 @@ else
 			config()
 		Case "save_config"
 			save_config()
+		Case "remake"
+			reMakeData xml_make, xml_path, xml_config, xml_list
 		Case "user"
 			user()
 		Case "edituser"
@@ -111,8 +113,12 @@ sub config()
             </tr>
           </table>
         </div>
-        <div style="color:#0000FF;">注：修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户<br />
-          请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源</div></td>
+        <div style="color:#0000FF;">
+          <p>注：文件夹名请勿用同级目录下系统已存文件夹名称，如images,data,lrc,skins,plugins等，以防止修改时被删除</p>
+          <p>ID匹配文件名推荐用config.xml和list.xml，请勿用*.asp,*.asa等服务端程序后缀名，以防止恶意脚本执行</p>
+          <p>修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户</p>
+          <p>请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源和时间</p>
+        </div></td>
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
@@ -141,7 +147,7 @@ function check(o){
 		return false;
 	}
 	if(o.xml_make.checked) {
-		if(o.xml_path.value=="" || !checkbadwords(o.xml_path.value, "./\\:*?<>\"|")){
+		if(o.xml_path.value=="" || o.xml_path.value=="images" || o.xml_path.value=="data" || o.xml_path.value=="lrc" || o.xml_path.value=="skins" || o.xml_path.value=="plugins" || !checkbadwords(o.xml_path.value, "./\\:*?<>\"|")){
 			alert("生成静态数据的文件夹名不正确！");
 			o.xml_path.select();
 			return false;
@@ -167,11 +173,16 @@ function check(o){
 </script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th colspan="2" align="left">数据库：</th>
+    <th colspan="2" align="left">数据管理：</th>
   </tr>
   <tr>
-    <td align="right" width="20%">数据库路径：</td>
-    <td width="80%"><%=Server.MapPath(sitedb)%></td>
+    <td align="right" width="20%">手动重建所有静态数据文件：</td>
+    <td width="80%"><input name="按钮" type="button" style="width:50px;" value="开始" onclick="window.location='system.asp?action=remake';" /></td>
+  </tr>
+  
+  <tr>
+    <td align="right">数据库路径：</td>
+    <td><%=Server.MapPath(sitedb)%></td>
   </tr>
   <tr>
     <td align="right">数据库大小：</td>
@@ -265,14 +276,22 @@ sub save_config()
 	if xmlmake=xml_make and xmlpath=xml_path and xmlconfig=xml_config and xmllist=xml_list then
 		SucMsg="修改成功！"
 		Cenfun_suc("system.asp?action=config")
-	elseif CheckObjInstalled("Scripting.FileSystemObject")=true then
-		dim FSO
-		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+	else
+		reMakeData xmlmake, xmlpath, xmlconfig, xmllist
+	end if
+'更新Application信息
+Application.Lock
+Application(CookieName&"_Arr_system_info")=""
+Application.UnLock
+end sub
+
+sub reMakeData(xmlmake, xmlpath, xmlconfig, xmllist)
+if CheckObjInstalled("Scripting.FileSystemObject")=true then
+	dim FSO
+	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
 	'===================================================================
 %>
 <div class="output">
-  <p>保存设置信息完成！</p>
-  
   <%if xml_make="1" then%>
   <p>开始清除所有旧的静态数据...</p>
   <%
@@ -283,7 +302,6 @@ sub save_config()
   %>
   <p>清理完成！</p>
   <%end if%>
-  
   <%if xmlmake="1" then%>
   <p>开始重建所有静态数据...</p>
   <%
@@ -292,7 +310,8 @@ sub save_config()
 	FSO.CreateFolder(Server.MapPath(xmlpath))
 	end if
 	'生成文件
-	dim config_file,list_file
+	dim config_file,list_file,num
+	num = 0
 	sql = "select id,config,list from cmp_user"
 	set rs = conn.execute(sql)
   		do while not rs.eof
@@ -309,11 +328,12 @@ sub save_config()
 				set list_file=nothing
 			end if
 			rs.movenext
+			num = num + 2
 		loop
   	rs.close
 	set rs = nothing
   %>
-  <p>重建数据完成！</p>
+  <p>重建数据完成！共生成<%=num%>个文件。</p>
   <%end if%>
   <p>
     <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
@@ -321,16 +341,13 @@ sub save_config()
 </div>
 <%
 	'===================================================================
-		Set FSO=Nothing
-	else
-		ErrMsg="服务器不支持FSO，无法重建数据！"
-		Cenfun_err()
-	end if
-'更新Application信息
-Application.Lock
-Application(CookieName&"_Arr_system_info")=""
-Application.UnLock
+	Set FSO=Nothing
+else
+	ErrMsg="服务器不支持FSO，无法重建数据！"
+	cenfun_error()
+end if
 end sub
+
 
 sub user()
 '操作处理
@@ -718,7 +735,7 @@ if id <> "" then
 			sql = sql & " where username='"&rs("username")&"'"
 			'response.Write(sql)
 			conn.execute(sql)
-			SucMsg=SucMsg&"修改成功！"
+			SucMsg="修改成功！"
 			Cenfun_suc(Request.ServerVariables("HTTP_REFERER"))
 		end if
 		rs.close
