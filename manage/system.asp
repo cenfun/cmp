@@ -82,8 +82,18 @@ sub config()
     </tr>
     <tr>
       <td align="right" valign="top">是否生成静态XML数据文件：</td>
-      <td align="left"><input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onClick="xmlmake(this);" />
-        开启将减轻服务器负担，服务器必须支持FSO写文件
+      <td align="left"><%
+	  if CheckObjInstalled("Scripting.FileSystemObject")=false then
+	  	xml_make=""
+		'开启： regsvr32 scrrun.dll 
+		'关闭： regsvr32 /u scrrun.dll
+	  %>
+        <input name="xml_make" type="checkbox" id="xml_make" value="" disabled="disabled" />
+        您的服务器不支持FSO，无法开启此功能
+        <%else%>
+        <input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onClick="xmlmake(this);" />
+        开启将减轻服务器负担(服务器必须支持FSO)
+        <%end if%>
         <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
@@ -197,6 +207,13 @@ end if
         服务器CPU数量：<%=Request.ServerVariables("NUMBER_OF_PROCESSORS")%><br/>
         服务器解译引擎：<%=ScriptEngine & "/"& ScriptEngineMajorVersion &"."&ScriptEngineMinorVersion&"."& ScriptEngineBuildVersion %><br/>
         服务器操作系统：<%=Request.ServerVariables("OS")%> <br/>
+        是否支持FSO：
+        <%if CheckObjInstalled("Scripting.FileSystemObject")=false then%>
+        否
+        <%else%>
+        是
+        <%end if%>
+        <br/>
         支持的文件类型：<%=Request.ServerVariables("HTTP_Accept")%></div></td>
   </tr>
 </table>

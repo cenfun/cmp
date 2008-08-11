@@ -94,7 +94,25 @@ function getCode(code)
 	next
 	getCode = str
 end function
-
+'*************************************
+'检测系统组件是否安装
+'*************************************
+Function CheckObjInstalled(strClassString)
+	On Error Resume Next
+	Dim Temp
+	Err = 0
+	Dim TmpObj
+	Set TmpObj = Server.CreateObject(strClassString)
+	Temp = Err
+	IF Temp = 0 OR Temp = -2147221477 Then
+		CheckObjInstalled=true
+	ElseIF Temp = 1 OR Temp = -2147221005 Then
+		CheckObjInstalled=false
+	End IF
+	Err.Clear
+	Set TmpObj = Nothing
+	Err = 0
+End Function
 '*************************************
 '过滤特殊字符
 '*************************************
@@ -172,45 +190,47 @@ End Function
 '获取文件信息
 function getFileInfo(FileName)
 	dim FSO,File,FileInfo(3)
-	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
-	if FSO.FileExists(Server.MapPath(FileName)) then
-		Set File=FSO.GetFile(Server.MapPath(FileName))
-		FileInfo(0)=File.Size
-		if FileInfo(0)/1000>1 then 
-			FileInfo(0)=int(FileInfo(0)/1000)&" KB"
-		else
-			FileInfo(0)=FileInfo(0)&" Bytes"
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		if FSO.FileExists(Server.MapPath(FileName)) then
+			Set File=FSO.GetFile(Server.MapPath(FileName))
+			FileInfo(0)=File.Size
+			if FileInfo(0)/1000>1 then 
+				FileInfo(0)=int(FileInfo(0)/1000)&" KB"
+			else
+				FileInfo(0)=FileInfo(0)&" Bytes"
+			end if
+			FileInfo(1)=lcase(right(FileName,4))
+			FileInfo(2)=File.DateCreated
+			FileInfo(3)=File.Type 
 		end if
-		FileInfo(1)=lcase(right(FileName,4))
-		FileInfo(2)=File.DateCreated
-		FileInfo(3)=File.Type 
+		Set FSO=Nothing
 	end if
 	getFileInfo=FileInfo
-	Set FSO=Nothing
 end function
 
 '获取文件夹大小
 function getFolderSize(path)
 	dim FSO,folder,FolderSize,str
-	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
-	if FSO.FolderExists(Server.MapPath(path)) then	 		
-		set folder=FSO.getfolder(Server.MapPath(path)) 		
-		FolderSize=folder.size
-		str=FolderSize & " Bytes" 
-		if FolderSize>1024 then
-		   FolderSize=(FolderSize/1024)
-		   str=formatnumber(FolderSize,2) & " KB"
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		if FSO.FolderExists(Server.MapPath(path)) then	 		
+			set folder=FSO.getfolder(Server.MapPath(path)) 		
+			FolderSize=folder.size
+			str=FolderSize & " Bytes" 
+			if FolderSize>1024 then
+			   FolderSize=(FolderSize/1024)
+			   str=formatnumber(FolderSize,2) & " KB"
+			end if
+			if FolderSize>1024 then
+			   FolderSize=(FolderSize/1024)
+			   str=formatnumber(FolderSize,2) & "MB"		
+			end if
+			if FolderSize>1024 then
+			   FolderSize=(FolderSize/1024)
+			   str=formatnumber(FolderSize,2) & "GB"	   
+			end if   
 		end if
-		if FolderSize>1024 then
-		   FolderSize=(FolderSize/1024)
-		   str=formatnumber(FolderSize,2) & "MB"		
-		end if
-		if FolderSize>1024 then
-		   FolderSize=(FolderSize/1024)
-		   str=formatnumber(FolderSize,2) & "GB"	   
-		end if   
-	else
-		str = ""
 	end if
 	getFolderSize = str
 End function	
