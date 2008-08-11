@@ -94,6 +94,23 @@ sub config()
 sql = "select id,config from cmp_user where username = '" & Session(CookieName & "_username") & "' "
 set rs = conn.execute(sql)
 if not rs.eof then
+	dim strContent,re
+	strContent = rs("config")
+	Set re=new RegExp
+	re.IgnoreCase =True
+	re.Global=True
+	re.Pattern="list( *)=( *)\""([^\r]*?)\"""
+	if xml_make="1" then
+		strContent=re.Replace(strContent,"list=""" & xml_path & "/" & rs("id") & xml_list & """")
+	else
+		strContent=re.Replace(strContent,"list=""list.asp?id="&rs("id")&"""")
+	end if
+	
+	'名称，网址替换
+	
+	
+	
+	Set re=nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
@@ -102,7 +119,7 @@ if not rs.eof then
       <th align="left">CMP配置文件编辑:</th>
     </tr>
     <tr>
-      <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"><%=rs("config")%></textarea></td>
+      <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"><%=strContent%></textarea></td>
     </tr>
     <tr>
       <td align="center"><input name="config_submit" type="submit" id="config_submit" style="width:50px;" value="提交" /></td>
