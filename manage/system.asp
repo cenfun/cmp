@@ -41,8 +41,9 @@ sub config()
       <th colspan="2" align="left">系统配置：</th>
     </tr>
     <tr>
-      <td align="right">CMP地址：</td>
-      <td><input name="cmp_path" type="text" id="cmp_path" value="<%=cmp_path%>" size="50" /></td>
+      <td align="right">CMP主程序：</td>
+      <td><input name="cmp_path" type="text" id="cmp_path" value="<%=cmp_path%>" size="50" />
+        同级目录下</td>
     </tr>
     <tr>
       <td align="right">站点名称：</td>
@@ -180,9 +181,25 @@ end if
       </div></td>
   </tr>
 </table>
-<script type="text/javascript">
-
-</script>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <th align="left">服务器信息：</th>
+  </tr>
+  <tr>
+    <td><div>本机IP：<%=request.servervariables("remote_addr")%> <br/>
+        服务器名：<%=Request.ServerVariables("SERVER_NAME")%><br/>
+        服务器IP：<%=Request.ServerVariables("LOCAL_ADDR")%><br/>
+        服务器端口：<%=Request.ServerVariables("SERVER_PORT")%><br/>
+        文件物理路径：<%=server.mappath(Request.ServerVariables("SCRIPT_NAME"))%><br/>
+        服务器当前时间：<%=now%><br/>
+        IIS版本：<%=Request.ServerVariables("SERVER_SOFTWARE")%><br/>
+        脚本超时时间：<%=Server.ScriptTimeout%><br/>
+        服务器CPU数量：<%=Request.ServerVariables("NUMBER_OF_PROCESSORS")%><br/>
+        服务器解译引擎：<%=ScriptEngine & "/"& ScriptEngineMajorVersion &"."&ScriptEngineMinorVersion&"."& ScriptEngineBuildVersion %><br/>
+        服务器操作系统：<%=Request.ServerVariables("OS")%> <br/>
+        支持的文件类型：<%=Request.ServerVariables("HTTP_Accept")%></div></td>
+  </tr>
+</table>
 <%
 end sub
 
@@ -219,7 +236,7 @@ sub save_config()
   <%%>
   <p>开始重建新的静态数据...</p>
   <p>
-    <input name="" type="button" value="&lt;&lt;返回系统设置" onclick="window.location='system.asp?action=config';" />
+    <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
   </p>
 </div>
 <%
@@ -263,7 +280,7 @@ by=Checkstr(Request.QueryString("by"))
         <input type="submit" name="search" id="search" value="搜索" />
       </form>
       </span>
-      <select onchange="window.location='system.asp?action=user&userstatus='+this.options[this.selectedIndex].value;">
+      <select onChange="window.location='system.asp?action=user&userstatus='+this.options[this.selectedIndex].value;">
         <option value="">所有用户</option>
         <option value="0" <%if userstatus="0" then%>selected="selected"<%end if%>>未激活用户</option>
         <option value="1" <%if userstatus="1" then%>selected="selected"<%end if%>>被锁定用户</option>
@@ -365,7 +382,7 @@ IF not rs.EOF Then
             <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
             <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
             <td><%=rs("cmp_name")%></td>
-            <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank">查看</a></td>
+            <td><a href="<%=getCmpUrl(rs("id"))%>" target="_blank">查看</a></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>
           </tr>
           <%rs.MoveNext%>
@@ -449,7 +466,11 @@ dim id
 id=Checkstr(Request.QueryString("id"))
 if id <> "" then
 	if IsNumeric(id) then
-		id = cint(id)
+		if id > 0 and id < 32768 then
+			id = cint(id)
+		else
+			ErrMsg = "参数错误"
+		end if
 	else
 		ErrMsg = "参数错误"
 	end if
@@ -459,10 +480,15 @@ end if
 if ErrMsg <> "" then
 	cenfun_error()
 else
+	dim referer
+	referer = Request.ServerVariables("HTTP_REFERER")
+	if referer="" then
+		referer="system.asp?action=user"
+	end if
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th colspan="2" align="left"><input type="button" value="&lt;&lt;返回用户列表" onclick="window.location='<%=Request.ServerVariables("HTTP_REFERER")%>';" /></th>
+    <th colspan="2" align="left"><input type="button" value="&lt;&lt;返回用户列表" onClick="window.location='<%=referer%>';" /></th>
   </tr>
   <%
 sql = "select * from cmp_user where id = " & id & " "
@@ -482,8 +508,10 @@ if not rs.eof then
 	case else
 		role = "未定义"
 	end select
+	dim cmpurl
+	cmpurl = getCmpUrl(rs("id"))
 %>
-  <form method="post" action="manage.asp?action=saveinfo&do=info" onsubmit="return check_info(this);">
+  <form method="post" action="system.asp?action=saveuser" onSubmit="return check(this);">
     <tr>
       <th colspan="2" align="left">详细资料:</th>
     </tr>
@@ -544,7 +572,7 @@ if not rs.eof then
     </tr>
     <tr>
       <td align="right">播放器地址：</td>
-      <td><a href="<%=cmp_path%>?url=<%=geturl(rs("id"))%>" target="_blank"><%=cmp_path%>?url=<%=geturl(rs("id"))%></a></td>
+      <td><a href="<%=cmpurl%>" target="_blank"><%=cmpurl%></a></td>
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
@@ -558,6 +586,16 @@ rs.close
 set rs = nothing
 %>
 </table>
+<script type="text/javascript">
+function check(o){
+	if(o.cmp_name.value==""){
+		alert("播放器名称不能为空！");
+		o.cmp_name.focus();
+		return false;
+	}
+	return true;
+}
+</script>
 <%
 end if
 end sub

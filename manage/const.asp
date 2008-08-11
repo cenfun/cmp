@@ -45,6 +45,33 @@ end function
 function getQqUrl(qq)
 	getQqUrl = "http://wpa.qq.com/msgrd?Uin=" & qq
 end function
+'CMP调用地址
+function getCmpUrl(id)
+	dim cmp
+	'http://
+	if Left(LCase(cmp_path),7)="http://" then
+		cmp = cmp_path & "?url=" & geturl(id)
+	elseif Left(cmp_path,1)="/" then
+		cmp = "http://"&Request.ServerVariables("HTTP_HOST") & cmp_path & "?url=" & geturl(id)
+	else
+		dim this_path
+		this_path="http://"&Request.ServerVariables("HTTP_HOST")&left(Request.ServerVariables("PATH_INFO"),InStrRev(Request.ServerVariables("PATH_INFO"),"/"))
+		cmp = this_path & cmp_path & "?url=" & geturl(id)
+	end if
+	getCmpUrl = cmp
+end function
+'取得动静态地址
+function geturl(id)
+	dim url
+	if xml_make = "1" then
+		url = xml_path & "/" & id & xml_config
+	else
+		'config.asp%3Fid%3D1 
+		'config.asp?  id=  1 
+		url = "config.asp%3Fid%3D" & id
+	end if
+	geturl = url
+end function
 '验证码简单混淆
 function getCode(code)
 	dim str,i,rd,num
@@ -255,18 +282,6 @@ function JoinChar(strUrl)
 	else
 		JoinChar=strUrl
 	end if
-end function
-
-function geturl(id)
-	dim url
-	if xml_make = "1" then
-		url = xml_path & "/" & id & xml_config
-	else
-		'config.asp%3Fid%3D1 
-		'config.asp?  id=  1 
-		url = "config.asp%3Fid%3D" & id
-	end if
-	geturl = url
 end function
 
 Sub header()
