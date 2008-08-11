@@ -33,6 +33,24 @@ function CheckAll(o,form){
 		}
 	}
 }
+//检查非法字符
+//str 要检查的字符
+//badwords 非法字符 &|<>=
+function checkbadwords(str, badwords) {
+	if (typeof (str) != "string" || typeof (badwords) != "string") {
+		return (false);
+	}
+	for (i=0; i<badwords.length; i++) {
+		bad = badwords.charAt(i);
+		for (j=0; j<str.length; j++) {
+			if (bad == str.charAt(j)) {
+				return false;
+				break;
+			}
+		}
+	}
+	return true;
+}
 //open a new window
 function winopen(url,name,width,height,str){
 	var winopen = window.open(url,name,'width='+width+',height='+height+','+str+',menubar=0,status=0');

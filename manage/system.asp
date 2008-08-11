@@ -97,16 +97,16 @@ sub config()
         <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
-              <td>生成文件的目录：</td>
+              <td>生成静态数据的文件夹名：</td>
               <td><input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" />
                 当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
             </tr>
             <tr>
-              <td>模板配置文件名：</td>
+              <td>ID匹配配置文件的文件名：</td>
               <td><input name="xml_config" type="text" id="xml_config" value="<%=xml_config%>" /></td>
             </tr>
             <tr>
-              <td>模板列表文件名：</td>
+              <td>ID匹配列表文件的文件名：</td>
               <td><input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
             </tr>
           </table>
@@ -141,9 +141,24 @@ function check(o){
 		return false;
 	}
 	if(o.xml_make.checked) {
+		if(o.xml_path.value=="" || !checkbadwords(o.xml_path.value, "./\\:*?<>\"|")){
+			alert("生成静态数据的文件夹名不正确！");
+			o.xml_path.select();
+			return false;
+		}
+		if(o.xml_config.value=="" || !checkbadwords(o.xml_config.value, "/\\:*?<>\"|")){
+			alert("ID匹配配置文件的文件名不正确！");
+			o.xml_config.select();
+			return false;
+		}
+		if(o.xml_list.value=="" || !checkbadwords(o.xml_list.value, "/\\:*?<>\"|")){
+			alert("ID匹配列表文件的文件名不正确！");
+			o.xml_list.select();
+			return false;
+		}
 		if(o.xml_config.value == o.xml_list.value){
-			alert("模板配置和列表的名称不能相同！");
-			o.xml_config.focus();
+			alert("ID匹配配置文件和列表文件的名称不能相同！");
+			o.xml_config.select();
 			return false;
 		}
 	}
@@ -248,19 +263,68 @@ sub save_config()
 	'response.Write(sql)
 	conn.execute(sql)
 	if xmlmake=xml_make and xmlpath=xml_path and xmlconfig=xml_config and xmllist=xml_list then
-		SucMsg=SucMsg&"修改成功！"
+		SucMsg="修改成功！"
 		Cenfun_suc("system.asp?action=config")
-	else
+	elseif CheckObjInstalled("Scripting.FileSystemObject")=true then
+		dim FSO
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+	'===================================================================
 %>
 <div class="output">
   <p>保存设置信息完成！</p>
-  <%%>
-  <p>开始重建新的静态数据...</p>
+  
+  <%if xml_make="1" then%>
+  <p>开始清除所有旧的静态数据...</p>
+  <%
+  	'删除目录
+	if FSO.FolderExists(Server.MapPath(xml_path)) then	 	
+		FSO.DeleteFolder (Server.MapPath(xml_path))
+	end if
+  %>
+  <p>清理完成！</p>
+  <%end if%>
+  
+  <%if xmlmake="1" then%>
+  <p>开始重建所有静态数据...</p>
+  <%
+  	'创建新目录
+	if not FSO.FolderExists(Server.MapPath(xmlpath)) then
+	FSO.CreateFolder(Server.MapPath(xmlpath))
+	end if
+	'生成文件
+	dim config_file,list_file
+	sql = "select id,config,list from cmp_user"
+	set rs = conn.execute(sql)
+  		do while not rs.eof
+			if rs("config")<>"" then
+				Set config_file = FSO.CreateTextFile(server.MapPath(xmlpath & "/" & rs("id") & xmlconfig),true)
+					config_file.Write rs("config")
+					config_file.close
+				set config_file=nothing
+			end if
+			if rs("list")<>"" then
+				Set list_file = FSO.CreateTextFile(server.MapPath(xmlpath & "/" & rs("id") & xmllist),true)
+					list_file.Write rs("list")
+					list_file.close
+				set list_file=nothing
+			end if
+			rs.movenext
+		loop
+  	rs.close
+	set rs = nothing
+  %>
+  <p>重建数据完成！</p>
+  <%end if%>
   <p>
     <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
   </p>
 </div>
 <%
+	'===================================================================
+		Set FSO=Nothing
+	else
+		ErrMsg="服务器不支持FSO，无法重建数据！"
+		Cenfun_err()
 	end if
 '更新Application信息
 Application.Lock
@@ -657,6 +721,8 @@ if id <> "" then
 			SucMsg=SucMsg&"修改成功！"
 			Cenfun_suc(Request.ServerVariables("HTTP_REFERER"))
 		end if
+		rs.close
+		set rs = nothing
 	end if
 end if
 end sub

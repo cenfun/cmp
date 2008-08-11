@@ -203,6 +203,7 @@ function getFileInfo(FileName)
 			FileInfo(1)=lcase(right(FileName,4))
 			FileInfo(2)=File.DateCreated
 			FileInfo(3)=File.Type 
+			Set File=nothing
 		end if
 		Set FSO=Nothing
 	end if
@@ -229,11 +230,13 @@ function getFolderSize(path)
 			if FolderSize>1024 then
 			   FolderSize=(FolderSize/1024)
 			   str=formatnumber(FolderSize,2) & "GB"	   
-			end if   
+			end if  
+			set folder=nothing 
 		end if
+		Set FSO=Nothing
 	end if
 	getFolderSize = str
-End function	
+End function
 
 '分页显示
 function showpage(language,format,sfilename,totalnumber,MaxPerPage,ShowTotal,ShowAllPages,strUnit,CurrentPage)
