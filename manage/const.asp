@@ -406,9 +406,8 @@ End Sub
 Sub footer()
 %>
 <div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved. Powered by <a href="http://www.cenfun.com/" target="_blank">CenFun</a><span>
-  <!--页底站点统计，请更换成您自己的： 
+  <!--页底站点统计，请更换成您自己的：--> 
   <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
-  -->
   </span></div>
 <%
 response.Write("</body></html>")
