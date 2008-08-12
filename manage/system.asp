@@ -179,7 +179,6 @@ function check(o){
     <td align="right" width="20%">手动重建所有静态数据文件：</td>
     <td width="80%"><input name="按钮" type="button" style="width:50px;" value="开始" onclick="window.location='system.asp?action=remake';" /></td>
   </tr>
-  
   <tr>
     <td align="right">数据库路径：</td>
     <td><%=Server.MapPath(sitedb)%></td>
@@ -758,12 +757,26 @@ end if
 end sub
 
 sub skins()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <td>开发中...</td>
+  </tr>
+</table>
+<%
 end sub
 
 sub saveskins()
 end sub
 
 sub plugins()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <td>开发中...</td>
+  </tr>
+</table>
+<%
 end sub
 
 sub saveplugins()

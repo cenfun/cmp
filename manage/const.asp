@@ -41,10 +41,12 @@ If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
 function getIpUrl(ip)
 	getIpUrl = "http://www.baidu.com/s?wd=" & ip
 end function
+
 '调用QQ地址
 function getQqUrl(qq)
 	getQqUrl = "http://wpa.qq.com/msgrd?Uin=" & qq
 end function
+
 'CMP调用地址
 function getCmpUrl(id)
 	dim cmp
@@ -60,12 +62,14 @@ function getCmpUrl(id)
 	end if
 	getCmpUrl = cmp
 end function
+
 'CMP页面地址
 function getCmpPageUrl(id)
 	dim this_path
 	this_path="http://"&Request.ServerVariables("HTTP_HOST")&left(Request.ServerVariables("PATH_INFO"),InStrRev(Request.ServerVariables("PATH_INFO"),"/"))
 	getCmpPageUrl = this_path & "cmp.asp?id=" & id
 end function
+
 '取得动静态地址
 function geturl(id)
 	dim url
