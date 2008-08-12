@@ -14,9 +14,12 @@ sub main()
 	menu()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-    <tr>
-      <th colspan="2" align="left">用户列表:</th>
-    </tr>
+  <tr>
+    <th align="left">用户列表:</th>
+  </tr>
+  <tr>
+    <td align="left">建设中...</td>
+  </tr>
 </table>
 <%
 end sub
@@ -25,9 +28,9 @@ sub hot()
 	menu()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-    <tr>
-      <th colspan="2"></th>
-    </tr>
+  <tr>
+    <th></th>
+  </tr>
 </table>
 <%
 end sub
