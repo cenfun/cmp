@@ -48,9 +48,6 @@ if not rs.eof then
 </table>
 <script type="text/javascript">
 function check_list(o){
-	
-
-
 	return true;
 }
 </script>
@@ -91,7 +88,7 @@ end sub
 
 
 sub config()
-sql = "select id,config from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+sql = "select id,cmp_name,cmp_url,config from cmp_user where username = '" & Session(CookieName & "_username") & "' "
 set rs = conn.execute(sql)
 if not rs.eof then
 	dim strContent,re
@@ -99,17 +96,17 @@ if not rs.eof then
 	Set re=new RegExp
 	re.IgnoreCase =True
 	re.Global=True
-	re.Pattern="list( *)=( *)\""([^\r]*?)\"""
+	re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
 	if xml_make="1" then
-		strContent=re.Replace(strContent,"list=""" & xml_path & "/" & rs("id") & xml_list & """")
+		strContent=re.Replace(strContent,"$1" & xml_path & "/" & rs("id") & xml_list & "$2")
 	else
-		strContent=re.Replace(strContent,"list=""list.asp?id="&rs("id")&"""")
+		strContent=re.Replace(strContent,"$1list.asp?id="&rs("id")&"$2")
 	end if
-	
 	'名称，网址替换
-	
-	
-	
+	re.Pattern="(<cmp[^>]+name *= *\"")[^\r]*?(\""[^>]*>)"
+	strContent=re.Replace(strContent,"$1" & rs("cmp_name") & "$2")
+	re.Pattern="(<cmp[^>]+url *= *\"")[^\r]*?(\""[^>]*>)"
+	strContent=re.Replace(strContent,"$1" & rs("cmp_url") & "$2")
 	Set re=nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
@@ -124,13 +121,13 @@ if not rs.eof then
     <tr>
       <td align="center"><input name="config_submit" type="submit" id="config_submit" style="width:50px;" value="提交" /></td>
     </tr>
+    <tr>
+      <td><div style="padding-top:5px; margin-top:5px; border-top:1px dashed #CCCCCC;">注：其中name,url,list属性会自动根据个人资料和站点设置进行替换</div></td>
+    </tr>
   </form>
 </table>
 <script type="text/javascript">
 function check_config(o){
-	
-
-
 	return true;
 }
 </script>

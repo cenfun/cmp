@@ -18,8 +18,8 @@ if id <> "" then
 			Set re=new RegExp
 			re.IgnoreCase =True
 			re.Global=True
-			re.Pattern="list( *)=( *)\""([^\r]*?)\"""
-			strContent=re.Replace(strContent,"list=""list.asp?id="&id&"""")
+			re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
+			strContent=re.Replace(strContent,"$1list.asp?id="&id&"$2")
 			Set re=nothing
 			response.Charset = "utf-8"
 			response.AddHeader "Content-Type", "text/xml"
