@@ -1,0 +1,40 @@
+晨风在线音乐系统
+
+简介：
+
+1，晨风在线音乐系统通过与 CMP v3.0 的结合，可以轻松实现网上音乐的在线编辑和播放，
+并支持多用户管理，让你轻松建设自己的多用户音乐站 
+
+2，管理员的默认帐号和密码为：admin 
+
+3，安全起见，请在第一次登录后将管理员的用户名或密码修改，请在conn.asp文件中对数据
+库路径和名称进行修改(默认为data/#cmp3_2008.mdb，推荐数据库文件名中加#符号，防止被
+猜测下载)，进入系统请根据情况修改您的站点配置信息 
+
+4，管理员可以开启和关闭用户注册，以及用户注册后是否需要审核，并管理所有用户；管理
+员可以管理预存皮肤skins和插件plugins，以供普通用户选择使用 
+
+5，普通用户激活后(审核通过)，可以登录系统管理自己的配置config和列表list，修改用户
+信息以及获得播放器调用地址 
+
+
+基本运行环境：
+
+Win2000或更高+IIS5.0或更高+IE5.0以上+Access数据库支持
+文件目录需要有写入权限,支持FSO和ADODB.Stream
+
+
+最新版本下载：
+从Google版本库Checkout最新版即可：
+http://code.google.com/p/cenfunmusicplayer/
+SVN的checkout地址：
+http://cenfunmusicplayer.googlecode.com/svn/trunk/
+程序在manage目录中
+
+
+更多信息和使用说明请进CMP交流论坛：http://bbs.cenfun.com/
+
+     
+    ╭────────────────────╮    
+══┤    COPYRIGHT  2005-2008 CenFun.com     ├══
+    ╰────────────────────╯
