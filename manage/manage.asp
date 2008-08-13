@@ -106,7 +106,17 @@ if not rs.eof then
 	if trim(rs("config"))<>"" then
 		strContent = rs("config")
 	else
-		strContent = "<cmp name="""" url="""" list="""" >" & Chr(13) & Chr(10) & "</cmp>"
+		dim cr
+		cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
+		strContent = "<cmp name="""" url="""" list="""" >" & cr
+		strContent = strContent & "<config language="""" volume="""" timeout="""" skin_id="""" list_id="""" play_mode="""" auto_play="""" "
+		strContent = strContent & "max_video="""" mixer_color="""" mixer_filter="""" mixer_displace="""" mixer_id="""" "
+		strContent = strContent & "video_smoothing="""" plugins_disabled="""" check_policyfile="""" show_tip="""" />" & cr
+		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
+		strContent = strContent & "<plugins>"&cr&"</plugins>" & cr
+		strContent = strContent & "<count src="""&site_count&""" />" & cr
+		strContent = strContent & "</cmp>"
+		conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
 	end if
 	'替换列表地址
 	dim re
