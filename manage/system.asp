@@ -495,7 +495,7 @@ IF not rs.EOF Then
             <td><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
             <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
-            <td><a href="<%=getCmpUrl(rs("id"))%>" target="_blank" title="点击在新窗口中打开"><%=rs("cmp_name")%></a></td>
+            <td><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" title="点击在新窗口中打开"><%=rs("cmp_name")%></a></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>
           </tr>
           <%rs.MoveNext%>
@@ -685,7 +685,7 @@ if not rs.eof then
     </tr>
     <tr>
       <td align="right">播放器地址：</td>
-      <td><a href="<%=cmpurl%>" target="_blank"><%=cmpurl%></a></td>
+      <td><a href="<%=cmpurl%>&" target="_blank"><%=cmpurl%></a></td>
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
