@@ -57,6 +57,28 @@ set rs = nothing
     <tr>
       <td align="center"><input name="list_submit" type="submit" id="list_submit" style="width:50px;" value="提交" /></td>
     </tr>
+    <tr>
+      <td><div style="padding:5px 5px; margin-top:5px; border-top:1px dashed #CCCCCC;"><strong>l</strong> 标记专辑信息，属性有<br />
+          <strong>title</strong>: 专辑名称 <br />
+          <strong>m</strong> 标记单个音乐信息，属性有<br />
+          <strong>type</strong>: 音乐类型，不填将根据文件后缀(扩展名)自动识别，支持三种：1,MP3音频  2,FLV/MP4视频  3,WMP类型<br />
+          <strong>src</strong>: 音乐地址，必填<br />
+          <strong>lrc</strong>: 歌词或字幕地址 <br />
+          <strong>time</strong>: 视频总时间，仅针对部分非标准视频，一般不用<br />
+          <strong>&lt;m&gt;</strong>音乐名称<strong>&lt;/m&gt;</strong> <br />
+          一个完整的例子如下：<br />
+          &lt;list&gt;<br />
+          &lt;l title=&quot;最新&quot;&gt;<br />
+          &lt;m type=&quot;&quot; src=&quot;test.mp3&quot; lrc=&quot;&quot;&gt;mp3音频&lt;/m&gt;<br />
+          &lt;m type=&quot;&quot; src=&quot;test.mp4&quot; lrc=&quot;&quot; time=&quot;&quot;&gt;flv视频/高清h264视频/AAC音频&lt;/m&gt;<br />
+          &lt;m type=&quot;&quot; src=&quot;test.wma&quot; lrc=&quot;&quot;&gt;wma音频/wmv/wav/mid&lt;/m&gt;<br />
+          &lt;/l&gt;<br />
+          &lt;l title=&quot;欧美&quot;&gt;<br />
+          &lt;/l&gt;<br />
+          &lt;l title=&quot;日韩&quot;&gt;&lt;/l&gt;<br />
+          &lt;/list&gt;<br />
+        </div></td>
+    </tr>
   </form>
 </table>
 <script type="text/javascript">
