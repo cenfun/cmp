@@ -28,18 +28,31 @@ else
 end if
 
 sub list()
-sql = "select id,list from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+dim strContent,id
+sql = "select id,list from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
 set rs = conn.execute(sql)
 if not rs.eof then
+	id = rs("id")
+	if trim(rs("list"))<>"" then
+		strContent = rs("list")
+	else
+		strContent = "<list>" & Chr(13) & Chr(10) & "</list>"
+	end if
+else
+	ErrMsg = "用户不存在或者被锁定！"
+	cenfun_error()
+end if
+rs.close
+set rs = nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
-    <input name="id" type="hidden" value="<%=rs("id")%>" />
+    <input name="id" type="hidden" value="<%=id%>" />
     <tr>
       <th align="left">CMP列表文件编辑:</th>
     </tr>
     <tr>
-      <td align="center"><textarea name="list" rows="30" id="list" style="width:99%;"><%=rs("list")%></textarea></td>
+      <td align="center"><textarea name="list" rows="30" id="list" style="width:99%;"><%=strContent%></textarea></td>
     </tr>
     <tr>
       <td align="center"><input name="list_submit" type="submit" id="list_submit" style="width:50px;" value="提交" /></td>
@@ -52,9 +65,6 @@ function check_list(o){
 }
 </script>
 <%
-end if
-rs.close
-set rs = nothing
 end sub
 
 sub savelist()
@@ -88,11 +98,18 @@ end sub
 
 
 sub config()
-sql = "select id,cmp_name,cmp_url,config from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+dim strContent,id
+sql = "select id,cmp_name,cmp_url,config from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
 set rs = conn.execute(sql)
 if not rs.eof then
-	dim strContent,re
-	strContent = rs("config")
+	id = rs("id")
+	if trim(rs("config"))<>"" then
+		strContent = rs("config")
+	else
+		strContent = "<cmp name="""" url="""" list="""" >" & Chr(13) & Chr(10) & "</cmp>"
+	end if
+	'替换列表地址
+	dim re
 	Set re=new RegExp
 	re.IgnoreCase =True
 	re.Global=True
@@ -108,10 +125,16 @@ if not rs.eof then
 	re.Pattern="(<cmp[^>]+url *= *\"")[^\r]*?(\""[^>]*>)"
 	strContent=re.Replace(strContent,"$1" & rs("cmp_url") & "$2")
 	Set re=nothing
+else
+	ErrMsg = "用户不存在或者被锁定！"
+	cenfun_error()
+end if
+rs.close
+set rs = nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
-    <input name="id" type="hidden" value="<%=rs("id")%>" />
+    <input name="id" type="hidden" value="<%=id%>" />
     <tr>
       <th align="left">CMP配置文件编辑:</th>
     </tr>
@@ -132,9 +155,6 @@ function check_config(o){
 }
 </script>
 <%
-end if
-rs.close
-set rs = nothing
 end sub
 
 sub saveconfig()
@@ -167,7 +187,7 @@ sub saveconfig()
 end sub
 
 sub userinfo()
-sql = "select * from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+sql = "select * from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
 set rs = conn.execute(sql)
 if not rs.eof then
 %>
@@ -219,6 +239,9 @@ if not rs.eof then
   </form>
 </table>
 <%
+else
+	ErrMsg = "用户不存在或者被锁定！"
+	cenfun_error()
 end if
 rs.close
 set rs = nothing
@@ -329,7 +352,7 @@ end sub
 
 sub saveinfo()
 dim username
-	username = Session(CookieName & "_username")
+username = Session(CookieName & "_username")
 if Request.QueryString("do")="info" then
 	'修改用户信息
 	dim email,qq,cmp_name,cmp_url
@@ -404,7 +427,7 @@ end sub
 
 
 sub main()
-sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4"
 set rs = conn.execute(sql)
 if not rs.eof then
 	dim cmp_url,cmp_page_url
@@ -438,6 +461,9 @@ if not rs.eof then
   </tr>
 </table>
 <%
+else
+	ErrMsg = "用户不存在或者被锁定！"
+	cenfun_error()
 end if
 rs.close
 set rs = nothing
