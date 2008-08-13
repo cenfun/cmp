@@ -209,7 +209,10 @@ src: 插件路径，必填<br />
 lock: 是否锁定对象，锁定后将不能拖动对象：1表示锁定；0表示不锁定<br />
 display: 是否显示对象：1表示显示对象；0表示隐藏对象<br />
 istop: 是否置顶插件：0为最底层(默认)；1为顶层<br />
-多个插件的顺序即为其叠放层次，请注意不要被最大的背景遮挡，即将不用显示的插件和背景图放在最下层</div></td>
+多个插件的顺序即为其叠放层次，请注意不要被最大的背景遮挡，即将不用显示的插件和背景图放在最下层<br />
+      &lt;plugins&gt;<br />
+&lt;plugin name=&quot;大背景&quot; xywh=&quot;0, 0, 100P, 100P&quot; src=&quot;plugins/bigbg.swf&quot; lock=&quot;1&quot; display=&quot;1&quot; istop=&quot;0&quot; /&gt;<br />
+&lt;/plugins&gt;</div></td>
     </tr>
   </form>
 </table>
