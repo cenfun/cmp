@@ -17,7 +17,7 @@
 
 	<l title="最新">
 		<m type="" src="test.mp3" lrc="">mp3音频</m>
-		<m type="" src="test.mp4" time="">flv视频/高清h264视频/AAC音频</m>
+		<m type="" src="test.mp4" lrc="" time="">flv视频/高清h264视频/AAC音频</m>
 		<m type="" src="test.wma" lrc="">wma音频/wmv/wav/mid</m>
 	</l>
 	<l title="欧美">
