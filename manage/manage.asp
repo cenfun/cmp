@@ -100,10 +100,10 @@ sub savelist()
 	if xml_make="1" then
 		dim objStream
 		Set objStream = Server.CreateObject("ADODB.Stream")
-		If Err.Number=-2147221005 Then 
+		If Err Then 
+			Err.Clear
 			ErrMsg = "服务器不支持ADODB.Stream"
 			cenfun_error()
-			Err.Clear
 		else
 			With objStream
 			.Open
@@ -113,8 +113,8 @@ sub savelist()
 			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_list),2 
 			.Close
 			End With
-			Set objStream = Nothing
 		end if
+		Set objStream = Nothing
 	end if
 end sub
 
@@ -235,10 +235,10 @@ sub saveconfig()
 	if xml_make="1" then
 		dim objStream
 		Set objStream = Server.CreateObject("ADODB.Stream")
-		If Err.Number=-2147221005 Then 
+		If Err Then 
+			Err.Clear
 			ErrMsg = "服务器不支持ADODB.Stream"
 			cenfun_error()
-			Err.Clear
 		else
 			With objStream
 			.Open
@@ -248,8 +248,8 @@ sub saveconfig()
 			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_config),2 
 			.Close
 			End With
-			Set objStream = Nothing
 		end if
+		Set objStream = Nothing
 	end if
 end sub
 
@@ -504,7 +504,7 @@ if not rs.eof then
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
     <td width="20%" align="right">CMP调用地址：</td>
-    <td width="80%"><a href="<%=cmp_url%>" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%></strong></a></td>
+    <td width="80%"><a href="<%=cmp_url%>&" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%></strong></a></td>
   </tr>
   <tr>
     <td align="right">页面地址：</td>
