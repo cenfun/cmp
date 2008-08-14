@@ -240,7 +240,7 @@ if not rs.eof then
       <td><%=rs("regtime")%></td>
     </tr>
     <tr>
-      <td align="right">最后登录日期：</td>
+      <td align="right" nowrap="nowrap">最后登录日期：</td>
       <td><%=rs("lasttime")%></td>
     </tr>
     <tr>
@@ -287,7 +287,7 @@ set rs = nothing
       <th colspan="2" align="left">修改密码:</th>
     </tr>
     <tr>
-      <td align="right">原有密码：</td>
+      <td align="right" nowrap="nowrap">原有密码：</td>
       <td><input name="oldpassword" type="password" id="oldpassword" size="20" /></td>
     </tr>
     <tr>
@@ -351,7 +351,7 @@ function check_pass(o){
         必须输入当前用户密码才能修改</td>
     </tr>
     <tr>
-      <td align="right">用户名：</td>
+      <td align="right" nowrap="nowrap">用户名：</td>
       <td><input name="username" type="text" id="username" size="20" maxlength="200" value="<%=Session(CookieName & "_admin")%>" />
         仅管理员可修改</td>
     </tr>
@@ -471,20 +471,20 @@ if not rs.eof then
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td width="20%" align="right">CMP调用地址：</td>
-    <td width="80%"><a href="<%=cmp_url%>&" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%></strong></a></td>
+    <td width="10%" align="right">CMP调用地址：</td>
+    <td width="90%"><a href="<%=cmp_url%>&" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%></strong></a></td>
   </tr>
   <tr>
     <td align="right">页面地址：</td>
     <td><a href="<%=cmp_page_url%>" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_page_url%></strong></a></td>
   </tr>
   <tr>
-    <td align="right">常用论坛调用标签：</td>
-    <td><div style="margin:10px 0px;"><span style="border:1px dashed #00CCFF; padding:5px 5px;">[flash=100%,600]<%=cmp_url%>[/flash]</span></div></td>
+    <td align="right" nowrap="nowrap">常用论坛调用标签：</td>
+    <td><div style="margin:10px 0px;">[flash=100%,600]<%=cmp_url%>[/flash]</div></td>
   </tr>
   <tr>
     <td align="right">HTML调用代码：</td>
-    <td><textarea id="html_code" name="html_code" style="width:99%;" rows="15" onfocus="this.select();"></textarea></td>
+    <td><textarea id="html_code" name="html_code" style="width:99%;" wrap="virtual" rows="15" onfocus="this.select();"></textarea></td>
   </tr>
   <tr>
     <td align="right">&nbsp;</td>
