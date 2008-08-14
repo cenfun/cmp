@@ -24,6 +24,6 @@ label input { height:14px; }
 #menu a:hover { text-decoration:underline; }
 #menu span { padding-right:20px; }
 #menu span a:link, #menu span a:visited { font-weight:normal; }
-#footer { text-align:center; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; }
+#footer { text-align:center; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; font-size:11px; }
 #footer span { display:none; }
-#footer a:link, #footer a:visited { color:#666666; }
+#footer a:link, #footer a:visited { color:#666666; font-size:12px; }

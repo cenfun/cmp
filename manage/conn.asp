@@ -9,6 +9,8 @@ Session.LCID = 2057
 '站点数据库路径
 Dim sitedb
 	sitedb = "data/#cmp3_2008.mdb"
+Dim siteVersion
+	siteVersion = "Beta 08.8.14"
 Dim Startime,SqlNowString,SystemTime
 Dim conn,rs,sql,FoundErr,ErrMsg,SucMsg
 FoundErr=False 
