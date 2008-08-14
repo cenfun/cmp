@@ -161,7 +161,7 @@ function check_username(o){
 		return;
 	}
 	//检测是否已经存在
-	ajaxSend("GET","index.asp?rd="+Math.round()+"&username="+un,true,null,completeHd,errorHd)
+	ajaxSend("GET","index.asp?rd="+Math.round()+"&username="+un,true,null,completeHd,errorHd);
 }
 function completeHd(data){
 	//alert(data);
