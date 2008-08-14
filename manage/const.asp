@@ -196,7 +196,54 @@ Function UnCheckStr(ByVal Str)
         Str = Replace(Str, "&amp;", "&")
     	UnCheckStr=Str
 End Function
-
+'*************************************
+'转换HTML代码
+'*************************************
+Function HTMLEncode(ByVal reString) 
+	Dim Str:Str=reString
+	If Not IsNull(Str) Then
+   		Str = Replace(Str, ">", "&gt;")
+		Str = Replace(Str, "<", "&lt;")
+	    Str = Replace(Str, CHR(9), "&#160;&#160;&#160;&#160;")
+	    Str = Replace(Str, CHR(32), "&nbsp;")
+	    Str = Replace(Str, CHR(39), "&#39;")
+    	Str = Replace(Str, CHR(34), "&quot;")
+		Str = Replace(Str, CHR(13), "")
+		Str = Replace(Str, CHR(10), "<br/>")
+		HTMLEncode = Str
+	End If
+End Function
+'*************************************
+'反转换HTML代码
+'*************************************
+Function HTMLDecode(ByVal reString) 
+	Dim Str:Str=reString
+	If Not IsNull(Str) Then
+		Str = Replace(Str, "&gt;", ">")
+		Str = Replace(Str, "&lt;", "<")
+		Str = Replace(Str, "&#160;&#160;&#160;&#160;", CHR(9))
+	    Str = Replace(Str, "&nbsp;", CHR(32))
+		Str = Replace(Str, "&#39;", CHR(39))
+		Str = Replace(Str, "&quot;", CHR(34))
+		Str = Replace(Str, "", CHR(13))
+		Str = Replace(Str, "<br/>", CHR(10))
+		HTMLDecode = Str
+	End If
+End Function
+'*************************************
+'过滤HTML代码
+'*************************************
+Function EditDeHTML(byVal Content)
+	EditDeHTML=Content
+	IF Not IsNull(EditDeHTML) Then
+		EditDeHTML=UnCheckStr(EditDeHTML)
+		EditDeHTML=Replace(EditDeHTML,"&","&amp;")
+		EditDeHTML=Replace(EditDeHTML,"<","&lt;")
+		EditDeHTML=Replace(EditDeHTML,">","&gt;")
+		EditDeHTML=Replace(EditDeHTML,chr(34),"&quot;")
+		EditDeHTML=Replace(EditDeHTML,chr(39),"&#39;")
+	End IF
+End Function
 '获取文件信息
 function getFileInfo(FileName)
 	dim FSO,File,FileInfo(3)

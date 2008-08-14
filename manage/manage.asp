@@ -34,7 +34,7 @@ set rs = conn.execute(sql)
 if not rs.eof then
 	id = rs("id")
 	if trim(rs("list"))<>"" then
-		strContent = rs("list")
+		strContent = UnCheckStr(rs("list"))
 	else
 		strContent = "<list>" & Chr(13) & Chr(10) & "</list>"
 	end if
@@ -91,7 +91,7 @@ end sub
 
 sub savelist()
 	dim list,id
-	list = request.Form("list")
+	list = CheckStr(request.Form("list"))
 	id = Checkstr(request.Form("id"))
 	conn.execute("update cmp_user set list='"&list&"' where username='" & Session(CookieName & "_username") & "'")
 	SucMsg="修改成功！"
@@ -109,7 +109,7 @@ sub savelist()
 			.Open
 			.Charset = "utf-8"
 			.Position = objStream.Size
-			.WriteText = list
+			.WriteText = UnCheckStr(list)
 			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_list),2 
 			.Close
 			End With
@@ -126,7 +126,7 @@ set rs = conn.execute(sql)
 if not rs.eof then
 	id = rs("id")
 	if trim(rs("config"))<>"" then
-		strContent = rs("config")
+		strContent = UnCheckStr(rs("config"))
 	else
 		dim cr
 		cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
@@ -226,7 +226,7 @@ end sub
 
 sub saveconfig()
 	dim config,id
-	config = request.Form("config")
+	config = CheckStr(request.Form("config"))
 	id = Checkstr(request.Form("id"))
 	conn.execute("update cmp_user set config='"&config&"' where username='" & Session(CookieName & "_username") & "'")
 	SucMsg="修改成功！"
@@ -244,7 +244,7 @@ sub saveconfig()
 			.Open
 			.Charset = "utf-8"
 			.Position = objStream.Size
-			.WriteText = config
+			.WriteText = UnCheckStr(config)
 			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_config),2 
 			.Close
 			End With

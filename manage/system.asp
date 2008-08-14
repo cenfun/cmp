@@ -313,10 +313,10 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 	num = 0
 	dim objStream
 	Set objStream = Server.CreateObject("ADODB.Stream")
-	If Err.Number=-2147221005 Then 
+	If Err Then 
+		Err.Clear
 		ErrMsg = "服务器不支持ADODB.Stream"
 		cenfun_error()
-		Err.Clear
 	else
 		sql = "select id,config,list from cmp_user"
 		set rs = conn.execute(sql)
@@ -325,7 +325,7 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 					.Open
 					.Charset = "utf-8"
 					.Position = objStream.Size
-					.WriteText = rs("config")
+					.WriteText = UnCheckStr(rs("config"))
 					.SaveToFile Server.Mappath(xmlpath & "/" & rs("id") & xmlconfig),2 
 					.Close
 					End With
@@ -333,7 +333,7 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 					.Open
 					.Charset = "utf-8"
 					.Position = objStream.Size
-					.WriteText = rs("list")
+					.WriteText = UnCheckStr(rs("list"))
 					.SaveToFile Server.Mappath(xmlpath & "/" & rs("id") & xmllist),2 
 					.Close
 					End With
