@@ -104,6 +104,7 @@ function getCode(code)
 	next
 	getCode = str
 end function
+
 '*************************************
 '检测系统组件是否安装
 '*************************************
@@ -364,6 +365,28 @@ function JoinChar(strUrl)
 	end if
 end function
 
+'生成文件
+function makeFile(byVal path, byVal text)
+	dim objStream
+	Set objStream = Server.CreateObject("ADODB.Stream")
+	If Err Then 
+		Err.Clear
+		ErrMsg = "服务器不支持ADODB.Stream"
+		cenfun_error()
+	else
+		With objStream
+		.Open
+		.Charset = "utf-8"
+		.Position = objStream.Size
+		.WriteText = text
+		.SaveToFile Server.Mappath(path),2 
+		.Close
+		End With
+	end if
+	Set objStream = Nothing
+end function
+
+'公共头
 Sub header()
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

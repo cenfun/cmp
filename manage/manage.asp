@@ -98,23 +98,7 @@ sub savelist()
 	Cenfun_suc("manage.asp?action=list")
 	'重建静态数据
 	if xml_make="1" then
-		dim objStream
-		Set objStream = Server.CreateObject("ADODB.Stream")
-		If Err Then 
-			Err.Clear
-			ErrMsg = "服务器不支持ADODB.Stream"
-			cenfun_error()
-		else
-			With objStream
-			.Open
-			.Charset = "utf-8"
-			.Position = objStream.Size
-			.WriteText = UnCheckStr(list)
-			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_list),2 
-			.Close
-			End With
-		end if
-		Set objStream = Nothing
+		call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
 	end if
 end sub
 
@@ -178,41 +162,41 @@ set rs = nothing
     </tr>
     <tr>
       <td><div style="padding:5px 5px; margin-top:5px; border-top:1px dashed #CCCCCC;">注：其中name,url,list属性会自动根据个人资料和站点设置进行替换<br />
-      全局参数配置：(不填将在第一次打开时使用系统默认值，之后将读取存储值，必须开启Flash本地存储)<br />
-language: 使用语言，支持三种：简体中文(zh-cn)；繁体中文(zh-tw)；英文(en)，括号中为其使用值<br />
-volume: 初始化音量值，可用值为0-1之间，默认0.8，表示80%的音量，0表示静音，1为最大音量<br />
-timeout: 自定义连接超时，单位毫秒，默认15000，即15秒<br />
-skin_id: 皮肤ID，如skin_id=&quot;3&quot;表示使用皮肤列表的第3个皮肤；0为使用系统默认皮肤，默认为0；-1为随机<br />
-list_id: 指定初始的列表分类ID，如list_id=&quot;2&quot;表示指定播放第2个分类，默认为1；-1为随机<br />
-play_mode: 播放模式，支持三种：顺序播放(0)；重复播放(1)；随机播放(2)；默认0<br />
-auto_play: 是否启用自动播放：不启用(0)；启用(1)；播放第n个(n)；默认0<br />
-max_video: 打开时是否最大化视频窗口：否(0)；是(1)；默认0<br />
-mixer_color: 混音器的颜色，如：#00ff00，默认为0xa4eb0c<br />
-mixer_filter: 是否开启混音器滤镜：关闭(0)；开启(1)；默认0<br />
-mixer_displace: 是否开启滤镜随机置换：关闭(0)；开启(1)；默认0<br />
-mixer_id: 混音器ID，如目前支持10种效果，即可选1至10，默认为1；-1为随机<br />
-video_smoothing: 是否启用视频缩放时进行平滑处理：不启用(0)；启用(1)；默认1<br />
-plugins_disabled: 是否禁用插件：不禁用(0)；禁用(1)；默认0<br />
-check_policyfile: 是否下载跨域策略文件：不下载(0)；下载(1)，仅对播放跨域mp3时显示soundmixer和id3有用，默认1<br />
-show_tip: 是否延时显示按钮等文字提示信息：不显示(0)；显示(500)，数值表示延时的毫秒数，默认延时500毫秒<br />
-      皮肤列表：<br />
-src: 皮肤包路径<br />
-mixer_id/mixer_color/show_tip: 指定单个皮肤的配置参数，为空则使用全局参数配置<br />
-      &lt;skins&gt;<br />
-&lt;skin src=&quot;skins/wmp11.zip&quot; mixer_id=&quot;&quot; mixer_color=&quot;&quot; show_tip=&quot;&quot; /&gt;<br />
-&lt;skin src=&quot;skins/blue_full.zip&quot; mixer_id=&quot;2&quot; mixer_color=&quot;&quot; show_tip=&quot;&quot; /&gt;<br />
-&lt;/skins&gt;<br />
-      插件列表：<br />
-name: 插件名称，非必填<br />
-xywh: 为4个数值，用英文逗号(,)隔开，分别表示对象的x横坐标、y纵坐标、w宽、h高<br />
-src: 插件路径，必填<br />
-lock: 是否锁定对象，锁定后将不能拖动对象：1表示锁定；0表示不锁定<br />
-display: 是否显示对象：1表示显示对象；0表示隐藏对象<br />
-istop: 是否置顶插件：0为最底层(默认)；1为顶层<br />
-多个插件的顺序即为其叠放层次，请注意不要被最大的背景遮挡，即将不用显示的插件和背景图放在最下层<br />
-      &lt;plugins&gt;<br />
-&lt;plugin name=&quot;大背景&quot; xywh=&quot;0, 0, 100P, 100P&quot; src=&quot;plugins/bigbg.swf&quot; lock=&quot;1&quot; display=&quot;1&quot; istop=&quot;0&quot; /&gt;<br />
-&lt;/plugins&gt;</div></td>
+          全局参数配置：(不填将在第一次打开时使用系统默认值，之后将读取存储值，必须开启Flash本地存储)<br />
+          language: 使用语言，支持三种：简体中文(zh-cn)；繁体中文(zh-tw)；英文(en)，括号中为其使用值<br />
+          volume: 初始化音量值，可用值为0-1之间，默认0.8，表示80%的音量，0表示静音，1为最大音量<br />
+          timeout: 自定义连接超时，单位毫秒，默认15000，即15秒<br />
+          skin_id: 皮肤ID，如skin_id=&quot;3&quot;表示使用皮肤列表的第3个皮肤；0为使用系统默认皮肤，默认为0；-1为随机<br />
+          list_id: 指定初始的列表分类ID，如list_id=&quot;2&quot;表示指定播放第2个分类，默认为1；-1为随机<br />
+          play_mode: 播放模式，支持三种：顺序播放(0)；重复播放(1)；随机播放(2)；默认0<br />
+          auto_play: 是否启用自动播放：不启用(0)；启用(1)；播放第n个(n)；默认0<br />
+          max_video: 打开时是否最大化视频窗口：否(0)；是(1)；默认0<br />
+          mixer_color: 混音器的颜色，如：#00ff00，默认为0xa4eb0c<br />
+          mixer_filter: 是否开启混音器滤镜：关闭(0)；开启(1)；默认0<br />
+          mixer_displace: 是否开启滤镜随机置换：关闭(0)；开启(1)；默认0<br />
+          mixer_id: 混音器ID，如目前支持10种效果，即可选1至10，默认为1；-1为随机<br />
+          video_smoothing: 是否启用视频缩放时进行平滑处理：不启用(0)；启用(1)；默认1<br />
+          plugins_disabled: 是否禁用插件：不禁用(0)；禁用(1)；默认0<br />
+          check_policyfile: 是否下载跨域策略文件：不下载(0)；下载(1)，仅对播放跨域mp3时显示soundmixer和id3有用，默认1<br />
+          show_tip: 是否延时显示按钮等文字提示信息：不显示(0)；显示(500)，数值表示延时的毫秒数，默认延时500毫秒<br />
+          皮肤列表：<br />
+          src: 皮肤包路径<br />
+          mixer_id/mixer_color/show_tip: 指定单个皮肤的配置参数，为空则使用全局参数配置<br />
+          &lt;skins&gt;<br />
+          &lt;skin src=&quot;skins/wmp11.zip&quot; mixer_id=&quot;&quot; mixer_color=&quot;&quot; show_tip=&quot;&quot; /&gt;<br />
+          &lt;skin src=&quot;skins/blue_full.zip&quot; mixer_id=&quot;2&quot; mixer_color=&quot;&quot; show_tip=&quot;&quot; /&gt;<br />
+          &lt;/skins&gt;<br />
+          插件列表：<br />
+          name: 插件名称，非必填<br />
+          xywh: 为4个数值，用英文逗号(,)隔开，分别表示对象的x横坐标、y纵坐标、w宽、h高<br />
+          src: 插件路径，必填<br />
+          lock: 是否锁定对象，锁定后将不能拖动对象：1表示锁定；0表示不锁定<br />
+          display: 是否显示对象：1表示显示对象；0表示隐藏对象<br />
+          istop: 是否置顶插件：0为最底层(默认)；1为顶层<br />
+          多个插件的顺序即为其叠放层次，请注意不要被最大的背景遮挡，即将不用显示的插件和背景图放在最下层<br />
+          &lt;plugins&gt;<br />
+          &lt;plugin name=&quot;大背景&quot; xywh=&quot;0, 0, 100P, 100P&quot; src=&quot;plugins/bigbg.swf&quot; lock=&quot;1&quot; display=&quot;1&quot; istop=&quot;0&quot; /&gt;<br />
+          &lt;/plugins&gt;</div></td>
     </tr>
   </form>
 </table>
@@ -233,23 +217,7 @@ sub saveconfig()
 	Cenfun_suc("manage.asp?action=config")
 	'重建静态数据
 	if xml_make="1" then
-		dim objStream
-		Set objStream = Server.CreateObject("ADODB.Stream")
-		If Err Then 
-			Err.Clear
-			ErrMsg = "服务器不支持ADODB.Stream"
-			cenfun_error()
-		else
-			With objStream
-			.Open
-			.Charset = "utf-8"
-			.Position = objStream.Size
-			.WriteText = UnCheckStr(config)
-			.SaveToFile Server.Mappath(xml_path & "/" & id & xml_config),2 
-			.Close
-			End With
-		end if
-		Set objStream = Nothing
+		call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
 	end if
 end sub
 
@@ -516,17 +484,28 @@ if not rs.eof then
   </tr>
   <tr>
     <td align="right">HTML调用代码：</td>
-    <td><textarea style="width:99%;" rows="15" onfocus="this.select();"><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" name="cmp" width="100%" height="600" id="cmp">
-  <param name="movie" value="<%=cmp_url%>" />
-  <param name="quality" value="high" />
-  <param name="allowFullScreen" value="true" />
-  <param name="allowScriptAccess" value="always" />
-  <param name="flashvars" value="" />
-  <embed src="<%=cmp_url%>" width="100%" height="600" quality="high" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" flashvars="" name="cmp"></embed>
-</object>
-</textarea></td>
+    <td><textarea id="html_code" name="html_code" style="width:99%;" rows="15" onfocus="this.select();"></textarea></td>
+  </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td>默认宽100%高600</td>
   </tr>
 </table>
+<script type="text/javascript">
+function show_code() {
+	var html = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" name="cmp" width="100%" height="600" id="cmp">\n';
+	html += '<param name="movie" value="<%=cmp_url%>" />\n';
+	html += '<param name="quality" value="high" />\n';
+	html += '<param name="allowFullScreen" value="true" />\n';
+	html += '<param name="allowScriptAccess" value="always" />\n';
+	html += '<param name="flashvars" value="" />\n';
+	html += '<embed src="<%=cmp_url%>" width="100%" height="600" quality="high" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" flashvars="" name="cmp"></embed>\n';
+	html += '</object>';
+	var textarea = document.getElementById("html_code");
+	textarea.value = html;
+}
+show_code();
+</script>
 <%
 else
 	ErrMsg = "用户不存在或者被锁定！"

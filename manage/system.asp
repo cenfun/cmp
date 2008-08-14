@@ -177,7 +177,7 @@ function check(o){
   </tr>
   <tr>
     <td align="right" width="20%">手动重建所有静态数据文件：</td>
-    <td width="80%"><input name="按钮" type="button" style="width:50px;" value="开始" onclick="window.location='system.asp?action=remake';" /></td>
+    <td width="80%"><input name="按钮" type="button" style="width:80px;" value="开始" onclick="window.location='system.asp?action=remake';" /></td>
   </tr>
   <tr>
     <td align="right">数据库路径：</td>
@@ -191,7 +191,7 @@ function check(o){
     <td align="right">压缩和修复数据库：</td>
     <td><form action="system.asp?action=config" method="post">
         <input name="dbdo" type="hidden" value="compact" />
-        <input type="submit" value="开始" style="width:50px;" />
+        <input type="submit" value="开始" style="width:80px;" />
         推荐经常操作，可以有效地释放无效空间，加快访问速度
       </form>
       <div style="color:#0000FF;">
@@ -311,39 +311,16 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 	'生成文件
 	dim num
 	num = 0
-	dim objStream
-	Set objStream = Server.CreateObject("ADODB.Stream")
-	If Err Then 
-		Err.Clear
-		ErrMsg = "服务器不支持ADODB.Stream"
-		cenfun_error()
-	else
-		sql = "select id,config,list from cmp_user"
-		set rs = conn.execute(sql)
-			do while not rs.eof
-					With objStream
-					.Open
-					.Charset = "utf-8"
-					.Position = objStream.Size
-					.WriteText = UnCheckStr(rs("config"))
-					.SaveToFile Server.Mappath(xmlpath & "/" & rs("id") & xmlconfig),2 
-					.Close
-					End With
-					With objStream
-					.Open
-					.Charset = "utf-8"
-					.Position = objStream.Size
-					.WriteText = UnCheckStr(rs("list"))
-					.SaveToFile Server.Mappath(xmlpath & "/" & rs("id") & xmllist),2 
-					.Close
-					End With
-				rs.movenext
-				num = num + 2
-			loop
-		rs.close
-		set rs = nothing
-	end if
-	Set objStream = Nothing
+	sql = "select id,config,list from cmp_user"
+	set rs = conn.execute(sql)
+		do while not rs.eof
+			call makeFile(xmlpath & "/" & rs("id") & xmlconfig, UnCheckStr(rs("config")))
+			call makeFile(xmlpath & "/" & rs("id") & xmllist, UnCheckStr(rs("list")))
+			rs.movenext
+			num = num + 2
+		loop
+	rs.close
+	set rs = nothing
   %>
   <p>重建数据完成！共生成<%=num%>个文件。</p>
   <%end if%>
@@ -496,7 +473,7 @@ IF not rs.EOF Then
             <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
             <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
             <td><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" title="点击在新窗口中打开"><%=rs("cmp_name")%></a></td>
-            <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情编辑</a></td>
+            <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情查看和编辑</a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
@@ -623,6 +600,9 @@ if not rs.eof then
 	end select
 	dim cmpurl
 	cmpurl = getCmpUrl(rs("id"))
+	dim strConfig,strList
+	strConfig = UnCheckStr(rs("config"))
+	strList = UnCheckStr(rs("list"))
 %>
   <form method="post" action="system.asp?action=saveuser&id=<%=rs("id")%>" onSubmit="return check(this);">
     <tr>
@@ -688,6 +668,14 @@ if not rs.eof then
       <td><a href="<%=cmpurl%>&" target="_blank"><%=cmpurl%></a></td>
     </tr>
     <tr>
+      <td align="right">播放器配置：</td>
+      <td><textarea name="config" rows="10" id="config" style="width:99%;"><%=strConfig%></textarea></td>
+    </tr>
+    <tr>
+      <td align="right">播放器列表：</td>
+      <td><textarea name="list" rows="10" id="list" style="width:99%;"><%=strList%></textarea></td>
+    </tr>
+    <tr>
       <td width="20%">&nbsp;</td>
       <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" />
       </td>
@@ -732,7 +720,7 @@ if id <> "" then
 		sql = "select username from cmp_user where id="&id
 		set rs = conn.execute(sql)
 		if not rs.eof then
-			dim password,logins,hits,email,qq,cmp_name,cmp_url
+			dim password,logins,hits,email,qq,cmp_name,cmp_url,config,list
 			if Request.Form("password")<>"" then
 				password=md5(Request.Form("password")+rs("username"),16)
 				conn.execute("update cmp_user set [password]='"&password&"' where username='"&rs("username")&"'")
@@ -743,10 +731,17 @@ if id <> "" then
 			qq=Checkstr(Request.Form("qq"))
 			cmp_name=Checkstr(Request.Form("cmp_name"))
 			cmp_url=Checkstr(Request.Form("cmp_url"))
-			sql = "update cmp_user set logins="&logins&",hits="&hits&",email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"' "
-			sql = sql & " where username='"&rs("username")&"'"
+			config = CheckStr(request.Form("config"))
+			list = CheckStr(request.Form("list"))
+			sql = "update cmp_user set logins="&logins&",hits="&hits&",email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
+			sql = sql & "config='"&config&"',list='"&list&"' where username='"&rs("username")&"' "
 			'response.Write(sql)
 			conn.execute(sql)
+			'生成静态文件
+			if xml_make="1" then
+				call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
+				call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
+			end if
 			SucMsg="修改成功！"
 			Cenfun_suc(Request.ServerVariables("HTTP_REFERER"))
 		end if
