@@ -29,6 +29,10 @@ else
 			plugins()
 		Case "saveplugins"
 			saveplugins()
+		Case "lrcs"
+			lrcs()
+		Case "savelrcs"
+			savelrcs()
 		Case Else
 			config()
 	End Select
@@ -775,5 +779,18 @@ sub plugins()
 end sub
 
 sub saveplugins()
+end sub
+
+sub lrcs()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <td>开发中...</td>
+  </tr>
+</table>
+<%
+end sub
+
+sub savelrcs()
 end sub
 %>
