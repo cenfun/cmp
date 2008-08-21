@@ -67,7 +67,7 @@ set rs = nothing
   </form>
   <%else%>
   <tr>
-    <td align="center"><script type="text/javascript">
+    <td align="center">制作中...<script type="text/javascript">
 //id, width, height, cmp url, vars
 showcmp("cmp_list_editer", "100%", "600", "CList.swf", "i=list.asp%3Fid%3D<%=id%>&o=");
 </script>
