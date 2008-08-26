@@ -5,26 +5,30 @@
 '检测用户是否登录
 If Session(CookieName & "_username")="" Then
 	response.Redirect("index.asp")
-else
-	header()
-	menu()
-	Select Case Request.QueryString("action")
-		Case "userinfo"
-			userinfo()
-		Case "saveinfo"
-			saveinfo()	
-		Case "config"
-			config()
-		Case "saveconfig"
-			saveconfig()
-		Case "list"
-			list()
-		Case "savelist"
-			savelist()
-		Case Else
-			main()
-	End Select
-	footer()
+else 
+	if Request.QueryString("handler")="savelistdata" then
+		savelistdata()
+	else
+		header()
+		menu()
+		Select Case Request.QueryString("action")
+			Case "userinfo"
+				userinfo()
+			Case "saveinfo"
+				saveinfo()	
+			Case "config"
+				config()
+			Case "saveconfig"
+				saveconfig()
+			Case "list"
+				list()
+			Case "savelist"
+				savelist()
+			Case Else
+				main()
+		End Select
+		footer()
+	end if
 end if
 
 sub list()
@@ -57,7 +61,6 @@ set rs = nothing
   </tr>
   <%if request.QueryString("mode")="code" then%>
   <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
-    <input name="id" type="hidden" value="<%=id%>" />
     <tr>
       <td align="center"><textarea name="list" rows="30" id="list" style="width:99%;"><%=strContent%></textarea></td>
     </tr>
@@ -67,9 +70,9 @@ set rs = nothing
   </form>
   <%else%>
   <tr>
-    <td align="center">制作中...<script type="text/javascript">
+    <td align="center"><script type="text/javascript">
 //id, width, height, cmp url, vars
-showcmp("cmp_list_editer", "100%", "600", "CList.swf", "i=list.asp%3Fid%3D<%=id%>&o=");
+showcmp("cmp_list_editer", "100%", "600", "CList.swf", "i=list.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random()+"&o=manage.asp%3Fhandler%3Dsavelistdata");
 </script>
     </td>
   </tr>
@@ -85,15 +88,42 @@ end sub
 
 sub savelist()
 	dim list,id
-	list = CheckStr(request.Form("list"))
-	id = Checkstr(request.Form("id"))
-	conn.execute("update cmp_user set list='"&list&"' where username='" & Session(CookieName & "_username") & "'")
-	SucMsg="修改成功！"
-	Cenfun_suc("manage.asp?action=list")
-	'重建静态数据
-	if xml_make="1" then
-		call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
+	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
+	set rs = conn.execute(sql)
+	if not rs.eof then
+		id = rs("id")
+		list = CheckStr(request.Form("list"))
+		conn.execute("update cmp_user set list='"&list&"' where id=" & id & " ")
+		SucMsg="修改成功！"
+		Cenfun_suc("manage.asp?action=list&mode=code")
+		'重建静态数据
+		if xml_make="1" then
+			call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
+		end if
+	else
+		ErrMsg = "用户不存在或者被锁定！"
+		cenfun_error()
 	end if
+	rs.close
+	set rs = nothing
+end sub
+
+sub savelistdata()
+	dim list,id
+	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
+	set rs = conn.execute(sql)
+	if not rs.eof then
+		id = rs("id")
+		list = CheckStr(request.Form("list"))
+		conn.execute("update cmp_user set list='"&list&"' where id=" & id & " ")
+		Response.Write("CMPListComplete")
+		'重建静态数据
+		if xml_make="1" then
+			call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
+		end if
+	end if
+	rs.close
+	set rs = nothing
 end sub
 
 
