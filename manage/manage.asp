@@ -51,7 +51,7 @@ set rs = nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th align="left">CMP列表文件编辑: <span style="padding-left:20px;">
+    <th align="left">CMP列表文件编辑: <span style="margin-left:20px;padding:2px 5px;border:1px solid #999999;">
       <%if request.QueryString("mode")="code" then%>
       <a href="manage.asp?action=list">&lt;&lt;返回普通编辑模式</a>
       <%else%>
