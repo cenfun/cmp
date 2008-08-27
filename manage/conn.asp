@@ -10,7 +10,7 @@ Session.LCID = 2057
 Dim sitedb
 	sitedb = "data/#cmp3_2008.mdb"
 Dim siteVersion
-	siteVersion = "Beta 08.8.14"
+	siteVersion = "Beta 08.8.26"
 Dim Startime,SqlNowString,SystemTime
 Dim conn,rs,sql,FoundErr,ErrMsg,SucMsg
 FoundErr=False 
