@@ -23,16 +23,10 @@ else
 			saveuser()
 		Case "skins"
 			skins()
-		Case "saveskins"
-			saveskins()
 		Case "plugins"
 			plugins()
-		Case "saveplugins"
-			saveplugins()
 		Case "lrcs"
 			lrcs()
-		Case "savelrcs"
-			savelrcs()
 		Case Else
 			config()
 	End Select
@@ -756,30 +750,229 @@ end if
 end sub
 
 sub skins()
+dim deal
+deal = Request.QueryString("deal")
+if deal<>"" then
+	dim id,title,src
+	select case deal
+		case "add"
+			title = Checkstr(Request.Form("skin_title"))
+			src = Checkstr(Request.Form("skin_src"))
+			sql = "insert into cmp_skins "
+			sql = sql & "(title,src) values("
+			sql = sql & "'"&title&"','"&src&"')"
+			conn.execute(sql)
+		case "del"
+			id = Checkstr(Request.QueryString("id"))
+			conn.execute("delete from cmp_skins where id in ("&id&")")
+		case "edit"
+			id = Checkstr(Request.QueryString("id"))
+			title = Checkstr(Request.Form("skin_title"))
+			src = Checkstr(Request.Form("skin_src"))
+			conn.execute("update cmp_skins set title='"&title&"',src='"&src&"' where id="&id&" ")
+		case else
+	end select
+	response.Redirect("system.asp?action=skins")
+else
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td>开发中...</td>
+    <th align="left">系统皮肤管理</th>
+  </tr>
+  <tr>
+    <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
+        <form action="system.asp?action=skins&amp;deal=add" method="post" onSubmit="return check(this);">
+          <tr align="center">
+            <td><input name="skin_title" type="text" size="35" /></td>
+            <td><input name="skin_src" type="text" size="50" /></td>
+            <td colspan="3"><input name="add_submit" type="submit" value="添加皮肤" /></td>
+          </tr>
+        </form>
+        <tr>
+          <th>名称</th>
+          <th>路径</th>
+          <th colspan="3">操作</th>
+        </tr>
+        <%
+		'取得用户ID
+		dim userid,cmp_show_url
+		sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' "
+		userid = conn.execute(sql)("id")
+		cmp_show_url = getCmpUrl(userid)
+		'所有皮肤
+		sql = "select id,title,src from cmp_skins order by id desc"
+		set rs = conn.execute(sql)
+		Do Until rs.EOF
+		%>
+        <form action="system.asp?action=skins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
+          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
+            <td><input name="skin_title" type="text" value="<%=rs("title")%>" size="35" /></td>
+            <td><input name="skin_src" type="text" value="<%=rs("src")%>" size="50" /></td>
+            <td><input name="edit_submit" type="submit" value="修改" /></td>
+            <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&skin_src=" & rs("src")%>');" /></td>
+            <td><input name="del_submit" type="button" value="删除" onclick="skin_del('<%=rs("id")%>');" /></td>
+          </tr>
+        </form>
+        <%
+		rs.MoveNext
+		loop
+		rs.close
+		set rs = nothing
+		%>
+      </table></td>
   </tr>
 </table>
+<script type="text/javascript">
+function skin_del(id){
+	if(confirm("确定要【删除】此皮肤吗？")){
+		window.location = "system.asp?action=skins&deal=del&id="+id;
+	}
+}
+function skin_show(url){
+	if (url) {
+		window.open(url);
+	}
+}
+function check(o){
+	if(o.skin_title.value==""){
+		alert("皮肤名称不能为空！");
+		o.skin_title.focus();
+		return false;
+	}
+	if(o.skin_src.value==""){
+		alert("皮肤路径不能为空！");
+		o.skin_src.focus();
+		return false;
+	}
+	return true;
+}
+</script>
 <%
-end sub
-
-sub saveskins()
+end if
 end sub
 
 sub plugins()
+dim deal
+deal = Request.QueryString("deal")
+if deal<>"" then
+	dim id,title,src,plugin_xywh,plugin_lock,plugin_display,plugin_istop
+	select case deal
+		case "add"
+			title = Checkstr(Request.Form("plugin_title"))
+			src = Checkstr(Request.Form("plugin_src"))
+			plugin_xywh = Checkstr(Request.Form("plugin_xywh"))
+			plugin_lock = Request.Form("plugin_lock")
+			plugin_display = Request.Form("plugin_display")
+			plugin_istop = Request.Form("plugin_istop")
+			sql = "insert into cmp_plugins "
+			sql = sql & "(title,src,xywh,lock,display,istop) values("
+			sql = sql & "'"&title&"','"&src&"','"&plugin_xywh&"','"&plugin_lock&"','"&plugin_display&"','"&plugin_istop&"')"
+			conn.execute(sql)
+		case "del"
+			id = Checkstr(Request.QueryString("id"))
+			conn.execute("delete from cmp_plugins where id in ("&id&")")
+		case "edit"
+			id = Checkstr(Request.QueryString("id"))
+			title = Checkstr(Request.Form("plugin_title"))
+			src = Checkstr(Request.Form("plugin_src"))
+			plugin_xywh = Checkstr(Request.Form("plugin_xywh"))
+			plugin_lock = Request.Form("plugin_lock")
+			plugin_display = Request.Form("plugin_display")
+			plugin_istop = Request.Form("plugin_istop")
+			conn.execute("update cmp_plugins set title='"&title&"',src='"&src&"',xywh='"&plugin_xywh&"',lock='"&plugin_lock&"',display='"&plugin_display&"',istop='"&plugin_istop&"' where id="&id&" ")
+		case else
+	end select
+	response.Redirect("system.asp?action=plugins")
+else
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td>开发中...</td>
+    <th align="left">系统插件管理</th>
+  </tr>
+  <tr>
+    <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
+        <form action="system.asp?action=plugins&amp;deal=add" method="post" onSubmit="return check(this);">
+          <tr align="center">
+            <td><input name="plugin_title" type="text" size="35" /></td>
+            <td><input name="plugin_src" type="text" size="50" /></td>
+            <td>xywh:
+              <input name="plugin_xywh" type="text" value="0, 0, 100P, 100P" />
+              <input name="plugin_lock" type="checkbox" value="1" checked="checked" />
+              锁定
+              <input name="plugin_display" type="checkbox" value="1" checked="checked" />
+              显示
+              <input name="plugin_istop" type="checkbox" value="1" />
+              前置</td>
+            <td colspan="3"><input name="add_submit" type="submit" value="添加插件" /></td>
+          </tr>
+        </form>
+        <tr>
+          <th>名称</th>
+          <th>路径</th>
+          <th>默认设置</th>
+          <th colspan="3">操作</th>
+        </tr>
+        <%
+		'所有插件
+		sql = "select id,title,src,xywh,lock,display,istop from cmp_plugins order by id desc"
+		set rs = conn.execute(sql)
+		Do Until rs.EOF
+		%>
+        <form action="system.asp?action=plugins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
+          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
+            <td><input name="plugin_title" type="text" value="<%=rs("title")%>" size="35" /></td>
+            <td><input name="plugin_src" type="text" value="<%=rs("src")%>" size="50" /></td>
+            <td>xywh:
+              <input name="plugin_xywh" type="text" value="<%=rs("xywh")%>" />
+              <input name="plugin_lock" type="checkbox" value="1" <%if rs("lock")="1" then%>checked="checked"<%end if%> />
+              锁定
+              <input name="plugin_display" type="checkbox" value="1" <%if rs("display")="1" then%>checked="checked"<%end if%> />
+              显示
+              <input name="plugin_istop" type="checkbox" value="1" <%if rs("istop")="1" then%>checked="checked"<%end if%>/>
+              前置</td>
+            <td><input name="edit_submit" type="submit" value="修改" /></td>
+            <td><input name="show_submit" type="button" value="预览" onclick="plugin_show('<%=rs("src")%>');" /></td>
+            <td><input name="del_submit" type="button" value="删除" onclick="plugin_del('<%=rs("id")%>');" /></td>
+          </tr>
+        </form>
+        <%
+		rs.MoveNext
+		loop
+		rs.close
+		set rs = nothing
+		%>
+      </table></td>
   </tr>
 </table>
+<script type="text/javascript">
+function plugin_del(id){
+	if(confirm("确定要【删除】此插件吗？")){
+		window.location = "system.asp?action=plugins&deal=del&id="+id;
+	}
+}
+function plugin_show(url){
+	if (url) {
+		window.open(url);
+	}
+}
+function check(o){
+	if(o.plugin_title.value==""){
+		alert("插件名称不能为空！");
+		o.plugin_title.focus();
+		return false;
+	}
+	if(o.plugin_src.value==""){
+		alert("插件路径不能为空！");
+		o.plugin_src.focus();
+		return false;
+	}
+	return true;
+}
+</script>
 <%
+end if
 end sub
 
-sub saveplugins()
-end sub
 
 sub lrcs()
 %>
@@ -791,6 +984,4 @@ sub lrcs()
 <%
 end sub
 
-sub savelrcs()
-end sub
 %>
