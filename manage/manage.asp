@@ -6,8 +6,12 @@
 If Session(CookieName & "_username")="" Then
 	response.Redirect("index.asp")
 else 
-	if Request.QueryString("handler")="savelistdata" then
+	dim handler
+	handler = Request.QueryString("handler")
+	if handler="savelistdata" then
 		savelistdata()
+	elseif handler="saveconfigdata" then
+		saveconfigdata()
 	else
 		header()
 		menu()
@@ -30,6 +34,115 @@ else
 		footer()
 	end if
 end if
+
+
+sub config()
+dim strContent,id
+sql = "select id,cmp_name,cmp_url,config from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
+set rs = conn.execute(sql)
+if not rs.eof then
+	id = rs("id")
+	if trim(rs("config"))<>"" then
+		strContent = UnCheckStr(rs("config"))
+	else
+		dim cr
+		cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
+		strContent = "<cmp name="""" url="""" list="""" >" & cr
+		strContent = strContent & "<config language="""" volume="""" timeout="""" skin_id="""" list_id="""" play_mode="""" auto_play="""" "
+		strContent = strContent & "max_video="""" mixer_color="""" mixer_filter="""" mixer_displace="""" mixer_id="""" "
+		strContent = strContent & "video_smoothing="""" plugins_disabled="""" check_policyfile="""" show_tip="""" />" & cr
+		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
+		strContent = strContent & "<plugins>"&cr&"</plugins>" & cr
+		strContent = strContent & "<count src="""&site_count&""" />" & cr
+		strContent = strContent & "</cmp>"
+		conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
+	end if
+	'替换列表地址
+	dim re
+	Set re=new RegExp
+	re.IgnoreCase =True
+	re.Global=True
+	re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
+	if xml_make="1" then
+		strContent=re.Replace(strContent,"$1" & xml_path & "/" & rs("id") & xml_list & "$2")
+	else
+		strContent=re.Replace(strContent,"$1list.asp?id="&rs("id")&"$2")
+	end if
+	'名称，网址替换
+	re.Pattern="(<cmp[^>]+name *= *\"")[^\r]*?(\""[^>]*>)"
+	strContent=re.Replace(strContent,"$1" & rs("cmp_name") & "$2")
+	re.Pattern="(<cmp[^>]+url *= *\"")[^\r]*?(\""[^>]*>)"
+	strContent=re.Replace(strContent,"$1" & rs("cmp_url") & "$2")
+	Set re=nothing
+else
+	ErrMsg = "用户不存在或者被锁定！"
+	cenfun_error()
+end if
+rs.close
+set rs = nothing
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <th align="left">CMP配置文件编辑: <span style="margin-left:20px;padding:2px 5px;border:1px solid #999999;">
+      <%if request.QueryString("mode")="code" then%>
+      <a href="manage.asp?action=config">&lt;&lt;返回普通编辑模式</a>
+      <%else%>
+      <a href="manage.asp?action=config&mode=code">进入代码编辑模式&gt;&gt;</a>
+      <%end if%>
+      </span></th>
+  </tr>
+  <%if request.QueryString("mode")="code" then%>
+  <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
+    <tr>
+      <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"><%=strContent%></textarea></td>
+    </tr>
+    <tr>
+      <td align="center"><input name="config_submit" type="submit" id="config_submit" style="width:50px;" value="提交" /></td>
+    </tr>
+  </form>
+  <%else%>
+  <tr>
+    <td align="center">制作中...<script type="text/javascript">
+//id, width, height, cmp url, vars
+showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", "i=config.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random()+"&o=manage.asp%3Fhandler%3Dsaveconfigdata");
+</script>
+    </td>
+  </tr>
+  <%end if%>
+</table>
+<script type="text/javascript">
+function check_config(o){
+	return true;
+}
+</script>
+<%
+end sub
+
+sub saveconfig()
+	dim config,id
+	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
+	set rs = conn.execute(sql)
+	if not rs.eof then
+		id = rs("id")
+		config = CheckStr(request.Form("config"))
+		conn.execute("update cmp_user set config='"&config&"' where id=" & id & " ")
+		SucMsg="修改成功！"
+		Cenfun_suc("manage.asp?action=config&mode=code")
+		'重建静态数据
+		if xml_make="1" then
+			call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
+		end if
+	else
+		ErrMsg = "用户不存在或者被锁定！"
+		cenfun_error()
+	end if
+	rs.close
+	set rs = nothing
+end sub
+
+sub saveconfigdata()
+
+end sub
 
 sub list()
 dim strContent,id
@@ -126,124 +239,6 @@ sub savelistdata()
 	set rs = nothing
 end sub
 
-
-sub config()
-dim strContent,id
-sql = "select id,cmp_name,cmp_url,config from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
-set rs = conn.execute(sql)
-if not rs.eof then
-	id = rs("id")
-	if trim(rs("config"))<>"" then
-		strContent = UnCheckStr(rs("config"))
-	else
-		dim cr
-		cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
-		strContent = "<cmp name="""" url="""" list="""" >" & cr
-		strContent = strContent & "<config language="""" volume="""" timeout="""" skin_id="""" list_id="""" play_mode="""" auto_play="""" "
-		strContent = strContent & "max_video="""" mixer_color="""" mixer_filter="""" mixer_displace="""" mixer_id="""" "
-		strContent = strContent & "video_smoothing="""" plugins_disabled="""" check_policyfile="""" show_tip="""" />" & cr
-		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
-		strContent = strContent & "<plugins>"&cr&"</plugins>" & cr
-		strContent = strContent & "<count src="""&site_count&""" />" & cr
-		strContent = strContent & "</cmp>"
-		conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
-	end if
-	'替换列表地址
-	dim re
-	Set re=new RegExp
-	re.IgnoreCase =True
-	re.Global=True
-	re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
-	if xml_make="1" then
-		strContent=re.Replace(strContent,"$1" & xml_path & "/" & rs("id") & xml_list & "$2")
-	else
-		strContent=re.Replace(strContent,"$1list.asp?id="&rs("id")&"$2")
-	end if
-	'名称，网址替换
-	re.Pattern="(<cmp[^>]+name *= *\"")[^\r]*?(\""[^>]*>)"
-	strContent=re.Replace(strContent,"$1" & rs("cmp_name") & "$2")
-	re.Pattern="(<cmp[^>]+url *= *\"")[^\r]*?(\""[^>]*>)"
-	strContent=re.Replace(strContent,"$1" & rs("cmp_url") & "$2")
-	Set re=nothing
-else
-	ErrMsg = "用户不存在或者被锁定！"
-	cenfun_error()
-end if
-rs.close
-set rs = nothing
-%>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
-    <input name="id" type="hidden" value="<%=id%>" />
-    <tr>
-      <th align="left">CMP配置文件编辑:</th>
-    </tr>
-    <tr>
-      <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"><%=strContent%></textarea></td>
-    </tr>
-    <tr>
-      <td align="center"><input name="config_submit" type="submit" id="config_submit" style="width:50px;" value="提交" /></td>
-    </tr>
-    <tr>
-      <td><div style="padding:5px 5px; margin-top:5px; border-top:1px dashed #CCCCCC;">注：其中name,url,list属性会自动根据个人资料和站点设置进行替换<br />
-          全局参数配置：(不填将在第一次打开时使用系统默认值，之后将读取存储值，必须开启Flash本地存储)<br />
-          language: 使用语言，支持三种：简体中文(zh-cn)；繁体中文(zh-tw)；英文(en)，括号中为其使用值<br />
-          volume: 初始化音量值，可用值为0-1之间，默认0.8，表示80%的音量，0表示静音，1为最大音量<br />
-          timeout: 自定义连接超时，单位毫秒，默认15000，即15秒<br />
-          skin_id: 皮肤ID，如skin_id=&quot;3&quot;表示使用皮肤列表的第3个皮肤；0为使用系统默认皮肤，默认为0；-1为随机<br />
-          list_id: 指定初始的列表分类ID，如list_id=&quot;2&quot;表示指定播放第2个分类，默认为1；-1为随机<br />
-          play_mode: 播放模式，支持三种：顺序播放(0)；重复播放(1)；随机播放(2)；默认0<br />
-          auto_play: 是否启用自动播放：不启用(0)；启用(1)；播放第n个(n)；默认0<br />
-          max_video: 打开时是否最大化视频窗口：否(0)；是(1)；默认0<br />
-          mixer_color: 混音器的颜色，如：#00ff00，默认为0xa4eb0c<br />
-          mixer_filter: 是否开启混音器滤镜：关闭(0)；开启(1)；默认0<br />
-          mixer_displace: 是否开启滤镜随机置换：关闭(0)；开启(1)；默认0<br />
-          mixer_id: 混音器ID，如目前支持10种效果，即可选1至10，默认为1；-1为随机<br />
-          video_smoothing: 是否启用视频缩放时进行平滑处理：不启用(0)；启用(1)；默认1<br />
-          plugins_disabled: 是否禁用插件：不禁用(0)；禁用(1)；默认0<br />
-          check_policyfile: 是否下载跨域策略文件：不下载(0)；下载(1)，仅对播放跨域mp3时显示soundmixer和id3有用，默认1<br />
-          show_tip: 是否延时显示按钮等文字提示信息：不显示(0)；显示(500)，数值表示延时的毫秒数，默认延时500毫秒<br />
-          皮肤列表：<br />
-          src: 皮肤包路径<br />
-          mixer_id/mixer_color/show_tip: 指定单个皮肤的配置参数，为空则使用全局参数配置<br />
-          &lt;skins&gt;<br />
-          &lt;skin src=&quot;skins/wmp11.zip&quot; mixer_id=&quot;&quot; mixer_color=&quot;&quot; show_tip=&quot;&quot; /&gt;<br />
-          &lt;skin src=&quot;skins/blue_full.zip&quot; mixer_id=&quot;2&quot; mixer_color=&quot;&quot; show_tip=&quot;&quot; /&gt;<br />
-          &lt;/skins&gt;<br />
-          插件列表：<br />
-          name: 插件名称，非必填<br />
-          xywh: 为4个数值，用英文逗号(,)隔开，分别表示对象的x横坐标、y纵坐标、w宽、h高<br />
-          src: 插件路径，必填<br />
-          lock: 是否锁定对象，锁定后将不能拖动对象：1表示锁定；0表示不锁定<br />
-          display: 是否显示对象：1表示显示对象；0表示隐藏对象<br />
-          istop: 是否置顶插件：0为最底层(默认)；1为顶层<br />
-          多个插件的顺序即为其叠放层次，请注意不要被最大的背景遮挡，即将不用显示的插件和背景图放在最下层<br />
-          &lt;plugins&gt;<br />
-          &lt;plugin name=&quot;大背景&quot; xywh=&quot;0, 0, 100P, 100P&quot; src=&quot;plugins/bigbg.swf&quot; lock=&quot;1&quot; display=&quot;1&quot; istop=&quot;0&quot; /&gt;<br />
-          &lt;/plugins&gt;</div></td>
-    </tr>
-  </form>
-</table>
-<script type="text/javascript">
-function check_config(o){
-	return true;
-}
-</script>
-<%
-end sub
-
-sub saveconfig()
-	dim config,id
-	config = CheckStr(request.Form("config"))
-	id = Checkstr(request.Form("id"))
-	conn.execute("update cmp_user set config='"&config&"' where username='" & Session(CookieName & "_username") & "'")
-	SucMsg="修改成功！"
-	Cenfun_suc("manage.asp?action=config")
-	'重建静态数据
-	if xml_make="1" then
-		call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
-	end if
-end sub
 
 sub userinfo()
 sql = "select * from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
