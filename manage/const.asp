@@ -416,7 +416,7 @@ sub menu()
   <a href="manage.asp">调用代码</a> | <a href="manage.asp?action=config" title="Config">配置编辑</a> | <a href="manage.asp?action=list" title="List">列表编辑</a>
   <%else%>
   <div style="float:right;"><%=site_name%></div>
-  <a href="index.asp">登录</a> | <a href="index.asp?action=reg">免费注册</a> | <a href="userlist.asp">用户列表</a>
+  <a href="index.asp">登录</a> | <a href="index.asp?action=reg">免费注册</a> | <a href="userlist.asp">用户列表</a> | <a href="gbook.asp">留言簿</a>
   <%end if%>
 </div>
 <%
