@@ -54,6 +54,7 @@
 	<skins>
 		<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" show_tip="" />
 		<skin src="skins/blue_full.zip" mixer_id="2" mixer_color="" show_tip="" />
+		<skin src="skins/exobud_plastic.zip" mixer_id="" mixer_color="" show_tip="" />
 	</skins>
 
 	<!-- 

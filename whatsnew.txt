@@ -1,5 +1,14 @@
 CMP v3.0更新历史：
 
+-08年9月2日：b080902
+loading小调整
+修正混音器显示bug
+支持开场动画的加载，intro_src、intro_time
+支持base64编码格式的config.xml/list.xml/skin.xml
+皮肤增加列表的滚动条轨迹样式设置，如：track_src="scrollbar_track.png"
+皮肤增加窗口的遮罩动画加载，如：mask="mask.swf" 可用于完成某些特殊效果，推荐高级用户使用
+更新了官方皮肤配置文件的注释说明
+
 -08年8月30日：b080830
 把歌曲的序号对齐，如1改成01 
 修正几个报错Bug
