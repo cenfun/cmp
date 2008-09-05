@@ -83,11 +83,11 @@ set rs = nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th align="left">CMP配置文件编辑: <span style="margin-left:20px;padding:2px 5px;border:1px solid #999999;">
+    <th align="left">CMP配置文件编辑: <span style="margin-left:20px;font-weight:normal;">
       <%if request.QueryString("mode")="code" then%>
-      <a href="manage.asp?action=config">&lt;&lt;返回普通编辑模式</a>
+      <input type="button" onclick="window.location='manage.asp?action=config';" value="&lt;&lt;返回普通编辑模式" />
       <%else%>
-      <a href="manage.asp?action=config&mode=code">进入代码编辑模式&gt;&gt;</a>
+      <input type="button" onclick="window.location='manage.asp?action=config&mode=code';" value="进入代码编辑模式&gt;&gt;" />
       <%end if%>
       </span></th>
   </tr>
@@ -164,11 +164,11 @@ set rs = nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th align="left">CMP列表文件编辑: <span style="margin-left:20px;padding:2px 5px;border:1px solid #999999;">
+    <th align="left">CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
       <%if request.QueryString("mode")="code" then%>
-      <a href="manage.asp?action=list">&lt;&lt;返回普通编辑模式</a>
+      <input type="button" onclick="window.location='manage.asp?action=list';" value="&lt;&lt;返回普通编辑模式" />
       <%else%>
-      <a href="manage.asp?action=list&mode=code">进入代码编辑模式&gt;&gt;</a>
+      <input type="button" onclick="window.location='manage.asp?action=list&mode=code';" value="进入代码编辑模式&gt;&gt;" />
       <%end if%>
       </span></th>
   </tr>
