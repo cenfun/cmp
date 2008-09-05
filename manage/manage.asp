@@ -53,6 +53,7 @@ if not rs.eof then
 		strContent = strContent & "timeout="""" show_tip="""" context_menu="""" video_smoothing="""" plugins_disabled="""" check_policyfile=""""  />" & cr
 		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
 		strContent = strContent & "<plugins>"&cr&"</plugins>" & cr
+		strContent = strContent & "<nolrc src="""">"&cr&"</nolrc>" & cr
 		strContent = strContent & "<count src="""&site_count&""" />" & cr
 		strContent = strContent & "</cmp>"
 		conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
