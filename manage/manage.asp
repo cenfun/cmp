@@ -102,10 +102,10 @@ set rs = nothing
   </form>
   <%else%>
   <tr>
-    <td align="center">制作中...<script type="text/javascript">
+    <td align="center"><script type="text/javascript">
 //id, width, height, cmp url, vars
 showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", "i=config.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random()+"&o=manage.asp%3Fhandler%3Dsaveconfigdata");
-</script>
+</script>皮肤和插件功能还在制作中...
     </td>
   </tr>
   <%end if%>
@@ -141,7 +141,21 @@ sub saveconfig()
 end sub
 
 sub saveconfigdata()
-
+	dim config,id
+	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
+	set rs = conn.execute(sql)
+	if not rs.eof then
+		id = rs("id")
+		config = CheckStr(request.Form("config"))
+		conn.execute("update cmp_user set config='"&config&"' where id=" & id & " ")
+		Response.Write("CMPConfigComplete")
+		'重建静态数据
+		if xml_make="1" then
+			call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
+		end if
+	end if
+	rs.close
+	set rs = nothing
 end sub
 
 sub list()
