@@ -514,7 +514,11 @@ if not rs.eof then
   </tr>
   <tr>
     <td align="right" nowrap="nowrap">常用论坛调用标签：</td>
-    <td><div style="margin:10px 0px;">[flash=100%,600]<%=cmp_url%>[/flash]</div></td>
+    <td>[flash=100%,600]<%=cmp_url%>[/flash]</td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap">内框架页面调用：</td>
+    <td>&lt;iframe frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;<%=cmp_page_url%>&quot; width=&quot;100%&quot; height=&quot;600&quot;&gt;&lt;/iframe&gt;</td>
   </tr>
   <tr>
     <td align="right">HTML调用代码：</td>
