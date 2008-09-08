@@ -33,7 +33,7 @@ by=Checkstr(Request.QueryString("by"))
         <form>
           <%
 '查询串
-sql = "select id,lasttime,hits,email,qq,cmp_name,cmp_url from cmp_user where userstatus > 4 and "
+sql = "select id,lasttime,hits,email,qq,cmp_name,cmp_url from cmp_user where userstatus > 4 and setinfo<>1 and "
 if cmp_name <> "" then
 	sql = sql & " cmp_name like '%"&cmp_name&"%' and "
 end if

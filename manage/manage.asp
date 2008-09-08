@@ -302,6 +302,10 @@ if not rs.eof then
       <td><input name="cmp_url" type="text" id="cmp_url" size="50" maxlength="200" value="<%=rs("cmp_url")%>" /></td>
     </tr>
     <tr>
+      <td align="right">不公开到用户列表：</td>
+      <td><input name="setinfo" type="checkbox" value="1" <%if rs("setinfo")=1 then%>checked="checked"<%end if%> /></td>
+    </tr>
+    <tr>
       <td width="20%">&nbsp;</td>
       <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" /></td>
     </tr>
@@ -424,12 +428,16 @@ dim username
 username = Session(CookieName & "_username")
 if Request.QueryString("do")="info" then
 	'修改用户信息
-	dim email,qq,cmp_name,cmp_url
+	dim email,qq,cmp_name,cmp_url,setinfo
 	email=Checkstr(Request.Form("email"))
 	qq=Checkstr(Request.Form("qq"))
 	cmp_name=Checkstr(Request.Form("cmp_name"))
 	cmp_url=Checkstr(Request.Form("cmp_url"))
-	sql = "update cmp_user set email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"' where username='"&username&"'"
+	setinfo=Checkstr(Request.Form("setinfo"))
+	if setinfo="" then
+		setinfo=0
+	end if
+	sql = "update cmp_user set email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',setinfo="&setinfo&" where username='"&username&"'"
 	'response.Write(sql)
 	conn.execute(sql)
 	SucMsg="修改成功！"
