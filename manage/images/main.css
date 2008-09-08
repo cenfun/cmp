@@ -1,11 +1,10 @@
 ﻿@charset "utf-8";
-* { padding:0px 0px; margin:0px 0px; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; }
 html, body { height:100%; }
-body { background-color:#F5FAFE; }
+body, a, td, th, span, div, input, textarea { font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; }
+body { background-color:#F5FAFE; padding:0px 0px; margin:0px 0px; }
 a:link, a:visited { color:#000000; text-decoration:none; }
 a:hover { color:#428EFF; text-decoration:underline; }
-label input { height:14px; }
-.verifycode { font-weight:bold; font-family:"Times New Roman", Times, serif; -moz-user-select:none; cursor:default; }
+.verifycode { font-weight:bold; -moz-user-select:none; cursor:default; }
 .tableborder { margin:0px auto; border:1px solid #CAD9EA; margin-bottom:10px; background-color:#FFFFFF; }
 .tableborder th { padding:5px 3px; border-bottom:1px solid #CAD9EA; color:#428EFF; }
 .tableborder td { padding:2px 2px; line-height:20px; }
