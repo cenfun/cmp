@@ -6,6 +6,7 @@
 If Session(CookieName & "_username")="" Then
 	response.Redirect("index.asp")
 else 
+	
 	dim handler
 	handler = Request.QueryString("handler")
 	if handler="savelistdata" then
