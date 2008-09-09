@@ -6,36 +6,60 @@
 If Session(CookieName & "_username")="" Then
 	response.Redirect("index.asp")
 else 
-	
-	dim handler
-	handler = Request.QueryString("handler")
-	if handler="savelistdata" then
-		savelistdata()
-	elseif handler="saveconfigdata" then
-		saveconfigdata()
-	else
-		header()
-		menu()
-		Select Case Request.QueryString("action")
-			Case "userinfo"
-				userinfo()
-			Case "saveinfo"
-				saveinfo()	
-			Case "config"
-				config()
-			Case "saveconfig"
-				saveconfig()
-			Case "list"
-				list()
-			Case "savelist"
-				savelist()
-			Case Else
-				main()
-		End Select
-		footer()
-	end if
+	Select Case Request.QueryString("handler")
+		Case "savelistdata"
+			savelistdata()
+		Case "saveconfigdata"
+			saveconfigdata()
+		Case "getskins"
+			getskins()
+		Case "getplugins"
+			getplugins()
+		Case Else
+			header()
+			menu()
+			Select Case Request.QueryString("action")
+				Case "userinfo"
+					userinfo()
+				Case "saveinfo"
+					saveinfo()	
+				Case "config"
+					config()
+				Case "saveconfig"
+					saveconfig()
+				Case "list"
+					list()
+				Case "savelist"
+					savelist()
+				Case Else
+					main()
+			End Select
+			footer()
+	 End Select
 end if
 
+sub getskins()
+addUTFBOM()
+dim skinlist
+skinlist = "<cmp_skins>"
+sql = "select * from cmp_skins "
+set rs = conn.execute(sql)
+if not rs.eof then
+	Do Until rs.EOF
+		skinlist = skinlist & "<skin src=""" & rs("src") & """ />"
+	rs.MoveNext
+    loop
+end if
+rs.close
+set rs = nothing
+skinlist = skinlist & "</cmp_skins>"
+Response.Write(skinlist)
+end sub
+
+sub getplugins()
+addUTFBOM()
+
+end sub
 
 sub config()
 dim strContent,id

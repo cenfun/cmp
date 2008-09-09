@@ -1,13 +1,7 @@
 <!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
 <%
-Response.BinaryWrite(ChrB(239))
-Response.BinaryWrite(ChrB(187))
-Response.BinaryWrite(ChrB(191))
-response.Charset = "utf-8"
-response.AddHeader "Content-Type", "text/xml"
-%>
-<%
+addUTFBOM()
 dim id,strContent
 id=Checkstr(Request.QueryString("id"))
 if id <> "" then

@@ -105,6 +105,14 @@ function getCode(code)
 	getCode = str
 end function
 
+'添加utf-8编码的XML文件头
+function addUTFBOM()
+	Response.BinaryWrite(ChrB(239))
+	Response.BinaryWrite(ChrB(187))
+	Response.BinaryWrite(ChrB(191))
+	response.Charset = "utf-8"
+	response.AddHeader "Content-Type", "text/xml"
+end function
 '*************************************
 '检测系统组件是否安装
 '*************************************
