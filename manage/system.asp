@@ -463,7 +463,7 @@ IF not rs.EOF Then
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
-              <%end if%></td>
+            <%end if%></td>
             <td><%=role%></td>
             <td><%=rs("id")%></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>" title="点击查看和编辑详细资料"><%=rs("username")%></a></td>
@@ -753,14 +753,17 @@ sub skins()
 dim deal
 deal = Request.QueryString("deal")
 if deal<>"" then
-	dim id,title,src
+	dim id,title,src,mixer_id,mixer_color,show_tip
 	select case deal
 		case "add"
 			title = Checkstr(Request.Form("skin_title"))
 			src = Checkstr(Request.Form("skin_src"))
+			mixer_id = Checkstr(Request.Form("skin_mixer_id"))
+			mixer_color = Checkstr(Request.Form("skin_mixer_color"))
+			show_tip = Checkstr(Request.Form("skin_show_tip"))
 			sql = "insert into cmp_skins "
-			sql = sql & "(title,src) values("
-			sql = sql & "'"&title&"','"&src&"')"
+			sql = sql & "(title,src,mixer_id,mixer_color,show_tip) values("
+			sql = sql & "'"&title&"','"&src&"','"&mixer_id&"','"&mixer_color&"','"&show_tip&"')"
 			conn.execute(sql)
 		case "del"
 			id = Checkstr(Request.QueryString("id"))
@@ -769,7 +772,13 @@ if deal<>"" then
 			id = Checkstr(Request.QueryString("id"))
 			title = Checkstr(Request.Form("skin_title"))
 			src = Checkstr(Request.Form("skin_src"))
-			conn.execute("update cmp_skins set title='"&title&"',src='"&src&"' where id="&id&" ")
+			mixer_id = Checkstr(Request.Form("skin_mixer_id"))
+			mixer_color = Checkstr(Request.Form("skin_mixer_color"))
+			show_tip = Checkstr(Request.Form("skin_show_tip"))
+			sql = "update cmp_skins set "
+			sql = sql & "title='"&title&"',src='"&src&"',mixer_id='"&mixer_id&"',mixer_color='"&mixer_color&"',show_tip='"&show_tip&"' "
+			sql = sql & "where id="&id&" "
+			conn.execute(sql)
 		case else
 	end select
 	response.Redirect("system.asp?action=skins")
@@ -783,14 +792,21 @@ else
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
         <form action="system.asp?action=skins&amp;deal=add" method="post" onSubmit="return check(this);">
           <tr align="center">
-            <td><input name="skin_title" type="text" size="35" /></td>
-            <td><input name="skin_src" type="text" size="50" /></td>
+            <td><input name="skin_title" type="text" maxlength="50" /></td>
+            <td><input name="skin_src" type="text" maxlength="200" /></td>
+            <td>混音器ID
+            <input name="skin_mixer_id" type="text" size="2" maxlength="2" />
+            混音器颜色
+            <input name="skin_mixer_color" type="text" size="10" maxlength="10" />
+            提示文字延时
+            <input name="skin_show_tip" type="text" size="10" maxlength="10" /></td>
             <td colspan="3"><input name="add_submit" type="submit" value="添加皮肤" /></td>
           </tr>
         </form>
         <tr>
           <th>名称</th>
           <th>路径</th>
+          <th>默认设置</th>
           <th colspan="3">操作</th>
         </tr>
         <%
@@ -800,14 +816,20 @@ else
 		userid = conn.execute(sql)("id")
 		cmp_show_url = getCmpUrl(userid)
 		'所有皮肤
-		sql = "select id,title,src from cmp_skins order by id desc"
+		sql = "select * from cmp_skins order by id desc"
 		set rs = conn.execute(sql)
 		Do Until rs.EOF
 		%>
         <form action="system.asp?action=skins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
-            <td><input name="skin_title" type="text" value="<%=rs("title")%>" size="35" /></td>
-            <td><input name="skin_src" type="text" value="<%=rs("src")%>" size="50" /></td>
+            <td><input name="skin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
+            <td><input name="skin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
+            <td>混音器ID
+            <input name="skin_mixer_id" type="text" value="<%=rs("mixer_id")%>" size="2" maxlength="2" />
+            混音器颜色
+            <input name="skin_mixer_color" type="text" value="<%=rs("mixer_color")%>" size="10" maxlength="10" />
+            提示文字延时
+            <input name="skin_show_tip" type="text" value="<%=rs("show_tip")%>" size="10" maxlength="10" /></td>
             <td><input name="edit_submit" type="submit" value="修改" /></td>
             <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&skin_src=" & rs("src")%>');" /></td>
             <td><input name="del_submit" type="button" value="删除" onclick="skin_del('<%=rs("id")%>');" /></td>
@@ -819,7 +841,7 @@ else
 		rs.close
 		set rs = nothing
 		%>
-      </table></td>
+    </table></td>
   </tr>
 </table>
 <script type="text/javascript">
@@ -893,10 +915,10 @@ else
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
         <form action="system.asp?action=plugins&amp;deal=add" method="post" onSubmit="return check(this);">
           <tr align="center">
-            <td><input name="plugin_title" type="text" size="35" /></td>
-            <td><input name="plugin_src" type="text" size="50" /></td>
+            <td><input name="plugin_title" type="text" maxlength="50" /></td>
+            <td><input name="plugin_src" type="text" maxlength="200" /></td>
             <td>xywh:
-              <input name="plugin_xywh" type="text" value="0, 0, 100P, 100P" />
+              <input name="plugin_xywh" type="text" value="0, 0, 100P, 100P" maxlength="50" />
               <input name="plugin_lock" type="checkbox" value="1" checked="checked" />
               锁定
               <input name="plugin_display" type="checkbox" value="1" checked="checked" />
@@ -920,10 +942,10 @@ else
 		%>
         <form action="system.asp?action=plugins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
-            <td><input name="plugin_title" type="text" value="<%=rs("title")%>" size="35" /></td>
-            <td><input name="plugin_src" type="text" value="<%=rs("src")%>" size="50" /></td>
+            <td><input name="plugin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
+            <td><input name="plugin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
             <td>xywh:
-              <input name="plugin_xywh" type="text" value="<%=rs("xywh")%>" />
+              <input name="plugin_xywh" type="text" value="<%=rs("xywh")%>" maxlength="50" />
               <input name="plugin_lock" type="checkbox" value="1" <%if rs("lock")="1" then%>checked="checked"<%end if%> />
               锁定
               <input name="plugin_display" type="checkbox" value="1" <%if rs("display")="1" then%>checked="checked"<%end if%> />
