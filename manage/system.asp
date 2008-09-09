@@ -861,9 +861,9 @@ if deal<>"" then
 			title = Checkstr(Request.Form("plugin_title"))
 			src = Checkstr(Request.Form("plugin_src"))
 			plugin_xywh = Checkstr(Request.Form("plugin_xywh"))
-			plugin_lock = Request.Form("plugin_lock")
-			plugin_display = Request.Form("plugin_display")
-			plugin_istop = Request.Form("plugin_istop")
+			plugin_lock = Checkstr(Request.Form("plugin_lock"))
+			plugin_display = Checkstr(Request.Form("plugin_display"))
+			plugin_istop = Checkstr(Request.Form("plugin_istop"))
 			sql = "insert into cmp_plugins "
 			sql = sql & "(title,src,xywh,lock,display,istop) values("
 			sql = sql & "'"&title&"','"&src&"','"&plugin_xywh&"','"&plugin_lock&"','"&plugin_display&"','"&plugin_istop&"')"
@@ -876,9 +876,9 @@ if deal<>"" then
 			title = Checkstr(Request.Form("plugin_title"))
 			src = Checkstr(Request.Form("plugin_src"))
 			plugin_xywh = Checkstr(Request.Form("plugin_xywh"))
-			plugin_lock = Request.Form("plugin_lock")
-			plugin_display = Request.Form("plugin_display")
-			plugin_istop = Request.Form("plugin_istop")
+			plugin_lock = Checkstr(Request.Form("plugin_lock"))
+			plugin_display = Checkstr(Request.Form("plugin_display"))
+			plugin_istop = Checkstr(Request.Form("plugin_istop"))
 			conn.execute("update cmp_plugins set title='"&title&"',src='"&src&"',xywh='"&plugin_xywh&"',lock='"&plugin_lock&"',display='"&plugin_display&"',istop='"&plugin_istop&"' where id="&id&" ")
 		case else
 	end select
