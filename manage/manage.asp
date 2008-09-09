@@ -46,6 +46,7 @@ sql = "select * from cmp_skins "
 set rs = conn.execute(sql)
 if not rs.eof then
 	Do Until rs.EOF
+		'<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" show_tip="" />
 		skinlist = skinlist & "<skin title=""" & rs("title") & """ "
 		skinlist = skinlist & "src=""" & rs("src") & """ "
 		skinlist = skinlist & "mixer_id=""" & rs("mixer_id") & """ "
@@ -62,7 +63,26 @@ end sub
 
 sub getplugins()
 addUTFBOM()
-
+dim pluginlist
+pluginlist = "<cmp_plugins>"
+sql = "select * from cmp_plugins "
+set rs = conn.execute(sql)
+if not rs.eof then
+	Do Until rs.EOF
+		'<plugin name="大背景" xywh="0, 0, 100P, 100P" src="plugins/bigbg.swf" lock="1" display="1" istop="0" />
+		pluginlist = pluginlist & "<plugin title=""" & rs("title") & """ "
+		pluginlist = pluginlist & "src=""" & rs("src") & """ "
+		pluginlist = pluginlist & "xywh=""" & rs("xywh") & """ "
+		pluginlist = pluginlist & "lock=""" & rs("lock") & """ "
+		pluginlist = pluginlist & "display=""" & rs("display") & """ "
+		pluginlist = pluginlist & "istop=""" & rs("istop") & """ />"
+	rs.MoveNext
+    loop
+end if
+rs.close
+set rs = nothing
+pluginlist = pluginlist & "</cmp_plugins>"
+Response.Write(pluginlist)
 end sub
 
 sub config()
