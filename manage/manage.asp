@@ -46,7 +46,11 @@ sql = "select * from cmp_skins "
 set rs = conn.execute(sql)
 if not rs.eof then
 	Do Until rs.EOF
-		skinlist = skinlist & "<skin src=""" & rs("src") & """ />"
+		skinlist = skinlist & "<skin title=""" & rs("title") & """ "
+		skinlist = skinlist & "src=""" & rs("src") & """ "
+		skinlist = skinlist & "mixer_id=""" & rs("mixer_id") & """ "
+		skinlist = skinlist & "mixer_color=""" & rs("mixer_color") & """ "
+		skinlist = skinlist & "show_tip=""" & rs("show_tip") & """ />"
 	rs.MoveNext
     loop
 end if
