@@ -42,7 +42,7 @@ sub getskins()
 addUTFBOM()
 dim skinlist
 skinlist = "<cmp_skins>"
-sql = "select * from cmp_skins "
+sql = "select * from cmp_skins order by id desc"
 set rs = conn.execute(sql)
 if not rs.eof then
 	Do Until rs.EOF
@@ -65,7 +65,7 @@ sub getplugins()
 addUTFBOM()
 dim pluginlist
 pluginlist = "<cmp_plugins>"
-sql = "select * from cmp_plugins "
+sql = "select * from cmp_plugins order by id desc"
 set rs = conn.execute(sql)
 if not rs.eof then
 	Do Until rs.EOF
