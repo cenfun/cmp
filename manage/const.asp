@@ -207,6 +207,20 @@ Function UnCheckStr(ByVal Str)
     	UnCheckStr=Str
 End Function
 '*************************************
+'过滤XML属性的特殊字符串
+'*************************************
+Function XMLEncode(ByVal reString) 
+	Dim Str:Str=reString
+	If Not IsNull(Str) Then
+		Str = UnCheckStr(Str)
+		Str = Replace(Str, "&", "&amp;")
+   		Str = Replace(Str, ">", "&gt;")
+		Str = Replace(Str, "<", "&lt;")
+    	Str = Replace(Str, CHR(34), "&quot;")
+		XMLEncode = Str
+	End If
+End Function
+'*************************************
 '转换HTML代码
 '*************************************
 Function HTMLEncode(ByVal reString) 

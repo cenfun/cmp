@@ -50,12 +50,12 @@ set rs = conn.execute(sql)
 if not rs.eof then
 	Do Until rs.EOF
 		'<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" show_tip="" />
-		skinlist = skinlist & "<skin title=""" & rs("title") & """ "
-		skinlist = skinlist & "preview=""" & cmp_show_url & "&skin_src=" & rs("src") & """ "
-		skinlist = skinlist & "src=""" & rs("src") & """ "
-		skinlist = skinlist & "mixer_id=""" & rs("mixer_id") & """ "
-		skinlist = skinlist & "mixer_color=""" & rs("mixer_color") & """ "
-		skinlist = skinlist & "show_tip=""" & rs("show_tip") & """ />"
+		skinlist = skinlist & "<skin title=""" & XMLEncode(rs("title")) & """ "
+		skinlist = skinlist & "preview=""" & cmp_show_url & "&amp;skin_src=" & XMLEncode(rs("src")) & """ "
+		skinlist = skinlist & "src=""" & XMLEncode(rs("src")) & """ "
+		skinlist = skinlist & "mixer_id=""" & XMLEncode(rs("mixer_id")) & """ "
+		skinlist = skinlist & "mixer_color=""" & XMLEncode(rs("mixer_color")) & """ "
+		skinlist = skinlist & "show_tip=""" & XMLEncode(rs("show_tip")) & """ />"
 	rs.MoveNext
     loop
 end if
@@ -74,9 +74,9 @@ set rs = conn.execute(sql)
 if not rs.eof then
 	Do Until rs.EOF
 		'<plugin name="大背景" xywh="0, 0, 100P, 100P" src="plugins/bigbg.swf" lock="1" display="1" istop="0" />
-		pluginlist = pluginlist & "<plugin title=""" & rs("title") & """ "
-		pluginlist = pluginlist & "src=""" & rs("src") & """ "
-		pluginlist = pluginlist & "xywh=""" & rs("xywh") & """ "
+		pluginlist = pluginlist & "<plugin title=""" & XMLEncode(rs("title")) & """ "
+		pluginlist = pluginlist & "src=""" & XMLEncode(rs("src")) & """ "
+		pluginlist = pluginlist & "xywh=""" & XMLEncode(rs("xywh")) & """ "
 		pluginlist = pluginlist & "lock=""" & rs("lock") & """ "
 		pluginlist = pluginlist & "display=""" & rs("display") & """ "
 		pluginlist = pluginlist & "istop=""" & rs("istop") & """ />"
@@ -107,7 +107,7 @@ if not rs.eof then
 		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
 		strContent = strContent & "<plugins>"&cr&"</plugins>" & cr
 		strContent = strContent & "<nolrc src="""">"&cr&"</nolrc>" & cr
-		strContent = strContent & "<count src="""&site_count&""" />" & cr
+		strContent = strContent & "<count src="""&XMLEncode(site_count)&""" />" & cr
 		strContent = strContent & "</cmp>"
 		conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
 	end if
@@ -159,7 +159,7 @@ set rs = nothing
     <td align="center"><script type="text/javascript">
 //id, width, height, cmp url, vars
 showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", "i=config.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random()+"&o=manage.asp%3Fhandler%3Dsaveconfigdata");
-</script>皮肤和插件功能还在制作中...
+</script>
     </td>
   </tr>
   <%end if%>
