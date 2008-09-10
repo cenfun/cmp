@@ -297,7 +297,7 @@ sub login()
 		Exit Sub
 	End If
 	Session("verifycode")=""
-	sql = "select userstatus from cmp_user where username='"&UserName&"' and password='"&PassWord&"'"
+	sql = "select id,userstatus from cmp_user where username='"&UserName&"' and password='"&PassWord&"'"
 	set rs=conn.Execute(sql)
 	if rs.eof and rs.bof then
 		rs.close
@@ -317,6 +317,7 @@ sub login()
 			'session超时时间
 			Session.Timeout = 45
 			Session(CookieName & "_username") = UserName
+			Session(CookieName & "_userid") = rs("id")
 			if rs("userstatus") = 9 then
 				Session(CookieName & "_admin") = UserName
 			else
@@ -334,6 +335,7 @@ end sub
 
 sub logout()
 	Session(CookieName & "_username")=""
+	Session(CookieName & "_userid")=""
 	Session(CookieName & "_admin")=""
 	Response.Redirect("index.asp")
 end sub

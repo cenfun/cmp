@@ -33,6 +33,7 @@ xml_path = Arr_system_info(10,0)
 xml_config = Arr_system_info(11,0)
 xml_list = Arr_system_info(12,0)
 
+'取得真实IP
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")

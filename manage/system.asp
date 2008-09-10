@@ -812,8 +812,7 @@ else
         <%
 		'取得用户ID
 		dim userid,cmp_show_url
-		sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' "
-		userid = conn.execute(sql)("id")
+		userid = Session(CookieName & "_userid")
 		cmp_show_url = getCmpUrl(userid)
 		'所有皮肤
 		sql = "select * from cmp_skins order by id desc"

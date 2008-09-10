@@ -40,6 +40,9 @@ end if
 
 sub getskins()
 addUTFBOM()
+dim userid,cmp_show_url
+userid = Session(CookieName & "_userid")
+cmp_show_url = getCmpUrl(userid)
 dim skinlist
 skinlist = "<cmp_skins>"
 sql = "select * from cmp_skins order by id desc"
@@ -48,6 +51,7 @@ if not rs.eof then
 	Do Until rs.EOF
 		'<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" show_tip="" />
 		skinlist = skinlist & "<skin title=""" & rs("title") & """ "
+		skinlist = skinlist & "preview=""" & cmp_show_url & "&skin_src=" & rs("src") & """ "
 		skinlist = skinlist & "src=""" & rs("src") & """ "
 		skinlist = skinlist & "mixer_id=""" & rs("mixer_id") & """ "
 		skinlist = skinlist & "mixer_color=""" & rs("mixer_color") & """ "
@@ -553,12 +557,10 @@ end sub
 
 
 sub main()
-sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4"
-set rs = conn.execute(sql)
-if not rs.eof then
-	dim cmp_url,cmp_page_url
-	cmp_url = getCmpUrl(rs("id"))
-	cmp_page_url = getCmpPageUrl(rs("id"))
+dim userid,cmp_url,cmp_page_url
+userid = Session(CookieName & "_userid")
+cmp_url = getCmpUrl(userid)
+cmp_page_url = getCmpPageUrl(userid)
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
@@ -602,11 +604,5 @@ function show_code() {
 show_code();
 </script>
 <%
-else
-	ErrMsg = "用户不存在或者被锁定！"
-	cenfun_error()
-end if
-rs.close
-set rs = nothing
 end sub
 %>
