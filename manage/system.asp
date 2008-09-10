@@ -830,7 +830,7 @@ else
             提示信息延时
             <input name="skin_show_tip" type="text" value="<%=rs("show_tip")%>" size="10" maxlength="10" /></td>
             <td><input name="edit_submit" type="submit" value="修改" /></td>
-            <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&skin_src=" & rs("src")%>');" /></td>
+            <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&amp;skin_src=" & rs("src")%>');" /></td>
             <td><input name="del_submit" type="button" value="删除" onclick="skin_del('<%=rs("id")%>');" /></td>
           </tr>
         </form>
