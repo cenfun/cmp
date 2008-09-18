@@ -157,8 +157,13 @@ set rs = nothing
   <%else%>
   <tr>
     <td align="center"><script type="text/javascript">
+var vars = "";
+vars += "i=config.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random();
+vars += "&o=manage.asp%3Fhandler%3Dsaveconfigdata";
+vars += "&sl=manage.asp%3Fhandler%3Dgetskins%26rd%3D"+Math.random();
+vars += "&pl=manage.asp%3Fhandler%3Dgetplugins%26rd%3D"+Math.random();
 //id, width, height, cmp url, vars
-showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", "i=config.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random()+"&o=manage.asp%3Fhandler%3Dsaveconfigdata");
+showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars);
 </script>
     </td>
   </tr>
@@ -252,8 +257,11 @@ set rs = nothing
   <%else%>
   <tr>
     <td align="center"><script type="text/javascript">
+var vars = "";
+vars += "i=list.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random();
+vars += "&o=manage.asp%3Fhandler%3Dsavelistdata";
 //id, width, height, cmp url, vars
-showcmp("cmp_list_editer", "100%", "600", "CList.swf", "i=list.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random()+"&o=manage.asp%3Fhandler%3Dsavelistdata");
+showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars);
 </script>
     </td>
   </tr>
