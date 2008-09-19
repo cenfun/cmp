@@ -433,14 +433,14 @@ sub menu()
   <%If Session(CookieName & "_username")<>"" then%>
   <div style="float:right;">欢迎: <%=Session(CookieName & "_username")%> <a href="manage.asp?action=userinfo">个人资料</a> | <a href="index.asp?action=logout">退出</a></div>
   <%If Session(CookieName & "_admin")<>"" then%>
-  <span>管理项： <a href="system.asp?action=config" title="System">[系统]</a><a href="system.asp?action=user" title="Users">[用户]</a><a href="system.asp?action=skins" title="Skins">[皮肤]</a><a href="system.asp?action=plugins" title="Plugins">[插件]</a><a href="system.asp?action=lrcs" title="LRC">[歌词库]</a></span>
+  <span>管理项： <a href="system.asp?action=config" title="System">[系统]</a><a href="system.asp?action=user" title="Users">[用户]</a><a href="system.asp?action=skins" title="Skins">[皮肤]</a><a href="system.asp?action=plugins" title="Plugins">[插件]</a><!--<a href="system.asp?action=lrcs" title="LRC">[歌词库]</a>--></span>
   <%end if%>
   <a href="manage.asp">调用代码</a> | <a href="manage.asp?action=config" title="Config">配置编辑</a> | <a href="manage.asp?action=list" title="List">列表编辑</a>
   <%else%>
   <div style="float:right;"><%=site_name%></div>
   <a href="index.asp">登录</a> | <a href="index.asp?action=reg">免费注册</a>
   <%end if%>
-  | <a href="userlist.asp">用户列表</a> | <a href="gbook.asp">留言簿</a> </div>
+  | <a href="userlist.asp">用户列表</a><!-- | <a href="gbook.asp">留言簿</a> --></div>
 <%
 end sub
 
