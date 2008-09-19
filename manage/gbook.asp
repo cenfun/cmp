@@ -15,9 +15,6 @@ sub main()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td>发表留言</td>
-  </tr>
-  <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
         <form>
 制作中...
