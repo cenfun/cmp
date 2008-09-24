@@ -33,7 +33,7 @@ by=Checkstr(Request.QueryString("by"))
         <form>
           <%
 '查询串
-sql = "select id,lasttime,hits,email,qq,cmp_name,cmp_url from cmp_user where userstatus > 4 and setinfo<>1 and "
+sql = "select id,lasttime,hits,email,qq,cmp_name,cmp_url,list from cmp_user where userstatus > 4 and setinfo<>1 and "
 if cmp_name <> "" then
 	sql = sql & " cmp_name like '%"&cmp_name&"%' and "
 end if
@@ -86,6 +86,7 @@ IF not rs.EOF Then
             <th>Email</th>
             <th>QQ</th>
             <th align="left">CMP播放器地址</th>
+            <th>音乐量</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
@@ -96,6 +97,7 @@ IF not rs.EOF Then
             <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
             <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
             <td align="left"><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%></a></td>
+            <td><%=Len(Trim(rs("list")))%></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
