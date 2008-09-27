@@ -19,6 +19,7 @@
 	mixer_color: 混音器的颜色，如：#00ff00，默认为0xa4eb0c
 	mixer_filter: 是否开启混音器滤镜：关闭(0)；开启(1)；默认为0
 	mixer_displace: 是否开启滤镜随机置换：关闭(0)；开启(1)；默认为0
+	buffer: 是否开启音乐缓冲：关闭(0)；开启(1)，并缓冲1个；缓冲n个(n)，最大3个；默认为1
 	timeout: 自定义连接超时，单位毫秒，默认15000，即15秒
 	show_tip: 是否延时显示按钮等文字提示信息：不显示(0)；显示(500)，数值表示延时的毫秒数，默认延时500毫秒
 	context_menu: 右键菜单选项：不显示(0)；显示(1)；仅显示名称，无功能菜单(2)；默认为1
@@ -38,6 +39,7 @@
 		mixer_color="" 
 		mixer_filter="" 
 		mixer_displace="" 
+		buffer="" 
 		timeout=""
 		show_tip=""
 		context_menu=""

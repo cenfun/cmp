@@ -48,6 +48,7 @@ max_video 是否最大化视频
 mixer_id 混音器id
 mixer_filter 是否开启滤镜
 mixer_displace 是否开启置换
+buffer 是否缓冲音乐及其数目
 show_tip 提示参数
 context_menu 右键菜单选项
 video_smoothing 是否平滑处理视频
