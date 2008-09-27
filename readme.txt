@@ -13,6 +13,8 @@ JS接口实现WMP(Windows Media Player)所支持的格式播放，
 邮箱：cenfun@gmail.com
 网址：http://bbs.cenfun.com/
 日期：2008.9.28
+最新版本以及相关工具下载请进：
+http://code.google.com/p/cenfunmusicplayer/downloads/list
 ----------------------------------------------------
 上传说明：请上传upload目录中的文件到你的服务器:
 ----------------------------------------------------
