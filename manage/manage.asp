@@ -103,7 +103,7 @@ if not rs.eof then
 		strContent = "<cmp name="""" url="""" list="""" >" & cr
 		strContent = strContent & "<config language="""" play_mode="""" skin_id="""" list_id="""" volume="""" auto_play="""" max_video="""" "
 		strContent = strContent & "mixer_id="""" mixer_color="""" mixer_filter="""" mixer_displace="""" "
-		strContent = strContent & "timeout="""" show_tip="""" context_menu="""" video_smoothing="""" plugins_disabled="""" check_policyfile=""""  />" & cr
+		strContent = strContent & "buffer="""" timeout="""" show_tip="""" context_menu="""" video_smoothing="""" plugins_disabled="""" check_policyfile=""""  />" & cr
 		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
 		strContent = strContent & "<plugins>"&cr&"</plugins>" & cr
 		strContent = strContent & "<nolrc src="""">"&cr&"</nolrc>" & cr
