@@ -730,17 +730,19 @@ if id <> "" then
 			qq=Checkstr(Request.Form("qq"))
 			cmp_name=Checkstr(Request.Form("cmp_name"))
 			cmp_url=Checkstr(Request.Form("cmp_url"))
-			config = CheckStr(request.Form("config"))
-			list = CheckStr(request.Form("list"))
-			sql = "update cmp_user set logins="&logins&",hits="&hits&",email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
-			sql = sql & "config='"&config&"',list='"&list&"' where username='"&rs("username")&"' "
-			'response.Write(sql)
-			conn.execute(sql)
+			'正则替换配置文件列表地址，名称，网站
+			config = setLNU(request.Form("config"), xml_make, xml_path, xml_list, id, cmp_name, cmp_url)
+			list = request.Form("list")
 			'生成静态文件
 			if xml_make="1" then
-				call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
-				call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
+				call makeFile(xml_path & "/" & id & xml_config, config)
+				call makeFile(xml_path & "/" & id & xml_list, list)
 			end if
+			'保存至数据库
+			sql = "update cmp_user set logins="&logins&",hits="&hits&",email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
+			sql = sql & "config='"&CheckStr(config)&"',list='"&CheckStr(list)&"' where username='"&rs("username")&"' "
+			'response.Write(sql)
+			conn.execute(sql)
 			SucMsg="修改成功！"
 			Cenfun_suc(Request.ServerVariables("HTTP_REFERER"))
 		end if

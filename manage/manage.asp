@@ -113,7 +113,7 @@ if not rs.eof then
 	'正则替换配置文件列表地址，名称，网站
 	strContent = setLNU(strContent, xml_make, xml_path, xml_list, id, rs("cmp_name"), rs("cmp_url"))
 	'更新配置至数据库
-	conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
+	conn.execute("update cmp_user set config='"&CheckStr(strContent)&"' where id=" & id & " ")
 else
 	ErrMsg = "用户不存在或者被锁定！"
 	cenfun_error()
@@ -495,7 +495,7 @@ if Request.QueryString("do")="info" then
 	rs.close
 	set rs = nothing
 	'保存到数据库
-	sql = "update cmp_user set email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',setinfo="&setinfo&",config='"&config&"' where username='"&username&"'"
+	sql = "update cmp_user set email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',setinfo="&setinfo&",config='"&CheckStr(config)&"' where username='"&username&"'"
 	'response.Write(sql)
 	conn.execute(sql)
 	
