@@ -112,10 +112,10 @@ sub config()
           </table>
         </div>
         <div style="color:#0000FF;">
-          <p>注：文件夹名请勿用同级目录下系统已存文件夹名称，如images,data,lrc,skins,plugins等，以防止重建时被一起删除</p>
-          <p>ID匹配文件名推荐用config.xml和list.xml，请勿用*.asp,*.asa等服务端程序后缀名，以防止恶意脚本执行</p>
-          <p>修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户</p>
-          <p>请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源和时间</p>
+          <div>注：文件夹名请勿用同级目录下系统已存文件夹名称，如images,data,lrc,skins,plugins等，以防止重建时被一起删除</div>
+          <div>ID匹配文件名推荐用config.xml和list.xml，请勿用*.asp,*.asa等服务端程序后缀名，以防止恶意脚本执行</div>
+          <div>修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户</div>
+          <div>请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源和时间</div>
         </div></td>
     </tr>
     <tr>
@@ -175,7 +175,8 @@ function check(o){
   </tr>
   <tr>
     <td align="right" width="20%">手动重建所有静态数据文件：</td>
-    <td width="80%"><input name="按钮" type="button" style="width:80px;" value="开始" onclick="window.location='system.asp?action=remake';" /></td>
+    <td width="80%"><input name="按钮" type="button" style="width:80px;" value="开始" onclick="window.location='system.asp?action=remake';" />
+    将重新生成所有用户的xml文件</td>
   </tr>
   <tr>
     <td align="right">数据库路径：</td>

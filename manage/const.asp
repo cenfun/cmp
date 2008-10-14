@@ -83,6 +83,33 @@ function geturl(id)
 	end if
 	geturl = url
 end function
+
+'正则替换配置文件列表地址，名称，网站
+function setLNU(strContent, xml_make, xml_path, xml_list, id, cmp_name, cmp_url)
+	If IsNull(strContent) Then
+		setLNU = ""
+		Exit Function 
+	End If
+	'替换列表地址
+	dim re
+	Set re=new RegExp
+	re.IgnoreCase =True
+	re.Global=True
+	re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
+	if xml_make="1" then
+		strContent=re.Replace(strContent,"$1" & xml_path & "/" & id & xml_list & "$2")
+	else
+		strContent=re.Replace(strContent,"$1list.asp?id="&id&"$2")
+	end if
+	'名称，网址替换
+	re.Pattern="(<cmp[^>]+name *= *\"")[^\r]*?(\""[^>]*>)"
+	strContent=re.Replace(strContent,"$1" & cmp_name & "$2")
+	re.Pattern="(<cmp[^>]+url *= *\"")[^\r]*?(\""[^>]*>)"
+	strContent=re.Replace(strContent,"$1" & cmp_url & "$2")
+	Set re=nothing
+	setLNU = strContent
+end function
+
 '验证码简单混淆
 function getCode(code)
 	dim str,i,rd,num

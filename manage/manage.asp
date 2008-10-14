@@ -109,25 +109,11 @@ if not rs.eof then
 		strContent = strContent & "<nolrc src="""">"&cr&"</nolrc>" & cr
 		strContent = strContent & "<count src="""&XMLEncode(site_count)&""" />" & cr
 		strContent = strContent & "</cmp>"
-		conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
 	end if
-	'替换列表地址
-	dim re
-	Set re=new RegExp
-	re.IgnoreCase =True
-	re.Global=True
-	re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
-	if xml_make="1" then
-		strContent=re.Replace(strContent,"$1" & xml_path & "/" & rs("id") & xml_list & "$2")
-	else
-		strContent=re.Replace(strContent,"$1list.asp?id="&rs("id")&"$2")
-	end if
-	'名称，网址替换
-	re.Pattern="(<cmp[^>]+name *= *\"")[^\r]*?(\""[^>]*>)"
-	strContent=re.Replace(strContent,"$1" & rs("cmp_name") & "$2")
-	re.Pattern="(<cmp[^>]+url *= *\"")[^\r]*?(\""[^>]*>)"
-	strContent=re.Replace(strContent,"$1" & rs("cmp_url") & "$2")
-	Set re=nothing
+	'正则替换配置文件列表地址，名称，网站
+	strContent = setLNU(strContent, xml_make, xml_path, xml_list, id, rs("cmp_name"), rs("cmp_url"))
+	'更新配置至数据库
+	conn.execute("update cmp_user set config='"&strContent&"' where id=" & id & " ")
 else
 	ErrMsg = "用户不存在或者被锁定！"
 	cenfun_error()
@@ -489,7 +475,7 @@ dim username
 username = Session(CookieName & "_username")
 if Request.QueryString("do")="info" then
 	'修改用户信息
-	dim email,qq,cmp_name,cmp_url,setinfo
+	dim email,qq,cmp_name,cmp_url,setinfo,config
 	email=Checkstr(Request.Form("email"))
 	qq=Checkstr(Request.Form("qq"))
 	cmp_name=Checkstr(Request.Form("cmp_name"))
@@ -498,9 +484,21 @@ if Request.QueryString("do")="info" then
 	if setinfo="" then
 		setinfo=0
 	end if
-	sql = "update cmp_user set email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',setinfo="&setinfo&" where username='"&username&"'"
+	
+	set rs = conn.execute("select id,config from cmp_user where username='"&username&"' ")
+	'正则替换配置文件列表地址，名称，网站
+	config = setLNU(UnCheckStr(rs("config")), xml_make, xml_path, xml_list, rs("id"), cmp_name, cmp_url)
+	'重建静态数据
+	if xml_make="1" then
+		call makeFile(xml_path & "/" & rs("id") & xml_config, config)
+	end if
+	rs.close
+	set rs = nothing
+	'保存到数据库
+	sql = "update cmp_user set email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',setinfo="&setinfo&",config='"&config&"' where username='"&username&"'"
 	'response.Write(sql)
 	conn.execute(sql)
+	
 	SucMsg="修改成功！"
 	Cenfun_suc("manage.asp?action=userinfo")
 elseif Request.QueryString("do")="pass" then
