@@ -26,7 +26,7 @@ by=Checkstr(Request.QueryString("by"))
         <input type="text" name="cmp_name" id="cmp_name" value="<%=cmp_name%>" />
         <input type="submit" name="search" id="search" value="搜索" />
       </form>
-      </span> </td>
+      </span></td>
   </tr>
   <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
@@ -38,8 +38,8 @@ if cmp_name <> "" then
 	sql = sql & " cmp_name like '%"&cmp_name&"%' and "
 end if
 sql = sql & " 1=1 "
-if order<>"desc" then
-	order = ""
+if order<>"" then
+	order = "desc"
 end if
 select case by
 	case "id"
@@ -50,6 +50,8 @@ select case by
         sql = sql & " order by hits " & order
 	case "lasttime"
         sql = sql & " order by lasttime " & order
+	case "list"
+        sql = sql & " order by len(list) " & order
 	case else
 		sql = sql & " order by id desc"
 		by = "id"
@@ -81,23 +83,23 @@ IF not rs.EOF Then
           <tr>
             <th><a href="javascript:orderby('id');" title="点击按其排序">ID</a></th>
             <th><a href="javascript:orderby('cmp_name');" title="点击按其排序">播放器名</a></th>
-            <th><a href="javascript:orderby('hits');" title="点击按其排序">查看次数</a></th>
             <th><a href="javascript:orderby('lasttime');" title="点击按其排序">最后更新</a></th>
-            <th>Email</th>
-            <th>QQ</th>
+            <th><a href="javascript:orderby('hits');" title="点击按其排序">查看次数</a></th>
+            <th><a href="javascript:orderby('list');" title="点击按其排序">音乐量</a></th>
             <th align="left">CMP播放器地址</th>
-            <th>音乐量</th>
+            <th>QQ</th>
+            <th>Email</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
             <td><%=rs("id")%></td>
             <td><a href="<%=getCmpPageUrl(rs("id"))%>" target="_blank" title="点击打开播放器页面"><%=rs("cmp_name")%></a></td>
-            <td><%=rs("hits")%></td>
             <td><%=FormatDateTime(rs("lasttime"),2)%></td>
-            <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
-            <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
-            <td align="left"><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%></a></td>
+            <td><%=rs("hits")%></td>
             <td><%=Len(Trim(rs("list")))%></td>
+            <td align="left"><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%></a></td>
+            <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
+            <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>

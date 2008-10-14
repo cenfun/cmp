@@ -66,11 +66,6 @@ sub config()
       <td><input name="site_count" type="text" id="site_count" value="<%=site_count%>" size="50" /></td>
     </tr>
     <tr>
-      <td align="right">系统公告：<br />
-        (支持html)</td>
-      <td><textarea name="site_ads" cols="100" rows="10" id="site_ads"><%=site_ads%></textarea></td>
-    </tr>
-    <tr>
       <td align="right">是否开启用户注册：</td>
       <td align="left"><input name="user_reg" type="checkbox" id="user_reg" value="1" <%if user_reg="1" then%>checked="checked"<%end if%> />
         如果用户数过多导致服务器负担加重，可关闭注册</td>
@@ -117,6 +112,11 @@ sub config()
           <div>修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户</div>
           <div>请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源和时间</div>
         </div></td>
+    </tr>
+    <tr>
+      <td align="right">系统公告：<br />
+        (支持html)</td>
+      <td><textarea name="site_ads" cols="100" rows="10" id="site_ads" style="width:98%;"><%=site_ads%></textarea></td>
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
