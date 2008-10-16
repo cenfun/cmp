@@ -32,7 +32,14 @@ xml_make = Arr_system_info(9,0)
 xml_path = Arr_system_info(10,0)
 xml_config = Arr_system_info(11,0)
 xml_list = Arr_system_info(12,0)
-
+'解析公告和广告
+dim site_ad_news,site_ad_top,site_ad_bottom
+site_ads=Split(UnCheckstr(site_ads),"{|}")
+site_ad_news=site_ads(0)
+if Ubound(site_ads)=2 then
+	site_ad_top=site_ads(1)
+	site_ad_bottom=site_ads(2)
+end if
 '取得真实IP
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
@@ -469,6 +476,9 @@ sub menu()
   <%end if%>
   | <a href="userlist.asp">用户列表</a><!-- | <a href="gbook.asp">留言簿</a> --></div>
 <%
+if site_ad_top<>"" then
+	Response.Write("<div class=""ads"">"&site_ad_top&"</div>")
+end if
 end sub
 
 
@@ -523,6 +533,9 @@ Sub cenfun_error()
 End Sub
 
 Sub footer()
+if site_ad_bottom<>"" then
+	Response.Write("<div class=""ads"">"&site_ad_bottom&"</div>")
+end if
 %>
 <div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved. Powered by <a href="http://www.cenfun.com/" target="_blank">CenFun</a> <%=siteVersion%><span>
   <!--页底站点统计，请更换成您自己的：-->

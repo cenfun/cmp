@@ -116,7 +116,17 @@ sub config()
     <tr>
       <td align="right">系统公告：<br />
         (支持html)</td>
-      <td><textarea name="site_ads" cols="100" rows="10" id="site_ads" style="width:98%;"><%=site_ads%></textarea></td>
+      <td><textarea name="site_ad_news" cols="100" rows="10" style="width:98%;"><%=site_ad_news%></textarea></td>
+    </tr>
+    <tr>
+      <td align="right">页顶广告：<br />
+        (支持html)</td>
+      <td><textarea name="site_ad_top" cols="100" rows="10" style="width:98%;"><%=site_ad_top%></textarea></td>
+    </tr>
+    <tr>
+      <td align="right">页底广告：<br />
+        (支持html)</td>
+      <td><textarea name="site_ad_bottom" cols="100" rows="10" style="width:98%;"><%=site_ad_bottom%></textarea></td>
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
@@ -256,7 +266,10 @@ sub save_config()
 	site_qq=Checkstr(Request.Form("site_qq"))
 	site_email=Checkstr(Request.Form("site_email"))
 	site_count=Checkstr(Request.Form("site_count"))
-	site_ads=Checkstr(Request.Form("site_ads"))
+	site_ad_news=Checkstr(Request.Form("site_ad_news"))
+	site_ad_top=Checkstr(Request.Form("site_ad_top"))
+	site_ad_bottom=Checkstr(Request.Form("site_ad_bottom"))
+	site_ads=site_ad_news &"{|}"& site_ad_top &"{|}"& site_ad_bottom
 	user_reg=Request.Form("user_reg")
 	user_check=Request.Form("user_check")
 	'静态数据设置

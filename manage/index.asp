@@ -93,7 +93,7 @@ function showcode(){
     <th align="left">系统公告:</th>
   </tr>
   <tr>
-    <td><%=UnCheckStr(site_ads)%></td>
+    <td><%=site_ad_news%></td>
   </tr>
 </table>
 <%
