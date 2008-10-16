@@ -474,7 +474,7 @@ sub menu()
   <div style="float:right;"><%=site_name%></div>
   <a href="index.asp">登录</a> | <a href="index.asp?action=reg">免费注册</a>
   <%end if%>
-  | <a href="userlist.asp">用户列表</a><!-- | <a href="gbook.asp">留言簿</a> --></div>
+  | <a href="userlist.asp">用户列表</a> | <a href="gbook.asp">留言簿</a></div>
 <%
 if site_ad_top<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_top&"</div>")
