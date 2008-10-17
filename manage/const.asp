@@ -1,7 +1,5 @@
 ﻿<%
-'Application.Lock
-'Application(CookieName&"_Arr_system_info")=""
-'Application.UnLock
+'系统缓存
 Dim Arr_system_info
 IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
 	set rs=conn.Execute("select * from cmp_config")
@@ -474,7 +472,7 @@ sub menu()
   <div style="float:right;"><%=site_name%></div>
   <a href="index.asp">登录</a> | <a href="index.asp?action=reg">免费注册</a>
   <%end if%>
-  | <a href="userlist.asp">用户列表</a> | <a href="gbook.asp">留言簿</a></div>
+  | <a href="mini.asp">Mini Player</a> | <a href="userlist.asp">用户列表</a> | <a href="gbook.asp">留言簿</a></div>
 <%
 if site_ad_top<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_top&"</div>")
