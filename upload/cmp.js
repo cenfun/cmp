@@ -9,7 +9,8 @@ function showcmp(id, width, height, url, vars, transparent){
 	html += '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,124,0" ';
 	html += 'width="'+width+'" ';
 	html += 'height="'+height+'" ';
-	html += 'id="'+id+'">';
+	html += 'id="'+id+'"';
+	html += '>';
 	html += '<param name="movie" value="'+url+'" />';
 	html += '<param name="quality" value="high" />';
 	html += '<param name="allowFullScreen" value="true" />';

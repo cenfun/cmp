@@ -1,26 +1,6 @@
 ﻿<?xml version="1.0"?>
-<!--
-跨域策略文件设置，如：
-
-<cross-domain-policy>
-    <allow-access-from domain="*" to-ports="*" />
-</cross-domain-policy>
-
-这表示放置crossdomain.xml所在的域允许所有其他站(*表示任意)读取
-也可设置只允许某某站读取，如只允许www.cenfun.com上的CMP读取：
-
-<cross-domain-policy>
-    <allow-access-from domain="www.cenfun.com" to-ports="*" />
-</cross-domain-policy>
-
-to-ports为允许的端口号，*表示任意，这样的允许站点可以添加任意个数，如还允许www.cmp.com站读取，则：
-
-<cross-domain-policy>
-    <allow-access-from domain="www.cenfun.com" to-ports="*" />
-    <allow-access-from domain="www.cmp.com" to-ports="*" />
-</cross-domain-policy>
-
--->
-<cross-domain-policy>
-    <allow-access-from domain="*" to-ports="*" />
+<cross-domain-policy> 
+    <site-control permitted-cross-domain-policies="all"/> 
+    <allow-access-from domain="*" /> 
+    <allow-http-request-headers-from domain="*" headers="*"/> 
 </cross-domain-policy>

@@ -1,5 +1,5 @@
 ╭─────────────────────╮    
-┤  CenFun Music Player v3.0 b080928 (CMP)  ├
+┤  CenFun Music Player v3.0 b081018 (CMP)  ├
 ╰─────────────────────╯
     CMP是一款免费的在线音乐播放器，采用Flash开发。
 支持的音频视频格式主要有MP3,FLV,MP4,并可以通过网页
@@ -12,7 +12,7 @@ JS接口实现WMP(Windows Media Player)所支持的格式播放，
 作者：晨风
 邮箱：cenfun@gmail.com
 网址：http://bbs.cenfun.com/
-日期：2008.9.28
+日期：2008.10.18
 最新版本以及相关工具下载请进：
 http://code.google.com/p/cenfunmusicplayer/downloads/list
 ----------------------------------------------------
@@ -28,7 +28,7 @@ skins            皮肤目录
 plugins          插件目录
 lrc              歌词目录
 注：如果MP3在你另外的空间(不同域)，请将crossdomain.xml
-和MP3文件放在一起，或域的根目录，即可实现可视化效果
+放在MP3文件所在域的根目录，即可实现可视化效果(波形)
 ----------------------------------------------------
 
 文件TrustFiles.txt为去除Flash本地安全限制补丁
