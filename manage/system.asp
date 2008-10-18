@@ -421,7 +421,7 @@ select case by
 	case else
 		sql = sql & " order by id desc"
 		by = "id"
-		order = "desc"
+		order = ""
 end select
 'response.Write(sql)
 '分页设置
