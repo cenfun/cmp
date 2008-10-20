@@ -462,17 +462,66 @@ end sub
 sub menu()
 %>
 <div id="menu">
-  <%If Session(CookieName & "_username")<>"" then%>
-  <div style="float:right;">欢迎: <%=Session(CookieName & "_username")%> <a href="manage.asp?action=userinfo">个人资料</a> | <a href="index.asp?action=logout">退出</a></div>
-  <%If Session(CookieName & "_admin")<>"" then%>
-  <span>管理项： <a href="system.asp?action=config" title="System">[系统]</a><a href="system.asp?action=user" title="Users">[用户]</a><a href="system.asp?action=skins" title="Skins">[皮肤]</a><a href="system.asp?action=plugins" title="Plugins">[插件]</a><!--<a href="system.asp?action=lrcs" title="LRC">[歌词库]</a>--></span>
-  <%end if%>
-  <a href="manage.asp">调用代码</a> | <a href="manage.asp?action=config" title="Config">配置编辑</a> | <a href="manage.asp?action=list" title="List">列表编辑</a>
-  <%else%>
-  <div style="float:right;"><%=site_name%></div>
-  <a href="index.asp">登录</a> | <a href="index.asp?action=reg">免费注册</a>
-  <%end if%>
-  | <a href="mini.asp">Mini Player</a> | <a href="userlist.asp">用户列表</a> | <a href="gbook.asp">留言簿</a></div>
+  <ul class="nav" id="mymenu">
+    <%If Session(CookieName & "_username")<>"" then%>
+    <li class="right"><a href="index.asp?action=logout">退出</a></li>
+    <li class="right"><a href="manage.asp?action=userinfo">个人资料</a></li>
+    <%If Session(CookieName & "_admin")<>"" then%>
+    <li class="right"><a href="system.asp">系统管理</a>
+      <ul>
+        <li><a href="system.asp?action=config" title="System">系统设置</a></li>
+        <li><a href="system.asp?action=user" title="Users">用户管理</a></li>
+        <li><a href="system.asp?action=skins" title="Skins">皮肤管理</a></li>
+        <li><a href="system.asp?action=plugins" title="Plugins">插件管理</a></li>
+      </ul>
+    </li>
+    <%end if%>
+    <li class="right"><span>欢迎：<%=Session(CookieName & "_username")%></span></li>
+    <li><a href="manage.asp">调用代码</a></li>
+    <li><a href="manage.asp?action=config" title="Config">配置编辑</a></li>
+    <li><a href="manage.asp?action=list" title="List">列表编辑</a></li>
+    <%else%>
+    <li><a href="index.asp">登录</a></li>
+    <li><a href="index.asp?action=reg">免费注册</a></li>
+    <li class="right"><span><%=site_name%></span></li>
+    <%end if%>
+    <!--#include file="menu.asp"-->
+  </ul>
+</div>
+<script type="text/javascript">
+initmenu("mymenu");
+function initmenu(o) {
+	var menu = document.getElementById(o);
+	var as = menu.getElementsByTagName("a");
+	for (var i = 0; i < as.length; i ++) {
+		var ta = as[i];
+		var tn = ta.nextSibling;
+		checkDropList(ta, tn);
+	}
+}
+function checkDropList(ta, tn) {
+	if (tn) {
+		if (tn.nodeType == 1) {
+			addMenuEvent(ta, tn);
+		} else {
+			checkDropList(ta, tn.nextSibling);
+		}
+	}
+}
+function addMenuEvent(ta, tn) {
+	tn.style.display = "none";
+	var tp = ta.parentNode;
+	if (tp) {
+		//alert(tp.nodeName);
+		tp.onmouseover = function(e) {
+			tn.style.display = "";
+		}
+		tp.onmouseout = function(e) {
+			tn.style.display = "none";
+		}
+	}
+}
+</script>
 <%
 if site_ad_top<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_top&"</div>")

@@ -20,11 +20,17 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .output p { padding:5px 0px; }
 .list { }
 .list li { list-style:inside; }
-#menu { background:url(top_bg.gif); height:32px; line-height:32px; color:#FFFFFF; padding:0px 10px; margin-bottom:10px; overflow:hidden; }
-#menu a:link, #menu a:visited { color:#FFFFFF; line-height:32px; padding:0px 5px; font-weight:bold; }
-#menu a:hover { text-decoration:underline; }
-#menu span { padding-right:20px; }
-#menu span a:link, #menu span a:visited { font-weight:normal; }
+#menu { background:url(top_bg.gif); height:32px; line-height:32px; margin-bottom:10px; }
+.nav { position:relative; height:32px; line-height:32px; padding:0px 10px; margin:0px 0px; }
+.nav li { position:relative; float:left; list-style:none; color:#FFFFFF; }
+.nav li.right { float:right; }
+.nav li span { margin-right:5px; }
+.nav li a:link, .nav li a:visited { display:block; color:#FFFFFF; line-height:32px; padding:0px 8px; font-weight:bold; }
+.nav li a:hover { }
+.nav li ul { list-style:none; position: absolute; margin:0px 0px; margin:0px 0px; padding:0px 0px 5px 0px; background-color:#438BDA; }
+.nav li ul li { height:27px; width:100%; margin:0px 0px; float:none; }
+.nav li ul li a:link, .nav li ul li a:visited { display:block; white-space: nowrap; height:27px; line-height:27px; }
+.nav li ul li a:hover { background-color:#559AE4; text-decoration:none; }
 #footer { text-align:center; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; font-size:11px; }
 #footer span { display:none; }
 #footer a:link, #footer a:visited { color:#666666; font-size:12px; }
