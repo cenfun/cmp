@@ -12,4 +12,4 @@
     <li><a href="http://tools.cenfun.com/flashplayer" target="_blank">在线升级Flash Player</a></li>
   </ul>
 </li>
-<!-- 这里可以自定义菜单，请严格按照以上格式添加 -->
+<!-- 这里可以添加自定义菜单，请严格按照以上格式添加 -->
