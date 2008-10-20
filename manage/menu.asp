@@ -1,8 +1,10 @@
 ﻿<li><a href="mini.asp">Mini Player</a></li>
 <li><a href="userlist.asp">用户列表</a>
   <ul>
-    <li><a href="#">音乐排名Top10</a></li>
-    <li><a href="#">点击排名Top10</a></li>
+    <li><a href="userlist.asp">按最新注册</a></li>
+    <li><a href="userlist.asp?order=desc&by=lasttime">按最后更新</a></li>
+    <li><a href="userlist.asp?order=desc&by=list">按音乐排名</a></li>
+    <li><a href="userlist.asp?order=desc&by=hits">按点击排名</a></li>
   </ul>
 </li>
 <li><a href="gbook.asp">留言簿</a></li>
