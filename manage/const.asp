@@ -478,8 +478,18 @@ sub menu()
     <%end if%>
     <li class="right"><span>欢迎：<%=Session(CookieName & "_username")%></span></li>
     <li><a href="manage.asp">调用代码</a></li>
-    <li><a href="manage.asp?action=config" title="Config">配置编辑</a></li>
-    <li><a href="manage.asp?action=list" title="List">列表编辑</a></li>
+    <li><a href="manage.asp?action=config" title="Config">配置编辑</a>
+      <ul>
+        <li><a href="manage.asp?action=config">普通编辑模式</a></li>
+        <li><a href="manage.asp?action=config&mode=code">代码编辑模式</a></li>
+      </ul>
+    </li>
+    <li><a href="manage.asp?action=list" title="List">列表编辑</a>
+      <ul>
+        <li><a href="manage.asp?action=list">普通编辑模式</a></li>
+        <li><a href="manage.asp?action=list&mode=code">代码编辑模式</a></li>
+      </ul>
+    </li>
     <%else%>
     <li><a href="index.asp">登录</a></li>
     <li><a href="index.asp?action=reg">免费注册</a></li>
