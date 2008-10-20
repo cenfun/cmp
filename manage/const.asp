@@ -483,7 +483,7 @@ sub menu()
     <%else%>
     <li><a href="index.asp">登录</a></li>
     <li><a href="index.asp?action=reg">免费注册</a></li>
-    <li class="right"><span><%=site_name%></span></li>
+    <li class="right"><a href="index.asp"><%=site_name%></a></li>
     <%end if%>
     <!--#include file="menu.asp"-->
   </ul>
