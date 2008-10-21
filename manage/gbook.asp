@@ -29,7 +29,7 @@ sub main()
 <%
 '查询串
 'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
-sql = "select id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime from cmp_gbook order by addtime desc"
+sql = "select g.id,g.user_id,g.user_ip,g.title,g.content,g.replay,g.istop,g.hidden,g.addtime,g.replytime,u.cmp_name from cmp_gbook g inner join cmp_user u on g.user_id=u.id order by addtime desc"
 'response.Write(sql)
 '分页设置
 dim page,CurrentPage
@@ -55,18 +55,38 @@ IF not rs.EOF Then
 	%>
 <%Do Until rs.EOF OR PageC=rs.PageSize%>
 <div class="gbox">
-  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>(<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank">user</a><span><%=rs("addtime")%></span>)</div>
-  <div class="gcontent" id="post<%=rs("id")%>" style="display:none;">
+  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>『<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>』<span><%=rs("addtime")%></span></div>
+  <div class="gcontent" id="post<%=rs("id")%>">
     <%
   	if rs("hidden")=0 or foundadmin or rs("user_id")=Session(CookieName & "_userid") then
-  		response.Write(HTMLEncode(rs("content")))
+	%>
+    <%=HTMLEncode(rs("content"))%>
+    <%if rs("replay")<>"" then%>
+    <div class="greply"><%=HTMLEncode(rs("replay"))%></div>
+	<%
+	end if
 	else
 		response.Write("此内容设置了隐藏，仅管理员可见。")
   	end if
-   %>
-    <div class="greply"><%=HTMLEncode(rs("replay"))%></div>
+    %>
     <%if founduser then%>
-    <div class="gadmin">编辑 删除 回复 置顶</div>
+    <%if foundadmin or rs("user_id")=Session(CookieName & "_userid") then%>
+    <div class="gadmin">
+    <a href="">删除</a> <a href="">编辑</a>
+    <%if foundadmin then%>
+    <%if rs("replay")<>"" then%>
+    <a href="">编辑回复</a>
+	<%else%>
+    <a href="">回复</a>
+    <%end if%>
+    <%if rs("istop")=1 then%>
+    <a href="">取消置顶</a>
+	<%else%>
+    <a href="">置顶</a>
+    <%end if%>
+    <%end if%>
+    </div>
+    <%end if%>
     <%end if%>
   </div>
 </div>
@@ -116,8 +136,8 @@ function sha(flag) {
 }
 </script>
 <%
-
 end sub
+
 
 sub showpost()
 dim deal,formtitle,formbt,id,title,content,hidden
