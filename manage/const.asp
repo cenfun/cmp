@@ -43,6 +43,20 @@ dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
 
+'用户登录状况
+Dim founduser,foundadmin
+if Session(CookieName & "_username")<>"" then
+	founduser = true
+	if Session(CookieName & "_admin")<>"" then
+		foundadmin = true
+	else
+		foundadmin = false
+	end if
+else
+	founduser = false
+	foundadmin = false	
+end if 
+
 '查询IP地址
 function getIpUrl(ip)
 	getIpUrl = "http://www.baidu.com/s?wd=" & ip

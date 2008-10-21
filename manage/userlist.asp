@@ -13,7 +13,8 @@ End Select
 
 sub main()
 'action=user
-dim cmp_name,order,by
+dim user_id,cmp_name,order,by
+user_id=Checkstr(Request.QueryString("user_id"))
 cmp_name=Checkstr(Request.QueryString("cmp_name"))
 order=Checkstr(Request.QueryString("order"))
 by=Checkstr(Request.QueryString("by"))
@@ -34,8 +35,14 @@ by=Checkstr(Request.QueryString("by"))
           <%
 '查询串
 sql = "select id,lasttime,hits,email,qq,cmp_name,cmp_url,list from cmp_user where userstatus > 4 and setinfo<>1 and "
-if cmp_name <> "" then
-	sql = sql & " cmp_name like '%"&cmp_name&"%' and "
+if user_id <> "" then
+	if IsNumeric(user_id) then
+		sql = sql & " id="&user_id&" and "
+	end if
+else
+	if cmp_name <> "" then
+		sql = sql & " cmp_name like '%"&cmp_name&"%' and "
+	end if
 end if
 sql = sql & " 1=1 "
 if order<>"" then
@@ -43,15 +50,15 @@ if order<>"" then
 end if
 select case by
 	case "id"
-        sql = sql & " order by id " & order
+		sql = sql & " order by id " & order
 	case "cmp_name"
-        sql = sql & " order by cmp_name " & order
+		sql = sql & " order by cmp_name " & order
 	case "hits"
-        sql = sql & " order by hits " & order
+		sql = sql & " order by hits " & order
 	case "lasttime"
-        sql = sql & " order by lasttime " & order
+		sql = sql & " order by lasttime " & order
 	case "list"
-        sql = sql & " order by len(list) " & order
+		sql = sql & " order by len(list) " & order
 	case else
 		sql = sql & " order by id desc"
 		by = "id"
@@ -104,10 +111,12 @@ IF not rs.EOF Then
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
           <%loop%>
+          <%if rs_nums>MaxPerPage then%>
           <tr>
             <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"userlist.asp?cmp_name="&cmp_name&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div></td>
           </tr>
           <%
+		  end if
 else
 %>
           <tr>

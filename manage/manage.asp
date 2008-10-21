@@ -3,9 +3,7 @@
 <!--#include file="md5.asp"-->
 <%
 '检测用户是否登录
-If Session(CookieName & "_username")="" Then
-	response.Redirect("index.asp")
-else 
+If founduser Then
 	Select Case Request.QueryString("handler")
 		Case "savelistdata"
 			savelistdata()
@@ -36,6 +34,8 @@ else
 			End Select
 			footer()
 	 End Select
+else 
+	response.Redirect("index.asp")
 end if
 
 sub getskins()

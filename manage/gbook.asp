@@ -15,11 +15,18 @@ footer()
 
 sub main()
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <td width="90%" valign="top"><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
-        <form>
-          <%
+<div class="gbox">
+  <div style="line-height:24px;">
+    <div style="float:left; margin-right:10px;">( <a href="javascript:sha(true);">展开所有内容</a> | <a href="javascript:sha(false);">收起所有内容</a> )</div>
+    <%if founduser then%>
+    <div style="float:left;"><a href="#newpost"><strong>立刻发表留言 » </strong></a></div>
+    <%if foundadmin then%>
+    <div style="float:right;"><strong>管理选项：</strong>删除多少天以前的数据：</div>
+    <%end if%>
+    <%end if%>
+  </div>
+</div>
+<%
 '查询串
 'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
 sql = "select id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime from cmp_gbook order by addtime desc"
@@ -37,7 +44,7 @@ if page <> "" then
 end if
 dim PageC,MaxPerPage
 	PageC=0
-	MaxPerPage=50
+	MaxPerPage=20
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
 IF not rs.EOF Then
@@ -46,50 +53,68 @@ IF not rs.EOF Then
 	Dim rs_nums
 	rs_nums=rs.RecordCount
 	%>
-          <tr>
-            <th><input name="checkall" type="checkbox" value="" /></th>
-            <th align="left">标题</th>
-            <th>用户</th>
-            <th>发表时间</th>
-          </tr>
-          <%Do Until rs.EOF OR PageC=rs.PageSize%>
-          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
-            <td><input name="checkall" type="checkbox" value="" /></td>
-            <td align="left"><a href="javascript:showmsg(<%=rs("id")%>)"><%=rs("title")%></a></td>
-            <td><%=rs("user_id")%></td>
-            <td><%=rs("addtime")%></td>
-          </tr>
-          <%rs.MoveNext%>
-          <%PageC=PageC+1%>
-          <%loop%>
-          <tr>
-            <td colspan="5"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"gbook.asp",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div></td>
-          </tr>
-          <%
+<%Do Until rs.EOF OR PageC=rs.PageSize%>
+<div class="gbox">
+  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>(<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank">user</a><span><%=rs("addtime")%></span>)</div>
+  <div class="gcontent" id="post<%=rs("id")%>" style="display:none;">
+    <%
+  	if rs("hidden")=0 or foundadmin or rs("user_id")=Session(CookieName & "_userid") then
+  		response.Write(HTMLEncode(rs("content")))
+	else
+		response.Write("此内容设置了隐藏，仅管理员可见。")
+  	end if
+   %>
+    <div class="greply"><%=HTMLEncode(rs("replay"))%></div>
+    <%if founduser then%>
+    <div class="gadmin">编辑 删除 回复 置顶</div>
+    <%end if%>
+  </div>
+</div>
+<%rs.MoveNext%>
+<%PageC=PageC+1%>
+<%loop%>
+<%if rs_nums>MaxPerPage then%>
+<div class="gbox">
+  <div><%=showpage("zh",1,"gbook.asp",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
+</div>
+<%
+end if
 else
 %>
-          <tr>
-            <td><span style="color:#FF0000;">没有找到任何相关记录</span></td>
-          </tr>
-          <%
+<div class="gbox"><span style="color:#FF0000;">没有找到任何相关记录</span></div>
+<%
 end if
 rs.Close
 Set rs=Nothing
+'发表留言
+If founduser then
+	showpost() 
+end if
 %>
-        </form>
-      </table></td>
-    <%
-	If Session(CookieName & "_username")<>"" then
-		response.Write("<td width=""10%"" valign=""top"">")
-		showpost() 
-		if Session(CookieName & "_admin")<>"" then
-			showadmin()
-		end if
-		response.Write("</td>")
-    end if
-	%>
-  </tr>
-</table>
+<script type="text/javascript">
+function shc(id) {
+	var o = document.getElementById("post"+id);
+	if (o.style.display == "none") {
+		o.style.display = "";
+	} else {
+		o.style.display = "none";
+	}
+}
+function sha(flag) {
+	var divs = document.getElementsByTagName("div");
+	for (var i = 0; i < divs.length; i ++) {
+		var div = divs[i];
+		if (div.className == "gcontent") {
+			if (flag) {
+				div.style.display = "";
+			} else {
+				div.style.display = "none";
+			}
+		}
+	}
+	
+}
+</script>
 <%
 
 end sub
@@ -117,37 +142,36 @@ else
 	hidden=0
 end if
 %>
-<table border="0" cellspacing="1" cellpadding="2" class="tablelist">
-  <form action="gbook.asp?action=save_post&deal=<%=deal%>" method="post" onSubmit="return check_post(this);">
-    <%if deal="edit" then%>
-    <input name="id" type="hidden" value="<%=id%>" />
-    <%end if%>
-    <tr>
-      <th colspan="2"><strong><%=formtitle%>留言</strong></th>
-    </tr>
-    <tr>
-      <td align="right" nowrap="nowrap">&nbsp;&nbsp;用户：</td>
-      <td><%=Session(CookieName & "_username")%></td>
-    </tr>
-    <tr>
-      <td align="right">标题：</td>
-      <td><input name="title" type="text" size="45" maxlength="200" /></td>
-    </tr>
-    <tr>
-      <td align="right">内容：</td>
-      <td><textarea name="content" cols="45" rows="10" style="width:98%;"></textarea></td>
-    </tr>
-    <tr>
-      <td align="right">隐藏：</td>
-      <td><input type="checkbox" name="hidden" value="1" />
-        (仅管理员可见) </td>
-    </tr>
-    <tr>
-      <td align="right">&nbsp;</td>
-      <td><input type="submit" name="submitbutton" value="<%=formbt%>" /></td>
-    </tr>
-  </form>
-</table>
+<a name="newpost"></a>
+<div class="gbox">
+  <table border="0" cellspacing="1" cellpadding="2" class="tablelist" width="100%">
+    <form action="gbook.asp?action=save_post&deal=<%=deal%>" method="post" onSubmit="return check_post(this);">
+      <%if deal="edit" then%>
+      <input name="id" type="hidden" value="<%=id%>" />
+      <%end if%>
+      <tr>
+        <th colspan="2" height="24"><strong><%=formtitle%>留言</strong></th>
+      </tr>
+      <tr>
+        <td align="right">标题：</td>
+        <td><input name="title" type="text" size="45" maxlength="200" /></td>
+      </tr>
+      <tr>
+        <td align="right">内容：</td>
+        <td><textarea name="content" cols="45" rows="10" style="width:98%;"></textarea></td>
+      </tr>
+      <tr>
+        <td align="right">隐藏：</td>
+        <td><input type="checkbox" name="hidden" value="1" />
+          (仅管理员可见) </td>
+      </tr>
+      <tr>
+        <td align="right">&nbsp;</td>
+        <td><input type="submit" name="submitbutton" value="<%=formbt%>" /></td>
+      </tr>
+    </form>
+  </table>
+</div>
 <script type="text/javascript">
 function check_post(o){
 	if(o.title.value.length < 3){
@@ -169,7 +193,7 @@ end sub
 sub save_post()
 'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
 '用户已经登录
-If Session(CookieName & "_userid")<>"" then
+If founduser and Session(CookieName & "_userid")<>"" then
 	dim deal,id,title,content,hidden
 	deal=Request.QueryString("deal")
 	title=CheckStr(Request.Form("title"))
@@ -181,11 +205,13 @@ If Session(CookieName & "_userid")<>"" then
 		hidden=1
 	end if
 	if deal="edit" then
-		if Session(CookieName & "_admin")<>"" then
+		if foundadmin then
 		
 		end if
 	elseif deal="reply" then
+		if foundadmin then
 		
+		end if
 	else
 		if Request.Cookies(CookieName)("posttime")<>empty then
  	   		if DateDiff("s",Request.Cookies(CookieName)("posttime"),SystemTime) < 30 then
@@ -207,22 +233,10 @@ If Session(CookieName & "_userid")<>"" then
 		'保存提交时间
 		Response.Cookies(CookieName)("posttime")=SystemTime
 	end if
+else
+	ErrMsg="没有操作权限！"
+	cenfun_error()
 end if
-end sub
-
-
-sub showadmin()
-%>
-<br />
-<table border="0" cellspacing="1" cellpadding="2" class="tablelist" width="100%">
-  <tr>
-    <th><strong>管理选项</strong></th>
-  </tr>
-  <tr>
-    <td>删除多少天以前的数据：</td>
-  </tr>
-</table>
-<%
 end sub
 
 %>

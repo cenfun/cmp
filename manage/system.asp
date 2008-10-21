@@ -3,9 +3,7 @@
 <!--#include file="md5.asp"-->
 <%
 '检测管理员是否登录
-If Session(CookieName & "_username")="" or Session(CookieName & "_admin")="" Then
-	response.Redirect("index.asp")
-else
+If founduser and foundadmin Then
 	header()
 	menu()
 	Select Case Request.QueryString("action")
@@ -31,6 +29,8 @@ else
 			config()
 	End Select
 	footer()
+else
+	response.Redirect("index.asp")
 end if
 
 sub config()
