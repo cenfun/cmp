@@ -21,7 +21,8 @@ sub main()
     <%if founduser then%>
     <div style="float:left;"><a href="#newpost"><strong>立刻发表留言 » </strong></a></div>
     <%if foundadmin then%>
-    <div style="float:right;"><strong>管理选项：</strong>删除多少天以前的数据：</div>
+    <div style="float:right;"><strong>管理选项：</strong>清除<input id="cleardays" type="text" value="60" size="3" maxlength="5" />
+    天以前的所有留言<input type="button" value="提交" onclick="clearByDay();" /></div>
     <%end if%>
     <%end if%>
   </div>
@@ -63,7 +64,7 @@ IF not rs.EOF Then
     <%=HTMLEncode(rs("content"))%>
     <%if rs("replay")<>"" then%>
     <div class="greply"><%=HTMLEncode(rs("replay"))%></div>
-	<%
+    <%
 	end if
 	else
 		response.Write("此内容设置了隐藏，仅管理员可见。")
@@ -71,20 +72,19 @@ IF not rs.EOF Then
     %>
     <%if founduser then%>
     <%if foundadmin or rs("user_id")=Session(CookieName & "_userid") then%>
-    <div class="gadmin">
-    <a href="">删除</a> <a href="">编辑</a>
-    <%if foundadmin then%>
-    <%if rs("replay")<>"" then%>
-    <a href="">编辑回复</a>
-	<%else%>
-    <a href="">回复</a>
-    <%end if%>
-    <%if rs("istop")=1 then%>
-    <a href="">取消置顶</a>
-	<%else%>
-    <a href="">置顶</a>
-    <%end if%>
-    <%end if%>
+    <div class="gadmin"> <a href="">删除</a> <a href="">编辑</a>
+      <%if foundadmin then%>
+      <%if rs("replay")<>"" then%>
+      <a href="">编辑回复</a>
+      <%else%>
+      <a href="">回复</a>
+      <%end if%>
+      <%if rs("istop")=1 then%>
+      <a href="">取消置顶</a>
+      <%else%>
+      <a href="">置顶</a>
+      <%end if%>
+      <%end if%>
     </div>
     <%end if%>
     <%end if%>
@@ -132,7 +132,18 @@ function sha(flag) {
 			}
 		}
 	}
-	
+}
+function clearByDay() {
+	var cleardays = document.getElementById("cleardays");
+	var days = cleardays.value;
+	if (days && !isNaN(days)) {
+		if (confirm("确定要清除"+days+"天以前的所有留言？")) {
+			
+		}
+	} else {
+		alert("请填写正确清除期限！");
+		cleardays.focus();
+	}
 }
 </script>
 <%
