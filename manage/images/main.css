@@ -18,10 +18,10 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .tablelist td { padding:2px 2px; }
 .gbox { margin:0px auto; border:1px solid #ADC4DF; margin-bottom:5px; background-color:#FFFFFF; width:98%; word-break:break-all; overflow:auto; }
 .gtitle { cursor:pointer; padding:5px 5px; color:#666666; }
-.gtitle strong { margin-right:10px; color:#000000; }
+.gtitle strong { margin-right:10px; color:#000000; font-size:14px; }
 .gtitle span { font-size:10px; margin-left:10px; color:#999999;}
 .gtitle a:link, .gtitle a:visited{ color:#666666; }
-.gcontent { padding:5px 5px; word-break:break-all; border-top:1px solid #eeeeee; }
+.gcontent { padding:5px 5px; word-break:break-all; border-top:1px solid #eeeeee; color:#333333; }
 .greply { padding:5px 5px; margin-top:8px; border:1px dashed #eeeeee; word-break:break-all; background-color:#fcfcfc; }
 .greply span { color:#999999; font-size:10px; }
 .gadmin { padding:5px 5px; margin-top:8px; border-top:1px solid #eeeeee; }
