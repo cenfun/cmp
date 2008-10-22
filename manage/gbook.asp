@@ -33,7 +33,7 @@ sub main()
 <%
 '查询串
 'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
-sql = "select g.id,g.user_id,g.user_ip,g.title,g.content,g.replay,g.istop,g.hidden,g.addtime,g.replytime,u.cmp_name from cmp_gbook g inner join cmp_user u on g.user_id=u.id order by addtime desc"
+sql = "select g.id,g.user_id,g.user_ip,g.title,g.content,g.replay,g.istop,g.hidden,g.addtime,g.replytime,u.cmp_name from cmp_gbook g inner join cmp_user u on g.user_id=u.id order by istop desc, addtime desc"
 'response.Write(sql)
 '分页设置
 dim page,CurrentPage
@@ -59,7 +59,11 @@ IF not rs.EOF Then
 	%>
 <%Do Until rs.EOF OR PageC=rs.PageSize%>
 <div class="gbox">
-  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>『<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>』<span><%=rs("addtime")%></span></div>
+  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong> 『<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>』<span><%=rs("addtime")%></span>
+    <%if rs("istop")=1 then%>
+    【置顶】
+    <%end if%>
+  </div>
   <div class="gcontent" id="post<%=rs("id")%>">
     <%
   	if rs("hidden")=0 or foundadmin or rs("user_id")=Session(CookieName & "_userid") then
@@ -104,7 +108,9 @@ IF not rs.EOF Then
 end if
 else
 %>
-<div class="gbox"><div style="margin:5px 5px;"><span style="color:#FF0000;">没有找到任何相关记录</span></div></div>
+<div class="gbox">
+  <div style="margin:5px 5px;"><span style="color:#FF0000;">没有找到任何相关记录</span></div>
+</div>
 <%
 end if
 rs.Close
@@ -266,6 +272,19 @@ else
 		ErrMsg="没有操作权限！"
 		cenfun_error()
 	end if
+end if
+end sub
+
+
+sub settop(flag)
+dim id
+id=Checkstr(Request.QueryString("id"))
+if foundadmin then
+	conn.execute("update cmp_gbook set istop="&flag&" where id in ("&id&")")
+	response.Redirect("gbook.asp")
+else
+	ErrMsg="没有操作权限！"
+	cenfun_error()
 end if
 end sub
 
