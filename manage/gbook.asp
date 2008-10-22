@@ -4,10 +4,18 @@
 header()
 menu()
 Select Case Request.QueryString("action")
+	Case "top_up"
+		settop(1)
+	Case "top_down"
+		settop(0)
+	Case "edit_reply"
+		edit_reply()
+	Case "edit_post"
+		edit_post()	
+	Case "del_post"
+		del_post()
 	Case "save_post"
 		save_post()
-	Case "edit_post"
-		edit_post()
 	Case Else
 		main()
 End Select
@@ -16,14 +24,9 @@ footer()
 sub main()
 %>
 <div class="gbox">
-  <div style="line-height:24px;">
-    <div style="float:left; margin-right:10px;">( <a href="javascript:sha(true);">展开所有内容</a> | <a href="javascript:sha(false);">收起所有内容</a> )</div>
+  <div style="margin:5px 5px;"><span>( <a href="javascript:sha(true);">展开所有内容</a> | <a href="javascript:sha(false);">收起所有内容</a> )</span>
     <%if founduser then%>
-    <div style="float:left;"><a href="#newpost"><strong>立刻发表留言 » </strong></a></div>
-    <%if foundadmin then%>
-    <div style="float:right;"><strong>管理选项：</strong>清除<input id="cleardays" type="text" value="60" size="3" maxlength="5" />
-    天以前的所有留言<input type="button" value="提交" onclick="clearByDay();" /></div>
-    <%end if%>
+    <span style="margin-left:10px;"><a href="#newpost"><strong>立刻发表留言 » </strong></a></span>
     <%end if%>
   </div>
 </div>
@@ -72,17 +75,17 @@ IF not rs.EOF Then
     %>
     <%if founduser then%>
     <%if foundadmin or rs("user_id")=Session(CookieName & "_userid") then%>
-    <div class="gadmin"> <a href="">删除</a> <a href="">编辑</a>
+    <div class="gadmin"><a href="javascript:delpost(<%=rs("id")%>)">删除</a> | <a href="gbook.asp?action=edit_post&id=<%=rs("id")%>">编辑</a>
       <%if foundadmin then%>
+      | <a href="gbook.asp?action=edit_reply&id=<%=rs("id")%>">
       <%if rs("replay")<>"" then%>
-      <a href="">编辑回复</a>
-      <%else%>
-      <a href="">回复</a>
+      编辑
       <%end if%>
+      回复</a>
       <%if rs("istop")=1 then%>
-      <a href="">取消置顶</a>
+      | <a href="gbook.asp?action=top_down&id=<%=rs("id")%>">取消置顶</a>
       <%else%>
-      <a href="">置顶</a>
+      | <a href="gbook.asp?action=top_up&id=<%=rs("id")%>">置顶</a>
       <%end if%>
       <%end if%>
     </div>
@@ -101,15 +104,19 @@ IF not rs.EOF Then
 end if
 else
 %>
-<div class="gbox"><span style="color:#FF0000;">没有找到任何相关记录</span></div>
+<div class="gbox"><div style="margin:5px 5px;"><span style="color:#FF0000;">没有找到任何相关记录</span></div></div>
 <%
 end if
 rs.Close
 Set rs=Nothing
 '发表留言
-If founduser then
+if founduser then
 	showpost() 
 end if
+'管理选项
+if foundadmin then
+	showadmin()
+end if	
 %>
 <script type="text/javascript">
 function shc(id) {
@@ -133,6 +140,27 @@ function sha(flag) {
 		}
 	}
 }
+<%if founduser then%>
+function delpost(id) {
+	if (confirm("确定要删除吗？")) {
+		window.location = "gbook.asp?action=del_post&id="+id+"&referer="+escape(window.location);
+	}
+}
+<%end if%>
+</script>
+<%
+end sub
+
+sub showadmin()
+%>
+<div class="gbox">
+  <div style="margin:5px 5px;"><strong>批量管理：</strong>清除
+    <input id="cleardays" type="text" value="60" size="3" maxlength="5" />
+    天以前的所有留言
+    <input type="button" value="提交" onclick="clearByDay();" />
+  </div>
+</div>
+<script type="text/javascript">
 function clearByDay() {
 	var cleardays = document.getElementById("cleardays");
 	var days = cleardays.value;
@@ -148,8 +176,6 @@ function clearByDay() {
 </script>
 <%
 end sub
-
-
 sub showpost()
 dim deal,formtitle,formbt,id,title,content,hidden
 deal=Request.QueryString("deal")
@@ -221,10 +247,32 @@ function check_post(o){
 <%
 end sub
 
+sub del_post()
+dim id,referer
+id=Checkstr(Request.QueryString("id"))
+referer=Request.QueryString("referer")
+if referer="" then
+	referer="gbook.asp"
+end if
+if foundadmin then
+	'管理员直接删除
+	conn.execute("delete from cmp_gbook where id in ("&id&")")
+	response.Redirect(referer)
+else
+	if founduser then
+		conn.execute("delete from cmp_gbook where id in ("&id&") and user_id=" & Session(CookieName & "_userid"))
+		response.Redirect(referer)
+	else
+		ErrMsg="没有操作权限！"
+		cenfun_error()
+	end if
+end if
+end sub
+
 sub save_post()
 'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
 '用户已经登录
-If founduser and Session(CookieName & "_userid")<>"" then
+if founduser and Session(CookieName & "_userid")<>"" then
 	dim deal,id,title,content,hidden
 	deal=Request.QueryString("deal")
 	title=CheckStr(Request.Form("title"))
