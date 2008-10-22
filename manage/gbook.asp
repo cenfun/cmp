@@ -14,6 +14,8 @@ Select Case Request.QueryString("action")
 		show_post(true)	
 	Case "del_post"
 		del_post()
+	Case "clear_post"
+		clear_post()
 	Case "save_post"
 		save_post()
 	Case Else
@@ -206,7 +208,7 @@ function clearByDay() {
 	var days = cleardays.value;
 	if (days && !isNaN(days)) {
 		if (confirm("确定要清除"+days+"天以前的所有留言？")) {
-			
+			window.location = "gbook.asp?action=clear_post&days="+days;
 		}
 	} else {
 		alert("请填写正确清除期限！");
@@ -335,6 +337,22 @@ elseif founduser then
 	conn.execute("delete from cmp_gbook where id in ("&id&") and user_id="&Session(CookieName & "_userid"))
 end if
 response.Redirect(referer)
+end sub
+
+sub clear_post()
+if foundadmin then
+	dim days
+	days=Checkstr(Request.QueryString("days"))
+	if days<>"" then
+		if isNumeric(days) then
+			conn.execute("delete from cmp_gbook where DateDiff('d', addtime, "&SqlNowString&")>=" & days)
+			response.Redirect("gbook.asp")
+		end if
+	end if
+else
+	ErrMsg="没有操作权限！"
+	cenfun_error()
+end if
 end sub
 
 
