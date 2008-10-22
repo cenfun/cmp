@@ -288,6 +288,17 @@ else
 end if
 end sub
 
+
+sub edit_reply()
+
+end sub
+
+
+sub edit_post()
+
+end sub
+
+
 sub save_post()
 'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
 '用户已经登录
@@ -303,13 +314,6 @@ if founduser and Session(CookieName & "_userid")<>"" then
 		hidden=1
 	end if
 	if deal="edit" then
-		if foundadmin then
-		
-		end if
-	elseif deal="reply" then
-		if foundadmin then
-		
-		end if
 	else
 		if Request.Cookies(CookieName)("posttime")<>empty then
  	   		if DateDiff("s",Request.Cookies(CookieName)("posttime"),SystemTime) < 30 then
