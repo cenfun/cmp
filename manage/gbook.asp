@@ -48,7 +48,7 @@ if page <> "" then
 end if
 dim PageC,MaxPerPage
 	PageC=0
-	MaxPerPage=20
+	MaxPerPage=10
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
 IF not rs.EOF Then
@@ -59,7 +59,7 @@ IF not rs.EOF Then
 	%>
 <%Do Until rs.EOF OR PageC=rs.PageSize%>
 <div class="gbox">
-  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong> 『<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>』<span><%=rs("addtime")%>
+  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>[<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>]<span><%=rs("addtime")%>
     <%if foundadmin then%>
     IP:<%=rs("user_ip")%>
     <%end if%>
@@ -79,8 +79,10 @@ IF not rs.EOF Then
       <div style="padding:5px 0px;"><%=HTMLEncode(rs("replay"))%></div>
     </div>
     <%end if%>
+    <%if foundadmin then%>
     <textarea id="reply<%=rs("id")%>" style="display:none;"><%=UnCheckStr(rs("replay"))%></textarea>
     <div id="replyform<%=rs("id")%>"></div>
+    <%end if%>
     <%
 	else
 		response.Write("此内容设置了隐藏，仅管理员可见。")
@@ -111,7 +113,7 @@ IF not rs.EOF Then
 <%loop%>
 <%if rs_nums>MaxPerPage then%>
 <div class="gbox">
-  <div><%=showpage("zh",1,"gbook.asp",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
+  <div style="padding:5px 5px;"><%=showpage("zh",1,"gbook.asp",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
 </div>
 <%
 end if
@@ -275,10 +277,10 @@ else
   <table border="0" cellspacing="1" cellpadding="2" class="tablelist" width="100%">
     <form action="gbook.asp?action=save_post&deal=<%=deal%>" method="post" onSubmit="return check_post(this);">
       <tr>
-        <th colspan="2" height="24"><strong><%=formtitle%>留言</strong>
+        <td colspan="2" height="24" align="center"><strong><%=formtitle%>留言</strong>
           <%if deal="edit" then%>
           <input name="id" type="hidden" value="<%=id%>" />
-          <%end if%></th>
+          <%end if%></td>
       </tr>
       <tr>
         <td align="right">标题：</td>
