@@ -82,7 +82,7 @@ IF not rs.EOF Then
     </div>
     <%end if%>
     <%if foundadmin then%>
-    <textarea id="reply<%=rs("id")%>" style="display:none;"><%=UnCheckStr(rs("replay"))%></textarea>
+    <textarea id="reply<%=rs("id")%>" style="display:none;"><%=XMLEncode(UnCheckStr(rs("replay")))%></textarea>
     <div id="replyform<%=rs("id")%>"></div>
     <%end if%>
     <%
@@ -168,21 +168,22 @@ function delpost(id) {
 <%end if%>
 <%if foundadmin then%>
 function replypost(id) {
-	var reply = document.getElementById("reply"+id);
 	var replyform = document.getElementById("replyform"+id);
 	replyform.style.display = "";
-	var replycontent = "";
-	if (reply) {
-		replycontent = reply.value;
-	}
 	var html = '';
 	html +='<form action="gbook.asp?action=edit_reply&id='+id+'" method="post">';
-  	html +='<div><textarea name="reply" rows="10" style="width:99%;">'+replycontent+'</textarea></div>';
+  	html +='<div><textarea name="reply" id="edit_replyform'+id+'" rows="10" style="width:99%;"></textarea></div>';
   	html +='<div>';
 	html +='<input type="submit" value="提交" /> ';
 	html +='<input type="reset" value="取消" onclick="cannelreply('+id+');" />';
 	html +='</div></form>';
 	replyform.innerHTML = html;
+	//
+	var reply = document.getElementById("reply"+id);
+	if (reply) {
+		var edit_replyform = document.getElementById("edit_replyform"+id);
+		edit_replyform.value = reply.value;
+	}
 }
 function cannelreply(id) {
 	var replyform = document.getElementById("replyform"+id);
@@ -233,8 +234,8 @@ if founduser then
 				if not rs.eof then
 					user_id=rs("user_id")
 					if foundadmin or user_id=Session(CookieName & "_userid") then
-						title=rs("title")
-						content=rs("content")
+						title=XMLEncode(UnCheckStr(rs("title")))
+						content=XMLEncode(UnCheckStr(rs("content")))
 						hidden=rs("hidden")
 					else
 						ErrMsg="没有操作权限！"
@@ -285,7 +286,7 @@ else
           <%end if%></td>
       </tr>
       <tr>
-        <td align="right">标题：</td>
+        <td align="right" nowrap="nowrap">标题：</td>
         <td><input name="title" type="text" size="45" maxlength="200" value="<%=title%>" /></td>
       </tr>
       <tr>
@@ -313,6 +314,11 @@ function check_post(o){
 	}
 	if(o.content.value.length < 10){
 		alert("内容长度不能小于10！");
+		o.content.focus();
+		return false;
+	}
+	if(o.content.value.length > 10000){
+		alert("内容长度不能大于10000！");
 		o.content.focus();
 		return false;
 	}
