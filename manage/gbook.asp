@@ -5,13 +5,13 @@ header()
 menu()
 Select Case Request.QueryString("action")
 	Case "top_up"
-		settop(1)
+		set_top(1)
 	Case "top_down"
-		settop(0)
+		set_top(0)
 	Case "edit_reply"
 		edit_reply()
-	Case "edit_post"
-		edit_post()	
+	Case "show_post"
+		show_post(true)	
 	Case "del_post"
 		del_post()
 	Case "save_post"
@@ -26,7 +26,7 @@ sub main()
 <div class="gbox">
   <div style="margin:5px 5px;"><span>( <a href="javascript:sha(true);">展开所有内容</a> | <a href="javascript:sha(false);">收起所有内容</a> )</span>
     <%if founduser then%>
-    <span style="margin-left:10px;"><a href="#newpost"><strong>立刻发表留言 » </strong></a></span>
+    <span style="margin-left:10px;"><a href="gbook.asp?action=show_post"><strong>立刻发表留言 » </strong></a></span>
     <%end if%>
   </div>
 </div>
@@ -59,7 +59,11 @@ IF not rs.EOF Then
 	%>
 <%Do Until rs.EOF OR PageC=rs.PageSize%>
 <div class="gbox">
-  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong> 『<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>』<span><%=rs("addtime")%></span>
+  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong> 『<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>』<span><%=rs("addtime")%>
+    <%if foundadmin then%>
+    IP:<%=rs("user_ip")%>
+    <%end if%>
+    </span>
     <%if rs("istop")=1 then%>
     【置顶】
     <%end if%>
@@ -70,22 +74,27 @@ IF not rs.EOF Then
 	%>
     <%=HTMLEncode(rs("content"))%>
     <%if rs("replay")<>"" then%>
-    <div class="greply"><%=HTMLEncode(rs("replay"))%></div>
+    <div class="greply">
+      <div>管理员回复：<span><%=rs("replytime")%></span></div>
+      <div style="padding:5px 0px;"><%=HTMLEncode(rs("replay"))%></div>
+    </div>
+    <%end if%>
+    <textarea id="reply<%=rs("id")%>" style="display:none;"><%=UnCheckStr(rs("replay"))%></textarea>
+    <div id="replyform<%=rs("id")%>"></div>
     <%
-	end if
 	else
 		response.Write("此内容设置了隐藏，仅管理员可见。")
   	end if
     %>
     <%if founduser then%>
     <%if foundadmin or rs("user_id")=Session(CookieName & "_userid") then%>
-    <div class="gadmin"><a href="javascript:delpost(<%=rs("id")%>)">删除</a> | <a href="gbook.asp?action=edit_post&id=<%=rs("id")%>">编辑</a>
+    <div class="gadmin"><a href="javascript:delpost(<%=rs("id")%>)">删除</a> | <a href="gbook.asp?action=show_post&deal=edit&id=<%=rs("id")%>">编辑</a>
       <%if foundadmin then%>
-      | <a href="gbook.asp?action=edit_reply&id=<%=rs("id")%>">
       <%if rs("replay")<>"" then%>
-      编辑
+      | <a href="javascript:replypost(<%=rs("id")%>)">编辑回复</a>
+      <%else%>
+      | <a href="javascript:replypost(<%=rs("id")%>)">回复</a>
       <%end if%>
-      回复</a>
       <%if rs("istop")=1 then%>
       | <a href="gbook.asp?action=top_down&id=<%=rs("id")%>">取消置顶</a>
       <%else%>
@@ -117,11 +126,11 @@ rs.Close
 Set rs=Nothing
 '发表留言
 if founduser then
-	showpost() 
+	show_post(false) 
 end if
 '管理选项
 if foundadmin then
-	showadmin()
+	show_admin()
 end if	
 %>
 <script type="text/javascript">
@@ -153,11 +162,34 @@ function delpost(id) {
 	}
 }
 <%end if%>
+<%if foundadmin then%>
+function replypost(id) {
+	var reply = document.getElementById("reply"+id);
+	var replyform = document.getElementById("replyform"+id);
+	replyform.style.display = "";
+	var replycontent = "";
+	if (reply) {
+		replycontent = reply.value;
+	}
+	var html = '';
+	html +='<form action="gbook.asp?action=edit_reply&id='+id+'" method="post">';
+  	html +='<div><textarea name="reply" rows="10" style="width:99%;">'+replycontent+'</textarea></div>';
+  	html +='<div>';
+	html +='<input type="submit" value="提交" /> ';
+	html +='<input type="reset" value="取消" onclick="cannelreply('+id+');" />';
+	html +='</div></form>';
+	replyform.innerHTML = html;
+}
+function cannelreply(id) {
+	var replyform = document.getElementById("replyform"+id);
+	replyform.style.display = "none";
+}
+<%end if%>
 </script>
 <%
 end sub
 
-sub showadmin()
+sub show_admin()
 %>
 <div class="gbox">
   <div style="margin:5px 5px;"><strong>批量管理：</strong>清除
@@ -182,50 +214,83 @@ function clearByDay() {
 </script>
 <%
 end sub
-sub showpost()
-dim deal,formtitle,formbt,id,title,content,hidden
-deal=Request.QueryString("deal")
-if deal="edit" then
-	id=0
-	deal="edit"
-	formtitle="编辑"
-	formbt="修改"
-	title=""
-	content=""
-	hidden=0
-elseif deal="reply" then
-	
-
+sub show_post(flag)
+if founduser then
+	dim deal,formtitle,formbt,user_id,id,title,content,hidden
+	deal=Request.QueryString("deal")
+	if deal="edit" then
+		deal="edit"
+		formtitle="编辑"
+		formbt="修改"
+		id=Checkstr(Request.QueryString("id"))
+		if id<>"" then
+			if isNumeric(id) then
+				set rs=conn.execute("select user_id,title,content,hidden from cmp_gbook where id="&id&" ")
+				if not rs.eof then
+					user_id=rs("user_id")
+					if foundadmin or user_id=Session(CookieName & "_userid") then
+						title=rs("title")
+						content=rs("content")
+						hidden=rs("hidden")
+					else
+						ErrMsg="没有操作权限！"
+					end if
+				else
+					ErrMsg="未找到记录！"
+				end if
+				rs.close
+				set rs=nothing
+			else
+				ErrMsg="参数错误！"
+			end if
+		else
+			ErrMsg="参数错误！"
+		end if
+	else
+		deal="add"
+		formtitle="发表"
+		formbt="提交"
+		title=""
+		content=""
+		hidden=0
+	end if
 else
-	deal="add"
-	formtitle="发表"
-	formbt="提交"
-	title=""
-	content=""
-	hidden=0
+	ErrMsg="没有操作权限！"
 end if
+
+if ErrMsg<>"" then
+	cenfun_error()
+else
 %>
+<%if flag then%>
+<div class="gbox">
+  <div style="padding:5px 5px;">
+    <input name="bt_back" type="button" onclick="history.back();" value="&lt;&lt;返回" />
+  </div>
+</div>
+<%else%>
 <a name="newpost"></a>
+<%end if%>
 <div class="gbox">
   <table border="0" cellspacing="1" cellpadding="2" class="tablelist" width="100%">
     <form action="gbook.asp?action=save_post&deal=<%=deal%>" method="post" onSubmit="return check_post(this);">
-      <%if deal="edit" then%>
-      <input name="id" type="hidden" value="<%=id%>" />
-      <%end if%>
       <tr>
-        <th colspan="2" height="24"><strong><%=formtitle%>留言</strong></th>
+        <th colspan="2" height="24"><strong><%=formtitle%>留言</strong>
+          <%if deal="edit" then%>
+          <input name="id" type="hidden" value="<%=id%>" />
+          <%end if%></th>
       </tr>
       <tr>
         <td align="right">标题：</td>
-        <td><input name="title" type="text" size="45" maxlength="200" /></td>
+        <td><input name="title" type="text" size="45" maxlength="200" value="<%=title%>" /></td>
       </tr>
       <tr>
         <td align="right">内容：</td>
-        <td><textarea name="content" cols="45" rows="10" style="width:98%;"></textarea></td>
+        <td><textarea name="content" cols="45" rows="10" style="width:98%;"><%=content%></textarea></td>
       </tr>
       <tr>
         <td align="right">隐藏：</td>
-        <td><input type="checkbox" name="hidden" value="1" />
+        <td><input type="checkbox" name="hidden" value="1" <%if hidden=1 then%>checked="checked"<%end if%> />
           (仅管理员可见) </td>
       </tr>
       <tr>
@@ -251,6 +316,7 @@ function check_post(o){
 }
 </script>
 <%
+end if
 end sub
 
 sub del_post()
@@ -263,23 +329,17 @@ end if
 if foundadmin then
 	'管理员直接删除
 	conn.execute("delete from cmp_gbook where id in ("&id&")")
-	response.Redirect(referer)
-else
-	if founduser then
-		conn.execute("delete from cmp_gbook where id in ("&id&") and user_id=" & Session(CookieName & "_userid"))
-		response.Redirect(referer)
-	else
-		ErrMsg="没有操作权限！"
-		cenfun_error()
-	end if
+elseif founduser then
+	conn.execute("delete from cmp_gbook where id in ("&id&") and user_id="&Session(CookieName & "_userid"))
 end if
+response.Redirect(referer)
 end sub
 
 
-sub settop(flag)
-dim id
-id=Checkstr(Request.QueryString("id"))
+sub set_top(flag)
 if foundadmin then
+	dim id
+	id=Checkstr(Request.QueryString("id"))
 	conn.execute("update cmp_gbook set istop="&flag&" where id in ("&id&")")
 	response.Redirect("gbook.asp")
 else
@@ -290,20 +350,29 @@ end sub
 
 
 sub edit_reply()
-
-end sub
-
-
-sub edit_post()
-
+if foundadmin then
+	dim id,reply
+	id=Checkstr(Request.QueryString("id"))
+	reply=Checkstr(Request.Form("reply"))
+	if id<>"" then
+		if isNumeric(id) then
+			conn.execute("update cmp_gbook set replay='"&reply&"',replytime="&SqlNowString&" where id="&id&" ")
+			response.Redirect(Request.ServerVariables("HTTP_REFERER"))
+		end if
+	end if
+else
+	ErrMsg="没有操作权限！"
+	cenfun_error()
+end if
 end sub
 
 
 sub save_post()
 'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
 '用户已经登录
-if founduser and Session(CookieName & "_userid")<>"" then
-	dim deal,id,title,content,hidden
+if founduser then
+	dim deal,id,title,content,hidden,referer
+	referer="gbook.asp"
 	deal=Request.QueryString("deal")
 	title=CheckStr(Request.Form("title"))
 	content=CheckStr(Request.Form("content"))
@@ -314,6 +383,14 @@ if founduser and Session(CookieName & "_userid")<>"" then
 		hidden=1
 	end if
 	if deal="edit" then
+		id=Checkstr(Request.Form("id"))
+		if foundadmin then
+			conn.execute("update cmp_gbook set title='"&title&"',content='"&content&"',hidden="&hidden&" where id="&id&" ")
+		elseif founduser then
+			conn.execute("update cmp_gbook set title='"&title&"',content='"&content&"',hidden="&hidden&" where id="&id&" and user_id="&Session(CookieName & "_userid"))
+		end if
+		SucMsg = "编辑留言完成！"
+		cenfun_suc(referer)
 	else
 		if Request.Cookies(CookieName)("posttime")<>empty then
  	   		if DateDiff("s",Request.Cookies(CookieName)("posttime"),SystemTime) < 30 then
@@ -330,7 +407,7 @@ if founduser and Session(CookieName & "_userid")<>"" then
 			sql = sql & ""&user_id&",'"&UserTrueIP&"','"&title&"','"&content&"',"&hidden&","&SqlNowString&")"
 			conn.execute(sql)
 			SucMsg = "发表留言成功！"
-			cenfun_suc("gbook.asp")
+			cenfun_suc(referer)
 		end if
 		'保存提交时间
 		Response.Cookies(CookieName)("posttime")=SystemTime
