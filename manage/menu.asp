@@ -3,7 +3,8 @@
     <li><a href="userlist.asp">按最新注册</a></li>
     <li><a href="userlist.asp?order=desc&by=lasttime">按最后更新</a></li>
     <li><a href="userlist.asp?order=desc&by=list">按音乐排名</a></li>
-    <li><a href="userlist.asp?order=desc&by=hits">按点击排名</a></li>
+    <li><a href="userlist.asp?order=desc&by=hits">按查看排名</a></li>
+	<li><a href="userlist.asp?order=desc&by=logins">按登录排名</a></li>
   </ul>
 </li>
 <li><a href="mini.asp">迷你播放器</a></li>

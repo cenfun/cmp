@@ -34,7 +34,7 @@ by=Checkstr(Request.QueryString("by"))
         <form>
           <%
 '查询串
-sql = "select id,lasttime,hits,email,qq,cmp_name,cmp_url,list from cmp_user where userstatus > 4 and setinfo<>1 and "
+sql = "select id,lasttime,hits,logins,email,qq,cmp_name,cmp_url,list from cmp_user where userstatus > 4 and setinfo<>1 and "
 if user_id <> "" then
 	if IsNumeric(user_id) then
 		sql = sql & " id="&user_id&" and "
@@ -55,6 +55,8 @@ select case by
 		sql = sql & " order by cmp_name " & order
 	case "hits"
 		sql = sql & " order by hits " & order
+	case "logins"
+		sql = sql & " order by logins " & order
 	case "lasttime"
 		sql = sql & " order by lasttime " & order
 	case "list"
@@ -91,7 +93,8 @@ IF not rs.EOF Then
             <th><a href="javascript:orderby('id');" title="点击按其排序">ID</a></th>
             <th><a href="javascript:orderby('cmp_name');" title="点击按其排序">播放器名</a></th>
             <th><a href="javascript:orderby('lasttime');" title="点击按其排序">最后更新</a></th>
-            <th><a href="javascript:orderby('hits');" title="点击按其排序">查看次数</a></th>
+            <th><a href="javascript:orderby('hits');" title="点击按其排序">查看</a></th>
+			<th><a href="javascript:orderby('logins');" title="点击按其排序">登录</a></th>
             <th><a href="javascript:orderby('list');" title="点击按其排序">音乐量</a></th>
             <th align="left">CMP播放器地址</th>
             <th>QQ</th>
@@ -103,6 +106,7 @@ IF not rs.EOF Then
             <td><a href="<%=getCmpPageUrl(rs("id"))%>" target="_blank" title="点击打开播放器页面"><%=rs("cmp_name")%></a></td>
             <td title="<%=rs("lasttime")%>"><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><%=rs("hits")%></td>
+			<td><%=rs("logins")%></td>
             <td><%=Len(Trim(rs("list")))%></td>
             <td align="left"><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%></a></td>
             <td title="点击开启QQ对话"><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
