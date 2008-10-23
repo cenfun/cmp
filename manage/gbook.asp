@@ -63,7 +63,7 @@ IF not rs.EOF Then
 <div class="gbox">
   <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>[<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>]<span><%=rs("addtime")%>
     <%if foundadmin then%>
-    IP:<%=rs("user_ip")%>
+    &nbsp;&nbsp;IP:<%=rs("user_ip")%>
     <%end if%>
     </span>
     <%if rs("istop")=1 then%>
@@ -277,10 +277,11 @@ else
 <a name="newpost"></a>
 <%end if%>
 <div class="gbox">
-  <table border="0" cellspacing="1" cellpadding="2" class="tablelist" width="100%">
+  <table border="0" cellspacing="1" cellpadding="2" width="100%">
     <form action="gbook.asp?action=save_post&deal=<%=deal%>" method="post" onSubmit="return check_post(this);">
       <tr>
-        <td colspan="2" height="24" align="center"><strong><%=formtitle%>留言</strong>
+        <td>&nbsp;</td>
+        <td height="24"><strong><%=formtitle%>留言</strong>
           <%if deal="edit" then%>
           <input name="id" type="hidden" value="<%=id%>" />
           <%end if%></td>
