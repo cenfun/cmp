@@ -101,12 +101,12 @@ IF not rs.EOF Then
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
             <td><%=rs("id")%></td>
             <td><a href="<%=getCmpPageUrl(rs("id"))%>" target="_blank" title="点击打开播放器页面"><%=rs("cmp_name")%></a></td>
-            <td><%=FormatDateTime(rs("lasttime"),2)%></td>
+            <td title="<%=rs("lasttime")%>"><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><%=rs("hits")%></td>
             <td><%=Len(Trim(rs("list")))%></td>
             <td align="left"><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%></a></td>
-            <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
-            <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
+            <td title="点击开启QQ对话"><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
+            <td title="点击发送邮件"><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
