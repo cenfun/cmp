@@ -769,17 +769,18 @@ sub skins()
 dim deal
 deal = Request.QueryString("deal")
 if deal<>"" then
-	dim id,title,src,mixer_id,mixer_color,show_tip
+	dim id,title,src,bgcolor,mixer_id,mixer_color,show_tip
 	select case deal
 		case "add"
 			title = Checkstr(Request.Form("skin_title"))
 			src = Checkstr(Request.Form("skin_src"))
+			bgcolor = Checkstr(Request.Form("skin_bgcolor"))
 			mixer_id = Checkstr(Request.Form("skin_mixer_id"))
 			mixer_color = Checkstr(Request.Form("skin_mixer_color"))
 			show_tip = Checkstr(Request.Form("skin_show_tip"))
 			sql = "insert into cmp_skins "
-			sql = sql & "(title,src,mixer_id,mixer_color,show_tip) values("
-			sql = sql & "'"&title&"','"&src&"','"&mixer_id&"','"&mixer_color&"','"&show_tip&"')"
+			sql = sql & "(title,src,bgcolor,mixer_id,mixer_color,show_tip) values("
+			sql = sql & "'"&title&"','"&src&"','"&bgcolor&"','"&mixer_id&"','"&mixer_color&"','"&show_tip&"')"
 			conn.execute(sql)
 		case "del"
 			id = Checkstr(Request.QueryString("id"))
@@ -788,11 +789,12 @@ if deal<>"" then
 			id = Checkstr(Request.QueryString("id"))
 			title = Checkstr(Request.Form("skin_title"))
 			src = Checkstr(Request.Form("skin_src"))
+			bgcolor = Checkstr(Request.Form("skin_bgcolor"))
 			mixer_id = Checkstr(Request.Form("skin_mixer_id"))
 			mixer_color = Checkstr(Request.Form("skin_mixer_color"))
 			show_tip = Checkstr(Request.Form("skin_show_tip"))
 			sql = "update cmp_skins set "
-			sql = sql & "title='"&title&"',src='"&src&"',mixer_id='"&mixer_id&"',mixer_color='"&mixer_color&"',show_tip='"&show_tip&"' "
+			sql = sql & "title='"&title&"',src='"&src&"',bgcolor='"&bgcolor&"',mixer_id='"&mixer_id&"',mixer_color='"&mixer_color&"',show_tip='"&show_tip&"' "
 			sql = sql & "where id="&id&" "
 			conn.execute(sql)
 		case else
@@ -810,12 +812,14 @@ else
           <tr align="center">
             <td><input name="skin_title" type="text" maxlength="50" /></td>
             <td><input name="skin_src" type="text" maxlength="200" /></td>
-            <td>混音器ID
+            <td>背景色
+            <input name="skin_bgcolor" type="text" size="7" maxlength="7" />
+			混音器ID
             <input name="skin_mixer_id" type="text" size="2" maxlength="2" />
             混音器颜色
-            <input name="skin_mixer_color" type="text" size="10" maxlength="10" />
+            <input name="skin_mixer_color" type="text" size="7" maxlength="7" />
             提示信息延时
-            <input name="skin_show_tip" type="text" size="10" maxlength="10" /></td>
+            <input name="skin_show_tip" type="text" size="5" maxlength="10" /></td>
             <td colspan="3"><input name="add_submit" type="submit" value="添加皮肤" /></td>
           </tr>
         </form>
@@ -839,12 +843,14 @@ else
           <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
             <td><input name="skin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
             <td><input name="skin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
-            <td>混音器ID
+            <td>背景色
+            <input name="skin_bgcolor" type="text" value="<%=rs("bgcolor")%>" size="7" maxlength="7" />
+			混音器ID
             <input name="skin_mixer_id" type="text" value="<%=rs("mixer_id")%>" size="2" maxlength="2" />
             混音器颜色
-            <input name="skin_mixer_color" type="text" value="<%=rs("mixer_color")%>" size="10" maxlength="10" />
+            <input name="skin_mixer_color" type="text" value="<%=rs("mixer_color")%>" size="7" maxlength="7" />
             提示信息延时
-            <input name="skin_show_tip" type="text" value="<%=rs("show_tip")%>" size="10" maxlength="10" /></td>
+            <input name="skin_show_tip" type="text" value="<%=rs("show_tip")%>" size="5" maxlength="10" /></td>
             <td><input name="edit_submit" type="submit" value="修改" /></td>
             <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&amp;skin_src=" & rs("src")%>');" /></td>
             <td><input name="del_submit" type="button" value="删除" onclick="skin_del('<%=rs("id")%>');" /></td>

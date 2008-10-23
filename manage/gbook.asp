@@ -34,8 +34,8 @@ sub main()
 </div>
 <%
 '查询串
-'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
-sql = "select g.id,g.user_id,g.user_ip,g.title,g.content,g.replay,g.istop,g.hidden,g.addtime,g.replytime,u.cmp_name from cmp_gbook g inner join cmp_user u on g.user_id=u.id order by istop desc, addtime desc"
+'id,user_id,user_ip,title,content,reply,istop,hidden,addtime,replytime
+sql = "select g.id,g.user_id,g.user_ip,g.title,g.content,g.reply,g.istop,g.hidden,g.addtime,g.replytime,u.cmp_name from cmp_gbook g inner join cmp_user u on g.user_id=u.id order by istop desc, addtime desc"
 'response.Write(sql)
 '分页设置
 dim page,CurrentPage
@@ -75,14 +75,14 @@ IF not rs.EOF Then
   	if rs("hidden")=0 or foundadmin or rs("user_id")=Session(CookieName & "_userid") then
 	%>
     <%=HTMLEncode(rs("content"))%>
-    <%if rs("replay")<>"" then%>
+    <%if rs("reply")<>"" then%>
     <div class="greply">
       <div>管理员回复：<span><%=rs("replytime")%></span></div>
-      <div style="padding:5px 0px;"><%=HTMLEncode(rs("replay"))%></div>
+      <div style="padding:5px 0px;"><%=HTMLEncode(rs("reply"))%></div>
     </div>
     <%end if%>
     <%if foundadmin then%>
-    <textarea id="reply<%=rs("id")%>" style="display:none;"><%=XMLEncode(UnCheckStr(rs("replay")))%></textarea>
+    <textarea id="reply<%=rs("id")%>" style="display:none;"><%=XMLEncode(UnCheckStr(rs("reply")))%></textarea>
     <div id="replyform<%=rs("id")%>"></div>
     <%end if%>
     <%
@@ -94,7 +94,7 @@ IF not rs.EOF Then
     <%if foundadmin or rs("user_id")=Session(CookieName & "_userid") then%>
     <div class="gadmin"><a href="javascript:delpost(<%=rs("id")%>)">删除</a> | <a href="gbook.asp?action=show_post&deal=edit&id=<%=rs("id")%>">编辑</a>
       <%if foundadmin then%>
-      <%if rs("replay")<>"" then%>
+      <%if rs("reply")<>"" then%>
       | <a href="javascript:replypost(<%=rs("id")%>)">编辑回复</a>
       <%else%>
       | <a href="javascript:replypost(<%=rs("id")%>)">回复</a>
@@ -383,7 +383,7 @@ if foundadmin then
 	reply=Checkstr(Request.Form("reply"))
 	if id<>"" then
 		if isNumeric(id) then
-			conn.execute("update cmp_gbook set replay='"&reply&"',replytime="&SqlNowString&" where id="&id&" ")
+			conn.execute("update cmp_gbook set reply='"&reply&"',replytime="&SqlNowString&" where id="&id&" ")
 			response.Redirect(Request.ServerVariables("HTTP_REFERER"))
 		end if
 	end if
@@ -395,7 +395,7 @@ end sub
 
 
 sub save_post()
-'id,user_id,user_qq,user_email,user_ip,title,content,replay,istop,hidden,addtime,replytime
+'id,user_id,user_ip,title,content,reply,istop,hidden,addtime,replytime
 '用户已经登录
 if founduser then
 	dim deal,id,title,content,hidden,referer

@@ -53,6 +53,7 @@ if not rs.eof then
 		skinlist = skinlist & "<skin title=""" & XMLEncode(rs("title")) & """ "
 		skinlist = skinlist & "preview=""" & cmp_show_url & "&amp;skin_src=" & XMLEncode(rs("src")) & """ "
 		skinlist = skinlist & "src=""" & XMLEncode(rs("src")) & """ "
+		skinlist = skinlist & "bgcolor=""" & XMLEncode(rs("bgcolor")) & """ "
 		skinlist = skinlist & "mixer_id=""" & XMLEncode(rs("mixer_id")) & """ "
 		skinlist = skinlist & "mixer_color=""" & XMLEncode(rs("mixer_color")) & """ "
 		skinlist = skinlist & "show_tip=""" & XMLEncode(rs("show_tip")) & """ />"
