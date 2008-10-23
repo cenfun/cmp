@@ -479,7 +479,6 @@ sub menu()
   <ul class="nav" id="mymenu">
     <%If Session(CookieName & "_username")<>"" then%>
     <li class="right"><a href="index.asp?action=logout">退出</a></li>
-    <li class="right"><a href="manage.asp?action=userinfo">个人资料</a></li>
     <%If Session(CookieName & "_admin")<>"" then%>
     <li class="right"><a href="system.asp">系统管理</a>
       <ul>
@@ -490,6 +489,7 @@ sub menu()
       </ul>
     </li>
     <%end if%>
+    <li class="right"><a href="manage.asp?action=userinfo">个人资料</a></li>
     <li class="right"><span>欢迎：<%=Session(CookieName & "_username")%></span></li>
     <li><a href="manage.asp">调用代码</a></li>
     <li><a href="manage.asp?action=config" title="Config">配置编辑</a>
