@@ -568,10 +568,17 @@ userid = Session(CookieName & "_userid")
 cmp_url = getCmpUrl(userid)
 cmp_page_url = getCmpPageUrl(userid)
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+<table border="0" cellpadding="3" cellspacing="2" class="tableborder" width="98%">
+  <tr>
+    <th colspan="2" align="left">调用代码：</th>
+  </tr>
   <tr>
     <td width="10%" align="right">CMP调用地址：</td>
     <td width="90%"><a href="<%=cmp_url%>&" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%></strong></a></td>
+  </tr>
+  <tr>
+    <td align="right">.swf后缀型地址：</td>
+    <td><a href="<%=cmp_url%>&amp;cmp.swf" target="_blank"><%=cmp_url%>&amp;cmp.swf</a></td>
   </tr>
   <tr>
     <td align="right">页面地址：</td>
