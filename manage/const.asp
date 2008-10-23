@@ -513,7 +513,6 @@ sub menu()
   </ul>
 </div>
 <script type="text/javascript">
-initmenu("mymenu");
 function initmenu(o) {
 	var menu = document.getElementById(o);
 	var as = menu.getElementsByTagName("a");
@@ -534,17 +533,14 @@ function checkDropList(ta, tn) {
 }
 function addMenuEvent(ta, tn) {
 	tn.style.display = "none";
+	ta.className = "drop";
 	var tp = ta.parentNode;
 	if (tp) {
-		//alert(tp.nodeName);
-		tp.onmouseover = function(e) {
-			tn.style.display = "";
-		}
-		tp.onmouseout = function(e) {
-			tn.style.display = "none";
-		}
+		tp.onmouseover = function(e) {tn.style.display = "";}
+		tp.onmouseout = function(e) {tn.style.display = "none";}
 	}
 }
+initmenu("mymenu");
 </script>
 <%
 if site_ad_top<>"" then
@@ -608,7 +604,7 @@ if site_ad_bottom<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_bottom&"</div>")
 end if
 %>
-<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a>. All Rights Reserved. Powered by <a href="http://www.cenfun.com/" target="_blank">CenFun</a> <%=siteVersion%><span>
+<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a> <a href="http://code.google.com/p/cenfunmusicplayer/" target="_blank"><%=siteVersion%></a>. All Rights Reserved. Powered by <a href="http://www.cenfun.com/" target="_blank">CenFun</a><span>
   <!--页底站点统计，请更换成您自己的：-->
   <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
   </span></div>

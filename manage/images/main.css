@@ -19,8 +19,8 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .gbox { margin:0px auto; border:1px solid #ADC4DF; margin-bottom:5px; background-color:#FFFFFF; width:98%; word-break:break-all; overflow:auto; }
 .gtitle { cursor:pointer; padding:5px 5px; color:#666666; }
 .gtitle strong { margin-right:10px; color:#000000; font-size:14px; }
-.gtitle span { font-size:10px; margin-left:10px; color:#999999;}
-.gtitle a:link, .gtitle a:visited{ color:#666666; }
+.gtitle span { font-size:10px; margin-left:10px; color:#999999; }
+.gtitle a:link, .gtitle a:visited { color:#666666; }
 .gcontent { padding:5px 5px; word-break:break-all; border-top:1px solid #eeeeee; color:#333333; }
 .greply { padding:5px 5px; margin-top:8px; border:1px dashed #eeeeee; word-break:break-all; background-color:#fcfcfc; }
 .greply span { color:#999999; font-size:10px; }
@@ -34,8 +34,9 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .nav li { position:relative; float:left; list-style:none; color:#FFFFFF; }
 .nav li.right { float:right; }
 .nav li span { margin-right:5px; }
-.nav li a:link, .nav li a:visited { display:block; color:#FFFFFF; line-height:32px; padding:0px 8px; font-weight:bold; }
+.nav li a:link, .nav li a:visited { font-family:"宋体"; display:block; color:#FFFFFF; line-height:32px; padding:0px 10px; font-weight:bold; }
 .nav li a:hover { }
+.nav li a.drop { background:url(dot.gif) no-repeat right; margin-right:7px; }
 .nav li ul { list-style:none; position: absolute; margin:0px 0px; margin:0px 0px; padding:0px 0px 5px 0px; background-color:#438BDA; }
 .nav li ul li { height:27px; width:100%; margin:0px 0px; float:none; }
 .nav li ul li a:link, .nav li ul li a:visited { display:block; white-space: nowrap; height:27px; line-height:27px; }
