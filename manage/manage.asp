@@ -101,7 +101,7 @@ if not rs.eof then
 		dim cr
 		cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
 		strContent = "<cmp name="""" url="""" list="""" >" & cr
-		strContent = strContent & "<config language="""" play_mode="""" skin_id="""" list_id="""" volume="""" auto_play="""" max_video="""" "
+		strContent = strContent & "<config language="""" play_mode="""" skin_id="""" list_id="""" volume="""" auto_play="""" max_video="""" bgcolor="""" "
 		strContent = strContent & "mixer_id="""" mixer_color="""" mixer_filter="""" mixer_displace="""" "
 		strContent = strContent & "buffer="""" timeout="""" show_tip="""" context_menu="""" video_smoothing="""" plugins_disabled="""" check_policyfile=""""  />" & cr
 		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
