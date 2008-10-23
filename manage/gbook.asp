@@ -420,8 +420,8 @@ if founduser then
 		cenfun_suc(referer)
 	else
 		if Request.Cookies(CookieName)("posttime")<>empty then
- 	   		if DateDiff("s",Request.Cookies(CookieName)("posttime"),SystemTime) < 30 then
-	    		ErrMsg="请不要在30秒内重复提交"
+ 	   		if DateDiff("s",Request.Cookies(CookieName)("posttime"),SystemTime) < 60 then
+	    		ErrMsg="请不要在60秒内重复提交"
  	   		end if
 		end if
 		if ErrMsg<>"" then
