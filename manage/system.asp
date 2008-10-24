@@ -2,6 +2,7 @@
 <!--#include file="const.asp"-->
 <!--#include file="md5.asp"-->
 <%
+site_title = "系统管理"
 '检测管理员是否登录
 If founduser and foundadmin Then
 	header()

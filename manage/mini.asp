@@ -1,6 +1,7 @@
 ﻿<!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
 <% 
+site_title = "迷你播放器"
 header()
 menu()
 main()

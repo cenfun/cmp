@@ -2,6 +2,7 @@
 <!--#include file="const.asp"-->
 <!--#include file="md5.asp"-->
 <%
+site_title = "首页"
 if Request.QueryString("username")<>"" then
 	checkuser()
 else

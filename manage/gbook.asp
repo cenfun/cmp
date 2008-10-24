@@ -1,6 +1,7 @@
 ﻿<!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
 <% 
+site_title = "留言簿"
 header()
 menu()
 Select Case Request.QueryString("action")

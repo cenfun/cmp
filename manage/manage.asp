@@ -2,6 +2,7 @@
 <!--#include file="const.asp"-->
 <!--#include file="md5.asp"-->
 <%
+site_title = "管理中心"
 '检测用户是否登录
 If founduser Then
 	Select Case Request.QueryString("handler")

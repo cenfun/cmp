@@ -1,6 +1,7 @@
 ﻿<!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
 <% 
+site_title = "用户列表"
 Select Case Request.QueryString("action")
 	Case "hits"
 		hits()

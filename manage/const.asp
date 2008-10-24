@@ -18,7 +18,7 @@ IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
 End IF
 
 Arr_system_info=Application(CookieName&"_Arr_system_info")
-Dim cmp_path,site_name,site_url,site_qq,site_email,site_count,site_ads,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
+Dim cmp_path,site_title,site_name,site_url,site_qq,site_email,site_count,site_ads,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
 cmp_path = Arr_system_info(0,0)
 site_name = Arr_system_info(1,0)
 site_url = Arr_system_info(2,0)
@@ -459,6 +459,12 @@ end function
 
 '公共头
 Sub header()
+dim mytitle
+if site_title<>"" then
+	mytitle=site_name&" - "&site_title
+else
+	mytitle=site_name
+end if
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -467,7 +473,7 @@ Sub header()
 <meta name="Keywords" content="CMP,Manage,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
 <meta name="Description" content="CenFun Music Player v3.0 - bbs.cenfun.com" />
 <meta name="Copyright" content="2006-2008 Cenfun.Com" />
-<title><%=site_name%></title>
+<title><%=mytitle%></title>
 <link rel="stylesheet" type="text/css" href="<%=dbpath%>images/main.css" />
 <script type="text/javascript" src="<%=dbpath%>images/main.js"></script>
 </head>
