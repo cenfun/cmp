@@ -676,6 +676,10 @@ if not rs.eof then
       <td><input name="cmp_url" type="text" id="cmp_url" size="50" maxlength="200" value="<%=rs("cmp_url")%>" /></td>
     </tr>
     <tr>
+      <td align="right">不公开到用户列表：</td>
+      <td><input name="setinfo" type="checkbox" value="1" <%if rs("setinfo")=1 then%>checked="checked"<%end if%> /></td>
+    </tr>
+    <tr>
       <td align="right">播放器地址：</td>
       <td><a href="<%=cmpurl%>&" target="_blank"><%=cmpurl%></a></td>
     </tr>
@@ -732,7 +736,7 @@ if id <> "" then
 		sql = "select username from cmp_user where id="&id
 		set rs = conn.execute(sql)
 		if not rs.eof then
-			dim password,logins,hits,email,qq,cmp_name,cmp_url,config,list
+			dim password,logins,hits,email,qq,cmp_name,cmp_url,setinfo,config,list
 			if Request.Form("password")<>"" then
 				password=md5(Request.Form("password")+rs("username"),16)
 				conn.execute("update cmp_user set [password]='"&password&"' where username='"&rs("username")&"'")
@@ -743,6 +747,12 @@ if id <> "" then
 			qq=Checkstr(Request.Form("qq"))
 			cmp_name=Checkstr(Request.Form("cmp_name"))
 			cmp_url=Checkstr(Request.Form("cmp_url"))
+			setinfo=Checkstr(Request.Form("setinfo"))
+			if setinfo<>"" then
+				setinfo=1
+			else
+				setinfo=0
+			end if
 			'正则替换配置文件列表地址，名称，网站
 			config = setLNU(request.Form("config"), xml_make, xml_path, xml_list, id, cmp_name, cmp_url)
 			list = request.Form("list")
@@ -753,7 +763,7 @@ if id <> "" then
 			end if
 			'保存至数据库
 			sql = "update cmp_user set logins="&logins&",hits="&hits&",email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
-			sql = sql & "config='"&CheckStr(config)&"',list='"&CheckStr(list)&"' where username='"&rs("username")&"' "
+			sql = sql & "setinfo="&setinfo&",config='"&CheckStr(config)&"',list='"&CheckStr(list)&"' where username='"&rs("username")&"' "
 			'response.Write(sql)
 			conn.execute(sql)
 			SucMsg="修改成功！"

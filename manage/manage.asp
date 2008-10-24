@@ -482,7 +482,9 @@ if Request.QueryString("do")="info" then
 	cmp_name=Checkstr(Request.Form("cmp_name"))
 	cmp_url=Checkstr(Request.Form("cmp_url"))
 	setinfo=Checkstr(Request.Form("setinfo"))
-	if setinfo="" then
+	if setinfo<>"" then
+		setinfo=1
+	else
 		setinfo=0
 	end if
 	
