@@ -10,37 +10,68 @@ footer()
 sub main()
 %>
 <script type="text/javascript">
+var styleId;
 var styleList = new Array();
 //名称，皮肤地址，默认宽，默认高
-styleList.push(["","",0,0]);
+styleList.push(["","","",""]);
 styleList.push(["单播放按钮","mini/btplay.zip",20,15]);
 styleList.push(["播放按钮+进度条黑色","mini/btplay.zip",200,15]);
 styleList.push(["WMP Alone","skins/wmp_alone.zip",600,400]);
 
-
-
+function $(s) {return document.getElementById(s);}
 function showStyleList() {
-	var ss = document.getElementById("styleSelect");
+	var ss = $("styleSelect");
 	ss.onchange = function() {
-		showStyle(ss.value);
+		styleId = ss.value;
+		getStyle();
 	}
 	for (var i = 0; i < styleList.length; i ++) {
 		ss.options.add(new Option(styleList[i][0],i));
 	}
 }
-function showStyle(i) {
+function getStyle() {
+	//取得故意样式宽高设置
+	$("cmp_width").value = styleList[styleId][2];
+	$("cmp_height").value = styleList[styleId][3];
+	showStyle();
+}
+function showStyle() {
+	//迷你设置
 	var miniset = "&context_menu=0&show_tip=0";
-	var musicurl = document.getElementById("musicurl").value;
-	musicurl = escape(musicurl);
+	//取得音乐地址
+	var musicurl = $("musicurl").value;
+	if (musicurl) {
+		musicurl = escape(musicurl);
+	}
+	//取得设置
+	var auto_play = $("cmp_auto_play").checked;
+	var play_mode = $("cmp_play_mode").checked;
+	var bgcolor = $("cmp_bgcolor").value;
+	var cmp_width = $("cmp_width").value;
+	var cmp_height = $("cmp_height").value;
+	var cmp_type = $("cmp_type").value;
+	//生成代码
 	var html = "";
 	var cmpurl = "";
-	if (i > 0) {
-		cmpurl = "<%=getCmpPath()%>?src="+musicurl+"&skin_src="+styleList[i][1]+"&bgcolor=ffffff&play_mode=0&auto_play=1"+miniset;
-		html = getcmp("cmp", styleList[i][2], styleList[i][3], cmpurl, "");
+	if (styleId > 0) {
+		//生成cmp的调用地址
+		cmpurl = "<%=getCmpPath()%>?src="+musicurl+"&skin_src="+styleList[styleId][1];
+		if (auto_play) {cmpurl += "&auto_play=1";}
+		if (play_mode) {cmpurl += "&play_mode=1";}
+		if (bgcolor) {
+			if (bgcolor.charAt(0) == "#") {
+				bgcolor = bgcolor.substring(1);
+			}
+			cmpurl += "&bgcolor="+bgcolor;
+		}
+		if (cmp_type) {cmpurl += "&type="+cmp_type;}
+		cmpurl += miniset;
+		//生成html地址
+		html = getcmp("cmp", cmp_width, cmp_height, cmpurl, "");
 	}
-	document.getElementById("preview").innerHTML = html;
-	document.getElementById("htmlcode").value = html;
-	document.getElementById("flashcode").value = cmpurl;
+	$("preview").innerHTML = html;
+	$("htmlcode").value = html;
+	$("flashcode").value = cmpurl;
 }
 </script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
@@ -52,35 +83,37 @@ function showStyle(i) {
         <div class="mbox">当你在发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供各种Mini播放器供您使用，无需注册，仅仅填写你要播放的音乐或视频地址即可。</div>
         <div class="mbox"><strong>音乐或视频地址：</strong><span>(mp3,flv)</span>
           <div>
-            <input name="" type="text" size="100" id="musicurl" value="http://" onfocus="this.select();" />
+            <input type="text" size="100" id="musicurl" value="" onfocus="this.select();" />
           </div>
         </div>
         <div class="mbox"><strong>选择你想要的样式：</strong>
           <div>
-            <select name="" id="styleSelect">
+            <select id="styleSelect">
             </select>
           </div>
         </div>
         <div class="mbox"><strong>播放器设置：</strong>
-          <table border="0" cellspacing="0" cellpadding="0">
+          <table border="0" cellspacing="5" cellpadding="3">
             <tr>
-              <td align="right">自动播放：</td>
-              <td><input name="" type="checkbox" value="" /></td>
-            </tr>
-            <tr>
-              <td align="right">循环播放：</td>
-              <td><input name="" type="checkbox" value="" /></td>
-            </tr>
-            <tr>
-              <td align="right">背景颜色：</td>
-              <td><input type="text" size="7" maxlength="7" />
-                默认为#181818</td>
-            </tr>
-            <tr>
-              <td align="right">宽度高度：</td>
-              <td><input type="text" size="4" />
-                x
-                <input type="text" size="4" /></td>
+              <td>自动播放
+                <input type="checkbox" value="1" id="cmp_auto_play" /></td>
+              <td>循环播放
+                <input type="checkbox" value="1" id="cmp_play_mode" /></td>
+              <td>背景颜色
+                <input type="text" size="7" maxlength="7" id="cmp_bgcolor" /></td>
+              <td>宽度
+                <input type="text" size="4" id="cmp_width" />
+              </td>
+              <td> 高度
+                <input type="text" size="4" id="cmp_height" /></td>
+              <td>类型
+                <select id="cmp_type">
+                  <option value="">自动识别</option>
+                  <option value="1">mp3音频</option>
+                  <option value="2">flv视频</option>
+                  <option value="3">wmp类型</option>
+                </select></td>
+              <td><input type="button" name="button" id="button" value="更新设置" onclick="showStyle();" /></td>
             </tr>
           </table>
         </div>
