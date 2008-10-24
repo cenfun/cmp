@@ -1,4 +1,6 @@
 ﻿<%
+'连接数据库
+If Not IsObject(conn) Then ConnectionDatabase()
 '系统缓存
 Dim Arr_system_info
 IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
@@ -462,12 +464,12 @@ Sub header()
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="Keywords" content="CMP,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
+<meta name="Keywords" content="CMP,Manage,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
 <meta name="Description" content="CenFun Music Player v3.0 - bbs.cenfun.com" />
-<meta name="copyright" content="2006-2008 Cenfun.Com" />
+<meta name="Copyright" content="2006-2008 Cenfun.Com" />
 <title><%=site_name%></title>
-<link rel="stylesheet" type="text/css" href="images/main.css" />
-<script type="text/javascript" src="images/main.js"></script>
+<link rel="stylesheet" type="text/css" href="<%=dbpath%>images/main.css" />
+<script type="text/javascript" src="<%=dbpath%>images/main.js"></script>
 </head>
 <body>
 <%
