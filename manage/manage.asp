@@ -151,7 +151,7 @@ vars += "&o=manage.asp%3Fhandler%3Dsaveconfigdata";
 vars += "&sl=manage.asp%3Fhandler%3Dgetskins%26rd%3D"+Math.random();
 vars += "&pl=manage.asp%3Fhandler%3Dgetplugins%26rd%3D"+Math.random();
 //id, width, height, cmp url, vars
-showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars);
+showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars, false);
 </script>
     </td>
   </tr>
@@ -249,7 +249,7 @@ var vars = "";
 vars += "i=list.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random();
 vars += "&o=manage.asp%3Fhandler%3Dsavelistdata";
 //id, width, height, cmp url, vars
-showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars);
+showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
 </script>
     </td>
   </tr>
@@ -598,7 +598,7 @@ cmp_page_url = getCmpPageUrl(userid)
   </tr>
   <tr>
     <td align="right">HTML调用代码：</td>
-    <td><textarea id="html_code" name="html_code" style="width:99%;" wrap="virtual" rows="15" onfocus="this.select();"></textarea></td>
+    <td><textarea id="html_code" name="html_code" style="width:99%;" wrap="virtual" rows="12" onfocus="this.select();"></textarea></td>
   </tr>
   <tr>
     <td align="right">&nbsp;</td>
@@ -607,14 +607,7 @@ cmp_page_url = getCmpPageUrl(userid)
 </table>
 <script type="text/javascript">
 function show_code() {
-	var html = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" name="cmp" width="100%" height="600" id="cmp">\n';
-	html += '<param name="movie" value="<%=cmp_url%>" />\n';
-	html += '<param name="quality" value="high" />\n';
-	html += '<param name="allowFullScreen" value="true" />\n';
-	html += '<param name="allowScriptAccess" value="always" />\n';
-	html += '<param name="flashvars" value="" />\n';
-	html += '<embed src="<%=cmp_url%>" width="100%" height="600" quality="high" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" flashvars="" name="cmp"></embed>\n';
-	html += '</object>';
+	html = getcmp("cmp", "100%", "600", "<%=cmp_url%>", "");
 	var textarea = document.getElementById("html_code");
 	textarea.value = html;
 }

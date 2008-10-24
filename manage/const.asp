@@ -69,19 +69,26 @@ function getQqUrl(qq)
 	getQqUrl = "http://wpa.qq.com/msgrd?Uin=" & qq
 end function
 
-'CMP调用地址
-function getCmpUrl(id)
+function getCmpPath()
 	dim cmp
 	'http://
 	if Left(LCase(cmp_path),7)="http://" then
-		cmp = cmp_path & "?url=" & geturl(id)
+		cmp = cmp_path
 	elseif Left(cmp_path,1)="/" then
-		cmp = "http://"&Request.ServerVariables("HTTP_HOST") & cmp_path & "?url=" & geturl(id)
+		cmp = "http://"&Request.ServerVariables("HTTP_HOST") & cmp_path
 	else
 		dim this_path
 		this_path="http://"&Request.ServerVariables("HTTP_HOST")&left(Request.ServerVariables("PATH_INFO"),InStrRev(Request.ServerVariables("PATH_INFO"),"/"))
-		cmp = this_path & cmp_path & "?url=" & geturl(id)
+		cmp = this_path & cmp_path
 	end if
+	getCmpPath = cmp
+end function
+
+'CMP调用地址
+function getCmpUrl(id)
+	dim cmp
+	cmp = getCmpPath()
+	cmp = cmp & "?url=" & geturl(id)
 	getCmpUrl = cmp
 end function
 

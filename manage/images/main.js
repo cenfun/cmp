@@ -1,22 +1,28 @@
 ﻿// CMP v3.0 show
-function showcmp(id, width, height, url, vars, transparent){
+function showcmp(id, width, height, url, vars, transparent) {
+	var html = getcmp(id, width, height, url, vars, transparent);
+	document.write(html);
+}
+function getcmp(id, width, height, url, vars, transparent) {
 	//Window | Opaque | Transparent
-	var wmode = "Opaque";
-	if (transparent) {
+	var wmode = "";
+	if (transparent == true) {
 		wmode = "Transparent";
+	} else if (transparent == false) {
+		wmode = "Opaque";	
 	}
 	var html = '';
 	html += '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,124,0" ';
 	html += 'width="'+width+'" ';
 	html += 'height="'+height+'" ';
 	html += 'id="'+id+'"';
-	html += '>';
-	html += '<param name="movie" value="'+url+'" />';
-	html += '<param name="quality" value="high" />';
-	html += '<param name="allowFullScreen" value="true" />';
-	html += '<param name="allowScriptAccess" value="always" />';
-	html += '<param name="wmode" value="'+wmode+'"/>';
-	html += '<param name="flashvars" value="'+vars+'" />';
+	html += '>\n';
+	html += '<param name="movie" value="'+url+'" />\n';
+	html += '<param name="quality" value="high" />\n';
+	html += '<param name="allowFullScreen" value="true" />\n';
+	html += '<param name="allowScriptAccess" value="always" />\n';
+	if (wmode) {html += '<param name="wmode" value="'+wmode+'"/>\n';}
+	if (vars) {html += '<param name="flashvars" value="'+vars+'" />\n';}
 	//
 	html += '<embed pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" ';
 	html += 'width="'+width+'" ';
@@ -26,11 +32,11 @@ function showcmp(id, width, height, url, vars, transparent){
 	html += 'quality="high"  ';
 	html += 'allowfullscreen="true" ';
 	html += 'allowscriptaccess="always" ';
-	html += 'wmode="'+wmode+'" ';
-	html += 'flashvars="'+vars+'"'
-	html += '></embed>';
+	if (wmode) {html += 'wmode="'+wmode+'" ';}
+	if (vars) {html += 'flashvars="'+vars+'" '}
+	html += '></embed>\n';
 	html += '</object>';
-	document.write(html);
+	return html;
 }
 function ajaxSend(method,url,async,data,completeHd,errorHd) {
 	var xmlHttp = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();

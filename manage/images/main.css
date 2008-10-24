@@ -17,6 +17,7 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .tablelist th a:link, .tablelist th a:visited { color:#428EFF; text-decoration:underline; }
 .tablelist th a:hover { }
 .tablelist td { padding:2px 2px; }
+.mbox { padding:8px 10px; border-bottom:1px dashed #CCCCCC; }
 .gbox { margin:0px auto; border:1px solid #ADC4DF; margin-bottom:5px; background-color:#FFFFFF; width:98%; word-break:break-all; overflow:auto; }
 .gtitle { cursor:pointer; padding:5px 5px; color:#666666; }
 .gtitle strong { color:#000000; font-size:14px; background:url(bullet.gif) no-repeat left; padding:0px 10px 3px 15px;}
