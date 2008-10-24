@@ -15,6 +15,9 @@ var styleList = new Array();
 styleList.push(["","",0,0]);
 styleList.push(["单播放按钮","mini/btplay.zip",20,15]);
 styleList.push(["播放按钮+进度条黑色","mini/btplay.zip",200,15]);
+styleList.push(["WMP Alone","skins/wmp_alone.zip",600,400]);
+
+
 
 function showStyleList() {
 	var ss = document.getElementById("styleSelect");
@@ -26,14 +29,16 @@ function showStyleList() {
 	}
 }
 function showStyle(i) {
-	var preview = document.getElementById("preview");
-	var html = "";
 	var miniset = "&context_menu=0&show_tip=0";
-	var cmpurl = "<%=getCmpPath()%>?skin_src="+styleList[i][1]+"&bgcolor=ffffff&play_mode=0&auto_play=0"+miniset;
+	var musicurl = document.getElementById("musicurl").value;
+	musicurl = escape(musicurl);
+	var html = "";
+	var cmpurl = "";
 	if (i > 0) {
+		cmpurl = "<%=getCmpPath()%>?src="+musicurl+"&skin_src="+styleList[i][1]+"&bgcolor=ffffff&play_mode=0&auto_play=1"+miniset;
 		html = getcmp("cmp", styleList[i][2], styleList[i][3], cmpurl, "");
 	}
-	preview.innerHTML = html;
+	document.getElementById("preview").innerHTML = html;
 	document.getElementById("htmlcode").value = html;
 	document.getElementById("flashcode").value = cmpurl;
 }
@@ -47,7 +52,7 @@ function showStyle(i) {
         <div class="mbox">当你在发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供各种Mini播放器供您使用，无需注册，仅仅填写你要播放的音乐或视频地址即可。</div>
         <div class="mbox"><strong>音乐或视频地址：</strong><span>(mp3,flv)</span>
           <div>
-            <input name="" type="text" size="100" />
+            <input name="" type="text" size="100" id="musicurl" value="http://" onfocus="this.select();" />
           </div>
         </div>
         <div class="mbox"><strong>选择你想要的样式：</strong>
@@ -55,9 +60,6 @@ function showStyle(i) {
             <select name="" id="styleSelect">
             </select>
           </div>
-          <div>
-            <input name="" type="checkbox" value="" />
-            预览所有效果</div>
         </div>
         <div class="mbox"><strong>播放器设置：</strong>
           <table border="0" cellspacing="0" cellpadding="0">
@@ -82,9 +84,6 @@ function showStyle(i) {
             </tr>
           </table>
         </div>
-        <div class="mbox"><strong>效果预览：</strong>
-          <div id="preview"></div>
-        </div>
         <div class="mbox"><strong>调用代码：</strong>
           <div>播放器地址：
             <textarea name="" cols="100" rows="3" id="flashcode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
@@ -92,6 +91,9 @@ function showStyle(i) {
           <div>html代码：
             <textarea name="" cols="100" rows="10" id="htmlcode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
           </div>
+        </div>
+        <div class="mbox"><strong>效果预览：</strong>
+          <div id="preview"></div>
         </div>
       </div></td>
   </tr>
