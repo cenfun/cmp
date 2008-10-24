@@ -101,7 +101,7 @@ IF not rs.EOF Then
             <th>Email</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
-          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
+          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><%=rs("id")%></td>
             <td><a href="<%=getCmpPageUrl(rs("id"))%>" target="_blank" title="点击打开播放器页面"><%=rs("cmp_name")%></a></td>
             <td title="<%=rs("lasttime")%>"><%=FormatDateTime(rs("lasttime"),2)%></td>

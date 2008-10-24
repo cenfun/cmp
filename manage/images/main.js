@@ -53,10 +53,10 @@ function ajaxSend(method,url,async,data,completeHd,errorHd) {
 		xmlHttp.send(data);
 	}
 }
-function highlight(o,c1,c2){
-	o.style.background=c1;
+function highlight(o,c){
+	o.style.backgroundColor=c;
 	o.onmouseout=function(){
-		o.style.background=c2;
+		o.style.backgroundColor="";
 	}
 }
 function CheckAll(o,form){

@@ -61,7 +61,7 @@ IF not rs.EOF Then
 	%>
 <%Do Until rs.EOF OR PageC=rs.PageSize%>
 <div class="gbox">
-  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9','#ffffff');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>[<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>]<span><%=rs("addtime")%>
+  <div class="gtitle" onmouseover="highlight(this,'#F9F9F9');" onclick="shc(<%=rs("id")%>);"><strong><%=HTMLEncode(rs("title"))%></strong>[<a href="userlist.asp?user_id=<%=rs("user_id")%>" target="_blank"><%=rs("cmp_name")%></a>]<span><%=rs("addtime")%>
     <%if foundadmin then%>
     &nbsp;&nbsp;IP:<%=rs("user_ip")%>
     <%end if%>

@@ -474,7 +474,7 @@ IF not rs.EOF Then
 			role = "未定义"
 		end select
 		%>
-          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
+          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
             <%end if%></td>
@@ -850,7 +850,7 @@ else
 		Do Until rs.EOF
 		%>
         <form action="system.asp?action=skins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
-          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
+          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><input name="skin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
             <td><input name="skin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
             <td>背景色
@@ -972,7 +972,7 @@ else
 		Do Until rs.EOF
 		%>
         <form action="system.asp?action=plugins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
-          <tr align="center" onMouseOver="highlight(this,'#F9F9F9','#ffffff');">
+          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><input name="plugin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
             <td><input name="plugin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
             <td>xywh:
