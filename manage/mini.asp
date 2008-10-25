@@ -14,12 +14,12 @@ sub main()
 var styleId;
 //Mini皮肤列表=================================================================
 var styleList = new Array();
-styleList.push(["","","",""]);
+styleList.push(["","","","",""]);
 
-//名称，皮肤地址，默认宽，默认高
-styleList.push(["单播放按钮","mini/btplay.zip",20,15]);
-styleList.push(["播放按钮+进度条黑色","mini/btplay.zip",200,15]);
-styleList.push(["WMP Alone","skins/wmp_alone.zip",600,400]);
+//名称，皮肤地址，默认宽，默认高，补充说明
+styleList.push(["单播放按钮","mini/mini01.zip",25,20,""]);
+styleList.push(["播放按钮+进度条黑色","mini/mini02.zip",200,15,"宽度自适应，可设置为100%"]);
+styleList.push(["WMP Alone","skins/wmp_alone.zip",600,400,""]);
 
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
 
@@ -36,10 +36,12 @@ function showStyleList() {
 	}
 }
 function getStyle() {
-	//取得故意样式宽高设置
+	//取得原有样式宽高设置
 	$("cmp_width").value = styleList[styleId][2];
 	$("cmp_height").value = styleList[styleId][3];
 	showStyle();
+	//详细说明
+	$("readme").innerHTML = styleList[styleId][4];
 }
 function showStyle() {
 	//迷你设置
@@ -73,7 +75,7 @@ function showStyle() {
 		if (cmp_type) {cmpurl += "&type="+cmp_type;}
 		cmpurl += miniset;
 		//生成html地址
-		html = getcmp("cmp", cmp_width, cmp_height, cmpurl, "");
+		html = getcmp("cmp", cmp_width, cmp_height, cmpurl, "", true);
 	}
 	$("htmlcode").value = html;
 	$("flashcode").value = cmpurl;
@@ -92,14 +94,14 @@ function showPreview() {
         <div class="mbox">当你在发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供各种Mini播放器供您使用，无需注册，仅仅填写你要播放的音乐或视频地址即可。</div>
         <div class="mbox"><strong>音乐或视频地址：</strong><span>(mp3,flv)</span>
           <div>
-            <input type="text" size="100" id="musicurl" value="" onfocus="this.select();" />
+            <input type="text" size="100" id="musicurl" value="http://localhost/music/128kbps_44kHz.mp3" onfocus="this.select();" />
           </div>
         </div>
         <div class="mbox"><strong>选择你想要的样式：</strong>
           <div>
             <select id="styleSelect">
             </select>
-          </div>
+            <span id="readme"></span></div>
         </div>
         <div class="mbox"><strong>播放器设置：</strong>
           <table border="0" cellspacing="5" cellpadding="3">
@@ -134,7 +136,8 @@ function showPreview() {
             <textarea name="" cols="100" rows="10" id="htmlcode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
           </div>
         </div>
-        <div class="mbox"><strong>效果预览：</strong><input type="button" value="刷新预览" onclick="showPreview();" />
+        <div class="mbox"><strong>效果预览：</strong>
+          <input type="button" value="刷新预览" onclick="showPreview();" />
           <div id="preview"></div>
         </div>
       </div></td>
