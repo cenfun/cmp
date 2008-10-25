@@ -98,7 +98,7 @@ function showPreview() {
         <div class="mbox">当你在发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供各种Mini播放器供您使用，无需注册，仅仅填写你要播放的音乐或视频地址即可。</div>
         <div class="mbox"><strong>音乐或视频地址：</strong><span>(mp3,flv)</span>
           <div>
-            <input type="text" size="100" id="musicurl" value="http://localhost/music/128kbps_44kHz.mp3" onfocus="this.select();" />
+            <input type="text" size="100" id="musicurl" value="http://localhost/music/128kbps_44kHz.mp3" onfocus="this.select();" onchange="showStyle();" />
           </div>
         </div>
         <div class="mbox"><strong>选择你想要的样式：</strong>
