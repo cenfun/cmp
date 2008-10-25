@@ -69,9 +69,12 @@ function showStyle() {
 		//生成html地址
 		html = getcmp("cmp", cmp_width, cmp_height, cmpurl, "");
 	}
-	$("preview").innerHTML = html;
 	$("htmlcode").value = html;
 	$("flashcode").value = cmpurl;
+	showPreview();
+}
+function showPreview() {
+	$("preview").innerHTML = $("htmlcode").value;
 }
 </script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
@@ -113,19 +116,19 @@ function showStyle() {
                   <option value="2">flv视频</option>
                   <option value="3">wmp类型</option>
                 </select></td>
-              <td><input type="button" name="button" id="button" value="更新设置" onclick="showStyle();" /></td>
+              <td><input type="button" value="更新设置" onclick="showStyle();" /></td>
             </tr>
           </table>
         </div>
         <div class="mbox"><strong>调用代码：</strong>
-          <div>播放器地址：
-            <textarea name="" cols="100" rows="3" id="flashcode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
+          <div>播放器调用地址：
+            <textarea name="" cols="100" rows="2" id="flashcode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
           </div>
           <div>html代码：
             <textarea name="" cols="100" rows="10" id="htmlcode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
           </div>
         </div>
-        <div class="mbox"><strong>效果预览：</strong>
+        <div class="mbox"><strong>效果预览：</strong><input type="button" value="刷新预览" onclick="showPreview();" />
           <div id="preview"></div>
         </div>
       </div></td>
