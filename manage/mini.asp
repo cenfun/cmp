@@ -20,9 +20,10 @@ styleList.push(["","","","",""]);
 styleList.push(["单播放按钮","mini/mini01.zip",25,20,""]);
 styleList.push(["海蓝一","mini/mini02.zip",73,24,"宽度自适应，可设置为100%"]);
 styleList.push(["海蓝二","mini/mini02.zip",200,24,"宽度自适应，可设置为100%"]);
-styleList.push(["Dewplayer Mini","mini/mini03.zip",153,16,""]);
-styleList.push(["Dewplayer Classic","mini/mini03.zip",172,16,""]);
-styleList.push(["Dewplayer Multi","mini/mini03.zip",210,16,""]);
+styleList.push(["Dewplayer Mini","mini/mini03.zip",16,16,"仅播放按钮"]);
+styleList.push(["Dewplayer Basic","mini/mini03.zip",153,16,"播放按钮和进度条"]);
+styleList.push(["Dewplayer Classic","mini/mini03.zip",172,16,"播放，停止，进度条"]);
+styleList.push(["Dewplayer Multi","mini/mini03.zip",201,16,"播放，停止，静音，进度条"]);
 
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
 
