@@ -10,14 +10,20 @@ footer()
 sub main()
 %>
 <script type="text/javascript">
+//当前样式ID
 var styleId;
+//Mini皮肤列表=================================================================
 var styleList = new Array();
-//名称，皮肤地址，默认宽，默认高
 styleList.push(["","","",""]);
+
+//名称，皮肤地址，默认宽，默认高
 styleList.push(["单播放按钮","mini/btplay.zip",20,15]);
 styleList.push(["播放按钮+进度条黑色","mini/btplay.zip",200,15]);
 styleList.push(["WMP Alone","skins/wmp_alone.zip",600,400]);
 
+//如有更多Mini皮肤样式，请安装以上格式在此添加即可
+
+//============================================================================
 function $(s) {return document.getElementById(s);}
 function showStyleList() {
 	var ss = $("styleSelect");
