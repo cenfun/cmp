@@ -18,8 +18,8 @@ styleList.push(["","","","",""]);
 
 //名称，皮肤地址，默认宽，默认高，补充说明
 styleList.push(["单播放按钮","mini/mini01.zip",25,20,""]);
-styleList.push(["播放按钮+进度条黑色","mini/mini02.zip",200,15,"宽度自适应，可设置为100%"]);
-styleList.push(["WMP Alone","skins/wmp_alone.zip",600,400,""]);
+styleList.push(["海蓝一","mini/mini02.zip",73,24,"宽度自适应，可设置为100%"]);
+styleList.push(["海蓝二","mini/mini02.zip",200,24,"宽度自适应，可设置为100%"]);
 
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
 
@@ -138,7 +138,7 @@ function showPreview() {
         </div>
         <div class="mbox"><strong>效果预览：</strong>
           <input type="button" value="刷新预览" onclick="showPreview();" />
-          <div id="preview"></div>
+          <div id="preview" style="margin:10px auto;"></div>
         </div>
       </div></td>
   </tr>
