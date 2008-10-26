@@ -17,7 +17,7 @@ var styleList = new Array();
 styleList.push(["","","","",""]);
 
 //名称，皮肤地址，默认宽，默认高，补充说明
-styleList.push(["单播放按钮","mini/mini01.zip",22,18,"宽度自适应，可设置为100%"]);
+styleList.push(["单播放按钮","mini/mini01.zip",23,18,"宽度自适应，可设置为100%"]);
 styleList.push(["播放+进度条","mini/mini01.zip",200,18,"宽度自适应，可设置为100%"]);
 styleList.push(["Ocean Blue海蓝一","mini/mini02.zip",73,24,"宽度自适应，可设置为100%"]);
 styleList.push(["Ocean Blue海蓝二","mini/mini02.zip",200,24,"宽度自适应，可设置为100%"]);
