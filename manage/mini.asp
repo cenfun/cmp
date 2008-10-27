@@ -25,8 +25,7 @@ styleList.push(["Dewplayer Mini","mini/mini03.zip",16,16,"仅播放按钮"]);
 styleList.push(["Dewplayer Basic","mini/mini03.zip",153,16,"播放按钮和进度条"]);
 styleList.push(["Dewplayer Classic","mini/mini03.zip",172,16,"播放，停止，进度条"]);
 styleList.push(["Dewplayer Multi","mini/mini03.zip",201,16,"播放，停止，静音，进度条"]);
-styleList.push(["视频","mini/mini04.zip",200,16,""]);
-styleList.push(["视频","mini/mini05.zip",200,16,""]);
+styleList.push(["[视频]JW Player","mini/jwplayer.zip",470,290,"宽高可自适应"]);
 
 
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
@@ -102,7 +101,7 @@ function showPreview() {
         <div class="mbox">当你在发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供各种Mini播放器供您使用，无需注册，仅仅填写你要播放的音乐或视频地址即可。</div>
         <div class="mbox"><strong>音乐或视频地址：</strong><span>(mp3,flv)</span>
           <div>
-            <input type="text" size="100" id="musicurl" value="http://localhost/music/128kbps_44kHz.mp3" onfocus="this.select();" onchange="showStyle();" />
+            <input type="text" size="100" id="musicurl" value="http://localhost/music/v1.flv" onfocus="this.select();" onchange="showStyle();" />
           </div>
         </div>
         <div class="mbox"><strong>选择你想要的样式：</strong>
