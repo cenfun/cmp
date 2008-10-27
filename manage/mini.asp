@@ -28,8 +28,11 @@ styleList.push(["Dewplayer Multi","mini/mini03.zip",201,16,true,"播放，停止
 styleList.push(["Blue Player","mini/blueplayer.zip",280,48,true,"宽度自适应"]);
 styleList.push(["[视频]Blue Player(4:3普屏)","mini/blueplayer.zip",320,290,false,"宽高可自适应，请自行调节"]);
 styleList.push(["[视频]Blue Player(16:9宽屏)","mini/blueplayer.zip",400,275,false,"宽高可自适应，请自行调节"]);
-styleList.push(["[视频]JW Player(4:3普屏)","mini/jwplayer/jwplayer.zip",320,260,false,"宽高可自适应，请自行调节"]);
-styleList.push(["[视频]JW Player(16:9宽屏)","mini/jwplayer/jwplayer.zip",470,290,false,"宽高可自适应，请自行调节"]);
+styleList.push(["JW Player","mini/jwplayer.zip",320,20,true,"宽度自适应"]);
+styleList.push(["[视频]JW Player(4:3普屏)","mini/jwplayer.zip",320,260,false,"宽高可自适应，请自行调节"]);
+styleList.push(["[视频]JW Player(16:9宽屏)","mini/jwplayer.zip",470,290,false,"宽高可自适应，请自行调节"]);
+
+
 
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
 
