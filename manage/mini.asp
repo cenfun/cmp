@@ -37,9 +37,6 @@ styleList.push(["QQ Video播放器","mini/qqvideo.zip",480,34,false,"宽度自�
 styleList.push(["[视频]QQ Video播放器","mini/qqvideo.zip",480,320,false,"宽高可自适应，请自行调节"]);
 
 
-
-
-
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
 
 //============================================================================
@@ -117,7 +114,7 @@ function showPreview() {
         <div class="mbox">当你在发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供各种Mini播放器供您使用，无需注册，仅仅填写你要播放的音乐或视频地址即可。</div>
         <div class="mbox"><strong>音乐或视频地址：</strong><span>(mp3,flv)</span>
           <div>
-            <input type="text" size="100" id="musicurl" value="http://localhost/music/v1.flv" onfocus="this.select();" onchange="showStyle();" />
+            <input type="text" size="100" id="musicurl" value="" onfocus="this.select();" onchange="showStyle();" />
           </div>
         </div>
         <div class="mbox"><strong>选择你想要的样式：</strong>
