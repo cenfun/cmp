@@ -10,6 +10,8 @@ footer()
 sub main()
 %>
 <script type="text/javascript">
+//CMP主程序地址
+var cmp = "<%=getCmpPath()%>";
 //当前样式ID
 var styleId;
 //Mini皮肤列表=================================================================
@@ -64,9 +66,13 @@ function showStyle() {
 	var miniset = "&context_menu=0&show_tip=0";
 	//取得音乐地址
 	var musicurl = $("musicurl").value;
+	var musicinfo = "";
 	if (musicurl) {
 		musicurl = escape(musicurl);
+	} else {
+		musicinfo = "当前音乐地址不能为空！";
 	}
+	$("musicinfo").innerHTML = musicinfo;
 	//取得设置
 	var auto_play = $("cmp_auto_play").checked;
 	var play_mode = $("cmp_play_mode").checked;
@@ -79,7 +85,7 @@ function showStyle() {
 	var cmpurl = "";
 	if (styleId > 0) {
 		//生成cmp的调用地址
-		cmpurl = "<%=getCmpPath()%>?src="+musicurl+"&skin_src="+styleList[styleId][1];
+		cmpurl = cmp+"?src="+musicurl+"&skin_src="+styleList[styleId][1];
 		if (auto_play) {cmpurl += "&auto_play=1";}
 		if (play_mode) {cmpurl += "&play_mode=1";}
 		if (bgcolor) {
@@ -115,7 +121,7 @@ function showPreview() {
         <div class="mbox"><strong>音乐或视频地址：</strong><span>(mp3,flv)</span>
           <div>
             <input type="text" size="100" id="musicurl" value="" onfocus="this.select();" onchange="showStyle();" />
-          </div>
+            <span style="color:#FF0000;" id="musicinfo"></span></div>
         </div>
         <div class="mbox"><strong>选择你想要的样式：</strong>
           <div>
