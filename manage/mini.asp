@@ -31,8 +31,8 @@ styleList.push(["[视频]Blue Player(16:9宽屏)","mini/blueplayer.zip",400,275,
 styleList.push(["JW Player","mini/jwplayer.zip",320,20,true,"宽度自适应"]);
 styleList.push(["[视频]JW Player(4:3普屏)","mini/jwplayer.zip",320,260,false,"宽高可自适应，请自行调节"]);
 styleList.push(["[视频]JW Player(16:9宽屏)","mini/jwplayer.zip",470,290,false,"宽高可自适应，请自行调节"]);
-
-
+styleList.push(["Youku优酷播放器","mini/youku.zip",320,40,true,"宽度自适应"]);
+styleList.push(["[视频]Youku优酷播放器","mini/youku.zip",480,320,false,"宽高可自适应，请自行调节"]);
 
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
 
