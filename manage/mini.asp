@@ -14,7 +14,7 @@ sub main()
 var styleId;
 //Mini皮肤列表=================================================================
 var styleList = new Array();
-styleList.push(["","","","",""]);
+styleList.push(["","","","","",""]);
 
 //名称，皮肤地址，默认宽，默认高，是否需要支持透明，补充说明
 styleList.push(["单播放按钮","mini/mini01.zip",23,18,true,"宽度自适应，可设置为100%"]);
