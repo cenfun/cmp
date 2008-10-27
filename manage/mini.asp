@@ -16,17 +16,20 @@ var styleId;
 var styleList = new Array();
 styleList.push(["","","","",""]);
 
-//名称，皮肤地址，默认宽，默认高，补充说明
-styleList.push(["单播放按钮","mini/mini01.zip",23,18,"宽度自适应，可设置为100%"]);
-styleList.push(["播放+进度条","mini/mini01.zip",200,18,"宽度自适应，可设置为100%"]);
-styleList.push(["Ocean Blue海蓝一","mini/mini02.zip",73,24,"宽度自适应，可设置为100%"]);
-styleList.push(["Ocean Blue海蓝二","mini/mini02.zip",200,24,"宽度自适应，可设置为100%"]);
-styleList.push(["Dewplayer Mini","mini/mini03.zip",16,16,"仅播放按钮"]);
-styleList.push(["Dewplayer Basic","mini/mini03.zip",153,16,"播放按钮和进度条"]);
-styleList.push(["Dewplayer Classic","mini/mini03.zip",172,16,"播放，停止，进度条"]);
-styleList.push(["Dewplayer Multi","mini/mini03.zip",201,16,"播放，停止，静音，进度条"]);
-styleList.push(["[视频]JW Player","mini/jwplayer.zip",470,290,"宽高可自适应"]);
-
+//名称，皮肤地址，默认宽，默认高，是否需要支持透明，补充说明
+styleList.push(["单播放按钮","mini/mini01.zip",23,18,true,"宽度自适应，可设置为100%"]);
+styleList.push(["播放+进度条","mini/mini01.zip",200,18,true,"宽度自适应，可设置为100%"]);
+styleList.push(["Ocean Blue海蓝一","mini/mini02.zip",73,24,true,"宽度自适应，可设置为100%"]);
+styleList.push(["Ocean Blue海蓝二","mini/mini02.zip",200,24,true,"宽度自适应，可设置为100%"]);
+styleList.push(["Dewplayer Mini","mini/mini03.zip",16,16,true,"仅播放按钮"]);
+styleList.push(["Dewplayer Basic","mini/mini03.zip",153,16,true,"播放按钮和进度条"]);
+styleList.push(["Dewplayer Classic","mini/mini03.zip",172,16,true,"播放，停止，进度条"]);
+styleList.push(["Dewplayer Multi","mini/mini03.zip",201,16,true,"播放，停止，静音，进度条"]);
+styleList.push(["Blue Player","mini/blueplayer.zip",280,48,true,"宽度自适应"]);
+styleList.push(["[视频]Blue Player(4:3普屏)","mini/blueplayer.zip",320,290,false,"宽高可自适应，请自行调节"]);
+styleList.push(["[视频]Blue Player(16:9宽屏)","mini/blueplayer.zip",400,275,false,"宽高可自适应，请自行调节"]);
+styleList.push(["[视频]JW Player(4:3普屏)","mini/jwplayer/jwplayer.zip",320,260,false,"宽高可自适应，请自行调节"]);
+styleList.push(["[视频]JW Player(16:9宽屏)","mini/jwplayer/jwplayer.zip",470,290,false,"宽高可自适应，请自行调节"]);
 
 //如有更多Mini皮肤样式，请安装以上格式在此添加即可
 
@@ -48,7 +51,7 @@ function getStyle() {
 	$("cmp_height").value = styleList[styleId][3];
 	showStyle();
 	//详细说明
-	$("readme").innerHTML = styleList[styleId][4];
+	$("readme").innerHTML = styleList[styleId][5];
 }
 function showStyle() {
 	//迷你设置
@@ -82,7 +85,11 @@ function showStyle() {
 		if (cmp_type) {cmpurl += "&type="+cmp_type;}
 		cmpurl += miniset;
 		//生成html地址
-		html = getcmp("cmp", cmp_width, cmp_height, cmpurl, "", true);
+		var wmode;
+		if (styleList[styleId][4]) {
+			wmode = true;
+		}
+		html = getcmp("cmp", cmp_width, cmp_height, cmpurl, "", wmode);
 	}
 	$("htmlcode").value = html;
 	$("flashcode").value = cmpurl;
