@@ -551,7 +551,7 @@ function addMenuEvent(ta, tn) {
 	ta.className = "drop";
 	var tp = ta.parentNode;
 	if (tp) {
-		tp.onmouseover = function(e) {tn.style.display = "";}
+		tp.onmouseover = function(e) {tn.style.display = "block";}
 		tp.onmouseout = function(e) {tn.style.display = "none";}
 	}
 }
