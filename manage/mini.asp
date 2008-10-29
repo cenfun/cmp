@@ -68,7 +68,7 @@ function showStyle() {
 	var musicurl = $("musicurl").value;
 	var musicinfo = "";
 	if (musicurl) {
-		musicurl = escape(musicurl);
+		musicurl = encodeURIComponent(musicurl);
 	} else {
 		musicinfo = "当前音乐地址不能为空！";
 	}
@@ -85,7 +85,7 @@ function showStyle() {
 	var cmpurl = "";
 	if (styleId > 0) {
 		//生成cmp的调用地址
-		cmpurl = cmp+"?src="+musicurl+"&skin_src="+styleList[styleId][1];
+		cmpurl = cmp+"?src="+musicurl+"&skin_src="+encodeURIComponent(styleList[styleId][1]);
 		if (auto_play) {cmpurl += "&auto_play=1";}
 		if (play_mode) {cmpurl += "&play_mode=1";}
 		if (bgcolor) {
