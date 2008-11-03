@@ -289,7 +289,7 @@ sub login()
 	verifycode=Checkstr(Request.Form("verifycode"))
 	If verifycode="" or verifycode<>session("verifycode") Then
 		session("verifycode")=""
-		goback("验证码输入有误！请重新输入正确的信息。")
+		goback("验证码输入有误！请刷新页面重新输入正确的信息。")
     	response.End
 		Exit Sub
 	Elseif 	session("verifycode")="" then
