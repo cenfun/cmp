@@ -547,7 +547,6 @@ function checkDropList(ta, tn) {
 	}
 }
 function addMenuEvent(ta, tn) {
-	tn.style.display = "none";
 	ta.className = "drop";
 	var tp = ta.parentNode;
 	if (tp) {
