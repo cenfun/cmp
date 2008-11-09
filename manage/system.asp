@@ -271,11 +271,11 @@ sub save_config()
 	site_ad_top=Checkstr(Request.Form("site_ad_top"))
 	site_ad_bottom=Checkstr(Request.Form("site_ad_bottom"))
 	site_ads=site_ad_news &"{|}"& site_ad_top &"{|}"& site_ad_bottom
-	user_reg=Request.Form("user_reg")
-	user_check=Request.Form("user_check")
+	user_reg=Checkstr(Request.Form("user_reg"))
+	user_check=Checkstr(Request.Form("user_check"))
 	'静态数据设置
 	dim xmlmake,xmlpath,xmlconfig,xmllist
-	xmlmake=Request.Form("xml_make")
+	xmlmake=Checkstr(Request.Form("xml_make"))
 	xmlpath=Checkstr(Request.Form("xml_path"))
 	xmlconfig=Checkstr(Request.Form("xml_config"))
 	xmllist=Checkstr(Request.Form("xml_list"))
