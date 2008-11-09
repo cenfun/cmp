@@ -63,7 +63,7 @@ function getStyle() {
 }
 function showStyle() {
 	//迷你设置
-	var miniset = "&context_menu=0&show_tip=0&plugins_disabled=1";
+	var miniset = "&context_menu=0&show_tip=0&plugins_disabled=1&c.swf";
 	//取得音乐地址
 	var musicurl = $("musicurl").value;
 	var musicinfo = "";
