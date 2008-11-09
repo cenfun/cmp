@@ -105,6 +105,11 @@ sub config()
               <td>ID匹配列表文件的文件名：</td>
               <td><input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
             </tr>
+            <%if xml_make="1" then%>
+            <tr>
+              <td colspan="2"><input type="button" value="手动重建所有静态数据文件" onclick="window.location='system.asp?action=remake';" /></td>
+            </tr>
+            <%end if%>
           </table>
         </div>
         <div style="color:#0000FF;">
@@ -183,11 +188,6 @@ function check(o){
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
     <th colspan="2" align="left">数据管理：</th>
-  </tr>
-  <tr>
-    <td align="right" width="20%">手动重建所有静态数据文件：</td>
-    <td width="80%"><input name="按钮" type="button" style="width:80px;" value="开始" onclick="window.location='system.asp?action=remake';" />
-    将重新生成所有用户的xml文件</td>
   </tr>
   <tr>
     <td align="right">数据库路径：</td>
@@ -492,7 +492,7 @@ IF not rs.EOF Then
           <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
-            <%end if%></td>
+              <%end if%></td>
             <td><%=role%></td>
             <td><%=rs("id")%></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>" title="点击查看和编辑详细资料"><%=rs("username")%></a></td>
@@ -838,13 +838,13 @@ else
             <td><input name="skin_title" type="text" maxlength="50" /></td>
             <td><input name="skin_src" type="text" maxlength="200" /></td>
             <td>背景色
-            <input name="skin_bgcolor" type="text" size="7" maxlength="7" />
-			混音器ID
-            <input name="skin_mixer_id" type="text" size="2" maxlength="2" />
-            混音器颜色
-            <input name="skin_mixer_color" type="text" size="7" maxlength="7" />
-            提示信息延时
-            <input name="skin_show_tip" type="text" size="5" maxlength="10" /></td>
+              <input name="skin_bgcolor" type="text" size="7" maxlength="7" />
+              混音器ID
+              <input name="skin_mixer_id" type="text" size="2" maxlength="2" />
+              混音器颜色
+              <input name="skin_mixer_color" type="text" size="7" maxlength="7" />
+              提示信息延时
+              <input name="skin_show_tip" type="text" size="5" maxlength="10" /></td>
             <td colspan="3"><input name="add_submit" type="submit" value="添加皮肤" /></td>
           </tr>
         </form>
@@ -869,13 +869,13 @@ else
             <td><input name="skin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
             <td><input name="skin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
             <td>背景色
-            <input name="skin_bgcolor" type="text" value="<%=rs("bgcolor")%>" size="7" maxlength="7" />
-			混音器ID
-            <input name="skin_mixer_id" type="text" value="<%=rs("mixer_id")%>" size="2" maxlength="2" />
-            混音器颜色
-            <input name="skin_mixer_color" type="text" value="<%=rs("mixer_color")%>" size="7" maxlength="7" />
-            提示信息延时
-            <input name="skin_show_tip" type="text" value="<%=rs("show_tip")%>" size="5" maxlength="10" /></td>
+              <input name="skin_bgcolor" type="text" value="<%=rs("bgcolor")%>" size="7" maxlength="7" />
+              混音器ID
+              <input name="skin_mixer_id" type="text" value="<%=rs("mixer_id")%>" size="2" maxlength="2" />
+              混音器颜色
+              <input name="skin_mixer_color" type="text" value="<%=rs("mixer_color")%>" size="7" maxlength="7" />
+              提示信息延时
+              <input name="skin_show_tip" type="text" value="<%=rs("show_tip")%>" size="5" maxlength="10" /></td>
             <td><input name="edit_submit" type="submit" value="修改" /></td>
             <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&amp;skin_src=" & rs("src")%>');" /></td>
             <td><input name="del_submit" type="button" value="删除" onclick="skin_del('<%=rs("id")%>');" /></td>
@@ -887,7 +887,7 @@ else
 		rs.close
 		set rs = nothing
 		%>
-    </table></td>
+      </table></td>
   </tr>
 </table>
 <script type="text/javascript">
