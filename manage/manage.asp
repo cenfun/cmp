@@ -578,11 +578,7 @@ cmp_page_url = getCmpPageUrl(userid)
   </tr>
   <tr>
     <td width="10%" align="right">CMP调用地址：</td>
-    <td width="90%"><a href="<%=cmp_url%>&" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%></strong></a></td>
-  </tr>
-  <tr>
-    <td align="right">.swf后缀型地址：</td>
-    <td><a href="<%=cmp_url%>&amp;cmp.swf" target="_blank"><%=cmp_url%>&amp;cmp.swf</a></td>
+    <td width="90%"><a href="<%=cmp_url%>&amp;c.swf" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%>&amp;c.swf</strong></a></td>
   </tr>
   <tr>
     <td align="right">页面地址：</td>
@@ -590,7 +586,7 @@ cmp_page_url = getCmpPageUrl(userid)
   </tr>
   <tr>
     <td align="right" nowrap="nowrap">常用论坛调用标签：</td>
-    <td>[flash=100%,600]<%=cmp_url%>[/flash]</td>
+    <td>[flash=100%,600]<%=cmp_url%>&amp;c.swf[/flash]</td>
   </tr>
   <tr>
     <td align="right" nowrap="nowrap">内框架页面调用：</td>
@@ -607,7 +603,7 @@ cmp_page_url = getCmpPageUrl(userid)
 </table>
 <script type="text/javascript">
 function show_code() {
-	html = getcmp("cmp", "100%", "600", "<%=cmp_url%>", "");
+	html = getcmp("cmp<%=userid%>", "100%", "600", "<%=cmp_url%>&c.swf", "");
 	var textarea = document.getElementById("html_code");
 	textarea.value = html;
 }

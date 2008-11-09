@@ -112,15 +112,17 @@ if user_reg="1" then
     <tr>
       <td align="right">用户名：</td>
       <td><input name="username" type="text" id="username" size="30" maxlength="200" onchange="check_username(this)" />
-        <span id="reg_username" style="color:#FF0000;"></span></td>
+        *<span id="reg_username" style="color:#FF0000;"></span></td>
     </tr>
     <tr>
       <td align="right">密码：</td>
-      <td><input name="password" type="password" id="password" size="30" /></td>
+      <td><input name="password" type="password" id="password" size="30" />
+        *</td>
     </tr>
     <tr>
       <td align="right">确认密码：</td>
-      <td><input name="passwordcheck" type="password" id="passwordcheck" size="30" /></td>
+      <td><input name="passwordcheck" type="password" id="passwordcheck" size="30" />
+        *</td>
     </tr>
     <tr>
       <td align="right">邮箱：</td>
@@ -132,7 +134,8 @@ if user_reg="1" then
     </tr>
     <tr>
       <td align="right">播放器名称：</td>
-      <td><input name="cmp_name" type="text" id="cmp_name" size="50" maxlength="200" /></td>
+      <td><input name="cmp_name" type="text" id="cmp_name" size="50" maxlength="200" />
+        *</td>
     </tr>
     <tr>
       <td align="right">网址：</td>

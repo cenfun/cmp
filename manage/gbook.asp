@@ -163,7 +163,7 @@ function sha(flag) {
 <%if founduser then%>
 function delpost(id) {
 	if (confirm("确定要删除吗？")) {
-		window.location = "gbook.asp?action=del_post&id="+id+"&referer="+escape(window.location);
+		window.location = "gbook.asp?action=del_post&id="+id+"&referer="+encodeURIComponent(window.location);
 	}
 }
 <%end if%>

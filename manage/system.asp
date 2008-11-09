@@ -324,18 +324,18 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 	'生成文件
 	dim num
 	num = 0
-	sql = "select id,config,list from cmp_user"
+	sql = "select id,config,list from cmp_user where userstatus > 4"
 	set rs = conn.execute(sql)
 		do while not rs.eof
 			call makeFile(xmlpath & "/" & rs("id") & xmlconfig, UnCheckStr(rs("config")))
 			call makeFile(xmlpath & "/" & rs("id") & xmllist, UnCheckStr(rs("list")))
 			rs.movenext
-			num = num + 2
+			num = num + 1
 		loop
 	rs.close
 	set rs = nothing
   %>
-  <p>重建数据完成！共生成<%=num%>个文件。</p>
+  <p>重建数据完成！共处理 <strong><%=num%></strong> 个用户共计 <strong><%=num*2%></strong> 个文件。</p>
   <%end if%>
   <p>
     <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
@@ -351,12 +351,15 @@ end if
 end sub
 
 
+
 sub user()
 '操作处理
 dim idlist
 idlist = Checkstr(Request.QueryString("idlist"))
 if idlist <> "" then
-	select case Request.QueryString("deal")
+	dim deal
+	deal=Checkstr(Request.QueryString("deal"))
+	select case deal
 	case "del"
 		conn.execute("delete from cmp_user where id in ("&idlist&")")
 	case "lock"
@@ -365,7 +368,18 @@ if idlist <> "" then
 		conn.execute("update cmp_user set userstatus=5 where id in ("&idlist&")")
 	case else
 	end select
-	response.Redirect(Request.QueryString("referer"))
+	'删除idlist的静态数据
+	if xml_make="1" and deal<>"enable" then
+		dim uid
+		idlist = Split(idlist, ",")
+		For Each uid in idlist
+			'删除用户配置和列表文件
+			delFile(xml_path & "/" & trim(uid) & xml_config)
+			delFile(xml_path & "/" & trim(uid) & xml_list)
+		Next
+	end if
+	SucMsg="操作完成！"
+	Cenfun_suc(Request.QueryString("referer"))
 	exit sub
 end if
 'action=user
@@ -549,11 +563,11 @@ function dealuser(o){
 	if(id_list.length > 0){
 		if(confirm("确定要【"+str+"】以下id所在的项？\n\n"+id_list)){
 			if(str == "删除"){
-				window.location = "system.asp?action=user&deal=del&idlist="+id_list+"&referer="+escape(window.location);
+				window.location = "system.asp?action=user&deal=del&idlist="+id_list+"&referer="+encodeURIComponent(window.location);
 			}else if(str == "锁定"){
-				window.location = "system.asp?action=user&deal=lock&idlist="+id_list+"&referer="+escape(window.location);
+				window.location = "system.asp?action=user&deal=lock&idlist="+id_list+"&referer="+encodeURIComponent(window.location);
 			}else if(str == "激活"){
-				window.location = "system.asp?action=user&deal=enable&idlist="+id_list+"&referer="+escape(window.location);
+				window.location = "system.asp?action=user&deal=enable&idlist="+id_list+"&referer="+encodeURIComponent(window.location);
 			}
 		}
 	} else {

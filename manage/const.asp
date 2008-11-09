@@ -464,6 +464,18 @@ function makeFile(byVal path, byVal text)
 	Set objStream = Nothing
 end function
 
+'删除单个文件
+function delFile(byVal path)
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		dim FSO
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+			if FSO.FileExists(Server.MapPath(path)) then	 	
+				FSO.DeleteFile (Server.MapPath(path))
+			end if
+		Set FSO=Nothing	
+	end if
+end function
+
 '公共头
 Sub header()
 dim mytitle
