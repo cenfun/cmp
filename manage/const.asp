@@ -452,6 +452,7 @@ function makeFile(byVal path, byVal text)
 		ErrMsg = "服务器不支持ADODB.Stream"
 		cenfun_error()
 	else
+		On Error Resume Next
 		With objStream
 		.Open
 		.Charset = "utf-8"
@@ -460,6 +461,11 @@ function makeFile(byVal path, byVal text)
 		.SaveToFile Server.Mappath(path),2 
 		.Close
 		End With
+		If Err Then 
+			Err.Clear
+			ErrMsg = "写入文件失败，请检查服务器是否有可写权限！"
+			cenfun_error()
+		end if
 	end if
 	Set objStream = Nothing
 end function
@@ -469,10 +475,52 @@ function delFile(byVal path)
 	if CheckObjInstalled("Scripting.FileSystemObject")=true then
 		dim FSO
 		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
-			if FSO.FileExists(Server.MapPath(path)) then	 	
+			if FSO.FileExists(Server.MapPath(path)) then	
+				On Error Resume Next
 				FSO.DeleteFile (Server.MapPath(path))
+				If Err Then 
+					Err.Clear
+					ErrMsg = "删除文件失败！请检查服务器是否有可写权限！"
+					cenfun_error()
+				end if
 			end if
 		Set FSO=Nothing	
+	end if
+end function
+
+'创建目录
+function makeFolder(byVal path)
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		dim FSO
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		if not FSO.FolderExists(Server.MapPath(path)) then
+			On Error Resume Next
+			FSO.CreateFolder(Server.MapPath(path))
+			If Err Then 
+				Err.Clear
+				ErrMsg = "创建文件夹失败，请检查服务器是否有可写权限！"
+				cenfun_error()
+			end if
+		end if
+		Set FSO=Nothing
+	end if
+end function
+
+'删除目录
+function delFolder(byVal path)
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		dim FSO
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		if FSO.FolderExists(Server.MapPath(path)) then
+			On Error Resume Next
+			FSO.DeleteFolder (Server.MapPath(path))
+			If Err Then 
+				Err.Clear
+				ErrMsg = "删除文件夹失败，请检查服务器是否有可写权限！"
+				cenfun_error()
+			end if
+		end if
+		Set FSO=Nothing
 	end if
 end function
 

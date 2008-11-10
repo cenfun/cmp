@@ -88,7 +88,7 @@ sub config()
         您的服务器不支持FSO，无法开启此功能
         <%else%>
         <input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onClick="xmlmake(this);" />
-        开启将减轻服务器负担(服务器必须支持FSO写文件)
+        开启将减轻服务器负担(<strong>服务器必须支持FSO和文件可写</strong>)
         <%end if%>
         <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
           <table border="0" cellspacing="0" cellpadding="0">
@@ -169,12 +169,12 @@ function check(o){
 			return false;
 		}
 		if(o.xml_config.value=="" || !checkbadwords(o.xml_config.value, "/\\:*?<>\"|")){
-			alert("ID匹配配置文件的文件名不正确！");
+			alert("用户id匹配配置文件的文件名不正确！");
 			o.xml_config.select();
 			return false;
 		}
 		if(o.xml_list.value=="" || !checkbadwords(o.xml_list.value, "/\\:*?<>\"|")){
-			alert("ID匹配列表文件的文件名不正确！");
+			alert("用户id匹配列表文件的文件名不正确！");
 			o.xml_list.select();
 			return false;
 		}
@@ -249,7 +249,7 @@ end if
     <td><%=server.mappath(Request.ServerVariables("SCRIPT_NAME"))%></td>
   </tr>
   <tr>
-    <td align="right">是否支持FSO写文件：</td>
+    <td align="right">是否支持FSO：</td>
     <td><%if CheckObjInstalled("Scripting.FileSystemObject")=false then%>
       否
       <%else%>
@@ -261,7 +261,7 @@ end if
     <td><%=Request.ServerVariables("SERVER_SOFTWARE")%> 脚本:<%=ScriptEngine & "/"& ScriptEngineMajorVersion &"."&ScriptEngineMinorVersion&"."& ScriptEngineBuildVersion %> 超时:<%=Server.ScriptTimeout%> CPU:<%=Request.ServerVariables("NUMBER_OF_PROCESSORS")%> 系统:<%=Request.ServerVariables("OS")%></td>
   </tr>
   <tr>
-    <td align="right">支持的文件类型：</td>
+    <td align="right" nowrap="nowrap">支持的文件类型：</td>
     <td><%=Request.ServerVariables("HTTP_Accept")%></td>
   </tr>
 </table>
@@ -288,6 +288,7 @@ sub save_config()
 	xmlpath=Checkstr(Request.Form("xml_path"))
 	xmlconfig=Checkstr(Request.Form("xml_config"))
 	xmllist=Checkstr(Request.Form("xml_list"))
+	'保存到数据库
   	sql = "Update cmp_config Set "
 	sql = sql & "cmp_path='"&cmp_path&"',site_name='"&site_name&"',site_url='"&site_url&"',site_qq='"&site_qq&"',site_email='"&site_email&"',site_count='"&site_count&"',site_ads='"&site_ads&"',"
 	sql = sql & "user_reg='"&user_reg&"',user_check='"&user_check&"',xml_make='"&xmlmake&"',"
@@ -300,10 +301,10 @@ sub save_config()
 	else
 		reMakeData xmlmake, xmlpath, xmlconfig, xmllist
 	end if
-'更新Application信息
-Application.Lock
-Application(CookieName&"_Arr_system_info")=""
-Application.UnLock
+	'更新Application信息
+	Application.Lock
+	Application(CookieName&"_Arr_system_info")=""
+	Application.UnLock
 end sub
 
 sub reMakeData(xmlmake, xmlpath, xmlconfig, xmllist)
@@ -317,9 +318,7 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
   <p>开始清除所有旧的静态数据...</p>
   <%
   	'删除目录
-	if FSO.FolderExists(Server.MapPath(xml_path)) then	 	
-		FSO.DeleteFolder (Server.MapPath(xml_path))
-	end if
+	delFolder(xmlpath)
   %>
   <p>清理完成！</p>
   <%end if%>
@@ -327,9 +326,7 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
   <p>开始重建所有静态数据...</p>
   <%
   	'创建新目录
-	if not FSO.FolderExists(Server.MapPath(xmlpath)) then
-	FSO.CreateFolder(Server.MapPath(xmlpath))
-	end if
+	makeFolder(xmlpath)
 	'生成文件
 	dim num
 	num = 0
@@ -354,7 +351,7 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 	'===================================================================
 	Set FSO=Nothing
 else
-	ErrMsg="服务器不支持FSO，无法重建数据！"
+	ErrMsg="服务器不支持FSO写文件，无法重建数据！"
 	cenfun_error()
 end if
 end sub
