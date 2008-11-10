@@ -99,10 +99,17 @@ if not rs.eof then
 	id = rs("id")
 	if trim(rs("config"))<>"" then
 		strContent = UnCheckStr(rs("config"))
+		'正则替换配置文件列表地址，名称，网站
+		strContent = setLNU(strContent, xml_make, xml_path, xml_list, id, rs("cmp_name"), rs("cmp_url"))
 	else
-		dim cr
+		dim cr,lPath
 		cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
-		strContent = "<cmp name="""" url="""" list="""" >" & cr
+		if xml_make="1" then
+			lPath = xml_path & "/" & id & xml_list
+		else
+			lPath = "list.asp?id="&id
+		end if
+		strContent = "<cmp name="""&rs("cmp_name")&""" url="""&rs("cmp_url")&""" list="""&lPath&""" >" & cr
 		strContent = strContent & "<config language="""" play_mode="""" skin_id="""" list_id="""" volume="""" auto_play="""" max_video="""" bgcolor="""" "
 		strContent = strContent & "mixer_id="""" mixer_color="""" mixer_filter="""" mixer_displace="""" "
 		strContent = strContent & "buffer="""" timeout="""" show_tip="""" context_menu="""" video_smoothing="""" plugins_disabled="""" check_policyfile=""""  />" & cr
@@ -111,11 +118,9 @@ if not rs.eof then
 		strContent = strContent & "<nolrc src="""">"&cr&"</nolrc>" & cr
 		strContent = strContent & "<count src="""&XMLEncode(site_count)&""" />" & cr
 		strContent = strContent & "</cmp>"
+		'更新配置至数据库
+		conn.execute("update cmp_user set config='"&CheckStr(strContent)&"' where id=" & id & " ")
 	end if
-	'正则替换配置文件列表地址，名称，网站
-	strContent = setLNU(strContent, xml_make, xml_path, xml_list, id, rs("cmp_name"), rs("cmp_url"))
-	'更新配置至数据库
-	conn.execute("update cmp_user set config='"&CheckStr(strContent)&"' where id=" & id & " ")
 else
 	ErrMsg = "用户不存在或者被锁定！"
 	cenfun_error()
