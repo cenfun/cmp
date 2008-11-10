@@ -12,6 +12,8 @@ If founduser and foundadmin Then
 			config()
 		Case "save_config"
 			save_config()
+		Case "update_config"
+			update_config()
 		Case "remake"
 			reMakeData xml_make, xml_path, xml_config, xml_list
 		Case "user"
@@ -63,7 +65,7 @@ sub config()
       <td><input name="site_email" type="text" id="site_email" value="<%=site_email%>" size="50" /></td>
     </tr>
     <tr>
-      <td align="right">CMP默认统计(图片方式)：</td>
+      <td align="right">CMP系统统计(图片方式)：</td>
       <td><input name="site_count" type="text" id="site_count" value="<%=site_count%>" size="50" /></td>
     </tr>
     <tr>
@@ -138,7 +140,7 @@ sub config()
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
-      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" /></td>
+      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" /> <a href="system.asp?action=update_config">刷新系统配置缓存</a></td>
     </tr>
   </form>
 </table>
@@ -267,6 +269,14 @@ end if
 </table>
 <%
 end sub
+
+sub update_config()
+	Application.Lock
+	Application(CookieName&"_Arr_system_info")=""
+	Application.UnLock
+	Response.Redirect("system.asp")
+end sub
+
 
 sub save_config()
 	'cmp_path,site_name,site_url,site_qq,site_email,site_count,site_ads,user_reg,user_check,xml_make,xml_path,xml_config,xml_list

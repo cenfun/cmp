@@ -678,10 +678,7 @@ if site_ad_bottom<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_bottom&"</div>")
 end if
 %>
-<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a> <a href="http://code.google.com/p/cenfunmusicplayer/" target="_blank"><%=siteVersion%></a>. All Rights Reserved. Powered by <a href="http://www.cenfun.com/" target="_blank">CenFun</a><span>
-  <!--页底站点统计，请更换成您自己的：-->
-  <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script>
-  </span></div>
+<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a> <a href="http://code.google.com/p/cenfunmusicplayer/" target="_blank"><%=siteVersion%></a>. All Rights Reserved. Powered by <a href="http://www.cenfun.com/" target="_blank">CenFun</a><span><img src="<%=site_count%>" /></span></div>
 <%
 response.Write("</body></html>")
 '关闭所有连接
