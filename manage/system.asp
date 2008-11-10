@@ -93,30 +93,32 @@ sub config()
         <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
-              <td>生成静态数据的文件夹名：</td>
-              <td><input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" />
-                当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
+              <td>生成静态数据的文件夹名：
+                <input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" />
+              当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
             </tr>
             <tr>
-              <td>ID匹配配置文件的文件名：</td>
-              <td><input name="xml_config" type="text" id="xml_config" value="<%=xml_config%>" /></td>
+              <td>用户id匹配配置文件的文件名：
+              <input name="xml_config" type="text" id="xml_config" value="<%=xml_config%>" /></td>
             </tr>
             <tr>
-              <td>ID匹配列表文件的文件名：</td>
-              <td><input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
+              <td>用户id匹配列表文件的文件名：
+              <input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
             </tr>
             <%if xml_make="1" then%>
             <tr>
-              <td colspan="2"><input type="button" value="手动重建所有静态数据文件" onclick="window.location='system.asp?action=remake';" /></td>
+              <td><input type="button" value="手动重建所有静态数据文件" onclick="window.location='system.asp?action=remake';" /></td>
             </tr>
             <%end if%>
+            <tr>
+              <td><div style="color:#0000FF;">
+                  <div>注：文件夹名请勿用同级目录下系统已存文件夹名称，如images,data,lrc,skins,plugins等，以防止重建时被一起删除</div>
+                  <div>ID匹配文件名推荐用config.xml和list.xml，请勿用*.asp,*.asa等服务端程序后缀名，以防止恶意脚本执行</div>
+                  <div>修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户</div>
+                  <div>请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源和时间</div>
+                </div></td>
+            </tr>
           </table>
-        </div>
-        <div style="color:#0000FF;">
-          <div>注：文件夹名请勿用同级目录下系统已存文件夹名称，如images,data,lrc,skins,plugins等，以防止重建时被一起删除</div>
-          <div>ID匹配文件名推荐用config.xml和list.xml，请勿用*.asp,*.asa等服务端程序后缀名，以防止恶意脚本执行</div>
-          <div>修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户</div>
-          <div>请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源和时间</div>
         </div></td>
     </tr>
     <tr>
