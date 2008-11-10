@@ -88,22 +88,22 @@ sub config()
         您的服务器不支持FSO，无法开启此功能
         <%else%>
         <input name="xml_make" type="checkbox" id="xml_make" value="1" <%if xml_make="1" then%>checked="checked"<%end if%> onClick="xmlmake(this);" />
-        开启将减轻服务器负担(服务器必须支持FSO)
+        开启将减轻服务器负担(服务器必须支持FSO写文件)
         <%end if%>
         <div id="xmloption" <%if xml_make<>"1" then%>style="display:none;"<%end if%>>
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td>生成静态数据的文件夹名：
                 <input name="xml_path" type="text" id="xml_path" value="<%=xml_path%>" />
-              当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
+                当前所占空间：<strong><%=getFolderSize(xml_path)%></strong></td>
             </tr>
             <tr>
               <td>用户id匹配配置文件的文件名：
-              <input name="xml_config" type="text" id="xml_config" value="<%=xml_config%>" /></td>
+                <input name="xml_config" type="text" id="xml_config" value="<%=xml_config%>" /></td>
             </tr>
             <tr>
               <td>用户id匹配列表文件的文件名：
-              <input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
+                <input name="xml_list" type="text" id="xml_list" value="<%=xml_list%>" /></td>
             </tr>
             <%if xml_make="1" then%>
             <tr>
@@ -124,17 +124,17 @@ sub config()
     <tr>
       <td align="right">系统公告：<br />
         (支持html)</td>
-      <td><textarea name="site_ad_news" cols="100" rows="10" style="width:98%;"><%=site_ad_news%></textarea></td>
+      <td><textarea name="site_ad_news" cols="100" rows="5" style="width:98%;"><%=site_ad_news%></textarea></td>
     </tr>
     <tr>
       <td align="right">页顶广告：<br />
         (支持html)</td>
-      <td><textarea name="site_ad_top" cols="100" rows="10" style="width:98%;"><%=site_ad_top%></textarea></td>
+      <td><textarea name="site_ad_top" cols="100" rows="5" style="width:98%;"><%=site_ad_top%></textarea></td>
     </tr>
     <tr>
       <td align="right">页底广告：<br />
         (支持html)</td>
-      <td><textarea name="site_ad_bottom" cols="100" rows="10" style="width:98%;"><%=site_ad_bottom%></textarea></td>
+      <td><textarea name="site_ad_bottom" cols="100" rows="5" style="width:98%;"><%=site_ad_bottom%></textarea></td>
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
@@ -234,28 +234,35 @@ end if
 </table>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th align="left">服务器信息：</th>
+    <th colspan="2" align="left">服务器信息：</th>
   </tr>
   <tr>
-    <td><div>本机IP：<%=request.servervariables("remote_addr")%> <br/>
-        服务器名：<%=Request.ServerVariables("SERVER_NAME")%><br/>
-        服务器IP：<%=Request.ServerVariables("LOCAL_ADDR")%><br/>
-        服务器端口：<%=Request.ServerVariables("SERVER_PORT")%><br/>
-        文件物理路径：<%=server.mappath(Request.ServerVariables("SCRIPT_NAME"))%><br/>
-        服务器当前时间：<%=now%><br/>
-        IIS版本：<%=Request.ServerVariables("SERVER_SOFTWARE")%><br/>
-        脚本超时时间：<%=Server.ScriptTimeout%><br/>
-        服务器CPU数量：<%=Request.ServerVariables("NUMBER_OF_PROCESSORS")%><br/>
-        服务器解译引擎：<%=ScriptEngine & "/"& ScriptEngineMajorVersion &"."&ScriptEngineMinorVersion&"."& ScriptEngineBuildVersion %><br/>
-        服务器操作系统：<%=Request.ServerVariables("OS")%> <br/>
-        是否支持FSO：
-        <%if CheckObjInstalled("Scripting.FileSystemObject")=false then%>
-        否
-        <%else%>
-        是
-        <%end if%>
-        <br/>
-        支持的文件类型：<%=Request.ServerVariables("HTTP_Accept")%></div></td>
+    <td align="right">本机IP：</td>
+    <td><%=request.servervariables("remote_addr")%></td>
+  </tr>
+  <tr>
+    <td align="right">服务器地址：</td>
+    <td><%=Request.ServerVariables("SERVER_NAME")%> (IP:<%=Request.ServerVariables("LOCAL_ADDR")%>)</td>
+  </tr>
+  <tr>
+    <td align="right">文件物理路径：</td>
+    <td><%=server.mappath(Request.ServerVariables("SCRIPT_NAME"))%></td>
+  </tr>
+  <tr>
+    <td align="right">是否支持FSO写文件：</td>
+    <td><%if CheckObjInstalled("Scripting.FileSystemObject")=false then%>
+      否
+      <%else%>
+      是
+      <%end if%></td>
+  </tr>
+  <tr>
+    <td align="right">IIS信息：</td>
+    <td><%=Request.ServerVariables("SERVER_SOFTWARE")%> 脚本:<%=ScriptEngine & "/"& ScriptEngineMajorVersion &"."&ScriptEngineMinorVersion&"."& ScriptEngineBuildVersion %> 超时:<%=Server.ScriptTimeout%> CPU:<%=Request.ServerVariables("NUMBER_OF_PROCESSORS")%> 系统:<%=Request.ServerVariables("OS")%></td>
+  </tr>
+  <tr>
+    <td align="right">支持的文件类型：</td>
+    <td><%=Request.ServerVariables("HTTP_Accept")%></td>
   </tr>
 </table>
 <%
