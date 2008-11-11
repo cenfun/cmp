@@ -118,7 +118,7 @@ sub config()
       <td align="left"><%
 	  if CheckObjInstalled("Scripting.FileSystemObject")=false then
 	  	xml_make=""
-		'开启： regsvr32 scrrun.dll 
+		'开启： regsvr32 scrrun.dll  重启电脑后运行
 		'关闭： regsvr32 /u scrrun.dll
 	  %>
         <input name="xml_make" type="checkbox" id="xml_make" value="" disabled="disabled" />
@@ -521,7 +521,7 @@ IF not rs.EOF Then
           <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
-              <%end if%></td>
+            <%end if%></td>
             <td><%=role%></td>
             <td><%=rs("id")%></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>" title="点击查看和编辑详细资料"><%=rs("username")%></a></td>
@@ -1079,29 +1079,32 @@ sub lrc()
     <th colspan="2" align="left">歌词库管理</th>
   </tr>
   <tr>
+    <td align="right">当前歌词数：</td>
+    <td><%
+	set rs=conn.execute("select count(*) from cmp_lrc") 
+		Response.Write(rs(0))
+	rs.close
+	set rs=nothing
+	%></td>
+  </tr>
+  <tr>
     <td align="right">歌词库创建：</td>
     <td><input type="submit" value="从lrc目录创建歌词库" onclick="createLrc();" /></td>
   </tr>
   <tr>
     <td align="right">&nbsp;</td>
-    <td>程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库(将覆盖之前的记录)</td>
+    <td>程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库<br />
+    注意：重建时将覆盖之前的记录；且仅保存文本类型的文件名(*.txt/*.lrc)</td>
   </tr>
   <tr>
     <td align="right">歌词库优化：</td>
     <td><%database("system.asp?action=lrc")%></td>
   </tr>
-  <%
-  if Request.QueryString("showlrc")<>1 then
-  	dim lrcCount
-	set rs=conn.execute("select count(*) from cmp_lrc") 
-		lrcCount=rs(0)
-	rs.close
-	set rs=nothing
-  %>
   <tr>
-    <td align="right">当前歌词数：</td>
-    <td><%=lrcCount%></td>
+    <td align="right">&nbsp;</td>
+    <td>释放重建数据后的无效空间</td>
   </tr>
+  <%if Request.QueryString("showlrc")<>1 then%>
   <tr>
     <td align="right">&nbsp;</td>
     <td><input type="submit" value="打开歌词详细列表" onclick="showLrc();" /></td>
@@ -1133,7 +1136,7 @@ lrc_name=Checkstr(Request.QueryString("lrc_name"))
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
         <form>
           <%
-sql = "select id,src from cmp_lrc "
+sql = "select * from cmp_lrc order by id desc"
 if lrc_name <> "" then
 	sql = sql & " where src like '%"&lrc_name&"%' "
 end if
@@ -1162,14 +1165,14 @@ IF not rs.EOF Then
 %>
           <tr>
             <th><input type="checkbox" onClick="CheckAll(this,this.form);" /></th>
-            <th>地址</th>
+            <th align="left">歌词名</th>
             <th>操作</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
-          <tr>
+          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" /></td>
-            <td><%=rs("src")%></td>
-            <td></td>
+            <td align="left"><a href="lrc/<%=rs("src")%>" target="_blank"><%=rs("src")%></a></td>
+            <td><a href="<%=rs("id")%>">删除</a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
@@ -1218,9 +1221,22 @@ sub create_lrc()
 			cenfun_error()
 		else
 			if FSO.FolderExists(Server.MapPath("lrc")) then
-				
-				
-				
+				dim folder,lrcs,lrc,lrc_name
+				Set folder = FSO.GetFolder(Server.MapPath("lrc"))
+    				Set lrcs = folder.Files
+					'清除之前的记录
+					'删除表cmp_lrc
+					conn.execute("drop table cmp_lrc ")
+					'建表cmp_lrc  AutoNumber 
+					conn.execute("create table cmp_lrc (id COUNTER PRIMARY KEY, src char(150) with compression)")
+					'保存记录
+					For Each lrc in lrcs
+						lrc_name = lrc.Name 
+						'Response.Write(lrc_name)
+						conn.execute("insert into cmp_lrc (src) values('"&lrc_name&"')")
+					Next
+					Set lrcs = nothing
+				Set folder = nothing
 				SucMsg="创建歌词库完成！"
 				Cenfun_suc("system.asp?action=lrc")
 			else
