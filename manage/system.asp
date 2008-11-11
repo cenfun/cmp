@@ -1072,7 +1072,21 @@ end sub
 
 
 sub lrc()
-
+'删除处理
+dim idlist
+idlist = Checkstr(Request.QueryString("idlist"))
+if idlist <> "" then
+	set rs = conn.execute("select id,src from cmp_lrc where id in ("&idlist&")")
+	Do Until rs.EOF
+		'删除idlist的歌词文件
+		delFile("lrc/" & rs("src"))
+		rs.MoveNext
+    loop
+	rs.close
+	set rs = nothing
+	'删除数据库记录
+	conn.execute("delete from cmp_lrc where id in ("&idlist&")")
+end if
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
@@ -1136,10 +1150,11 @@ lrc_name=Checkstr(Request.QueryString("lrc_name"))
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
         <form>
           <%
-sql = "select * from cmp_lrc order by id desc"
+sql = "select * from cmp_lrc "
 if lrc_name <> "" then
 	sql = sql & " where src like '%"&lrc_name&"%' "
 end if
+sql = sql & " order by id desc "
 'response.Write(sql)
 '分页设置
 dim page,CurrentPage
@@ -1166,23 +1181,22 @@ IF not rs.EOF Then
           <tr>
             <th><input type="checkbox" onClick="CheckAll(this,this.form);" /></th>
             <th align="left">歌词名</th>
-            <th>操作</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
           <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" /></td>
             <td align="left"><a href="lrc/<%=rs("src")%>" target="_blank"><%=rs("src")%></a></td>
-            <td><a href="<%=rs("id")%>">删除</a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
           <%loop%>
-          <%if rs_nums>MaxPerPage then%>
           <tr>
-            <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=lrc&showlrc=1&lrc_name="&lrc_name&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div></td>
+            <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=lrc&showlrc=1&lrc_name="&lrc_name&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
+            <div style="padding:5px 5px;">
+                <input type="button" value="删除所选歌词" onClick="dellrc(this);" />
+                (可多选批量操作) </div></td>
           </tr>
           <%
-		  end if
 else
 %>
           <tr>
@@ -1204,6 +1218,33 @@ function searcher() {
 		window.location = "system.asp?action=lrc&showlrc=1&lrc_name="+encodeURIComponent(str);
 	}
 	return false;
+}
+function get_idlist(o){
+	var ids = new Array();
+	var arr = o.idlist;
+	if(arr){
+		var l = arr.length;
+		if(l){
+			for(var i = 0; i < l; i++){
+				if(arr[i].checked){
+					ids.push(arr[i].value);
+				}
+			}
+		}else if(arr.checked){
+			ids.push(arr.value);
+		}
+	}
+	return ids;
+}
+function dellrc(o){
+	var id_list = get_idlist(o.form);
+	if(id_list.length > 0){
+		if(confirm("删除记录的同时，也将删除lrc目录下对应的歌词文件，确定操作吗？")){
+			window.location = "system.asp?action=lrc&showlrc=1&idlist="+id_list;
+		}
+	} else {
+		alert("请先选择要删除的项");
+	}
 }
 </script>
 <%
