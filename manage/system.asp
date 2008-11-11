@@ -1094,7 +1094,7 @@ sub lrc()
   <tr>
     <td align="right">&nbsp;</td>
     <td>程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库<br />
-    注意：重建时将覆盖之前的记录；且仅保存文本类型的文件名(*.txt/*.lrc)</td>
+    注意：重建时将覆盖之前的记录；安全起见仅保存*.txt/*.lrc类型</td>
   </tr>
   <tr>
     <td align="right">歌词库优化：</td>
@@ -1102,7 +1102,7 @@ sub lrc()
   </tr>
   <tr>
     <td align="right">&nbsp;</td>
-    <td>释放重建数据后的无效空间</td>
+    <td>重建数据后释放无效空间</td>
   </tr>
   <%if Request.QueryString("showlrc")<>1 then%>
   <tr>
@@ -1212,39 +1212,40 @@ end if
 end sub
 
 sub create_lrc()
-	On Error Resume Next
-	dim FSO
-	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
-		If Err Then
-			Err.Clear
-			ErrMsg = "创建歌词库失败，请检查服务器是否支持FSO！"
-			cenfun_error()
-		else
-			if FSO.FolderExists(Server.MapPath("lrc")) then
-				dim folder,lrcs,lrc,lrc_name
-				Set folder = FSO.GetFolder(Server.MapPath("lrc"))
-    				Set lrcs = folder.Files
-					'清除之前的记录
-					'删除表cmp_lrc
-					conn.execute("drop table cmp_lrc ")
-					'建表cmp_lrc  AutoNumber 
-					conn.execute("create table cmp_lrc (id COUNTER PRIMARY KEY, src char(150) with compression)")
-					'保存记录
-					For Each lrc in lrcs
-						lrc_name = lrc.Name 
-						'Response.Write(lrc_name)
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		dim FSO
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		if FSO.FolderExists(Server.MapPath("lrc")) then
+			dim folder,lrcs,lrc,lrc_name,ext
+			Set folder = FSO.GetFolder(Server.MapPath("lrc"))
+				Set lrcs = folder.Files
+				'清除之前的记录
+				'删除表cmp_lrc
+				conn.execute("drop table cmp_lrc ")
+				'建表cmp_lrc  AutoNumber 
+				conn.execute("create table cmp_lrc (id COUNTER PRIMARY KEY, src char(150) with compression)")
+				'保存记录
+				For Each lrc in lrcs
+					lrc_name = lrc.Name
+					ext = Right(lrc_name, 4)
+					'过滤，仅保存txt和lrc类型
+					if ext=".lrc" or ext=".txt" then
 						conn.execute("insert into cmp_lrc (src) values('"&lrc_name&"')")
-					Next
-					Set lrcs = nothing
-				Set folder = nothing
-				SucMsg="创建歌词库完成！"
-				Cenfun_suc("system.asp?action=lrc")
-			else
-				ErrMsg = "没有找到歌词目录：lrc"
-				cenfun_error()
-			end if
+					end if
+				Next
+				Set lrcs = nothing
+			Set folder = nothing
+			SucMsg="创建歌词库完成！"
+			Cenfun_suc("system.asp?action=lrc")
+		else
+			ErrMsg = "没有找到歌词目录：lrc"
+			cenfun_error()
 		end if
-	Set FSO=Nothing	
+		Set FSO=Nothing	
+	else
+		ErrMsg = "创建歌词库失败，请检查服务器是否支持FSO！"
+		cenfun_error()
+	end if
 end sub
 
 %>
