@@ -26,8 +26,10 @@ If founduser and foundadmin Then
 			skins()
 		Case "plugins"
 			plugins()
-		Case "lrcs"
-			lrcs()
+		Case "lrc"
+			lrc()
+		Case "create_lrc"
+			create_lrc()
 		Case Else
 			config()
 	End Select
@@ -35,6 +37,39 @@ If founduser and foundadmin Then
 else
 	response.Redirect("index.asp")
 end if
+
+sub database(path)
+%>
+<form action="<%=path%>" method="post">
+  <input name="dbdo" type="hidden" value="compact" />
+  <input type="submit" value="压缩和修复数据库" />
+</form>
+<div style="color:#0000FF;">
+  <%
+if request.Form("dbdo") = "compact" then
+	Response.write "关闭所有连接...<br />"
+	conn.close
+	Response.write "开始压缩和修复数据...<br />"
+	dim AccessFSO,AccessEngine
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
+		IF AccessFSO.FileExists(Server.Mappath(sitedb)) Then
+			Set AccessEngine = CreateObject("JRO.JetEngine")
+			AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb & ".temp")
+			AccessFSO.CopyFile Server.Mappath(sitedb & ".temp"),Server.Mappath(sitedb)
+			AccessFSO.DeleteFile(Server.Mappath(sitedb & ".temp"))
+			Set AccessFSO = Nothing
+			Set AccessEngine = Nothing
+			Response.write "压缩数据库完成！新的文件大小为："&getFileInfo(sitedb)(0)
+		end If
+	Else
+		Response.write "<span style=""color:#ff0000;"">压缩数据库失败，服务器不支持FSO</span>"
+	End if
+end if
+%>
+</div>
+<%
+end sub
 
 sub config()
 %>
@@ -140,7 +175,8 @@ sub config()
     </tr>
     <tr>
       <td width="20%">&nbsp;</td>
-      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" /> <a href="system.asp?action=update_config">刷新系统配置缓存</a></td>
+      <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" />
+        <a href="system.asp?action=update_config">刷新系统配置缓存</a></td>
     </tr>
   </form>
 </table>
@@ -202,36 +238,13 @@ function check(o){
     <td><%=getFileInfo(sitedb)(0)%></td>
   </tr>
   <tr>
-    <td align="right">压缩和修复数据库：</td>
-    <td><form action="system.asp?action=config" method="post">
-        <input name="dbdo" type="hidden" value="compact" />
-        <input type="submit" value="开始" style="width:80px;" />
-        推荐经常操作，可以有效地释放无效空间，加快访问速度
-      </form>
-      <div style="color:#0000FF;">
-        <%
-if request.Form("dbdo") = "compact" then
-	Response.write "关闭所有连接...<br />"
-	conn.close
-	Response.write "开始压缩和修复数据...<br />"
-	dim AccessFSO,AccessEngine
-	if CheckObjInstalled("Scripting.FileSystemObject")=true then
-		Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
-		IF AccessFSO.FileExists(Server.Mappath(sitedb)) Then
-			Set AccessEngine = CreateObject("JRO.JetEngine")
-			AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb & ".temp")
-			AccessFSO.CopyFile Server.Mappath(sitedb & ".temp"),Server.Mappath(sitedb)
-			AccessFSO.DeleteFile(Server.Mappath(sitedb & ".temp"))
-			Set AccessFSO = Nothing
-			Set AccessEngine = Nothing
-			Response.write "压缩数据库完成！新的文件大小为："&getFileInfo(sitedb)(0)
-		end If
-	Else
-		Response.write "<span style=""color:#ff0000;"">压缩数据库失败，服务器不支持FSO</span>"
-	End if
-end if
-	  %>
-      </div></td>
+    <td align="right">数据库优化：</td>
+    <td><%database("system.asp?action=config")%>
+      推荐经常操作，可以有效地释放无效空间，加快访问速度</td>
+  </tr>
+  <tr>
+    <td align="right">数据库备份：</td>
+    <td>出于安全性考虑，请管理员用ftp直接在服务器复制或下载数据库文件进行备份</td>
   </tr>
 </table>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
@@ -323,7 +336,7 @@ if CheckObjInstalled("Scripting.FileSystemObject")=true then
 	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
 	'===================================================================
 %>
-<div class="output">
+<div class="output" align="center">
   <%if xml_make="1" then%>
   <p>开始清除所有旧的静态数据...</p>
   <%
@@ -1058,14 +1071,164 @@ end if
 end sub
 
 
-sub lrcs()
+sub lrc()
+
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td>开发中...</td>
+    <th colspan="2" align="left">歌词库管理</th>
+  </tr>
+  <tr>
+    <td align="right">歌词库创建：</td>
+    <td><input type="submit" value="从lrc目录创建歌词库" onclick="createLrc();" /></td>
+  </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td>程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库(将覆盖之前的记录)</td>
+  </tr>
+  <tr>
+    <td align="right">歌词库优化：</td>
+    <td><%database("system.asp?action=lrc")%></td>
+  </tr>
+  <%
+  if Request.QueryString("showlrc")<>1 then
+  	dim lrcCount
+	set rs=conn.execute("select count(*) from cmp_lrc") 
+		lrcCount=rs(0)
+	rs.close
+	set rs=nothing
+  %>
+  <tr>
+    <td align="right">当前歌词数：</td>
+    <td><%=lrcCount%></td>
+  </tr>
+  <tr>
+    <td align="right">&nbsp;</td>
+    <td><input type="submit" value="打开歌词详细列表" onclick="showLrc();" /></td>
+  </tr>
+  <%end if%>
+</table>
+<script type="text/javascript">
+function createLrc() {
+	window.location="system.asp?action=create_lrc";
+}
+function showLrc() {
+	window.location="system.asp?action=lrc&showlrc=1";
+}
+</script>
+<%
+if Request.QueryString("showlrc")=1 then
+dim lrc_name
+lrc_name=Checkstr(Request.QueryString("lrc_name"))
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <td align="center"><form onSubmit="return searcher();">
+        歌词名
+        <input type="text" name="lrc_name" id="lrc_name" value="<%=lrc_name%>" />
+        <input type="submit" name="search" id="search" value="搜索" />
+      </form></td>
+  </tr>
+  <tr>
+    <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
+        <form>
+          <%
+sql = "select id,src from cmp_lrc "
+if lrc_name <> "" then
+	sql = sql & " where src like '%"&lrc_name&"%' "
+end if
+'response.Write(sql)
+'分页设置
+dim page,CurrentPage
+page=Checkstr(Request.QueryString("page"))
+CurrentPage = 1
+if page <> "" then
+	if IsNumeric(page) then
+		if page > 0 and page < 32768 then
+			CurrentPage = cint(page)
+		end if
+	end if
+end if
+dim PageC,MaxPerPage
+	PageC=0
+	MaxPerPage=50
+set rs=Server.CreateObject("ADODB.RecordSet")
+rs.Open sql,conn,1,1
+IF not rs.EOF Then
+	rs.PageSize=MaxPerPage
+	rs.AbsolutePage=CurrentPage
+	Dim rs_nums
+	rs_nums=rs.RecordCount
+%>
+          <tr>
+            <th><input type="checkbox" onClick="CheckAll(this,this.form);" /></th>
+            <th>地址</th>
+            <th>操作</th>
+          </tr>
+          <%Do Until rs.EOF OR PageC=rs.PageSize%>
+          <tr>
+            <td><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" /></td>
+            <td><%=rs("src")%></td>
+            <td></td>
+          </tr>
+          <%rs.MoveNext%>
+          <%PageC=PageC+1%>
+          <%loop%>
+          <%if rs_nums>MaxPerPage then%>
+          <tr>
+            <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=lrc&showlrc=1&lrc_name="&lrc_name&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div></td>
+          </tr>
+          <%
+		  end if
+else
+%>
+          <tr>
+            <td><span style="color:#FF0000;">没有找到任何相关记录</span></td>
+          </tr>
+          <%
+end if
+rs.Close
+Set rs=Nothing
+%>
+        </form>
+      </table></td>
   </tr>
 </table>
+<script type="text/javascript">
+function searcher() {
+	var str = document.getElementById("lrc_name").value;
+	if(str != "<%=lrc_name%>"){
+		window.location = "system.asp?action=lrc&showlrc=1&lrc_name="+encodeURIComponent(str);
+	}
+	return false;
+}
+</script>
 <%
+end if
+
+end sub
+
+sub create_lrc()
+	On Error Resume Next
+	dim FSO
+	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		If Err Then
+			Err.Clear
+			ErrMsg = "创建歌词库失败，请检查服务器是否支持FSO！"
+			cenfun_error()
+		else
+			if FSO.FolderExists(Server.MapPath("lrc")) then
+				
+				
+				
+				SucMsg="创建歌词库完成！"
+				Cenfun_suc("system.asp?action=lrc")
+			else
+				ErrMsg = "没有找到歌词目录：lrc"
+				cenfun_error()
+			end if
+		end if
+	Set FSO=Nothing	
 end sub
 
 %>

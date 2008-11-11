@@ -445,6 +445,7 @@ end function
 
 '生成文件
 function makeFile(byVal path, byVal text)
+	On Error Resume Next
 	dim objStream
 	Set objStream = Server.CreateObject("ADODB.Stream")
 	If Err Then 
@@ -452,7 +453,6 @@ function makeFile(byVal path, byVal text)
 		ErrMsg = "服务器不支持ADODB.Stream"
 		cenfun_error()
 	else
-		On Error Resume Next
 		With objStream
 		.Open
 		.Charset = "utf-8"
@@ -472,38 +472,34 @@ end function
 
 '删除单个文件
 function delFile(byVal path)
-	if CheckObjInstalled("Scripting.FileSystemObject")=true then
-		dim FSO
-		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
-			if FSO.FileExists(Server.MapPath(path)) then	
-				On Error Resume Next
-				FSO.DeleteFile (Server.MapPath(path))
-				If Err Then 
-					Err.Clear
-					ErrMsg = "删除文件失败！请检查服务器是否有可写权限！"
-					cenfun_error()
-				end if
-			end if
-		Set FSO=Nothing	
-	end if
+	On Error Resume Next
+	dim FSO
+	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		if FSO.FileExists(Server.MapPath(path)) then	
+			FSO.DeleteFile (Server.MapPath(path))
+		end if
+		If Err Then 
+			Err.Clear
+			ErrMsg = "删除文件失败！请检查服务器是否有可写权限！"
+			cenfun_error()
+		end if
+	Set FSO=Nothing	
 end function
 
 '创建目录
 function makeFolder(byVal path)
-	if CheckObjInstalled("Scripting.FileSystemObject")=true then
-		dim FSO
-		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+	On Error Resume Next
+	dim FSO
+	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
 		if not FSO.FolderExists(Server.MapPath(path)) then
-			On Error Resume Next
 			FSO.CreateFolder(Server.MapPath(path))
-			If Err Then 
-				Err.Clear
-				ErrMsg = "创建文件夹失败，请检查服务器是否有可写权限！"
-				cenfun_error()
-			end if
 		end if
-		Set FSO=Nothing
-	end if
+		If Err Then
+			Err.Clear
+			ErrMsg = "创建文件夹失败，请检查服务器是否有可写权限！"
+			cenfun_error()
+		end if
+	Set FSO=Nothing
 end function
 
 '删除目录
@@ -561,6 +557,7 @@ sub menu()
         <li><a href="system.asp?action=user" title="Users">用户管理</a></li>
         <li><a href="system.asp?action=skins" title="Skins">皮肤管理</a></li>
         <li><a href="system.asp?action=plugins" title="Plugins">插件管理</a></li>
+		<li><a href="system.asp?action=lrc" title="LRC">歌词管理</a></li>
       </ul>
     </li>
     <%end if%>
@@ -626,6 +623,17 @@ end sub
 Sub cenfun_suc(url)
 %>
 <br />
+<script type="text/javascript">
+function countDown(secs){
+	document.getElementById("timeout").innerHTML=secs;
+	secs --;
+	if(secs>=0){
+		setTimeout("countDown("+secs+")",1000);
+	} else {
+		window.location = "<%=url%>";
+	}
+}
+</script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="75%">
   <tr>
     <th>成功信息</th>
@@ -633,17 +641,8 @@ Sub cenfun_suc(url)
   <tr>
     <td align="center"><%=SucMsg%>
       <%if url<>"" then%>
-      <meta http-equiv="Refresh" content="3;URL=<%=url%>" />
       <span id="timeout">3</span>秒钟后自动返回
-      <script type="text/javascript">
-	function countDown(secs){
-		document.getElementById('timeout').innerHTML=secs;
-		if(--secs>0){
-			setTimeout("countDown("+secs+")",1000);
-		}
-	}
-	countDown(3);
-    </script>
+      <script type="text/javascript">countDown(3);</script>
       <%end if%>
     </td>
   </tr>

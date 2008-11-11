@@ -22,13 +22,11 @@ by=Checkstr(Request.QueryString("by"))
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <td><span style="float:left;">
-      <form onSubmit="return searcher();">
+    <td align="center"><form onSubmit="return searcher();">
         播放器名
         <input type="text" name="cmp_name" id="cmp_name" value="<%=cmp_name%>" />
         <input type="submit" name="search" id="search" value="搜索" />
-      </form>
-      </span></td>
+      </form></td>
   </tr>
   <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
@@ -95,7 +93,7 @@ IF not rs.EOF Then
             <th><a href="javascript:orderby('cmp_name');" title="点击按其排序">播放器名</a></th>
             <th><a href="javascript:orderby('lasttime');" title="点击按其排序">最后更新</a></th>
             <th><a href="javascript:orderby('hits');" title="点击按其排序">查看</a></th>
-			<th><a href="javascript:orderby('logins');" title="点击按其排序">登录</a></th>
+            <th><a href="javascript:orderby('logins');" title="点击按其排序">登录</a></th>
             <th><a href="javascript:orderby('list');" title="点击按其排序">音乐量</a></th>
             <th align="left">CMP播放器地址</th>
             <th>QQ</th>
@@ -107,7 +105,7 @@ IF not rs.EOF Then
             <td><a href="<%=getCmpPageUrl(rs("id"))%>" target="_blank" title="<%=rs("cmp_name")%>"><%=Left(rs("cmp_name"),12)%></a></td>
             <td title="<%=rs("lasttime")%>"><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><%=rs("hits")%></td>
-			<td><%=rs("logins")%></td>
+            <td><%=rs("logins")%></td>
             <td><%=Len(Trim(rs("list")))%></td>
             <td align="left"><a href="<%=getCmpUrl(rs("id"))%>&amp;c.swf" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%>&amp;c.swf</a></td>
             <td title="点击开启QQ对话"><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
@@ -140,7 +138,7 @@ Set rs=Nothing
 function searcher() {
 	var str = document.getElementById("cmp_name").value;
 	if(str != "<%=cmp_name%>"){
-		window.location = "userlist.asp?cmp_name="+str+"&order=<%=order%>&by=<%=by%>";
+		window.location = "userlist.asp?cmp_name="+encodeURIComponent(str)+"&order=<%=order%>&by=<%=by%>";
 	}
 	return false;
 }
