@@ -62,7 +62,7 @@ select case by
 		sql = sql & " order by len(list) " & order
 	case else
 		sql = sql & " order by id desc"
-		by = "id"
+		by = ""
 		order = ""
 end select
 'response.Write(sql)
