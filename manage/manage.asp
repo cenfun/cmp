@@ -230,13 +230,17 @@ set rs = nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th align="left">CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
+    <th align="left"><span style="float:right;margin-right:5px;">
+      <input type="button" onclick="searchLrc();" value="搜索歌词" />
+      <input type="button" onclick="uploadLrc();" value="上传歌词" />
+      </span>CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
       <%if request.QueryString("mode")="code" then%>
       <input type="button" onclick="window.location='manage.asp?action=list';" value="&lt;&lt;返回普通编辑模式" />
       <%else%>
       <input type="button" onclick="window.location='manage.asp?action=list&mode=code';" value="进入代码编辑模式&gt;&gt;" />
       <%end if%>
-      </span></th>
+      </span>
+      <div align="right">歌词名：</div></th>
   </tr>
   <%if request.QueryString("mode")="code" then%>
   <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
@@ -244,7 +248,8 @@ set rs = nothing
       <td align="center"><textarea name="list" rows="30" id="list" style="width:99%;"><%=strContent%></textarea></td>
     </tr>
     <tr>
-      <td align="center"><input name="list_submit" type="submit" id="list_submit" style="width:50px;" value="提交" /></td>
+      <td align="center"><input name="list_submit" type="submit" style="width:50px;" value="提交" />
+      <input name="list_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
     </tr>
   </form>
   <%else%>
@@ -261,8 +266,65 @@ showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
   <%end if%>
 </table>
 <script type="text/javascript">
+function check_xml(o) {
+	if (check_list(o.form)) {
+		alert("XML格式正确！");
+	}
+}
+//检测列表文件格式
 function check_list(o){
-	return true;
+	var isok = true;
+	var str = o.list.value;
+	var msie = /msie/.test(navigator.userAgent.toLowerCase());
+	var xmlDoc;
+	var errMsg = "错误的CMP3列表格式：\n\n";
+	try {
+		if (msie) {
+			xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+			xmlDoc.async= false;
+			xmlDoc.loadXML(str);
+			if (xmlDoc.parseError != 0) {
+				errMsg += xmlDoc.parseError.reason + "\n";
+				errMsg += "行:" +xmlDoc.parseError.line + " 位置:" +xmlDoc.parseError.linepos + "\n";
+				errMsg += xmlDoc.parseError.srcText + "\n";
+				isok = false;
+				alert(errMsg);
+			}
+		} else {
+			var parser = new DOMParser();
+			xmlDoc = parser.parseFromString(str, "text/xml");
+			//是否有错误文档
+			var errNode = xmlDoc.getElementsByTagName("parsererror");
+			if (errNode.length) {
+				var serializer = new XMLSerializer();
+				var children = errNode[0].childNodes;
+				for (var i = 0; i < children.length; i ++) {
+					var node = children[i];
+					if (node.nodeType == 1) {
+						errMsg += serializer.serializeToString(node.firstChild) + "\n";
+					} else {
+						errMsg += serializer.serializeToString(node) + "\n";
+					}
+				}
+				isok = false;
+				alert(errMsg);
+			}
+		}
+	} catch (e) {
+		alert(e);
+	}
+	//是否有l专辑标记
+	if (isok) {
+		var root = xmlDoc.firstChild;
+		if (root.childNodes.length) {
+			var tagL = xmlDoc.firstChild.getElementsByTagName("l");
+			if (tagL.length == 0) {
+				isok = false;
+				alert(errMsg + "至少需要一个l标记的分类");
+			}
+		}
+	}
+	return isok;
 }
 </script>
 <%
