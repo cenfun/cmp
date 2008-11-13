@@ -521,7 +521,7 @@ IF not rs.EOF Then
           <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
-            <%end if%></td>
+              <%end if%></td>
             <td><%=role%></td>
             <td><%=rs("id")%></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>" title="点击查看和编辑详细资料"><%=rs("username")%></a></td>
@@ -634,26 +634,14 @@ else
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th colspan="2" align="left"><input type="button" value="&lt;&lt;返回用户列表" onClick="window.location='<%=referer%>';" /></th>
+    <th colspan="2" align="left"><input type="button" value="&lt;&lt;返回用户列表" onclick="window.location='<%=referer%>';" /></th>
   </tr>
   <%
 sql = "select * from cmp_user where id = " & id & " "
 set rs = conn.execute(sql)
 if not rs.eof then
-	dim role,ustatus
-	ustatus = rs("userstatus")
-	select case ustatus
-	case 0
-		role = "<strong>未激活</strong>"
-	case 1
-		role = "<strong style='color:#999999'>被锁定</strong>"
-	case 5
-		role = "普通用户"
-	case 9
-		role = "<strong style='color:#0000ff'>管理员</strong>"
-	case else
-		role = "未定义"
-	end select
+	dim userstatus
+	userstatus = rs("userstatus")
 	dim cmpurl
 	cmpurl = getCmpUrl(rs("id"))
 	dim strConfig,strList
@@ -670,13 +658,18 @@ if not rs.eof then
     </tr>
     <tr>
       <td align="right">状态：</td>
-      <td><%=role%></td>
+      <td><select name="userstatus">
+          <option value="0" <%if userstatus=0 then%>selected="selected"<%end if%>>未激活</option>
+          <option value="1" <%if userstatus=1 then%>selected="selected"<%end if%>>被锁定</option>
+          <option value="5" <%if userstatus=5 then%>selected="selected"<%end if%>>普通用户</option>
+          <option value="9" <%if userstatus=9 then%>selected="selected"<%end if%>>管理员</option>
+        </select></td>
     </tr>
     <tr>
       <td align="right">用户名：</td>
       <td><%=rs("username")%></td>
     </tr>
-    <%if ustatus <> 9 then%>
+    <%if userstatus <> 9 then%>
     <tr>
       <td align="right">密码：</td>
       <td><input name="password" type="password" id="password" size="30" />
@@ -738,6 +731,7 @@ if not rs.eof then
     <tr>
       <td width="20%">&nbsp;</td>
       <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" />
+        <input name="" type="button" value="取消" style="width:50px;" onclick="window.location='<%=referer%>';" />
       </td>
     </tr>
   </form>
@@ -749,6 +743,12 @@ set rs = nothing
 </table>
 <script type="text/javascript">
 function check(o){
+	if(o.userstatus.value=="9"){
+		if(!confirm("确定将此用户升级为系统管理员？")){
+			o.reset();
+			return false;
+		}
+	}
 	if(o.logins.value=="" || isNaN(o.logins.value)){
 		alert("登录次数必须为数字！");
 		o.logins.focus();
@@ -780,10 +780,14 @@ if id <> "" then
 		sql = "select username from cmp_user where id="&id
 		set rs = conn.execute(sql)
 		if not rs.eof then
-			dim password,logins,hits,email,qq,cmp_name,cmp_url,setinfo,config,list
+			dim password,userstatus,logins,hits,email,qq,cmp_name,cmp_url,setinfo,config,list
 			if Request.Form("password")<>"" then
 				password=md5(Request.Form("password")+rs("username"),16)
 				conn.execute("update cmp_user set [password]='"&password&"' where username='"&rs("username")&"'")
+			end if
+			userstatus=Checkstr(Request.Form("userstatus"))
+			if userstatus="" then
+				userstatus=0
 			end if
 			logins=Checkstr(Request.Form("logins"))
 			hits=Checkstr(Request.Form("hits"))
@@ -806,7 +810,8 @@ if id <> "" then
 				call makeFile(xml_path & "/" & id & xml_list, list)
 			end if
 			'保存至数据库
-			sql = "update cmp_user set logins="&logins&",hits="&hits&",email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
+			sql = "update cmp_user set userstatus="&userstatus&",logins="&logins&",hits="&hits&","
+			sql = sql & "email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
 			sql = sql & "setinfo="&setinfo&",config='"&CheckStr(config)&"',list='"&CheckStr(list)&"' where username='"&rs("username")&"' "
 			'response.Write(sql)
 			conn.execute(sql)
@@ -1094,18 +1099,20 @@ end if
   </tr>
   <tr>
     <td align="right">当前数据库中的歌词总数：</td>
-    <td>共 <strong><%
+    <td>共 <strong>
+      <%
 	set rs=conn.execute("select count(*) from cmp_lrc") 
 		Response.Write(rs(0))
 	rs.close
 	set rs=nothing
-	%></strong> 条</td>
+	%>
+      </strong> 条</td>
   </tr>
   <tr>
     <td align="right">歌词库创建：</td>
     <td><input type="submit" value="从lrc目录创建歌词库" onclick="createLrc();" />
-    程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库(重建时将覆盖之前的记录)<br />
-    安全起见仅保存 *.lrc 和 *.txt 类型的文件名；管理员可将常见歌词上传至lrc目录，自动创建歌词库后供用户使用</td>
+      程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库(重建时将覆盖之前的记录)<br />
+      安全起见仅保存 *.lrc 和 *.txt 类型的文件名；管理员可将常见歌词上传至lrc目录，自动创建歌词库后供用户使用</td>
   </tr>
   <tr>
     <td align="right">歌词库优化(重建数据后释放无效空间)：</td>
@@ -1185,7 +1192,7 @@ IF not rs.EOF Then
           <%loop%>
           <tr>
             <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=lrc&showlrc=1&lrc_name="&lrc_name&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
-            <div style="padding:5px 5px;">
+              <div style="padding:5px 5px;">
                 <input type="button" value="删除所选歌词" onClick="dellrc(this);" />
                 (可多选批量操作) </div></td>
           </tr>
