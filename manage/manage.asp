@@ -442,6 +442,13 @@ set rs = nothing
 </table>
 <script type="text/javascript">
 function check_info(o){
+	if(o.qq.value!=""){
+		if(isNaN(o.qq.value)){
+			alert("QQ号码必须为数字！");
+			o.qq.select();
+			return false;
+		}
+	}
 	if(o.cmp_name.value==""){
 		alert("播放器名称不能为空！");
 		o.cmp_name.focus();
