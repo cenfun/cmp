@@ -254,7 +254,6 @@ set rs = nothing
       <div>
         <div align="right">
           <form onsubmit="return getLrcList();">
-            歌词名：
             <input id="lrc_name" type="text" size="35" />
             <input type="submit" value="搜索歌词" />
           </form>
@@ -301,6 +300,7 @@ showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
 </table>
 <script type="text/javascript">
 function getLrcList() {
+	showUpload(false);
 	var lrc_name = document.getElementById("lrc_name");
 	if (lrc_name.value) {
 		ajaxSend("GET","manage.asp?rd="+Math.random()+"&handler=getlrcs&lrc_name="+encodeURIComponent(lrc_name.value),true,null,completeHd,errorHd);
@@ -313,20 +313,29 @@ function completeHd(data) {
 	//alert(data);
 	var obj = document.getElementById("lrclist");
 	if(data != ""){
-		var html = "";
+		var html = '<table border="0" cellpadding="2" cellspacing="1" >';
 		if (data == "null") {
-			html = '没有找到相关的歌词！<a href="javascript:uploadLrc(true);void(0);">上传歌词</a>';
+			html += '<tr><td>没有找到相关的歌词！<a href="javascript:showUpload(true);void(0);">上传歌词</a></td></tr>';
 		} else {
-			uploadLrc(false);
 			var lrcs = data.split("{|}");
 			for (var i = 0; i < lrcs.length - 1; i ++) {
 				var url = "lrc/"+lrcs[i];
-				html += '<a href="'+url+'" target="_blank">查看</a> <input value="'+url+'" onfocus="this.select();" size="60" /><br />';
+				html += '<tr><td><a href="'+url+'" target="_blank">查看</a> <input value="'+url+'" onfocus="this.select();" size="60" /></td></tr>';
 			}
-			html += '<div align="center">请复制输入框中的歌词路径，粘贴到列表编辑器中的歌词项即可</div>';
+			html += '<tr><td align="center">请复制输入框中的歌词路径，粘贴到列表编辑器中即可！ <a href="javascript:showList(false);void(0);">关闭</a></td></tr>';
 		}
-		obj.style.display = "";
+		html += '</table>';
+		//
+		showList(true);
 		obj.innerHTML = html;
+	} else {
+		showList(false);
+	}
+}
+function showList(show) {
+	var obj = document.getElementById("lrclist");
+	if (show) {
+		obj.style.display = "";
 	} else {
 		obj.style.display = "none";
 	}
@@ -334,7 +343,7 @@ function completeHd(data) {
 function errorHd(errmsg) {
 	alert(errmsg);
 }
-function uploadLrc(show) {
+function showUpload(show) {
 	var lrcupload = document.getElementById("lrcupload");
 	if (show) {
 		//lrcupload.style.display = "";
