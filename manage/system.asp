@@ -1093,30 +1093,23 @@ end if
     <th colspan="2" align="left">歌词库管理</th>
   </tr>
   <tr>
-    <td align="right">当前歌词数：</td>
-    <td><%
+    <td align="right">当前数据库中的歌词总数：</td>
+    <td>共 <strong><%
 	set rs=conn.execute("select count(*) from cmp_lrc") 
 		Response.Write(rs(0))
 	rs.close
 	set rs=nothing
-	%></td>
+	%></strong> 条</td>
   </tr>
   <tr>
     <td align="right">歌词库创建：</td>
-    <td><input type="submit" value="从lrc目录创建歌词库" onclick="createLrc();" /></td>
+    <td><input type="submit" value="从lrc目录创建歌词库" onclick="createLrc();" />
+    程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库(重建时将覆盖之前的记录)<br />
+    安全起见仅保存 *.lrc 和 *.txt 类型的文件名；管理员可将常见歌词上传至lrc目录，自动创建歌词库后供用户使用</td>
   </tr>
   <tr>
-    <td align="right">&nbsp;</td>
-    <td>程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库<br />
-    注意：重建时将覆盖之前的记录；安全起见仅保存*.txt/*.lrc类型</td>
-  </tr>
-  <tr>
-    <td align="right">歌词库优化：</td>
+    <td align="right">歌词库优化(重建数据后释放无效空间)：</td>
     <td><%database("system.asp?action=lrc")%></td>
-  </tr>
-  <tr>
-    <td align="right">&nbsp;</td>
-    <td>重建数据后释放无效空间</td>
   </tr>
   <%if Request.QueryString("showlrc")<>1 then%>
   <tr>
@@ -1169,7 +1162,7 @@ if page <> "" then
 end if
 dim PageC,MaxPerPage
 	PageC=0
-	MaxPerPage=50
+	MaxPerPage=20
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
 IF not rs.EOF Then
