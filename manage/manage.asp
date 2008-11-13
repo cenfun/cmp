@@ -323,7 +323,7 @@ function completeHd(data) {
 				var url = "lrc/"+lrcs[i];
 				html += '<a href="'+url+'" target="_blank">查看</a> <input value="'+url+'" onfocus="this.select();" size="60" /><br />';
 			}
-			html += '<div align="center">请复制输入框中的歌词路径粘贴到列表编辑器中！</div>';
+			html += '<div align="center">请复制输入框中的歌词路径，粘贴到列表编辑器中的歌词项即可</div>';
 		}
 		obj.style.display = "";
 		obj.innerHTML = html;
@@ -337,7 +337,7 @@ function errorHd(errmsg) {
 function uploadLrc(show) {
 	var lrcupload = document.getElementById("lrcupload");
 	if (show) {
-		lrcupload.style.display = "";
+		//lrcupload.style.display = "";
 	} else {
 		lrcupload.style.display = "none";
 	}
@@ -388,7 +388,7 @@ sub getlrcs()
 			Response.Write("null")
 		else
 			Do Until rs.EOF
-				Response.Write(rs("src") & "{|}")
+				Response.Write(trim(rs("src")) & "{|}")
 				rs.MoveNext
 			loop
 		end if
