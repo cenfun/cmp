@@ -14,6 +14,8 @@ If founduser Then
 			getskins()
 		Case "getplugins"
 			getplugins()
+		Case "getlrcs"
+			getlrcs()
 		Case Else
 			header()
 			menu()
@@ -145,7 +147,7 @@ set rs = nothing
     </tr>
     <tr>
       <td align="center"><input name="config_submit" type="submit" style="width:50px;" value="提交" />
-      <input name="config_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
+        <input name="config_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
     </tr>
   </form>
   <%else%>
@@ -249,16 +251,30 @@ set rs = nothing
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
     <th align="left"><span style="float:right;margin-right:5px;">
-      <input type="button" onclick="searchLrc();" value="搜索歌词" />
-      <input type="button" onclick="uploadLrc();" value="上传歌词" />
+      <div>
+        <div align="right">
+          <form onsubmit="return getLrcList();">
+            歌词名：
+            <input id="lrc_name" type="text" size="35" />
+            <input type="submit" value="搜索歌词" />
+          </form>
+        </div>
+        <div id="lrclist"></div>
+        <div id="lrcupload" style="display:none;">
+          <form>
+            <input name="" type="file" />
+            <input name="" type="submit" value="上传歌词" />
+          </form>
+          <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
+        </div>
+      </div>
       </span>CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
       <%if request.QueryString("mode")="code" then%>
       <input type="button" onclick="window.location='manage.asp?action=list';" value="&lt;&lt;返回普通编辑模式" />
       <%else%>
       <input type="button" onclick="window.location='manage.asp?action=list&mode=code';" value="进入代码编辑模式&gt;&gt;" />
       <%end if%>
-      </span>
-      <div align="right">歌词名：</div></th>
+      </span></th>
   </tr>
   <%if request.QueryString("mode")="code" then%>
   <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
@@ -267,7 +283,7 @@ set rs = nothing
     </tr>
     <tr>
       <td align="center"><input name="list_submit" type="submit" style="width:50px;" value="提交" />
-      <input name="list_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
+        <input name="list_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
     </tr>
   </form>
   <%else%>
@@ -284,6 +300,48 @@ showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
   <%end if%>
 </table>
 <script type="text/javascript">
+function getLrcList() {
+	var lrc_name = document.getElementById("lrc_name");
+	if (lrc_name.value) {
+		ajaxSend("GET","manage.asp?rd="+Math.random()+"&handler=getlrcs&lrc_name="+encodeURIComponent(lrc_name.value),true,null,completeHd,errorHd);
+	} else {
+		completeHd("");
+	}
+	return false;
+}
+function completeHd(data) {
+	//alert(data);
+	var obj = document.getElementById("lrclist");
+	if(data != ""){
+		var html = "";
+		if (data == "null") {
+			html = '没有找到相关的歌词！<a href="javascript:uploadLrc(true);void(0);">上传歌词</a>';
+		} else {
+			uploadLrc(false);
+			var lrcs = data.split("{|}");
+			for (var i = 0; i < lrcs.length - 1; i ++) {
+				var url = "lrc/"+lrcs[i];
+				html += '<a href="'+url+'" target="_blank">查看</a> <input value="'+url+'" onfocus="this.select();" size="60" /><br />';
+			}
+			html += '<div align="center">请复制输入框中的歌词路径粘贴到列表编辑器中！</div>';
+		}
+		obj.style.display = "";
+		obj.innerHTML = html;
+	} else {
+		obj.style.display = "none";
+	}
+}
+function errorHd(errmsg) {
+	alert(errmsg);
+}
+function uploadLrc(show) {
+	var lrcupload = document.getElementById("lrcupload");
+	if (show) {
+		lrcupload.style.display = "";
+	} else {
+		lrcupload.style.display = "none";
+	}
+}
 function check_xml(o) {
 	if (check_list(o.form)) {
 		alert("XML格式正确！");
@@ -310,6 +368,33 @@ function check_list(o){
 }
 </script>
 <%
+end sub
+
+sub getlrcs()
+	dim lrc_name
+	lrc_name = CheckStr(Request.QueryString("lrc_name"))
+	if lrc_name="" then
+		Response.Write("null")
+	else
+		'模糊搜索
+		sql = "select top 5 src from cmp_lrc where 1=1 "
+		dim keywords,key
+		keywords = Split(lrc_name, " ")
+		For Each key in keywords
+    		sql = sql & " and src like '%"&key&"%' "
+		Next
+		set rs=conn.Execute(sql)
+		if rs.eof then
+			Response.Write("null")
+		else
+			Do Until rs.EOF
+				Response.Write(rs("src") & "{|}")
+				rs.MoveNext
+			loop
+		end if
+		rs.close
+		set rs=nothing
+	end if
 end sub
 
 sub savelist()
