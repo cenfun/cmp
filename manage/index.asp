@@ -331,7 +331,7 @@ sub login()
     	response.End
 		Exit Sub
 	else
-		'用户状态 0未激活，1锁定，2删除，5正常，9管理员
+		'用户状态 0未激活，1锁定，2删除，5正常，8管理员，9系统管理员
 		if rs("userstatus") = 0 then
 			ErrMsg = "您的帐号还没有激活，请耐心等待管理员的审核或及时联系管理员。"
 			cenfun_error()
@@ -343,7 +343,9 @@ sub login()
 			Session.Timeout = 45
 			Session(CookieName & "_username") = UserName
 			Session(CookieName & "_userid") = rs("id")
-			if rs("userstatus") = 9 then
+			Session(CookieName & "_userstatus") = rs("userstatus")
+			'管理员8,9
+			if rs("userstatus") > 7 then
 				Session(CookieName & "_admin") = UserName
 			else
 				Session(CookieName & "_admin") = ""

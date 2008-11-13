@@ -464,7 +464,7 @@ select case by
         sql = sql & " order by lasttime " & order
 	case else
 		sql = sql & " order by id desc"
-		by = "id"
+		by = ""
 		order = ""
 end select
 'response.Write(sql)
@@ -512,8 +512,10 @@ IF not rs.EOF Then
 			role = "<strong style='color:#999999'>被锁定</strong>"
 		case 5
 			role = "普通用户"
+		case 8
+			role = "<strong style='color:#ff0000'>管理员</strong>"
 		case 9
-			role = "<strong style='color:#0000ff'>管理员</strong>"
+			role = "<strong style='color:#0000ff'>系统管理员</strong>"
 		case else
 			role = "未定义"
 		end select
@@ -526,9 +528,9 @@ IF not rs.EOF Then
             <td><%=rs("id")%></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>" title="点击查看和编辑详细资料"><%=rs("username")%></a></td>
             <td><%=FormatDateTime(rs("lasttime"),2)%></td>
-            <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=rs("email")%></a></td>
-            <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=rs("qq")%></a></td>
-            <td><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" title="点击在新窗口中打开"><%=rs("cmp_name")%></a></td>
+            <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=Left(rs("email"),20)%></a></td>
+            <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=Left(rs("qq"),10)%></a></td>
+            <td><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" title="<%=rs("cmp_name")%>"><%=Left(rs("cmp_name"),12)%></a></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情查看和编辑</a></td>
           </tr>
           <%rs.MoveNext%>
@@ -657,23 +659,28 @@ if not rs.eof then
       <td><%=rs("id")%></td>
     </tr>
     <tr>
-      <td align="right">状态：</td>
-      <td><select name="userstatus">
-          <option value="0" <%if userstatus=0 then%>selected="selected"<%end if%>>未激活</option>
-          <option value="1" <%if userstatus=1 then%>selected="selected"<%end if%>>被锁定</option>
-          <option value="5" <%if userstatus=5 then%>selected="selected"<%end if%>>普通用户</option>
-          <option value="9" <%if userstatus=9 then%>selected="selected"<%end if%>>管理员</option>
-        </select></td>
-    </tr>
-    <tr>
       <td align="right">用户名：</td>
       <td><%=rs("username")%></td>
     </tr>
     <%if userstatus <> 9 then%>
     <tr>
+      <td align="right">状态：</td>
+      <td><select name="userstatus">
+          <option value="0" <%if userstatus=0 then%>selected="selected"<%end if%>>未激活</option>
+          <option value="1" <%if userstatus=1 then%>selected="selected"<%end if%>>被锁定</option>
+          <option value="5" <%if userstatus=5 then%>selected="selected"<%end if%>>普通用户</option>
+          <option value="8" <%if userstatus=8 then%>selected="selected"<%end if%>>管理员</option>
+        </select></td>
+    </tr>
+    <tr>
       <td align="right">密码：</td>
       <td><input name="password" type="password" id="password" size="30" />
         一般用于帮用户重置密码，不修改请留空。</td>
+    </tr>
+    <%else%>
+	<tr>
+      <td align="right">状态：</td>
+      <td><strong>系统管理员</strong></td>
     </tr>
     <%end if%>
     <tr>
@@ -743,8 +750,8 @@ set rs = nothing
 </table>
 <script type="text/javascript">
 function check(o){
-	if(o.userstatus.value=="9"){
-		if(!confirm("确定将此用户升级为系统管理员？")){
+	if("<%=userstatus%>" != "8" && o.userstatus.value=="8"){
+		if(!confirm("确定将此用户升级为管理员吗？")){
 			o.reset();
 			return false;
 		}
@@ -786,9 +793,6 @@ if id <> "" then
 				conn.execute("update cmp_user set [password]='"&password&"' where username='"&rs("username")&"'")
 			end if
 			userstatus=Checkstr(Request.Form("userstatus"))
-			if userstatus="" then
-				userstatus=0
-			end if
 			logins=Checkstr(Request.Form("logins"))
 			hits=Checkstr(Request.Form("hits"))
 			email=Checkstr(Request.Form("email"))
@@ -810,8 +814,11 @@ if id <> "" then
 				call makeFile(xml_path & "/" & id & xml_list, list)
 			end if
 			'保存至数据库
-			sql = "update cmp_user set userstatus="&userstatus&",logins="&logins&",hits="&hits&","
+			sql = "update cmp_user set logins="&logins&",hits="&hits&","
 			sql = sql & "email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
+			if userstatus<>"" and IsNumeric(userstatus) then
+				sql = sql & "userstatus="&userstatus&","
+			end if
 			sql = sql & "setinfo="&setinfo&",config='"&CheckStr(config)&"',list='"&CheckStr(list)&"' where username='"&rs("username")&"' "
 			'response.Write(sql)
 			conn.execute(sql)
