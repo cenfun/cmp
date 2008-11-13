@@ -91,6 +91,49 @@ function checkbadwords(str, badwords) {
 	}
 	return true;
 }
+//检测xmlDom正确性
+function checkXML(str) {
+	var isok = true;
+	var msie = /msie/.test(navigator.userAgent.toLowerCase());
+	var xmlDoc;
+	var errMsg = "XML格式错误：\n\n";
+	try {
+		if (msie) {
+			xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+			xmlDoc.async= false;
+			xmlDoc.loadXML(str);
+			if (xmlDoc.parseError != 0) {
+				errMsg += xmlDoc.parseError.reason + "\n";
+				errMsg += "行:" +xmlDoc.parseError.line + " 位置:" +xmlDoc.parseError.linepos + "\n";
+				errMsg += xmlDoc.parseError.srcText + "\n";
+				isok = false;
+				alert(errMsg);
+			}
+		} else {
+			var parser = new DOMParser();
+			xmlDoc = parser.parseFromString(str, "text/xml");
+			//是否有错误文档
+			var errNode = xmlDoc.getElementsByTagName("parsererror");
+			if (errNode.length) {
+				var serializer = new XMLSerializer();
+				var children = errNode[0].childNodes;
+				for (var i = 0; i < children.length; i ++) {
+					var node = children[i];
+					if (node.nodeType == 1) {
+						errMsg += serializer.serializeToString(node.firstChild) + "\n";
+					} else {
+						errMsg += serializer.serializeToString(node) + "\n";
+					}
+				}
+				isok = false;
+				alert(errMsg);
+			}
+		}
+	} catch (e) {
+		alert(e);
+	}
+	return [isok, xmlDoc];
+}
 //open a new window
 function winopen(url,name,width,height,str){
 	var winopen = window.open(url,name,'width='+width+',height='+height+','+str+',menubar=0,status=0');

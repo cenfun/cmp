@@ -144,7 +144,8 @@ set rs = nothing
       <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"><%=strContent%></textarea></td>
     </tr>
     <tr>
-      <td align="center"><input name="config_submit" type="submit" id="config_submit" style="width:50px;" value="提交" /></td>
+      <td align="center"><input name="config_submit" type="submit" style="width:50px;" value="提交" />
+      <input name="config_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
     </tr>
   </form>
   <%else%>
@@ -163,8 +164,25 @@ showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars, false);
   <%end if%>
 </table>
 <script type="text/javascript">
+function check_xml(o) {
+	if (check_config(o.form)) {
+		alert("XML格式正确！");
+	}
+}
 function check_config(o){
-	return true;
+	var str = o.config.value;
+	var chk = checkXML(str);
+	var isok = chk[0];
+	var xmlDoc = chk[1];
+	//检测列表是否为空
+	if (isok) {
+		var root = xmlDoc.documentElement;
+		if (!root.getAttribute("list")) {
+			isok = false;
+			alert("必须配置对应的列表路径list");
+		}
+	}
+	return isok;
 }
 </script>
 <%
@@ -273,49 +291,13 @@ function check_xml(o) {
 }
 //检测列表文件格式
 function check_list(o){
-	var isok = true;
 	var str = o.list.value;
-	var msie = /msie/.test(navigator.userAgent.toLowerCase());
-	var xmlDoc;
-	var errMsg = "错误的CMP3列表格式：\n\n";
-	try {
-		if (msie) {
-			xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-			xmlDoc.async= false;
-			xmlDoc.loadXML(str);
-			if (xmlDoc.parseError != 0) {
-				errMsg += xmlDoc.parseError.reason + "\n";
-				errMsg += "行:" +xmlDoc.parseError.line + " 位置:" +xmlDoc.parseError.linepos + "\n";
-				errMsg += xmlDoc.parseError.srcText + "\n";
-				isok = false;
-				alert(errMsg);
-			}
-		} else {
-			var parser = new DOMParser();
-			xmlDoc = parser.parseFromString(str, "text/xml");
-			//是否有错误文档
-			var errNode = xmlDoc.getElementsByTagName("parsererror");
-			if (errNode.length) {
-				var serializer = new XMLSerializer();
-				var children = errNode[0].childNodes;
-				for (var i = 0; i < children.length; i ++) {
-					var node = children[i];
-					if (node.nodeType == 1) {
-						errMsg += serializer.serializeToString(node.firstChild) + "\n";
-					} else {
-						errMsg += serializer.serializeToString(node) + "\n";
-					}
-				}
-				isok = false;
-				alert(errMsg);
-			}
-		}
-	} catch (e) {
-		alert(e);
-	}
+	var chk = checkXML(str);
+	var isok = chk[0];
+	var xmlDoc = chk[1];
 	//是否有l专辑标记
 	if (isok) {
-		var root = xmlDoc.firstChild;
+		var root = xmlDoc.documentElement;
 		if (root.childNodes.length) {
 			var tagL = xmlDoc.firstChild.getElementsByTagName("l");
 			if (tagL.length == 0) {
