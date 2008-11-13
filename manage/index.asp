@@ -5,11 +5,13 @@
 site_title = "首页"
 if Request.QueryString("username")<>"" then
 	checkuser()
+elseif Request.QueryString("verify")="1" then
+	verify()
 else
 	header()
 	Select Case Request.QueryString("action")
 		Case "login"
-			login()
+			login()	
 		Case "reg"
 			reg()
 		Case "save_reg"
@@ -22,17 +24,8 @@ else
 	footer()
 end if
 
-
-
 sub main()
 	menu()
-	dim rndnum,verifycode,num1
-	Randomize
-	Do While Len(rndnum)<4
-	num1=CStr(Chr((57-48)*rnd+48))
-	rndnum=rndnum&num1
-	loop
-	session("verifycode")=rndnum
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <form action="index.asp?action=login" method="post" onsubmit="return check(this);">
@@ -51,8 +44,8 @@ sub main()
     </tr>
     <tr>
       <td align="right">验证码：</td>
-      <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" onfocus="showcode();" />
-        <span id="verifycodeobj"></span></td>
+      <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" onfocus="showcode(this);" />
+        <span id="verifycodeobj" title="点击更换验证码" style="font-weight:bold;-moz-user-select:none;cursor:pointer;background-color:#000000;" onclick="getcode();"></span></td>
     </tr>
     <tr>
       <td width="10%">&nbsp;</td>
@@ -79,14 +72,27 @@ function check(o){
 	}
 	return true;
 }
-function showcode(){
-	var html = '<%=getCode(session("verifycode"))%>';
-	var obj = document.getElementById("verifycodeobj");
-	obj.style.background = "#000000";
-	obj.className = "verifycode";
-	obj.style.display = "";
-	obj.onselectstart = function(){return false;}
-	obj.innerHTML = html;
+
+function showcode(o) {
+	o.onfocus = null;
+	getcode();
+}
+function getcode() {
+	ajaxSend("GET","index.asp?rd="+Math.random()+"&verify=1",true,null,completeHd,errorHd);
+}
+function completeHd(data) {
+	//alert(data);
+	if(data != ""){
+		var html = data;
+		var obj = document.getElementById("verifycodeobj");
+		obj.onselectstart = function(){return false;}
+		obj.innerHTML = html;
+	} else {
+		
+	}
+}
+function errorHd(errmsg) {
+	alert(errmsg);
 }
 </script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
@@ -164,8 +170,7 @@ function check_username(o){
 		ru.innerHTML = username_err;
 		return;
 	}
-	//检测是否已经存在
-	ajaxSend("GET","index.asp?rd="+Math.round()+"&username="+un,true,null,completeHd,errorHd);
+	ajaxSend("GET","index.asp?rd="+Math.random()+"&username="+un,true,null,completeHd,errorHd);
 }
 function completeHd(data){
 	//alert(data);
@@ -207,6 +212,13 @@ function check(o){
 		o.passwordcheck.value = "";
 		return false;
 	}
+	if(o.qq.value!=""){
+		if(isNaN(o.qq.value)){
+			alert("QQ号码必须为数字！");
+			o.qq.select();
+			return false;
+		}
+	}
 	if(o.cmp_name.value==""){
 		alert("播放器名称不能为空！");
 		o.cmp_name.focus();
@@ -215,9 +227,7 @@ function check(o){
 	return true;
 }
 </script>
-<%
-else
-%>
+<%else%>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
     <th align="left">用户注册:</th>
@@ -230,6 +240,17 @@ else
 </table>
 <%
 end if
+end sub
+
+sub verify()
+	dim rndnum,num1
+	Randomize
+	Do While Len(rndnum)<4
+		num1=CStr(Chr((57-48)*rnd+48))
+		rndnum=rndnum&num1
+	loop
+	session("verifycode")=rndnum
+	Response.Write(getCode(rndnum))
 end sub
 
 sub checkuser()

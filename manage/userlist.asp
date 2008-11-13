@@ -56,6 +56,8 @@ select case by
 		sql = sql & " order by hits " & order
 	case "logins"
 		sql = sql & " order by logins " & order
+	case "qq"
+		sql = sql & " order by len(qq) " & order & " ,qq " & order
 	case "lasttime"
 		sql = sql & " order by lasttime " & order
 	case "list"
@@ -96,7 +98,7 @@ IF not rs.EOF Then
             <th><a href="javascript:orderby('logins');" title="点击按其排序">登录</a></th>
             <th><a href="javascript:orderby('list');" title="点击按其排序">音乐量</a></th>
             <th align="left">CMP播放器地址</th>
-            <th>QQ</th>
+            <th><a href="javascript:orderby('qq');" title="点击按其排序">QQ</a></th>
             <th>Email</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
