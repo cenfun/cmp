@@ -6,6 +6,8 @@ site_title = "管理中心"
 '检测用户是否登录
 If founduser Then
 	Select Case Request.QueryString("handler")
+		Case "saveuploaddata"
+			saveuploaddata()
 		Case "savelistdata"
 			savelistdata()
 		Case "saveconfigdata"
@@ -40,6 +42,20 @@ If founduser Then
 else 
 	response.Redirect("index.asp")
 end if
+
+
+sub saveuploaddata()
+	dim filetype
+	filetype=CheckStr(Request.QueryString("type"))
+	Select Case filetype
+		Case "lrc"
+		'Response.Write("CMPConfigComplete")
+		'call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
+		Case Else
+	
+	End Select
+end sub
+
 
 sub getskins()
 addUTFBOM()
