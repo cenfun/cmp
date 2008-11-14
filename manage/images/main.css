@@ -9,6 +9,7 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .ads { margin:5px auto; width:98%; overflow:hidden; }
 .tableborder { margin:0px auto; border:1px solid #CAD9EA; margin-bottom:10px; background-color:#FFFFFF; }
 .tableborder th { padding:5px 3px; border-bottom:1px solid #CAD9EA; color:#428EFF; }
+.tableborder th * { font-weight:normal; color:#000000; }
 .tableborder td { padding:2px 2px; line-height:20px; font-weight:normal; color:#000000; }
 .tablelist { margin:0px auto; background-color:#CAD9EA; }
 .tablelist tr { background-color:#FFFFFF; }

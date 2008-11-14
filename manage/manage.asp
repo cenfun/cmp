@@ -254,16 +254,13 @@ set rs = nothing
       <div>
         <div align="right">
           <form onsubmit="return getLrcList();">
-            <input id="lrc_name" type="text" size="35" />
+            <input id="lrc_name" type="text" size="35" title="最多搜索出5个结果，请输入适当的关键字，以便更精确的查找歌词" />
             <input type="submit" value="搜索歌词" />
           </form>
         </div>
         <div id="lrclist"></div>
         <div id="lrcupload" style="display:none;">
-          <form>
-            <input name="" type="file" />
-            <input name="" type="submit" value="上传歌词" />
-          </form>
+          
           <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
         </div>
       </div>
@@ -346,7 +343,7 @@ function errorHd(errmsg) {
 function showUpload(show) {
 	var lrcupload = document.getElementById("lrcupload");
 	if (show) {
-		//lrcupload.style.display = "";
+		lrcupload.style.display = "";
 	} else {
 		lrcupload.style.display = "none";
 	}
