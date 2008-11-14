@@ -45,12 +45,33 @@ end if
 
 
 sub saveuploaddata()
-	dim filetype
+	dim filetype,filename,fileurl
 	filetype=CheckStr(Request.QueryString("type"))
+	Dim oUpFileStream
 	Select Case filetype
 		Case "lrc"
-		'Response.Write("CMPConfigComplete")
-		'call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
+			'http://localhost/manage/manage.asp?handler=saveuploaddata&type=lrc
+			'filename=CheckStr(Request.Form("filename"))
+			'Response.Write(Request.BinaryRead (Request.TotalBytes))
+			
+			fileurl = "lrc/test.lrc"
+			if Request.TotalBytes > 0 then
+				Set oUpFileStream = Server.CreateObject ("ADODB.Stream")
+				oUpFileStream.Type = 1
+				oUpFileStream.Mode = 3
+				oUpFileStream.Open 
+				oUpFileStream.Write Request.BinaryRead (Request.TotalBytes)
+				oUpFileStream.SaveToFile Server.Mappath(fileurl),2 
+				oUpFileStream.Close
+				If Err Then 
+					Err.Clear
+					Response.Write("uploadError{|}写入文件失败，请检查服务器是否有可写权限！")
+				else
+					Response.Write("uploadComplete{|}" & fileurl)
+				end if
+			else
+				Response.Write("uploadError{|}上传文件的大小为0！")
+			end if
 		Case Else
 	
 	End Select
