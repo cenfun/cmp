@@ -45,36 +45,74 @@ end if
 
 
 sub saveuploaddata()
-	dim filetype,filename,fileurl
-	filetype=CheckStr(Request.QueryString("type"))
-	Dim oUpFileStream
-	Select Case filetype
+	Dim fileStream
+	Set fileStream = Server.CreateObject ("ADODB.Stream")
+	If Err Then 
+		Err.Clear
+		Response.Write("uploadError{|}创建ADODB.Stream出错")
+		exit sub
+	end if
+	
+	dim formsize,formdata
+	formsize = Request.TotalBytes
+	if formsize < 1 then
+		'Response.Write("uploadError{|}上传文件的大小为0")
+		'exit sub
+	end if
+	formdata=Request.BinaryRead(formsize)
+	
+	'dim bncrlf
+	'bncrlf=chrB(13) & chrB(10)
+	
+	'表单项分割符
+	'Dim PosBeg, PosEnd, boundary, boundaryPos
+    'PosBeg = 1
+    'PosEnd = InstrB(PosBeg,formdata,bncrlf)
+    'boundary = MidB(formdata,PosBeg,PosEnd-PosBeg)
+	'boundaryPos = InstrB(1,formdata,boundary)
+	
+	'Response.BinaryWrite(boundary)
+	
+	Response.BinaryWrite(formdata)
+	
+	'Response.BinaryWrite(boundaryPos)
+	
+	
+	
+	
+	'dim filedata,filetype,filename,fileurl
+	
+	'filedata = midb(formdata,DataStart,DataEnd)
+	
+	'Response.BinaryWrite(filedata)
+	
+
+	
+	
+	if filename="" then filename="text.txt"
+	fileurl = "lrc/" & filename
+	
+	fileStream.Type = 1
+	fileStream.Mode = 3
+	fileStream.Open 
+	fileStream.Write formdata
+	fileStream.SaveToFile Server.Mappath(fileurl),2 
+	fileStream.Close
+	
+	'Response.Write("uploadComplete{|}" & fileurl)
+		
+	dim ftype
+	ftype=CheckStr(Request.QueryString("type"))
+	Select Case ftype
 		Case "lrc"
-			'http://localhost/manage/manage.asp?handler=saveuploaddata&type=lrc
-			'filename=CheckStr(Request.Form("filename"))
-			'Response.Write(Request.BinaryRead (Request.TotalBytes))
-			
-			fileurl = "lrc/test.lrc"
-			if Request.TotalBytes > 0 then
-				Set oUpFileStream = Server.CreateObject ("ADODB.Stream")
-				oUpFileStream.Type = 1
-				oUpFileStream.Mode = 3
-				oUpFileStream.Open 
-				oUpFileStream.Write Request.BinaryRead (Request.TotalBytes)
-				oUpFileStream.SaveToFile Server.Mappath(fileurl),2 
-				oUpFileStream.Close
-				If Err Then 
-					Err.Clear
-					Response.Write("uploadError{|}写入文件失败，请检查服务器是否有可写权限！")
-				else
-					Response.Write("uploadComplete{|}" & fileurl)
-				end if
-			else
-				Response.Write("uploadError{|}上传文件的大小为0！")
-			end if
+
 		Case Else
 	
 	End Select
+	
+	
+	
+	Set fileStream = nothing
 end sub
 
 
@@ -297,7 +335,12 @@ set rs = nothing
         </div>
         <div id="lrclist"></div>
         <div id="lrcupload" style="display:none;">
-          
+          <script type="text/javascript">
+var vars = "";
+vars += "url=manage.asp%3Fhandler%3Dsaveuploaddata%26type%3Dlrc";
+vars += "&type=txt,lrc,*";
+//document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
+          </script>
           <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
         </div>
       </div>
