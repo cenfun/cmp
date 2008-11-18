@@ -166,8 +166,8 @@ function addUTFBOM()
 	Response.BinaryWrite(ChrB(239))
 	Response.BinaryWrite(ChrB(187))
 	Response.BinaryWrite(ChrB(191))
-	response.Charset = "utf-8"
-	response.AddHeader "Content-Type", "text/xml"
+	Response.Charset = "utf-8"
+	Response.AddHeader "Content-Type", "text/xml"
 end function
 '*************************************
 '检测系统组件是否安装

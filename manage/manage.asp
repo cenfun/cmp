@@ -45,75 +45,132 @@ end if
 
 
 sub saveuploaddata()
-	Dim fileStream
-	Set fileStream = Server.CreateObject ("ADODB.Stream")
-	If Err Then 
-		Err.Clear
-		Response.Write("uploadError{|}创建ADODB.Stream出错")
-		exit sub
-	end if
-	
-	dim formsize,formdata
-	formsize = Request.TotalBytes
-	if formsize < 1 then
-		Response.Write("uploadError{|}上传文件的大小为0")
-		exit sub
-	end if
-	formdata=Request.BinaryRead(formsize)
-	
-	'dim bncrlf
-	'bncrlf=chrB(13) & chrB(10)
-	
-	'表单项分割符
-	'Dim PosBeg, PosEnd, boundary, boundaryPos
-    'PosBeg = 1
-    'PosEnd = InstrB(PosBeg,formdata,bncrlf)
-    'boundary = MidB(formdata,PosBeg,PosEnd-PosBeg)
-	'boundaryPos = InstrB(1,formdata,boundary)
-	
-	'Response.BinaryWrite(boundary)
-	
-	Response.BinaryWrite(formdata)
-	
-	'Response.BinaryWrite(boundaryPos)
-	
-	
-	
-	
-	dim filedata,filetype,filename,fileurl
-	
-	'filedata = midb(formdata,DataStart,DataEnd)
-	
-	'Response.BinaryWrite(filedata)
-	
-
-	
-	
-	if filename="" then filename="text.txt"
-	fileurl = "lrc/" & filename
-	
-	fileStream.Type = 1
-	fileStream.Mode = 3
-	fileStream.Open 
-	fileStream.Write formdata
-	fileStream.SaveToFile Server.Mappath(fileurl),2 
-	fileStream.Close
-	
-	'Response.Write("uploadComplete{|}" & fileurl)
-		
+	Response.Charset = "utf-8"
+	dim savepath,maxsize
+	'类型设置
 	dim ftype
 	ftype=CheckStr(Request.QueryString("type"))
 	Select Case ftype
 		Case "lrc"
-
+			'歌词保存至lrc目录
+			savepath = "lrc/"
+			'最大歌词文件大小
+			maxsize = 0
 		Case Else
-	
+			savepath = ""
+			maxsize = 0
 	End Select
+	'0大小判断
+	dim formsize,formdata
+	formsize = Request.TotalBytes
+	if formsize < 1 then
+		Response.Write("uploadError{|}上传文件的大小为0")
+		Response.End()
+		exit sub
+	end if
+	'取得表单数据
+	Dim formStream,tempStream
+	Set formStream = Server.CreateObject("ADODB.Stream")
+	Set tempStream = Server.CreateObject("ADODB.Stream")
+	formStream.Type = 1
+	formStream.Mode = 3
+	formStream.Open
+	formStream.Write Request.BinaryRead(formsize)
+	formStream.Position = 0
+	formdata = formStream.Read
+	'Response.BinaryWrite(formdata)
+	If Err Then 
+		Err.Clear
+		Response.Write("uploadError{|}创建ADODB.Stream出错")
+		Response.End()
+		Exit sub
+	end if
+	'超出大小跳出
+	if maxsize>0 then
+		if formsize>maxsize then
+			Response.Write("uploadError{|}文件大小("&formsize&")超过限制" & maxsize)
+			Response.End()
+			exit sub
+		end if
+	end if
+	'二进制换行分隔符
+	dim bncrlf
+	bncrlf=chrB(13) & chrB(10)
+	'表单项分割符
+	Dim PosBeg, PosEnd, boundary, boundaryPos, boundaryEnd
+	'开始位置
+    PosBeg = 1
+	'第一个换行结束位置
+    PosEnd = InstrB(PosBeg,formdata,bncrlf)
+	'取得项分隔符
+    boundary = MidB(formdata,PosBeg,PosEnd-PosBeg)
+	'Response.BinaryWrite(boundary)
+	'项分隔符位置
+	boundaryPos = InstrB(PosBeg,formdata,boundary)
+	'Response.Write(boundaryPos)
+	'最后一个项分隔符位置
+	boundaryEnd = InstrB(formsize-LenB(boundary)-LenB("--"),formdata,boundary)
+	Do until (boundaryPos = boundaryEnd)
+		'取得项信息位置
+		PosBeg = boundaryPos+LenB(boundary)
+        PosEnd = InstrB(PosBeg,formdata,bncrlf & bncrlf)
+		'读取项信息字符
+		tempStream.Type = 1
+		tempStream.Mode = 3
+		tempStream.Open
+		formStream.Position = PosBeg
+		formStream.CopyTo tempStream,PosEnd-PosBeg
+		tempStream.Position = 0
+		tempStream.Type = 2
+		tempStream.CharSet = "utf-8"
+		dim fileinfo
+		fileinfo = tempStream.ReadText
+		tempStream.Close
+		'Response.Write(fileinfo)
+		dim fnBeg, fnEnd
+		'查找文件标识开始的位置
+		fnBeg = InStr(45,fileinfo,"filename=""",1)
+		'如果是文件
+		if fnBeg > 0 Then
+            '取得文件名
+			dim filename
+            fnBeg = fnBeg + 10
+			fnEnd = InStr(fnBeg,fileinfo,""""&vbCrLf,1)
+			filename = Trim(Mid(fileinfo,fnBeg,fnEnd-fnBeg))
+			'过滤文件名中的路径
+			filename = Mid(filename, InStrRev(filename,"\")+1)
+            'Response.Write(filename)
+			
+            '取得文件数据位置
+            PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
+            PosEnd = InstrB(PosBeg,formdata,boundary)-2
+			
+			'保存文件
+			tempStream.Type = 1
+			tempStream.Mode = 3
+			tempStream.Open
+			tempStream.Position = 0
+			
+			formStream.Position = PosBeg-1
+			formStream.CopyTo tempStream,PosEnd-PosBeg
+			
+			tempStream.SaveToFile Server.Mappath(savepath & filename),2 
+			tempStream.Close
+			
+			Response.Write("uploadComplete{|}" & savepath & filename)
+			
+			Exit Do
+        else
+			'跳转到下一个项分隔符位置
+        	BoundaryPos = InstrB(boundaryPos+LenB(boundary),formdata,boundary)
+		End If
+	Loop
 	
-	
-	
-	Set fileStream = nothing
+	Set tempStream = nothing
+	formStream.Close
+	Set formStream = nothing
 end sub
+
 
 
 sub getskins()
