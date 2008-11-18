@@ -1275,7 +1275,7 @@ sub create_lrc()
 				'保存记录
 				For Each lrc in lrcs
 					lrc_name = lrc.Name
-					ext = Right(lrc_name, 4)
+					ext = LCase(Right(lrc_name, 4))
 					'过滤，仅保存txt和lrc类型
 					if ext=".lrc" or ext=".txt" then
 						conn.execute("insert into cmp_lrc (src) values('"&lrc_name&"')")

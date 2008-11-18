@@ -54,12 +54,21 @@ sub saveuploaddata()
 		Case "lrc"
 			'歌词保存至lrc目录
 			savepath = "lrc/"
-			'最大歌词文件大小
-			maxsize = 0
+			'最大歌词文件大小50K
+			maxsize = 50000
 		Case Else
 			savepath = ""
 			maxsize = 0
 	End Select
+	
+	
+	'写成文件解析类
+	
+	
+	
+	
+	
+	
 	'0大小判断
 	dim formsize,formdata
 	formsize = Request.TotalBytes
@@ -100,15 +109,11 @@ sub saveuploaddata()
 	Dim PosBeg, PosEnd, boundary, boundaryPos, boundaryEnd
 	'开始位置
     PosBeg = 1
-	'第一个换行结束位置
     PosEnd = InstrB(PosBeg,formdata,bncrlf)
 	'取得项分隔符
     boundary = MidB(formdata,PosBeg,PosEnd-PosBeg)
-	'Response.BinaryWrite(boundary)
 	'项分隔符位置
 	boundaryPos = InstrB(PosBeg,formdata,boundary)
-	'Response.Write(boundaryPos)
-	'最后一个项分隔符位置
 	boundaryEnd = InstrB(formsize-LenB(boundary)-LenB("--"),formdata,boundary)
 	Do until (boundaryPos = boundaryEnd)
 		'取得项信息位置
@@ -126,38 +131,55 @@ sub saveuploaddata()
 		dim fileinfo
 		fileinfo = tempStream.ReadText
 		tempStream.Close
-		'Response.Write(fileinfo)
-		dim fnBeg, fnEnd
 		'查找文件标识开始的位置
+		dim fnBeg, fnEnd
 		fnBeg = InStr(45,fileinfo,"filename=""",1)
 		'如果是文件
 		if fnBeg > 0 Then
             '取得文件名
-			dim filename
+			dim filename,fileurl
             fnBeg = fnBeg + 10
 			fnEnd = InStr(fnBeg,fileinfo,""""&vbCrLf,1)
 			filename = Trim(Mid(fileinfo,fnBeg,fnEnd-fnBeg))
 			'过滤文件名中的路径
 			filename = Mid(filename, InStrRev(filename,"\")+1)
-            'Response.Write(filename)
 			
+			'已经存在此文件
+			
+			'生成文件
+			fileurl = savepath & filename
             '取得文件数据位置
             PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
             PosEnd = InstrB(PosBeg,formdata,boundary)-2
-			
-			'保存文件
+			'保存文件数据
 			tempStream.Type = 1
 			tempStream.Mode = 3
 			tempStream.Open
 			tempStream.Position = 0
-			
 			formStream.Position = PosBeg-1
 			formStream.CopyTo tempStream,PosEnd-PosBeg
-			
-			tempStream.SaveToFile Server.Mappath(savepath & filename),2 
+			tempStream.SaveToFile Server.Mappath(fileurl),2 
 			tempStream.Close
 			
-			Response.Write("uploadComplete{|}" & savepath & filename)
+			'保存新增路径到数据库
+			Select Case ftype
+			Case "lrc"
+				dim ext
+				ext = LCase(Right(filename, 4))
+				'过滤，仅保存txt和lrc类型
+				if ext=".lrc" or ext=".txt" then
+					'如果没有重复记录
+					conn.execute("insert into cmp_lrc (src) values('"&filename&"')")
+				else
+					Response.Write("uploadError{|}仅支持*lrc和.txt类型的文件")
+					Response.End()
+				end if
+			Case Else
+			End Select
+
+
+			Response.Write("uploadComplete{|}" & fileurl)
+			Response.End()
 			
 			Exit Do
         else
@@ -165,7 +187,6 @@ sub saveuploaddata()
         	BoundaryPos = InstrB(boundaryPos+LenB(boundary),formdata,boundary)
 		End If
 	Loop
-	
 	Set tempStream = nothing
 	formStream.Close
 	Set formStream = nothing
@@ -391,19 +412,13 @@ set rs = nothing
           </form>
         </div>
         <div id="lrclist"></div>
-        <div id="lrcupload" style="display:none1;">
+        <div id="lrcupload" style="display:none;">
           <script type="text/javascript">
 var vars = "";
 vars += "url=manage.asp%3Fhandler%3Dsaveuploaddata%26type%3Dlrc";
 vars += "&type=txt,lrc,*";
 document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
           </script>
-          <div>
-            <form method="post" action="manage.asp?handler=saveuploaddata&type=lrc" enctype="multipart/form-data">
-              <input name="Filedata" type="file" />
-              <input name="" type="submit" value="上传" />
-            </form>
-          </div>
           <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
         </div>
       </div>
