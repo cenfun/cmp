@@ -56,8 +56,8 @@ sub saveuploaddata()
 	dim formsize,formdata
 	formsize = Request.TotalBytes
 	if formsize < 1 then
-		'Response.Write("uploadError{|}上传文件的大小为0")
-		'exit sub
+		Response.Write("uploadError{|}上传文件的大小为0")
+		exit sub
 	end if
 	formdata=Request.BinaryRead(formsize)
 	
@@ -80,7 +80,7 @@ sub saveuploaddata()
 	
 	
 	
-	'dim filedata,filetype,filename,fileurl
+	dim filedata,filetype,filename,fileurl
 	
 	'filedata = midb(formdata,DataStart,DataEnd)
 	
@@ -334,13 +334,19 @@ set rs = nothing
           </form>
         </div>
         <div id="lrclist"></div>
-        <div id="lrcupload" style="display:none;">
+        <div id="lrcupload" style="display:none1;">
           <script type="text/javascript">
 var vars = "";
 vars += "url=manage.asp%3Fhandler%3Dsaveuploaddata%26type%3Dlrc";
 vars += "&type=txt,lrc,*";
-//document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
+document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
           </script>
+          <div>
+            <form method="post" action="manage.asp?handler=saveuploaddata&type=lrc" enctype="multipart/form-data">
+              <input name="Filedata" type="file" />
+              <input name="" type="submit" value="上传" />
+            </form>
+          </div>
           <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
         </div>
       </div>
