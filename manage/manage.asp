@@ -6,8 +6,8 @@ site_title = "管理中心"
 '检测用户是否登录
 If founduser Then
 	Select Case Request.QueryString("handler")
-		Case "saveuploaddata"
-			saveuploaddata()
+		Case "savelrcdata"
+			savelrcdata()
 		Case "savelistdata"
 			savelistdata()
 		Case "saveconfigdata"
@@ -44,31 +44,14 @@ else
 end if
 
 
-sub saveuploaddata()
+sub savelrcdata()
 	Response.Charset = "utf-8"
 	dim savepath,maxsize
-	'类型设置
-	dim ftype
-	ftype=CheckStr(Request.QueryString("type"))
-	Select Case ftype
-		Case "lrc"
-			'歌词保存至lrc目录
-			savepath = "lrc/"
-			'最大歌词文件大小50K
-			maxsize = 50000
-		Case Else
-			savepath = ""
-			maxsize = 0
-	End Select
-	
-	
-	'写成文件解析类
-	
-	
-	
-	
-	
-	
+	'歌词保存至lrc目录
+	savepath = "lrc/"
+	'最大歌词文件大小50K
+	maxsize = 50000
+
 	'0大小判断
 	dim formsize,formdata
 	formsize = Request.TotalBytes
@@ -144,46 +127,51 @@ sub saveuploaddata()
 			'过滤文件名中的路径
 			filename = Mid(filename, InStrRev(filename,"\")+1)
 			
-			'已经存在此文件
-			
-			'生成文件
-			fileurl = savepath & filename
-            '取得文件数据位置
-            PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
-            PosEnd = InstrB(PosBeg,formdata,boundary)-2
-			'保存文件数据
-			tempStream.Type = 1
-			tempStream.Mode = 3
-			tempStream.Open
-			tempStream.Position = 0
-			formStream.Position = PosBeg-1
-			formStream.CopyTo tempStream,PosEnd-PosBeg
-			tempStream.SaveToFile Server.Mappath(fileurl),2 
-			tempStream.Close
-			
-			'保存新增路径到数据库
-			Select Case ftype
-			Case "lrc"
-				dim ext
-				ext = LCase(Right(filename, 4))
-				'过滤，仅保存txt和lrc类型
-				if ext=".lrc" or ext=".txt" then
+			'扩展类型是否符合要求，仅保存txt和lrc类型
+			dim ext
+			ext = LCase(Right(filename, 4))
+			if ext=".lrc" or ext=".txt" then
+				'生成文件
+				fileurl = savepath & filename
+				'取得文件数据位置
+				PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
+				PosEnd = InstrB(PosBeg,formdata,boundary)-2
+				'保存文件数据
+				tempStream.Type = 1
+				tempStream.Mode = 3
+				tempStream.Open
+				tempStream.Position = 0
+				formStream.Position = PosBeg-1
+				formStream.CopyTo tempStream,PosEnd-PosBeg
+				tempStream.SaveToFile Server.Mappath(fileurl),2
+				tempStream.Close
+				if Err then
+					Err.clear
+					'服务器已经存在此文件
+					Response.Write("uploadError{|}写入文件失败，可能服务器已经存在此文件，请尝试更换文件名再上传")
+					Response.End()
+					exit sub
+				else
+				
+					'保存新增路径到数据库
+		
 					'如果没有重复记录
 					conn.execute("insert into cmp_lrc (src) values('"&filename&"')")
-				else
-					Response.Write("uploadError{|}仅支持*lrc和.txt类型的文件")
+	
+					Response.Write("uploadComplete{|}" & fileurl)
 					Response.End()
 				end if
-			Case Else
-			End Select
-
-
-			Response.Write("uploadComplete{|}" & fileurl)
-			Response.End()
+				
+			else
+				Response.Write("uploadError{|}仅支持*lrc和.txt类型的文件")
+				Response.End()
+				exit sub
+			end if
 			
+			'找到文件项退出循环
 			Exit Do
         else
-			'跳转到下一个项分隔符位置
+			'非文件项，跳转到下一个项分隔符位置
         	BoundaryPos = InstrB(boundaryPos+LenB(boundary),formdata,boundary)
 		End If
 	Loop
@@ -415,8 +403,9 @@ set rs = nothing
         <div id="lrcupload" style="display:none;">
           <script type="text/javascript">
 var vars = "";
-vars += "url=manage.asp%3Fhandler%3Dsaveuploaddata%26type%3Dlrc";
-vars += "&type=txt,lrc,*";
+vars += "url=manage.asp%3Fhandler%3Dsavelrcdata";
+vars += "&type=txt,lrc";
+vars += "&max=50000";
 document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
           </script>
           <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
