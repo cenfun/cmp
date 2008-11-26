@@ -117,7 +117,7 @@ if user_reg="1" then
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td><input name="username" type="text" id="username" size="30" maxlength="200" onchange="check_username(this)" />
+      <td><input name="username" type="text" id="username" size="30" maxlength="200" onblur="check_username(this)" />
         *<span id="reg_username" style="color:#FF0000;"></span></td>
     </tr>
     <tr>
