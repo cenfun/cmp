@@ -109,7 +109,7 @@ IF not rs.EOF Then
             <td><%=rs("hits")%></td>
             <td><%=rs("logins")%></td>
             <td><%=Len(Trim(rs("list")))%></td>
-            <td align="left"><a href="<%=getCmpUrl(rs("id"))%>&amp;c.swf" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%>&amp;c.swf</a></td>
+            <td align="left"><a href="<%=getCmpUrl(rs("id"))%>" target="_blank" onclick="addHits(<%=rs("id")%>);"><%=getCmpUrl(rs("id"))%></a></td>
             <td title="点击开启QQ对话"><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=Left(rs("qq"),10)%></a></td>
             <td title="点击发送邮件"><a href="mailto:<%=rs("email")%>" target="_blank"><%=Left(rs("email"),20)%></a></td>
           </tr>

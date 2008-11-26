@@ -89,6 +89,8 @@ function getCmpUrl(id)
 	dim cmp
 	cmp = getCmpPath()
 	cmp = cmp & "?url=" & geturl(id)
+	'添加flash后缀
+	cmp = cmp & "&c.swf"
 	getCmpUrl = cmp
 end function
 

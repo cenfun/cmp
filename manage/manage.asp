@@ -871,20 +871,20 @@ cmp_page_url = getCmpPageUrl(userid)
     <th colspan="2" align="left">调用代码：</th>
   </tr>
   <tr>
-    <td width="10%" align="right">CMP调用地址：</td>
-    <td width="90%"><a href="<%=cmp_url%>&amp;c.swf" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_url%>&amp;c.swf</strong></a></td>
+    <td align="right" width="10%">CMP调用地址：</td>
+    <td width="90%"><input type="text" value="<%=cmp_url%>" onfocus="this.select();" style="width:99%;" /><a href="<%=cmp_url%>" target="_blank" title="点击在新窗口中打开">打开预览</a></td>
   </tr>
   <tr>
-    <td align="right">页面地址：</td>
-    <td><a href="<%=cmp_page_url%>" target="_blank" title="点击在新窗口中打开"><strong><%=cmp_page_url%></strong></a></td>
+    <td align="right">Web页面地址：</td>
+    <td><input type="text" value="<%=cmp_page_url%>" onfocus="this.select();" style="width:99%;" /><a href="<%=cmp_page_url%>" target="_blank" title="点击在新窗口中打开">打开预览</a></td>
   </tr>
   <tr>
     <td align="right" nowrap="nowrap">常用论坛调用标签：</td>
-    <td>[flash=100%,600]<%=cmp_url%>&amp;c.swf[/flash]</td>
+    <td><input type="text" value="[flash=100%,600]<%=cmp_url%>[/flash]" onfocus="this.select();" style="width:99%;" /></td>
   </tr>
   <tr>
     <td align="right" nowrap="nowrap">内框架页面调用：</td>
-    <td>&lt;iframe frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;<%=cmp_page_url%>&quot; width=&quot;100%&quot; height=&quot;600&quot;&gt;&lt;/iframe&gt;</td>
+    <td><input type="text" value="&lt;iframe frameborder=&quot;0&quot; scrolling=&quot;no&quot; src=&quot;<%=cmp_page_url%>&quot; width=&quot;600&quot; height=&quot;400&quot;&gt;&lt;/iframe&gt;" onfocus="this.select();" style="width:99%;" /></td>
   </tr>
   <tr>
     <td align="right">HTML调用代码：</td>
@@ -892,12 +892,12 @@ cmp_page_url = getCmpPageUrl(userid)
   </tr>
   <tr>
     <td align="right">&nbsp;</td>
-    <td>默认宽100%高600</td>
+    <td>宽100% 高600</td>
   </tr>
 </table>
 <script type="text/javascript">
 function show_code() {
-	html = getcmp("cmp<%=userid%>", "100%", "600", "<%=cmp_url%>&c.swf", "");
+	html = getcmp("cmp<%=userid%>", "100%", "600", "<%=cmp_url%>", "");
 	var textarea = document.getElementById("html_code");
 	textarea.value = html;
 }
