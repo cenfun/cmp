@@ -1192,9 +1192,13 @@ IF not rs.EOF Then
             <th align="left">歌词名</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
+          <%
+		  dim filename
+		  filename = UnCheckStr(rs("src"))
+		  %>
           <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" /></td>
-            <td align="left"><a href="lrc/<%=rs("src")%>" target="_blank"><%=rs("src")%></a></td>
+            <td align="left"><a href="lrc/<%=filename%>" target="_blank"><%=filename%></a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
@@ -1280,7 +1284,7 @@ sub create_lrc()
 					ext = LCase(Right(lrc_name, 4))
 					'过滤，仅保存txt和lrc类型
 					if ext=".lrc" or ext=".txt" then
-						conn.execute("insert into cmp_lrc (src) values('"&lrc_name&"')")
+						conn.execute("insert into cmp_lrc (src) values('"&CheckStr(lrc_name)&"')")
 					end if
 				Next
 				Set lrcs = nothing
