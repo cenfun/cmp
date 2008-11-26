@@ -294,10 +294,9 @@ set rs = nothing
         <div id="lrcupload" style="display:none;">
           <script type="text/javascript">
 var vars = "";
-vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&aspsessionid=<%=Session.SessionID%>");
+vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&u=<%=Session(CookieName & "_username")%>&p=<%=Session(CookieName & "_userpass")%>");
 vars += "&type=txt,lrc";
-vars += "&max=50000";
-document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
+document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
           </script>
           <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
         </div>

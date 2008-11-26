@@ -342,6 +342,7 @@ sub login()
 			'session超时时间
 			Session.Timeout = 45
 			Session(CookieName & "_username") = UserName
+			Session(CookieName & "_userpass") = PassWord
 			Session(CookieName & "_userid") = rs("id")
 			Session(CookieName & "_userstatus") = rs("userstatus")
 			'管理员8,9

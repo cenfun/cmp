@@ -1,11 +1,24 @@
 ﻿<!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
-<!--#include file="md5.asp"-->
 <%
 '检测用户是否登录
 If not founduser Then
-	
-
+	Dim u,p
+	u=Checkstr(Request.QueryString("u"))
+	p=Checkstr(Request.QueryString("p"))
+	if u<>"" and p<>"" then
+		sql = "select id from cmp_user where username='"&u&"' and password='"&p&"'"
+		set rs=conn.Execute(sql)
+		if rs.eof and rs.bof then
+			Response.Write("uploadError{|}用户验证失败，无上传权限")
+			Response.End()
+		end if
+		rs.close
+		set rs=nothing	
+	else
+		Response.Write("uploadError{|}无效用户验证信息")
+		Response.End()
+	end if
 end if
 
 Select Case Request.QueryString("action")
@@ -31,7 +44,6 @@ sub uploadlrc()
 	if formsize < 1 then
 		Response.Write("uploadError{|}上传文件的大小为0")
 		Response.End()
-		exit sub
 	end if
 	'取得表单数据
 	Dim formStream,tempStream
@@ -48,14 +60,12 @@ sub uploadlrc()
 		Err.Clear
 		Response.Write("uploadError{|}创建ADODB.Stream出错")
 		Response.End()
-		Exit sub
 	end if
 	'超出大小跳出
 	if maxsize>0 then
 		if formsize>maxsize then
 			Response.Write("uploadError{|}文件大小("&formsize&")超过限制" & maxsize)
 			Response.End()
-			exit sub
 		end if
 	end if
 	'二进制换行分隔符
@@ -123,7 +133,6 @@ sub uploadlrc()
 					'服务器已经存在此文件
 					Response.Write("uploadError{|}写入文件失败，可能服务器已经存在此文件，请尝试更换文件名再上传")
 					Response.End()
-					exit sub
 				else
 				
 					'保存新增路径到数据库
@@ -138,7 +147,6 @@ sub uploadlrc()
 			else
 				Response.Write("uploadError{|}仅支持*lrc和.txt类型的文件")
 				Response.End()
-				exit sub
 			end if
 			
 			'找到文件项退出循环
