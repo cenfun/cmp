@@ -39,7 +39,7 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .nav li a:link, .nav li a:visited { font-family:"宋体"; display:block; color:#FFFFFF; line-height:32px; padding:0px 10px; font-weight:bold; }
 .nav li a:hover { }
 .nav li a.drop { background:url(dot.gif) no-repeat right; margin-right:7px; }
-.nav li ul { position: absolute; z-index:999; margin:0px 0px; padding:0px 0px 5px 0px; background-color:#438BDA; display:none;}
+.nav li ul { position: absolute; z-index:999; margin:0px 0px; padding:0px 0px 0px 0px; background-color:#438BDA; display:none;}
 .nav li ul li { height:27px; width:100%; margin:0px 0px; float:none; position:relative; }
 .nav li ul li a:link, .nav li ul li a:visited { display:block; white-space: nowrap; height:27px; line-height:27px; }
 .nav li ul li a:hover { background-color:#559AE4; text-decoration:none; }
