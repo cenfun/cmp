@@ -286,7 +286,7 @@ set rs = nothing
       <div>
         <div align="right">
           <form onsubmit="return getLrcList();">
-            <input id="lrc_name" type="text" size="35" title="最多搜索出5个结果，请输入适当的关键字，以便更精确的查找歌词" />
+            <input id="lrc_name" type="text" size="35" />
             <input type="submit" value="搜索歌词" />
           </form>
         </div>
@@ -354,9 +354,10 @@ function completeHd(data) {
 			var lrcs = data.split("{|}");
 			for (var i = 0; i < lrcs.length - 1; i ++) {
 				var url = "lrc/"+lrcs[i];
-				html += '<tr><td><a href="'+url+'" target="_blank">查看</a> <input value="'+url+'" onfocus="this.select();" size="60" /></td></tr>';
+				html += '<tr><td><a href="'+url+'" target="_blank" title="直接打开歌词">查看</a> <input value="'+url+'" onfocus="this.select();" size="60" /></td></tr>';
 			}
-			html += '<tr><td align="center">请复制输入框中的歌词路径，粘贴到列表编辑器中即可！ <a href="javascript:showList(false);void(0);">关闭</a></td></tr>';
+			html += '<tr><td align="center">最多搜索出5个结果，请输入适当的关键字，以便更精确的找到歌词';
+			html += '<tr><td align="center">请复制输入框中的歌词路径，粘贴到列表编辑器中即可！ <a href="javascript:showList(false);void(0);">【关闭】</a></td></tr>';
 		}
 		html += '</table>';
 		//
