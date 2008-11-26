@@ -35,7 +35,9 @@ If founduser and foundadmin Then
 	End Select
 	footer()
 else
-	response.Redirect("index.asp")
+	header()
+	ErrMsg = "用户未登录或超时退出，请<a href=""index.asp"">重新登录</a>！"
+	cenfun_error()
 end if
 
 sub database(path)

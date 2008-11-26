@@ -6,8 +6,6 @@ site_title = "管理中心"
 '检测用户是否登录
 If founduser Then
 	Select Case Request.QueryString("handler")
-		Case "savelrcdata"
-			savelrcdata()
 		Case "savelistdata"
 			savelistdata()
 		Case "saveconfigdata"
@@ -40,146 +38,10 @@ If founduser Then
 			footer()
 	 End Select
 else 
-	response.Redirect("index.asp")
+	header()
+	ErrMsg = "用户未登录或超时退出，请<a href=""index.asp"">重新登录</a>！"
+	cenfun_error()
 end if
-
-
-sub savelrcdata()
-	Response.Charset = "utf-8"
-	dim savepath,maxsize
-	'歌词保存至lrc目录
-	savepath = "lrc/"
-	'最大歌词文件大小50K
-	maxsize = 50000
-
-	'0大小判断
-	dim formsize,formdata
-	formsize = Request.TotalBytes
-	if formsize < 1 then
-		Response.Write("uploadError{|}上传文件的大小为0")
-		Response.End()
-		exit sub
-	end if
-	'取得表单数据
-	Dim formStream,tempStream
-	Set formStream = Server.CreateObject("ADODB.Stream")
-	Set tempStream = Server.CreateObject("ADODB.Stream")
-	formStream.Type = 1
-	formStream.Mode = 3
-	formStream.Open
-	formStream.Write Request.BinaryRead(formsize)
-	formStream.Position = 0
-	formdata = formStream.Read
-	'Response.BinaryWrite(formdata)
-	If Err Then 
-		Err.Clear
-		Response.Write("uploadError{|}创建ADODB.Stream出错")
-		Response.End()
-		Exit sub
-	end if
-	'超出大小跳出
-	if maxsize>0 then
-		if formsize>maxsize then
-			Response.Write("uploadError{|}文件大小("&formsize&")超过限制" & maxsize)
-			Response.End()
-			exit sub
-		end if
-	end if
-	'二进制换行分隔符
-	dim bncrlf
-	bncrlf=chrB(13) & chrB(10)
-	'表单项分割符
-	Dim PosBeg, PosEnd, boundary, boundaryPos, boundaryEnd
-	'开始位置
-    PosBeg = 1
-    PosEnd = InstrB(PosBeg,formdata,bncrlf)
-	'取得项分隔符
-    boundary = MidB(formdata,PosBeg,PosEnd-PosBeg)
-	'项分隔符位置
-	boundaryPos = InstrB(PosBeg,formdata,boundary)
-	boundaryEnd = InstrB(formsize-LenB(boundary)-LenB("--"),formdata,boundary)
-	Do until (boundaryPos = boundaryEnd)
-		'取得项信息位置
-		PosBeg = boundaryPos+LenB(boundary)
-        PosEnd = InstrB(PosBeg,formdata,bncrlf & bncrlf)
-		'读取项信息字符
-		tempStream.Type = 1
-		tempStream.Mode = 3
-		tempStream.Open
-		formStream.Position = PosBeg
-		formStream.CopyTo tempStream,PosEnd-PosBeg
-		tempStream.Position = 0
-		tempStream.Type = 2
-		tempStream.CharSet = "utf-8"
-		dim fileinfo
-		fileinfo = tempStream.ReadText
-		tempStream.Close
-		'查找文件标识开始的位置
-		dim fnBeg, fnEnd
-		fnBeg = InStr(45,fileinfo,"filename=""",1)
-		'如果是文件
-		if fnBeg > 0 Then
-            '取得文件名
-			dim filename,fileurl
-            fnBeg = fnBeg + 10
-			fnEnd = InStr(fnBeg,fileinfo,""""&vbCrLf,1)
-			filename = Trim(Mid(fileinfo,fnBeg,fnEnd-fnBeg))
-			'过滤文件名中的路径
-			filename = Mid(filename, InStrRev(filename,"\")+1)
-			
-			'扩展类型是否符合要求，仅保存txt和lrc类型
-			dim ext
-			ext = LCase(Right(filename, 4))
-			if ext=".lrc" or ext=".txt" then
-				'生成文件
-				fileurl = savepath & filename
-				'取得文件数据位置
-				PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
-				PosEnd = InstrB(PosBeg,formdata,boundary)-2
-				'保存文件数据
-				tempStream.Type = 1
-				tempStream.Mode = 3
-				tempStream.Open
-				tempStream.Position = 0
-				formStream.Position = PosBeg-1
-				formStream.CopyTo tempStream,PosEnd-PosBeg
-				tempStream.SaveToFile Server.Mappath(fileurl),2
-				tempStream.Close
-				if Err then
-					Err.clear
-					'服务器已经存在此文件
-					Response.Write("uploadError{|}写入文件失败，可能服务器已经存在此文件，请尝试更换文件名再上传")
-					Response.End()
-					exit sub
-				else
-				
-					'保存新增路径到数据库
-		
-					'如果没有重复记录
-					conn.execute("insert into cmp_lrc (src) values('"&filename&"')")
-	
-					Response.Write("uploadComplete{|}" & fileurl)
-					Response.End()
-				end if
-				
-			else
-				Response.Write("uploadError{|}仅支持*lrc和.txt类型的文件")
-				Response.End()
-				exit sub
-			end if
-			
-			'找到文件项退出循环
-			Exit Do
-        else
-			'非文件项，跳转到下一个项分隔符位置
-        	BoundaryPos = InstrB(boundaryPos+LenB(boundary),formdata,boundary)
-		End If
-	Loop
-	Set tempStream = nothing
-	formStream.Close
-	Set formStream = nothing
-end sub
-
 
 
 sub getskins()
@@ -195,7 +57,7 @@ if not rs.eof then
 	Do Until rs.EOF
 		'<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" show_tip="" />
 		skinlist = skinlist & "<skin title=""" & XMLEncode(rs("title")) & """ "
-		skinlist = skinlist & "preview=""" & cmp_show_url & "&amp;skin_src=" & XMLEncode(rs("src")) & """ "
+		skinlist = skinlist & "preview=""" & cmp_show_url & "&amp;skin_src=" & XMLEncode(rs("src")) & "&amp;c.swf"" "
 		skinlist = skinlist & "src=""" & XMLEncode(rs("src")) & """ "
 		skinlist = skinlist & "bgcolor=""" & XMLEncode(rs("bgcolor")) & """ "
 		skinlist = skinlist & "mixer_id=""" & XMLEncode(rs("mixer_id")) & """ "
@@ -233,6 +95,35 @@ set rs = nothing
 pluginlist = pluginlist & "</cmp_plugins>"
 Response.Write(pluginlist)
 end sub
+
+
+sub getlrcs()
+	dim lrc_name
+	lrc_name = CheckStr(Request.QueryString("lrc_name"))
+	if lrc_name="" then
+		Response.Write("null")
+	else
+		'模糊搜索
+		sql = "select top 5 src from cmp_lrc where 1=1 "
+		dim keywords,key
+		keywords = Split(lrc_name, " ")
+		For Each key in keywords
+    		sql = sql & " and src like '%"&key&"%' "
+		Next
+		set rs=conn.Execute(sql)
+		if rs.eof then
+			Response.Write("null")
+		else
+			Do Until rs.EOF
+				Response.Write(trim(rs("src")) & "{|}")
+				rs.MoveNext
+			loop
+		end if
+		rs.close
+		set rs=nothing
+	end if
+end sub
+
 
 sub config()
 dim strContent,id
@@ -295,10 +186,10 @@ set rs = nothing
   <tr>
     <td align="center"><script type="text/javascript">
 var vars = "";
-vars += "i=config.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random();
-vars += "&o=manage.asp%3Fhandler%3Dsaveconfigdata";
-vars += "&sl=manage.asp%3Fhandler%3Dgetskins%26rd%3D"+Math.random();
-vars += "&pl=manage.asp%3Fhandler%3Dgetplugins%26rd%3D"+Math.random();
+vars += "i="+encodeURIComponent("config.asp?id=<%=id%>&rd="+Math.random());
+vars += "&o="+encodeURIComponent("manage.asp?handler=saveconfigdata");
+vars += "&sl="+encodeURIComponent("manage.asp?handler=getskins&rd="+Math.random());
+vars += "&pl="+encodeURIComponent("manage.asp?handler=getplugins&rd="+Math.random());
 //id, width, height, cmp url, vars
 showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars, false);
 </script>
@@ -330,7 +221,7 @@ function check_config(o){
 </script>
 <%
 end sub
-
+'从Form保存
 sub saveconfig()
 	dim config,id
 	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
@@ -352,7 +243,7 @@ sub saveconfig()
 	rs.close
 	set rs = nothing
 end sub
-
+'从Flash编辑器保存
 sub saveconfigdata()
 	dim config,id
 	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
@@ -403,7 +294,7 @@ set rs = nothing
         <div id="lrcupload" style="display:none;">
           <script type="text/javascript">
 var vars = "";
-vars += "url=manage.asp%3Fhandler%3Dsavelrcdata";
+vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&aspsessionid=<%=Session.SessionID%>");
 vars += "&type=txt,lrc";
 vars += "&max=50000";
 document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
@@ -433,8 +324,8 @@ document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars));
   <tr>
     <td align="center"><script type="text/javascript">
 var vars = "";
-vars += "i=list.asp%3Fid%3D<%=id%>%26rd%3D"+Math.random();
-vars += "&o=manage.asp%3Fhandler%3Dsavelistdata";
+vars += "i="+encodeURIComponent("list.asp?id=<%=id%>&rd="+Math.random());
+vars += "&o="+encodeURIComponent("manage.asp?handler=savelistdata");
 //id, width, height, cmp url, vars
 showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
 </script>
@@ -522,34 +413,7 @@ function check_list(o){
 </script>
 <%
 end sub
-
-sub getlrcs()
-	dim lrc_name
-	lrc_name = CheckStr(Request.QueryString("lrc_name"))
-	if lrc_name="" then
-		Response.Write("null")
-	else
-		'模糊搜索
-		sql = "select top 5 src from cmp_lrc where 1=1 "
-		dim keywords,key
-		keywords = Split(lrc_name, " ")
-		For Each key in keywords
-    		sql = sql & " and src like '%"&key&"%' "
-		Next
-		set rs=conn.Execute(sql)
-		if rs.eof then
-			Response.Write("null")
-		else
-			Do Until rs.EOF
-				Response.Write(trim(rs("src")) & "{|}")
-				rs.MoveNext
-			loop
-		end if
-		rs.close
-		set rs=nothing
-	end if
-end sub
-
+'从Form保存
 sub savelist()
 	dim list,id
 	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
@@ -571,7 +435,7 @@ sub savelist()
 	rs.close
 	set rs = nothing
 end sub
-
+'从Flash编辑器保存
 sub savelistdata()
 	dim list,id
 	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
