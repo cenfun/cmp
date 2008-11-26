@@ -294,7 +294,7 @@ set rs = nothing
         <div id="lrcupload" style="display:none;">
           <script type="text/javascript">
 var vars = "";
-vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&u=<%=Session(CookieName & "_username")%>&p=<%=Session(CookieName & "_userpass")%>");
+vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&us=<%=Session(CookieName & "_username")%>&p=<%=Session(CookieName & "_userpass")%>");
 vars += "&type=txt,lrc";
 document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
           </script>
