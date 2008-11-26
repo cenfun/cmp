@@ -1,5 +1,4 @@
 晨风在线音乐系统 
-CMP Manage b081025
 
 简介：
 
@@ -21,16 +20,23 @@ Win2000或更高+IIS5.0或更高+IE5.0以上+Access数据库支持
 文件目录需要有写入权限,支持FSO和ADODB.Stream
 
 
+程序版本库：
+http://code.google.com/p/cenfunmusicplayer/
+
+更多信息和使用说明请进CMP交流论坛：http://bbs.cenfun.com/
 
 
 更新日志：
 
--b081025修正(08.11.13):
+-b081126:
 新增代码编辑模式下xml格式检测功能
 添加歌词库功能
 删除和锁定用户，同时删除其静态数据文件
 重建所有静态数据时，仅生成正常用户数据
 调用地址最后统一加上&c.swf假后缀
+菜单样式的优化
+调用页的相关改动
+数据库无改动，升级时仅修改conn.asp中的数据库地址即可
 
 -b081025:
 完成留言簿功能
@@ -38,20 +44,10 @@ Win2000或更高+IIS5.0或更高+IE5.0以上+Access数据库支持
 新增迷你播放器调用系统
 完善菜单项，支持下拉菜单
 一些小细节优化
+数据库需要升级，请运行update目录中的080927to081025.asp
+
 -b080927:
 完成配置和列表编辑器
-
-
-最新版本下载：
-
-从Google版本库Checkout最新版即可：
-http://code.google.com/p/cenfunmusicplayer/
-SVN的checkout地址：
-http://cenfunmusicplayer.googlecode.com/svn/trunk/
-程序在manage目录中
-
-
-更多信息和使用说明请进CMP交流论坛：http://bbs.cenfun.com/
 
      
     ╭────────────────────╮    
