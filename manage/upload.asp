@@ -1,6 +1,7 @@
 ﻿<!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
 <%
+Response.Charset = "utf-8"
 '检测用户是否登录
 If not founduser Then
 	Dim u,p
@@ -24,20 +25,17 @@ end if
 Select Case Request.QueryString("action")
 	Case "uploadlrc"
 		uploadlrc()
-	
 	Case Else
-		
+		Response.Write("uploadError{|}错误的操作参数")
  End Select
 
 
 sub uploadlrc()
-	Response.Charset = "utf-8"
 	dim savepath,maxsize
 	'歌词保存至lrc目录
 	savepath = "lrc/"
 	'最大歌词文件大小50K
 	maxsize = 50000
-
 	'0大小判断
 	dim formsize,formdata
 	formsize = Request.TotalBytes
@@ -114,36 +112,35 @@ sub uploadlrc()
 			dim ext
 			ext = LCase(Right(filename, 4))
 			if ext=".lrc" or ext=".txt" then
-				'生成文件
-				fileurl = savepath & filename
-				'取得文件数据位置
-				PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
-				PosEnd = InstrB(PosBeg,formdata,boundary)-2
-				'保存文件数据
-				tempStream.Type = 1
-				tempStream.Mode = 3
-				tempStream.Open
-				tempStream.Position = 0
-				formStream.Position = PosBeg-1
-				formStream.CopyTo tempStream,PosEnd-PosBeg
-				tempStream.SaveToFile Server.Mappath(fileurl),2
-				tempStream.Close
-				if Err then
-					Err.clear
-					'服务器已经存在此文件
-					Response.Write("uploadError{|}写入文件失败，可能服务器已经存在此文件，请尝试更换文件名再上传")
-					Response.End()
-				else
-				
+				'检查数据库记录
+				sql = "select src from cmp_lrc where src='"&filename&"' "
+				set rs = conn.execute(sql)
+				if rs.eof and rs.bof then
+					'生成文件
+					fileurl = savepath & filename
+					'取得文件数据位置
+					PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
+					PosEnd = InstrB(PosBeg,formdata,boundary)-2
+					'保存文件数据
+					tempStream.Type = 1
+					tempStream.Mode = 3
+					tempStream.Open
+					tempStream.Position = 0
+					formStream.Position = PosBeg-1
+					formStream.CopyTo tempStream,PosEnd-PosBeg
+					tempStream.SaveToFile Server.Mappath(fileurl),2
+					tempStream.Close
 					'保存新增路径到数据库
-		
-					'如果没有重复记录
 					conn.execute("insert into cmp_lrc (src) values('"&filename&"')")
-	
+					'完成歌词上传
 					Response.Write("uploadComplete{|}" & fileurl)
 					Response.End()
+				else
+					Response.Write("uploadError{|}已经存在相同的文件，请尝试更换文件名再上传")
+					Response.End()
 				end if
-				
+				rs.close
+				set rs = nothing
 			else
 				Response.Write("uploadError{|}仅支持*lrc和.txt类型的文件")
 				Response.End()
@@ -160,6 +157,4 @@ sub uploadlrc()
 	formStream.Close
 	Set formStream = nothing
 end sub
-
-
 %>
