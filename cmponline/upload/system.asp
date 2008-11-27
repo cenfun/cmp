@@ -909,16 +909,16 @@ else
 		%>
         <form action="system.asp?action=skins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
           <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
-            <td><input name="skin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
-            <td><input name="skin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
+            <td><input name="skin_title" type="text" value="<%=trim(rs("title"))%>" maxlength="50" /></td>
+            <td><input name="skin_src" type="text" value="<%=trim(rs("src"))%>" maxlength="200" /></td>
             <td>背景色
-              <input name="skin_bgcolor" type="text" value="<%=rs("bgcolor")%>" size="7" maxlength="7" />
+              <input name="skin_bgcolor" type="text" value="<%=trim(rs("bgcolor"))%>" size="7" maxlength="7" />
               混音器ID
-              <input name="skin_mixer_id" type="text" value="<%=rs("mixer_id")%>" size="2" maxlength="2" />
+              <input name="skin_mixer_id" type="text" value="<%=trim(rs("mixer_id"))%>" size="2" maxlength="2" />
               混音器颜色
-              <input name="skin_mixer_color" type="text" value="<%=rs("mixer_color")%>" size="7" maxlength="7" />
+              <input name="skin_mixer_color" type="text" value="<%=trim(rs("mixer_color"))%>" size="7" maxlength="7" />
               提示信息延时
-              <input name="skin_show_tip" type="text" value="<%=rs("show_tip")%>" size="5" maxlength="10" /></td>
+              <input name="skin_show_tip" type="text" value="<%=trim(rs("show_tip"))%>" size="5" maxlength="10" /></td>
             <td><input name="edit_submit" type="submit" value="修改" /></td>
             <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&amp;skin_src=" & rs("src")%>');" /></td>
             <td><input name="del_submit" type="button" value="删除" onclick="skin_del('<%=rs("id")%>');" /></td>

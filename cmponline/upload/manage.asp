@@ -57,12 +57,12 @@ if not rs.eof then
 	Do Until rs.EOF
 		'<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" show_tip="" />
 		skinlist = skinlist & "<skin title=""" & XMLEncode(rs("title")) & """ "
-		skinlist = skinlist & "preview=""" & cmp_show_url & "&amp;skin_src=" & XMLEncode(rs("src")) & "&amp;c.swf"" "
-		skinlist = skinlist & "src=""" & XMLEncode(rs("src")) & """ "
-		skinlist = skinlist & "bgcolor=""" & XMLEncode(rs("bgcolor")) & """ "
-		skinlist = skinlist & "mixer_id=""" & XMLEncode(rs("mixer_id")) & """ "
-		skinlist = skinlist & "mixer_color=""" & XMLEncode(rs("mixer_color")) & """ "
-		skinlist = skinlist & "show_tip=""" & XMLEncode(rs("show_tip")) & """ />"
+		skinlist = skinlist & "preview=""" & cmp_show_url & "&amp;skin_src=" & XMLEncode(trim(rs("src"))) & "&amp;c.swf"" "
+		skinlist = skinlist & "src=""" & XMLEncode(trim(rs("src"))) & """ "
+		skinlist = skinlist & "bgcolor=""" & XMLEncode(trim(rs("bgcolor"))) & """ "
+		skinlist = skinlist & "mixer_id=""" & XMLEncode(trim(rs("mixer_id"))) & """ "
+		skinlist = skinlist & "mixer_color=""" & XMLEncode(trim(rs("mixer_color"))) & """ "
+		skinlist = skinlist & "show_tip=""" & XMLEncode(trim(rs("show_tip"))) & """ />"
 	rs.MoveNext
     loop
 end if
