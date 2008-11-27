@@ -15,9 +15,9 @@ IF Not IsArray(Application(CookieName&"_Arr_system_info")) Then
 	Application.Lock
 	Application(CookieName&"_Arr_system_info")=Arr_system_info
 	Application.UnLock
+else
+	Arr_system_info=Application(CookieName&"_Arr_system_info")
 End IF
-
-Arr_system_info=Application(CookieName&"_Arr_system_info")
 Dim cmp_path,site_title,site_name,site_url,site_qq,site_email,site_count,site_ads,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
 cmp_path = Arr_system_info(0,0)
 site_name = Arr_system_info(1,0)
