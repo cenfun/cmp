@@ -295,10 +295,11 @@ set rs = nothing
           <script type="text/javascript">
 var vars = "";
 vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&u=<%=Session(CookieName & "_username")%>&p=<%=Session(CookieName & "_userpass")%>");
-vars += "&type=txt,lrc";
+vars += "&type=txt";
 document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
           </script>
-          <div>注意：仅支持上传 *.lrc 和 *.txt 的歌词文件</div>
+          <div>注意：为安全性和下载兼容性考虑，仅支持上传*.txt的歌词文件<br />
+            如果是*.lrc类型的歌词，请直接修改后缀为txt再上传即可</div>
         </div>
       </div>
       </span>CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
@@ -736,11 +737,13 @@ cmp_page_url = getCmpPageUrl(userid)
   </tr>
   <tr>
     <td align="right" width="10%">CMP调用地址：</td>
-    <td width="90%"><input type="text" value="<%=cmp_url%>" onfocus="this.select();" style="width:99%;" /><a href="<%=cmp_url%>" target="_blank" title="点击在新窗口中打开">打开预览</a></td>
+    <td width="90%"><input type="text" value="<%=cmp_url%>" onfocus="this.select();" style="width:99%;" />
+      <a href="<%=cmp_url%>" target="_blank" title="点击在新窗口中打开">打开预览</a></td>
   </tr>
   <tr>
     <td align="right">Web页面地址：</td>
-    <td><input type="text" value="<%=cmp_page_url%>" onfocus="this.select();" style="width:99%;" /><a href="<%=cmp_page_url%>" target="_blank" title="点击在新窗口中打开">打开预览</a></td>
+    <td><input type="text" value="<%=cmp_page_url%>" onfocus="this.select();" style="width:99%;" />
+      <a href="<%=cmp_page_url%>" target="_blank" title="点击在新窗口中打开">打开预览</a></td>
   </tr>
   <tr>
     <td align="right" nowrap="nowrap">常用论坛调用标签：</td>

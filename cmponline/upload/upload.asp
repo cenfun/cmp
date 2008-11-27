@@ -108,44 +108,42 @@ sub uploadlrc()
 			'过滤文件名中的路径
 			filename = Mid(filename, InStrRev(filename,"\")+1)
 			
-			'扩展类型是否符合要求，仅保存txt和lrc类型
+			'扩展类型是否符合要求，仅保存txt类型
 			dim ext
 			ext = LCase(Right(filename, 4))
-			if ext=".lrc" or ext=".txt" then
+			if ext=".txt" then
+				'生成文件
+				fileurl = savepath & filename
+				'取得文件数据位置
+				PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
+				PosEnd = InstrB(PosBeg,formdata,boundary)-2
+				'保存文件数据
+				tempStream.Type = 1
+				tempStream.Mode = 3
+				tempStream.Open
+				tempStream.Position = 0
+				formStream.Position = PosBeg-1
+				formStream.CopyTo tempStream,PosEnd-PosBeg
+				tempStream.SaveToFile Server.Mappath(fileurl),2
+				tempStream.Close
+			
 				'检查数据库记录
 				sql = "select src from cmp_lrc where src='"&filename&"' "
 				set rs = conn.execute(sql)
 				if rs.eof and rs.bof then
-					'生成文件
-					fileurl = savepath & filename
-					'取得文件数据位置
-					PosBeg = InstrB(PosEnd,formdata,bncrlf & bncrlf)+4
-					PosEnd = InstrB(PosBeg,formdata,boundary)-2
-					'保存文件数据
-					tempStream.Type = 1
-					tempStream.Mode = 3
-					tempStream.Open
-					tempStream.Position = 0
-					formStream.Position = PosBeg-1
-					formStream.CopyTo tempStream,PosEnd-PosBeg
-					tempStream.SaveToFile Server.Mappath(fileurl),2
-					tempStream.Close
 					'保存新增路径到数据库
 					conn.execute("insert into cmp_lrc (src) values('"&filename&"')")
 					'完成歌词上传
 					Response.Write("uploadComplete{|}" & fileurl)
-					Response.End()
 				else
-					Response.Write("uploadError{|}已经存在相同的文件，请尝试更换文件名再上传")
-					Response.End()
+					Response.Write("uploadComplete{|}文件被覆盖" & fileurl)
 				end if
 				rs.close
 				set rs = nothing
 			else
-				Response.Write("uploadError{|}仅支持*lrc和.txt类型的文件")
-				Response.End()
+				Response.Write("uploadError{|}仅支持*.txt类型的文件")
 			end if
-			
+			Response.End()
 			'找到文件项退出循环
 			Exit Do
         else

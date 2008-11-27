@@ -1121,7 +1121,7 @@ end if
     <td align="right">歌词库创建：</td>
     <td><input type="submit" value="从lrc目录创建歌词库" onclick="createLrc();" />
       程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库(重建时将覆盖之前的记录)<br />
-      安全起见仅保存 *.lrc 和 *.txt 类型的文件名；管理员可将常见歌词上传至lrc目录，自动创建歌词库后供用户使用</td>
+      考虑到安全性和下载兼容性仅保存*.txt类型的文件名；管理员可将常见歌词上传至lrc目录，自动创建歌词库后供用户使用</td>
   </tr>
   <tr>
     <td align="right">歌词库优化(重建数据后释放无效空间)：</td>
@@ -1282,8 +1282,8 @@ sub create_lrc()
 				For Each lrc in lrcs
 					lrc_name = lrc.Name
 					ext = LCase(Right(lrc_name, 4))
-					'过滤，仅保存txt和lrc类型
-					if ext=".lrc" or ext=".txt" then
+					'过滤，仅保存txt类型
+					if ext=".txt" then
 						conn.execute("insert into cmp_lrc (src) values('"&CheckStr(lrc_name)&"')")
 					end if
 				Next
