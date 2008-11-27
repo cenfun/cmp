@@ -20,6 +20,7 @@ else
 End IF
 Dim cmp_path,site_title,site_name,site_url,site_qq,site_email,site_count,site_ads,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
 cmp_path = Arr_system_info(0,0)
+if cmp_path="" then cmp_path="cmp.swf"
 site_name = Arr_system_info(1,0)
 site_url = Arr_system_info(2,0)
 site_qq = Arr_system_info(3,0)
@@ -30,8 +31,11 @@ user_reg = Arr_system_info(7,0)
 user_check = Arr_system_info(8,0)
 xml_make = Arr_system_info(9,0)
 xml_path = Arr_system_info(10,0)
+if xml_path="" then xml_path="xml"
 xml_config = Arr_system_info(11,0)
+if xml_config="" then xml_config="c.xml"
 xml_list = Arr_system_info(12,0)
+if xml_list="" then xml_list="l.xml"
 '解析公告和广告
 dim site_ad_news,site_ad_top,site_ad_bottom
 site_ads=Split(UnCheckstr(site_ads),"{|}")
