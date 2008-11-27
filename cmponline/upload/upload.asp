@@ -136,7 +136,7 @@ sub uploadlrc()
 					'完成歌词上传
 					Response.Write("uploadComplete{|}" & fileurl)
 				else
-					Response.Write("uploadComplete{|}文件被覆盖" & fileurl)
+					Response.Write("uploadComplete{|}覆盖到" & fileurl)
 				end if
 				rs.close
 				set rs = nothing
