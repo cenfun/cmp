@@ -75,6 +75,8 @@ function check(o){
 
 function showcode(o) {
 	o.onfocus = null;
+	var obj = document.getElementById("verifycodeobj");
+	obj.innerHTML = '<img src="images/loading.gif" />';
 	getcode();
 }
 function getcode() {
