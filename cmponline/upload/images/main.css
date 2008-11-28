@@ -1,7 +1,7 @@
 ﻿@charset "utf-8";
 html, body { height:100%; }
 body, a, td, th, span, div { font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; }
-input, textarea {font-family:"宋体"; font-size:12px;}
+input, textarea { font-family:"宋体"; font-size:12px; }
 body { background-color:#F5FAFE; padding:0px 0px; margin:0px 0px; }
 form { margin:0px 0px; padding:0px 0px; }
 a:link, a:visited { color:#000000; text-decoration:none; }
@@ -20,7 +20,7 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .mbox { padding:8px 10px; border-bottom:1px dashed #CCCCCC; }
 .gbox { margin:0px auto; border:1px solid #ADC4DF; margin-bottom:5px; background-color:#FFFFFF; width:98%; word-break:break-all; overflow:auto; }
 .gtitle { cursor:pointer; padding:5px 5px; color:#666666; }
-.gtitle strong { color:#000000; font-size:14px; background:url(bullet.gif) no-repeat left; padding:0px 10px 3px 15px;}
+.gtitle strong { color:#000000; font-size:14px; background:url(bullet.gif) no-repeat left; padding:0px 10px 3px 15px; }
 .gtitle span { font-size:10px; margin-left:10px; color:#999999; }
 .gtitle a:link, .gtitle a:visited { color:#666666; }
 .gcontent { padding:5px 5px; word-break:break-all; border-top:1px solid #eeeeee; color:#333333; }
@@ -31,15 +31,15 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .output p { padding:5px 0px; }
 .list { }
 .list li { list-style:inside; }
-#menu { background:url(top_bg.gif); height:32px; line-height:32px; margin-bottom:10px; }
+#menu { background:url(top_bg.gif) #438BDA; height:32px; line-height:32px; margin-bottom:10px; }
 .nav { position:relative; height:32px; line-height:32px; padding:0px 10px; margin:0px 0px; }
 .nav li { position:relative; float:left; list-style:none; color:#FFFFFF; }
 .nav li.right { float:right; }
 .nav li span { margin-right:5px; }
-.nav li a:link, .nav li a:visited { font-family:"宋体"; display:block; color:#FFFFFF; line-height:32px; padding:0px 10px; font-weight:bold; }
+.nav li a:link, .nav li a:visited { font-family:"宋体"; display:block; color:#FFFFFF; line-height:32px; padding:0px 10px; font-weight:bold; white-space: nowrap; }
 .nav li a:hover { }
 .nav li a.drop, .nav li a.drop:hover { background:url(dot.gif) no-repeat right; margin-right:7px; }
-.nav li ul { position: absolute; z-index:999; width:auto; margin:0px auto; padding:0px 0px; background-color:#438BDA; display:none;}
+.nav li ul { position: absolute; z-index:999; width:auto; margin:0px auto; padding:0px 0px; background-color:#438BDA; display:none; }
 .nav li ul li { width:100%; clear:both; display:block; }
 .nav li ul li a:link, .nav li ul li a:visited { display:block; white-space: nowrap; height:27px; line-height:27px; }
 .nav li ul li a:hover { background-color:#559AE4; text-decoration:none; }
