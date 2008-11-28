@@ -45,7 +45,7 @@ sub main()
     <tr>
       <td align="right">验证码：</td>
       <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" onfocus="showcode(this);" />
-        <span id="verifycodeobj" title="点击更换验证码" style="font-weight:bold;-moz-user-select:none;cursor:pointer;" onclick="getcode();"></span></td>
+        <span id="verifycodeobj" title="点击更换验证码" style="font-weight:bold;-moz-user-select:none;cursor:pointer;" onclick="getcode();"></span><img src="images/loading.gif" width="1" height="1"/></td>
     </tr>
     <tr>
       <td width="10%">&nbsp;</td>
