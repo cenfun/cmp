@@ -11,7 +11,7 @@ Dim sitedb,dbpath
 	sitedb = "data/#cmp3_2008.mdb"
 	dbpath = ""
 Dim siteVersion
-	siteVersion = "b081126"
+	siteVersion = "b081128"
 Dim Startime,SqlNowString,SystemTime
 Dim conn,rs,sql,FoundErr,ErrMsg,SucMsg
 FoundErr=False 
