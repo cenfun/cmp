@@ -442,6 +442,7 @@ by=Checkstr(Request.QueryString("by"))
         <option value="0" <%if userstatus="0" then%>selected="selected"<%end if%>>未激活用户</option>
         <option value="1" <%if userstatus="1" then%>selected="selected"<%end if%>>被锁定用户</option>
         <option value="5" <%if userstatus="5" then%>selected="selected"<%end if%>>正常用户</option>
+        <option value="8" <%if userstatus="8" then%>selected="selected"<%end if%>>管理员</option>
       </select>
     </td>
   </tr>
@@ -456,7 +457,11 @@ if username <> "" then
 end if
 if userstatus <> "" then
 	if IsNumeric(userstatus) then
-		sql = sql & " userstatus="&userstatus&" and "
+		if userstatus="8" then
+			sql = sql & " userstatus>="&userstatus&" and "
+		else
+			sql = sql & " userstatus="&userstatus&" and "
+		end if
 	end if
 end if
 sql = sql & " 1=1 "
@@ -794,7 +799,7 @@ id=Checkstr(Request.QueryString("id"))
 if id <> "" then
 	if IsNumeric(id) then
 		'修改用户信息
-		sql = "select username from cmp_user where id="&id
+		sql = "select username,config,list from cmp_user where id="&id
 		set rs = conn.execute(sql)
 		if not rs.eof then
 			dim password,userstatus,logins,hits,email,qq,cmp_name,cmp_url,setinfo,config,list
@@ -820,14 +825,23 @@ if id <> "" then
 			list = request.Form("list")
 			'生成静态文件
 			if xml_make="1" then
-				call makeFile(xml_path & "/" & id & xml_config, config)
-				call makeFile(xml_path & "/" & id & xml_list, list)
+				if rs("config")<>config then
+					call makeFile(xml_path & "/" & id & xml_config, config)
+				end if
+				if rs("list")<>list then
+					call makeFile(xml_path & "/" & id & xml_list, list)
+				end if
 			end if
 			'保存至数据库
 			sql = "update cmp_user set logins="&logins&",hits="&hits&","
 			sql = sql & "email='"&email&"',qq='"&qq&"',cmp_name='"&cmp_name&"',cmp_url='"&cmp_url&"',"
-			if userstatus<>"" and IsNumeric(userstatus) then
-				sql = sql & "userstatus="&userstatus&","
+			'用户组状态
+			if userstatus<>"" then
+				if IsNumeric(userstatus) then
+					if userstatus<>9 then
+						sql = sql & "userstatus="&userstatus&","
+					end if
+				end if
 			end if
 			sql = sql & "setinfo="&setinfo&",config='"&CheckStr(config)&"',list='"&CheckStr(list)&"' where username='"&rs("username")&"' "
 			'response.Write(sql)
