@@ -441,7 +441,7 @@ by=Checkstr(Request.QueryString("by"))
         <option value="">所有用户</option>
         <option value="0" <%if userstatus="0" then%>selected="selected"<%end if%>>未激活用户</option>
         <option value="1" <%if userstatus="1" then%>selected="selected"<%end if%>>被锁定用户</option>
-        <option value="5" <%if userstatus="5" then%>selected="selected"<%end if%>>正常用户</option>
+        <option value="5" <%if userstatus="5" then%>selected="selected"<%end if%>>普通用户</option>
         <option value="8" <%if userstatus="8" then%>selected="selected"<%end if%>>管理员</option>
       </select>
     </td>
@@ -821,8 +821,8 @@ if id <> "" then
 				setinfo=0
 			end if
 			'正则替换配置文件列表地址，名称，网站
-			config = setLNU(request.Form("config"), xml_make, xml_path, xml_list, id, cmp_name, cmp_url)
-			list = request.Form("list")
+			config = CheckStr(setLNU(request.Form("config"), xml_make, xml_path, xml_list, id, cmp_name, cmp_url))
+			list = CheckStr(request.Form("list"))
 			'生成静态文件
 			if xml_make="1" then
 				if rs("config")<>config then
@@ -843,7 +843,7 @@ if id <> "" then
 					end if
 				end if
 			end if
-			sql = sql & "setinfo="&setinfo&",config='"&CheckStr(config)&"',list='"&CheckStr(list)&"' where username='"&rs("username")&"' "
+			sql = sql & "setinfo="&setinfo&",config='"&config&"',list='"&list&"' where username='"&rs("username")&"' "
 			'response.Write(sql)
 			conn.execute(sql)
 			SucMsg="修改成功！"
