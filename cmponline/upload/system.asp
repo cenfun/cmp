@@ -51,6 +51,10 @@ sub database(path)
 if request.Form("dbdo") = "compact" then
 	Response.write "关闭所有连接...<br />"
 	conn.close
+	'关闭站点
+	Application.Lock
+    Application(CookieName&"_site_close")="1"
+    Application.UnLock
 	Response.write "开始压缩和修复数据...<br />"
 	dim AccessFSO,AccessEngine
 	if CheckObjInstalled("Scripting.FileSystemObject")=true then
@@ -67,6 +71,10 @@ if request.Form("dbdo") = "compact" then
 	Else
 		Response.write "<span style=""color:#ff0000;"">压缩数据库失败，服务器不支持FSO</span>"
 	End if
+	'打开站点
+	Application.Lock
+    Application(CookieName&"_site_close")=""
+    Application.UnLock
 end if
 %>
 </div>

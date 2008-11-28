@@ -1,4 +1,24 @@
 ﻿<%
+'用户登录状况
+Dim founduser,foundadmin
+if Session(CookieName & "_username")<>"" then
+	founduser = true
+	if Session(CookieName & "_admin")<>"" then
+		foundadmin = true
+	else
+		foundadmin = false
+	end if
+else
+	founduser = false
+	foundadmin = false	
+end if 
+
+'站点关闭
+if Application(CookieName&"_site_close")="1" and not foundadmin then
+	Response.Charset = "utf-8"
+	Response.Write("<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />站点暂时关闭，请稍候访问！")	
+	Response.End()
+end if
 '连接数据库
 If Not IsObject(conn) Then ConnectionDatabase()
 '系统缓存
@@ -48,20 +68,6 @@ end if
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
 If UserTrueIP = "" Then UserTrueIP = Request.ServerVariables("REMOTE_ADDR")
-
-'用户登录状况
-Dim founduser,foundadmin
-if Session(CookieName & "_username")<>"" then
-	founduser = true
-	if Session(CookieName & "_admin")<>"" then
-		foundadmin = true
-	else
-		foundadmin = false
-	end if
-else
-	founduser = false
-	foundadmin = false	
-end if 
 
 '查询IP地址
 function getIpUrl(ip)

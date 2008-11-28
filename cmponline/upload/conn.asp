@@ -29,8 +29,9 @@ Sub ConnectionDatabase()
 	If Err Then
 		err.Clear
 		Set Conn = Nothing
+		Response.Charset = "utf-8"
 		Response.Write("<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />数据库连接出错，请检查连接字串")
-		Response.End
+		Response.End()
 	end If
 End Sub
 %>
