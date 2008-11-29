@@ -826,10 +826,10 @@ if id <> "" then
 			'生成静态文件
 			if xml_make="1" then
 				if rs("config")<>config then
-					call makeFile(xml_path & "/" & id & xml_config, config)
+					call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
 				end if
 				if rs("list")<>list then
-					call makeFile(xml_path & "/" & id & xml_list, list)
+					call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
 				end if
 			end if
 			'保存至数据库
