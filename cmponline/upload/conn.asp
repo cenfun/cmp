@@ -17,7 +17,7 @@ Startime = Timer()
 SqlNowString = "Now()"
 SystemTime=Now()
 '站点cookies唯一标识
-Const CookieName="cenfun_cmp3"
+Const CookieName="cmponline"
 '数据连接
 Sub ConnectionDatabase()
 	'on error resume next
