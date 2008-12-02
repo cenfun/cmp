@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="Keywords" content="CMP,Manage,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
+<meta name="Description" content="CenFun Music Player v3.0 - bbs.cenfun.com" />
+<meta name="Copyright" content="2006-2008 Cenfun.Com" />
+<title>CMP v3.0</title>
+<style type="text/css">
+html, body { height:100%; margin:0px 0px; }
+</style>
+<script type="text/javascript" src="images/main.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+var url = window.location.hash.substring(1);
+//id, width, height, cmp url, vars
+showcmp("cmp", "100%", "100%", "cmp.swf", "url=" + url);
+ajaxSend("GET",url,true,null,completeHd,function(e){});
+function completeHd(data) {
+	if(data != ""){
+		var str = data;
+		var msie = /msie/.test(navigator.userAgent.toLowerCase());
+		var xmlDoc;
+		try {
+			if (msie) {
+				xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+				xmlDoc.async= false;
+				xmlDoc.loadXML(str);
+			} else {
+				var parser = new DOMParser();
+				xmlDoc = parser.parseFromString(str, "text/xml");
+			}
+			var root = xmlDoc.documentElement;
+			var title = root.getAttribute("name");
+			document.title = title;
+		} catch (e) {}
+	}
+}
+</script>
+</body>
+</html>

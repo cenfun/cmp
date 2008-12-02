@@ -108,7 +108,11 @@ end function
 function getCmpPageUrl(id)
 	dim this_path
 	this_path="http://"&Request.ServerVariables("HTTP_HOST")&left(Request.ServerVariables("PATH_INFO"),InStrRev(Request.ServerVariables("PATH_INFO"),"/"))
-	getCmpPageUrl = this_path & "cmp.asp?id=" & id
+	if xml_make = "1" then
+		getCmpPageUrl = this_path & "cmp.htm#" & geturl(id)
+	else
+		getCmpPageUrl = this_path & "cmp.asp?id=" & id
+	end if
 end function
 
 '取得动静态地址
