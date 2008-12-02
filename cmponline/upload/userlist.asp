@@ -81,7 +81,7 @@ if page <> "" then
 end if
 dim PageC,MaxPerPage
 	PageC=0
-	MaxPerPage=50
+	MaxPerPage=20
 set rs=Server.CreateObject("ADODB.RecordSet")
 rs.Open sql,conn,1,1
 IF not rs.EOF Then
