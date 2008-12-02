@@ -104,7 +104,7 @@ IF not rs.EOF Then
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
           <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
             <td><%=rs("id")%></td>
-            <td><a href="<%=getCmpPageUrl(rs("id"))%>" target="_blank" title="<%=rs("cmp_name")%>"><%=Left(rs("cmp_name"),12)%></a></td>
+            <td><a href="<%=getCmpPageUrl(rs("id"))%>" target="_blank" title="<%=rs("cmp_name")%>" onclick="addHits(<%=rs("id")%>);"><%=Left(rs("cmp_name"),12)%></a></td>
             <td title="<%=rs("lasttime")%>"><%=FormatDateTime(rs("lasttime"),2)%></td>
             <td><%=rs("hits")%></td>
             <td><%=rs("logins")%></td>
