@@ -126,78 +126,38 @@ end sub
 
 
 sub config()
-dim strContent,id
-sql = "select id,cmp_name,cmp_url,config from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
-set rs = conn.execute(sql)
-if not rs.eof then
-	id = rs("id")
-	if trim(rs("config"))<>"" then
-		strContent = UnCheckStr(rs("config"))
-		'正则替换配置文件列表地址，名称，网站
-		strContent = setLNU(strContent, xml_make, xml_path, xml_list, id, rs("cmp_name"), rs("cmp_url"))
-	else
-		dim cr,lPath
-		cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
-		if xml_make="1" then
-			lPath = xml_path & "/" & id & xml_list
-		else
-			lPath = "list.asp?id="&id
-		end if
-		strContent = "<cmp name="""&rs("cmp_name")&""" url="""&rs("cmp_url")&""" list="""&lPath&""" >" & cr
-		strContent = strContent & "<config language="""" play_mode="""" skin_id="""" list_id="""" volume="""" auto_play="""" max_video="""" bgcolor="""" "
-		strContent = strContent & "mixer_id="""" mixer_color="""" mixer_filter="""" mixer_displace="""" "
-		strContent = strContent & "buffer="""" timeout="""" show_tip="""" context_menu="""" video_smoothing="""" plugins_disabled="""" check_policyfile=""""  />" & cr
-		strContent = strContent & "<skins>"&cr&"</skins>" & cr 
-		strContent = strContent & "<plugins>"&cr&"</plugins>" & cr
-		strContent = strContent & "<nolrc src="""">"&cr&"</nolrc>" & cr
-		strContent = strContent & "<count src="""&XMLEncode(site_count)&""" />" & cr
-		strContent = strContent & "</cmp>"
-		'更新配置至数据库
-		conn.execute("update cmp_user set config='"&CheckStr(strContent)&"' where id=" & id & " ")
-	end if
-else
-	ErrMsg = "用户不存在或者被锁定！"
-	cenfun_error()
-end if
-rs.close
-set rs = nothing
+dim id
+id = Session(CookieName & "_userid")
+dim pagetitle
+pagetitle = "CMP配置文件编辑: "
+if request.QueryString("mode")="code" then
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th align="left">CMP配置文件编辑: <span style="margin-left:20px;font-weight:normal;">
-      <%if request.QueryString("mode")="code" then%>
+    <th align="left"><%=pagetitle%><span style="margin-left:20px;font-weight:normal;">
       <input type="button" onclick="window.location='manage.asp?action=config';" value="&lt;&lt;返回普通编辑模式" />
-      <%else%>
-      <input type="button" onclick="window.location='manage.asp?action=config&mode=code';" value="进入代码编辑模式&gt;&gt;" />
-      <%end if%>
       </span></th>
   </tr>
-  <%if request.QueryString("mode")="code" then%>
   <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
     <tr>
-      <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"><%=strContent%></textarea></td>
+      <td align="center"><textarea name="config" rows="30" id="config" style="width:99%;"></textarea></td>
     </tr>
     <tr>
       <td align="center"><input name="config_submit" type="submit" style="width:50px;" value="提交" />
         <input name="config_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
     </tr>
   </form>
-  <%else%>
-  <tr>
-    <td align="center"><script type="text/javascript">
-var vars = "";
-vars += "i="+encodeURIComponent("config.asp?id=<%=id%>&rd="+Math.random());
-vars += "&o="+encodeURIComponent("manage.asp?handler=saveconfigdata");
-vars += "&sl="+encodeURIComponent("manage.asp?handler=getskins&rd="+Math.random());
-vars += "&pl="+encodeURIComponent("manage.asp?handler=getplugins&rd="+Math.random());
-//id, width, height, cmp url, vars
-showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars, false);
-</script>
-    </td>
-  </tr>
-  <%end if%>
 </table>
 <script type="text/javascript">
+ajaxSend("GET","config.asp?rd="+Math.random()+"&id=<%=id%>",true,null,completeHd,errorHd);
+function completeHd(data) {
+	if(data != ""){
+		document.getElementById("config").value = data;
+	} 
+}
+function errorHd(errmsg) {
+	alert(errmsg);
+}
 function check_xml(o) {
 	if (check_config(o.form)) {
 		alert("XML格式正确！");
@@ -219,7 +179,28 @@ function check_config(o){
 	return isok;
 }
 </script>
+<%else%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <th align="left"><%=pagetitle%><span style="margin-left:20px;font-weight:normal;">
+      <input type="button" onclick="window.location='manage.asp?action=config&mode=code';" value="进入代码编辑模式&gt;&gt;" />
+      </span></th>
+  </tr>
+  <tr>
+    <td align="center"><script type="text/javascript">
+var vars = "";
+vars += "i="+encodeURIComponent("config.asp?id=<%=id%>&rd="+Math.random());
+vars += "&o="+encodeURIComponent("manage.asp?handler=saveconfigdata");
+vars += "&sl="+encodeURIComponent("manage.asp?handler=getskins&rd="+Math.random());
+vars += "&pl="+encodeURIComponent("manage.asp?handler=getplugins&rd="+Math.random());
+//id, width, height, cmp url, vars
+showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars, false);
+</script>
+    </td>
+  </tr>
+</table>
 <%
+end if
 end sub
 '从Form保存
 sub saveconfig()
