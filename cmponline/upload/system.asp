@@ -100,6 +100,33 @@ sub ajax()
 			end if
 			rs.Close
 			Set rs=Nothing
+		Case "fixmdb"
+			'关闭连接
+			conn.close
+			'关闭站点
+			Application.Lock
+			Application(CookieName&"_site_close")="1"
+			Application.UnLock
+			'开始压缩和修复数据
+			dim AccessFSO,AccessEngine
+			if CheckObjInstalled("Scripting.FileSystemObject")=true then
+				Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
+				IF AccessFSO.FileExists(Server.Mappath(sitedb)) Then
+					Set AccessEngine = CreateObject("JRO.JetEngine")
+					AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb & ".temp")
+					AccessFSO.CopyFile Server.Mappath(sitedb & ".temp"),Server.Mappath(sitedb)
+					AccessFSO.DeleteFile(Server.Mappath(sitedb & ".temp"))
+					Set AccessFSO = Nothing
+					Set AccessEngine = Nothing
+					Response.write "压缩数据库完成！新的文件大小为："&getFileInfo(sitedb)(0)
+				end If
+			Else
+				Response.write "<span style=""color:#ff0000;"">压缩数据库失败，服务器不支持FSO</span>"
+			End if
+			'打开站点
+			Application.Lock
+			Application(CookieName&"_site_close")=""
+			Application.UnLock
 		Case Else
 		
 	End Select
@@ -217,44 +244,33 @@ clearApp()
 end sub
 
 
-sub database(path)
+sub database()
 %>
-<form action="<%=path%>" method="post">
-  <input name="dbdo" type="hidden" value="compact" />
-  <input type="submit" value="压缩和修复数据库" />
-</form>
-<div style="color:#0000FF;">
-  <%
-if request.Form("dbdo") = "compact" then
-	Response.write "关闭所有连接...<br />"
-	conn.close
-	'关闭站点
-	Application.Lock
-    Application(CookieName&"_site_close")="1"
-    Application.UnLock
-	Response.write "开始压缩和修复数据...<br />"
-	dim AccessFSO,AccessEngine
-	if CheckObjInstalled("Scripting.FileSystemObject")=true then
-		Set AccessFSO=Server.CreateObject("Scripting.FileSystemObject")
-		IF AccessFSO.FileExists(Server.Mappath(sitedb)) Then
-			Set AccessEngine = CreateObject("JRO.JetEngine")
-			AccessEngine.CompactDatabase "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb), "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.Mappath(sitedb & ".temp")
-			AccessFSO.CopyFile Server.Mappath(sitedb & ".temp"),Server.Mappath(sitedb)
-			AccessFSO.DeleteFile(Server.Mappath(sitedb & ".temp"))
-			Set AccessFSO = Nothing
-			Set AccessEngine = Nothing
-			Response.write "压缩数据库完成！新的文件大小为："&getFileInfo(sitedb)(0)
-		end If
-	Else
-		Response.write "<span style=""color:#ff0000;"">压缩数据库失败，服务器不支持FSO</span>"
-	End if
-	'打开站点
-	Application.Lock
-    Application(CookieName&"_site_close")=""
-    Application.UnLock
-end if
-%>
-</div>
+<div><input type="button" value="压缩和修复数据库" onclick="fixmdb(this);" /> <strong id="fix_status"></strong></div>
+<script type="text/javascript">
+var bt_fix;
+function fixmdb(o) {
+	bt_fix = o;
+	bt_fix.disabled = "disabled";
+	show_status('<img src="images/loading.gif" align="absmiddle" />');
+	ajaxSend("GET","system.asp?rd="+Math.random()+"&handler=ajax&cmd=fixmdb",true,null,fixHd,errorHd);
+}
+function fixHd(data) {
+	if(data != ""){
+		show_status(data);
+	} 
+	bt_fix.disabled = "";
+}
+function show_status(status) {
+	var obj = document.getElementById("fix_status");
+	obj.innerHTML = status;
+}
+function errorHd(errmsg) {
+	alert(errmsg);
+	show_status('错误');
+	bt_fix.disabled = "";
+}
+</script>
 <%
 end sub
 
@@ -426,7 +442,7 @@ function check(o){
   </tr>
   <tr>
     <td align="right">数据库优化：</td>
-    <td><%database("system.asp?action=config")%>
+    <td><%database()%>
       推荐经常操作，可以有效地释放无效空间，加快访问速度</td>
   </tr>
   <tr>
@@ -1269,7 +1285,7 @@ end if
   </tr>
   <tr>
     <td align="right">歌词库优化(重建数据后释放无效空间)：</td>
-    <td><%database("system.asp?action=lrc")%></td>
+    <td><%database()%></td>
   </tr>
   <%if Request.QueryString("showlrc")<>1 then%>
   <tr>
