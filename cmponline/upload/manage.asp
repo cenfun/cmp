@@ -202,45 +202,27 @@ showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars, false);
 <%
 end if
 end sub
+'保存配置数据
+sub saveconfignow()
+	dim config,id
+	id = Session(CookieName & "_userid")
+	config = CheckStr(request.Form("config"))
+	conn.execute("update cmp_user set config='"&config&"' where userstatus > 4 and id=" & id & " ")
+	'重建静态数据
+	if xml_make="1" then
+		call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
+	end if
+end sub
 '从Form保存
 sub saveconfig()
-	dim config,id
-	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
-	set rs = conn.execute(sql)
-	if not rs.eof then
-		id = rs("id")
-		config = CheckStr(request.Form("config"))
-		conn.execute("update cmp_user set config='"&config&"' where id=" & id & " ")
-		SucMsg="修改成功！"
-		Cenfun_suc("manage.asp?action=config&mode=code")
-		'重建静态数据
-		if xml_make="1" then
-			call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
-		end if
-	else
-		ErrMsg = "用户不存在或者被锁定！"
-		cenfun_error()
-	end if
-	rs.close
-	set rs = nothing
+	saveconfignow()
+	SucMsg="修改成功！"
+	Cenfun_suc("manage.asp?action=config&mode=code")
 end sub
 '从Flash编辑器保存
 sub saveconfigdata()
-	dim config,id
-	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
-	set rs = conn.execute(sql)
-	if not rs.eof then
-		id = rs("id")
-		config = CheckStr(request.Form("config"))
-		conn.execute("update cmp_user set config='"&config&"' where id=" & id & " ")
-		Response.Write("CMPConfigComplete")
-		'重建静态数据
-		if xml_make="1" then
-			call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
-		end if
-	end if
-	rs.close
-	set rs = nothing
+	saveconfignow()
+	Response.Write("CMPConfigComplete")
 end sub
 
 sub list()
