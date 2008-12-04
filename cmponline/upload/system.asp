@@ -177,10 +177,15 @@ function makeHd(data) {
 	if(data != ""){
 		if (data != "MakeComplete") {
 			//继续下一轮make
-			now_page = parseInt(data);
-			now_page ++;
-			make(now_page);
-			show_msg("step_make_msg", "正在创建第" + now_page + '页<img src="images/loading.gif" align="absmiddle" />');
+			var page = parseInt(data);
+			if(isNaN(page)) {
+				remakeHd("当前页码错误！");
+			} else {
+				now_page = page
+				now_page ++;
+				make(now_page);
+				show_msg("step_make_msg", "正在创建第" + now_page + '页<img src="images/loading.gif" align="absmiddle" />');
+			}
 		} else {
 			show_msg("step_make_msg", "完成");
 			show_step("step_end");
@@ -191,7 +196,7 @@ function makeHd(data) {
 }
 function remakeHd(errmsg) {
 	alert(errmsg);
-	show_msg("step_make_msg", "创建第" + page + '页时失败 <input type="button" value="点击重试" onclick="make('+now_page+');" />');
+	show_msg("step_make_msg", "创建第" + now_page + '页时失败 <input type="button" value="点击重试" onclick="make('+now_page+');" />');
 }
 //
 function show_step(step) {
