@@ -5,40 +5,154 @@
 site_title = "系统管理"
 '检测管理员是否登录
 If founduser and foundadmin Then
-	header()
-	menu()
-	Select Case Request.QueryString("action")
-		Case "config"
-			config()
-		Case "save_config"
-			save_config()
-		Case "update_config"
-			update_config()
-		Case "remake"
-			reMakeData xml_make, xml_path, xml_config, xml_list
-		Case "user"
-			user()
-		Case "edituser"
-			edituser()
-		Case "saveuser"
-			saveuser()
-		Case "skins"
-			skins()
-		Case "plugins"
-			plugins()
-		Case "lrc"
-			lrc()
-		Case "create_lrc"
-			create_lrc()
-		Case Else
-			config()
-	End Select
-	footer()
+	if Request.QueryString("handler")="ajax" then
+		ajax()
+	else
+		header()
+		menu()
+		Select Case Request.QueryString("action")
+			Case "config"
+				config()
+			Case "save_config"
+				save_config()
+			Case "update_config"
+				update_config()
+			Case "remake"
+				call reMakeData(xml_make, xml_path, xml_config, xml_list)
+			Case "user"
+				user()
+			Case "edituser"
+				edituser()
+			Case "saveuser"
+				saveuser()
+			Case "skins"
+				skins()
+			Case "plugins"
+				plugins()
+			Case "lrc"
+				lrc()
+			Case "create_lrc"
+				create_lrc()
+			Case Else
+				config()
+		End Select
+		footer()
+	end if
 else
 	header()
 	ErrMsg = "用户未登录或超时退出，请<a href=""index.asp"">重新登录</a>！"
 	cenfun_error()
 end if
+	
+	
+	
+sub ajax()
+	Select Case Request.QueryString("cmd")
+		Case "clear"
+			'删除目录
+			delFolder(Request.QueryString("xmlpath"))
+		Case "create"
+			'创建新目录
+			makeFolder(Request.QueryString("xmlpath"))
+		Case "make"	
+			'生成文件
+			dim num
+			num = 0
+			sql = "select id,config,list from cmp_user where userstatus > 4"
+			set rs = conn.execute(sql)
+				do while not rs.eof
+					call makeFile(xmlpath & "/" & rs("id") & xmlconfig, UnCheckStr(rs("config")))
+					call makeFile(xmlpath & "/" & rs("id") & xmllist, UnCheckStr(rs("list")))
+					rs.movenext
+					num = num + 1
+				loop
+			rs.close
+			set rs = nothing
+		
+		Case Else
+		
+	End Select
+end sub
+
+sub reMakeData(xmlmake, xmlpath, xmlconfig, xmllist)
+%>
+<div class="output" align="center">
+  <div id="step_clear" style="display:none;">
+    <p>开始清除所有旧的静态数据... <strong id="step_clear_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
+  </div>
+  <div id="step_create" style="display:none;">
+  	<p>开始创建新的静态数据目录... <strong id="step_create_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
+  </div>
+  <div id="step_make" style="display:none;">
+  	<p>开始生成所有静态数据文件... <strong id="step_make_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
+  </div>
+  <div id="step_end" style="display:none;">
+    <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
+  </div>
+</div>
+<script type="text/javascript">
+//新的设置
+var xmlmake = "<%=xmlmake%>";
+var xmlpath = "<%=xmlpath%>";
+var xmlconfig = "<%=xmlconfig%>";
+var xmllist = "<%=xmllist%>";
+//旧的设置
+var xml_make = "<%=xml_make%>";
+var xml_path = "<%=xml_path%>";
+var xml_config = "<%=xml_config%>";
+var xml_list = "<%=xml_list%>";
+if (xml_make == "1") {
+	//如果存在之前旧的数据则清理
+	show_step("step_clear");
+	//直接删除之前数据目录xml_path
+	ajaxSend("GET","system.asp?rd="+Math.random()+"&handler=ajax&cmd=clear&xmlpath="+xml_path,true,null,clearHd,errorHd);
+} else {
+	start_make();
+}
+function clearHd(data) {
+	var msg = "完成";
+	if(data != ""){
+		msg = data;
+	}
+	show_msg("step_clear_msg", msg);
+	start_make();
+}
+function start_make() {
+	if (xmlmake == "1") {
+		show_step("step_create");
+		//创建新的数据目录xmlpath
+		ajaxSend("GET","system.asp?rd="+Math.random()+"&handler=ajax&cmd=create&xmlpath="+xmlpath,true,null,createHd,errorHd);
+	} else {
+		show_step("step_end");
+	}
+}
+function createHd(data) {
+	var msg = "完成";
+	if(data != ""){
+		msg = data;
+	} 
+	show_msg("step_create_msg", msg);
+	//开始逐个生成文件
+	
+}
+//
+function show_step(step) {
+	var obj = document.getElementById(step);
+	obj.style.display = "block";
+}
+function show_msg(step, msg) {
+	var obj = document.getElementById(step);
+	obj.innerHTML = msg;
+}
+function errorHd(errmsg) {
+	alert(errmsg);
+}
+</script>
+<%
+'更新Application信息
+clearApp()
+end sub
+
 
 sub database(path)
 %>
@@ -294,12 +408,9 @@ function check(o){
 end sub
 
 sub update_config()
-	Application.Lock
-	Application(CookieName&"_Arr_system_info")=""
-	Application.UnLock
+	clearApp()
 	Response.Redirect("system.asp")
 end sub
-
 
 sub save_config()
 	'cmp_path,site_name,site_url,site_qq,site_email,site_count,site_ads,user_reg,user_check,xml_make,xml_path,xml_config,xml_list
@@ -329,66 +440,14 @@ sub save_config()
 	'response.Write(sql)
 	conn.execute(sql)
 	if xmlmake=xml_make and xmlpath=xml_path and xmlconfig=xml_config and xmllist=xml_list then
+		'更新Application信息
+		clearApp()
 		SucMsg="修改成功！"
 		Cenfun_suc("system.asp?action=config")
 	else
-		reMakeData xmlmake, xmlpath, xmlconfig, xmllist
+		call reMakeData(xmlmake, xmlpath, xmlconfig, xmllist)
 	end if
-	'更新Application信息
-	Application.Lock
-	Application(CookieName&"_Arr_system_info")=""
-	Application.UnLock
 end sub
-
-sub reMakeData(xmlmake, xmlpath, xmlconfig, xmllist)
-if CheckObjInstalled("Scripting.FileSystemObject")=true then
-	dim FSO
-	Set FSO=Server.CreateObject("Scripting.FileSystemObject")
-	'===================================================================
-%>
-<div class="output" align="center">
-  <%if xml_make="1" then%>
-  <p>开始清除所有旧的静态数据...</p>
-  <%
-  	'删除目录
-	delFolder(xmlpath)
-  %>
-  <p>清理完成！</p>
-  <%end if%>
-  <%if xmlmake="1" then%>
-  <p>开始重建所有静态数据...</p>
-  <%
-  	'创建新目录
-	makeFolder(xmlpath)
-	'生成文件
-	dim num
-	num = 0
-	sql = "select id,config,list from cmp_user where userstatus > 4"
-	set rs = conn.execute(sql)
-		do while not rs.eof
-			call makeFile(xmlpath & "/" & rs("id") & xmlconfig, UnCheckStr(rs("config")))
-			call makeFile(xmlpath & "/" & rs("id") & xmllist, UnCheckStr(rs("list")))
-			rs.movenext
-			num = num + 1
-		loop
-	rs.close
-	set rs = nothing
-  %>
-  <p>重建数据完成！共处理 <strong><%=num%></strong> 个用户共计 <strong><%=num*2%></strong> 个文件。</p>
-  <%end if%>
-  <p>
-    <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
-  </p>
-</div>
-<%
-	'===================================================================
-	Set FSO=Nothing
-else
-	ErrMsg="服务器不支持FSO写文件，无法重建数据！"
-	cenfun_error()
-end if
-end sub
-
 
 
 sub user()
@@ -693,7 +752,7 @@ if not rs.eof then
         一般用于帮用户重置密码，不修改请留空。</td>
     </tr>
     <%else%>
-	<tr>
+    <tr>
       <td align="right">状态：</td>
       <td><strong>系统管理员</strong></td>
     </tr>

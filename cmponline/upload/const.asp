@@ -67,6 +67,14 @@ if Ubound(site_ads)=2 then
 	site_ad_top=site_ads(1)
 	site_ad_bottom=site_ads(2)
 end if
+
+'清理Application信息
+function clearApp()
+	Application.Lock
+	Application(CookieName&"_Arr_system_info")=""
+	Application.UnLock
+end function
+
 '取得真实IP
 dim UserTrueIP
 UserTrueIP = Request.ServerVariables("HTTP_X_FORWARDED_FOR")
