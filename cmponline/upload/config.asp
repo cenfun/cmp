@@ -14,7 +14,7 @@ if id <> "" then
 				strContent = setLNU(strContent, xml_make, xml_path, xml_list, id, rs("cmp_name"), rs("cmp_url"))
 			else
 				dim cr,lPath
-				cr = Chr(13) & Chr(10)  & Chr(13) & Chr(10) 
+				cr = Chr(13) & Chr(10)
 				if xml_make="1" then
 					lPath = xml_path & "/" & id & xml_list
 				else
