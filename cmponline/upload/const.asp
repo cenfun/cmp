@@ -1,7 +1,7 @@
 ﻿<%
 '当前版本
 Dim siteVersion
-	siteVersion = "b081202"
+	siteVersion = "b081205"
 '用户登录状况
 Dim founduser,foundadmin
 if Session(CookieName & "_username")<>"" then
