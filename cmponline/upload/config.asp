@@ -15,7 +15,11 @@ if id <> "" then
 			re.IgnoreCase =True
 			re.Global=True
 			re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
-			strContent=re.Replace(strContent,"$1list.asp?id="&id&"$2")
+			if xml_make="1" then
+				strContent=re.Replace(strContent,"$1" & xml_path & "/" & id & xml_list & "$2")
+			else
+				strContent=re.Replace(strContent,"$1list.asp?id="&id&"$2")
+			end if
 			Set re=nothing
 		end if
 		rs.close
