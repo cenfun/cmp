@@ -235,15 +235,16 @@ function getLrcList() {
 	showUpload(false);
 	var lrc_name = document.getElementById("lrc_name");
 	if (lrc_name.value) {
+		showList(true);
+		showListMsg('<img src="images/loading.gif" align="absmiddle" />');
 		ajaxSend("GET","manage.asp?rd="+Math.random()+"&handler=getlrcs&lrc_name="+encodeURIComponent(lrc_name.value),true,null,completeHd,errorHd);
 	} else {
-		completeHd("");
+		showList(false);
 	}
 	return false;
 }
 function completeHd(data) {
 	//alert(data);
-	var obj = document.getElementById("lrclist");
 	if(data != ""){
 		var html = '<table border="0" cellpadding="2" cellspacing="1" >';
 		if (data == "null") {
@@ -259,11 +260,14 @@ function completeHd(data) {
 		}
 		html += '</table>';
 		//
-		showList(true);
-		obj.innerHTML = html;
+		showListMsg(html);
 	} else {
-		showList(false);
+		showListMsg("返回为空");
 	}
+}
+function showListMsg(msg) {
+	var obj = document.getElementById("lrclist");
+	obj.innerHTML = msg;
 }
 function showList(show) {
 	var obj = document.getElementById("lrclist");
