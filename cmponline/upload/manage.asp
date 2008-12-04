@@ -140,7 +140,8 @@ if request.QueryString("mode")="code" then
   </tr>
   <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
     <tr>
-      <td align="center"><textarea name="config" rows="30" id="config_area" style="width:99%;"></textarea></td>
+      <td align="center"><img src="images/loading.gif" align="absmiddle" id="loading" />
+        <textarea name="config" rows="30" id="config_area" style="width:99%;"></textarea></td>
     </tr>
     <tr>
       <td align="center"><input name="config_submit" type="submit" style="width:50px;" value="提交" />
@@ -151,6 +152,7 @@ if request.QueryString("mode")="code" then
 <script type="text/javascript">
 ajaxSend("GET","config.asp?rd="+Math.random()+"&id=<%=id%>",true,null,configHd,errorHd);
 function configHd(data) {
+	document.getElementById("loading").style.display = "none";
 	if(data != ""){
 		document.getElementById("config_area").value = data;
 	} 
@@ -322,7 +324,8 @@ document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
   <%if request.QueryString("mode")="code" then%>
   <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
     <tr>
-      <td align="center"><textarea name="list" rows="30" id="list_area" style="width:99%;"></textarea></td>
+      <td align="center"><img src="images/loading.gif" align="absmiddle" id="loading" />
+        <textarea name="list" rows="30" id="list_area" style="width:99%;"></textarea></td>
     </tr>
     <tr>
       <td align="center"><input name="list_submit" type="submit" style="width:50px;" value="提交" />
@@ -332,6 +335,7 @@ document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
   <script type="text/javascript">
 ajaxSend("GET","list.asp?rd="+Math.random()+"&id=<%=id%>",true,null,listHd,errorHd);
 function listHd(data) {
+	document.getElementById("loading").style.display = "none";
 	if(data != ""){
 		document.getElementById("list_area").value = data;
 	} 
