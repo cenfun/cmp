@@ -887,7 +887,7 @@ if not rs.eof then
     </tr>
     <tr>
       <td align="right">播放器地址：</td>
-      <td><a href="<%=cmpurl%>&" target="_blank"><%=cmpurl%></a></td>
+      <td><a href="<%=cmpurl%>" target="_blank"><%=cmpurl%></a></td>
     </tr>
     <tr>
       <td align="right">播放器配置：</td>
