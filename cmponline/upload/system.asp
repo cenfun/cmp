@@ -197,6 +197,7 @@ function createHd(data) {
 	make(now_page);
 }
 function make(page) {
+	show_msg("step_make_msg", "正在创建第" + now_page + '页<img src="images/loading.gif" align="absmiddle" />');
 	var url = "system.asp?rd="+Math.random()+"&handler=ajax&cmd=make&xmlpath="+xmlpath+"&xmlconfig="+xmlconfig+"&xmllist="+xmllist+"&page="+page;
 	ajaxSend("GET",url,true,null,makeHd,remakeHd);
 }
@@ -211,7 +212,6 @@ function makeHd(data) {
 				now_page = page
 				now_page ++;
 				make(now_page);
-				show_msg("step_make_msg", "正在创建第" + now_page + '页<img src="images/loading.gif" align="absmiddle" />');
 			}
 		} else {
 			show_msg("step_make_msg", "完成");
