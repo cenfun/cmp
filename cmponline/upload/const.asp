@@ -704,7 +704,7 @@ if site_ad_bottom<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_bottom&"</div>")
 end if
 %>
-<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a> <a href="http://bbs.cenfun.com/" target="_blank"><%=siteVersion%></a>. All Rights Reserved. Powered by <a href="mailto:cenfun@gmail.com" target="_blank">CenFun</a><span><img src="<%=site_count%>" /></span></div>
+<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a> All Rights Reserved. Powered by <a href="mailto:cenfun@gmail.com" target="_blank" style="font-size:10px;">CMPOnline</a> <a href="http://bbs.cenfun.com/" target="_blank" style="font-size:10px;"><%=siteVersion%></a><span><img src="<%=site_count%>" /></span></div>
 <%
 response.Write("</body></html>")
 '关闭所有连接
