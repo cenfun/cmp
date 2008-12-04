@@ -132,6 +132,8 @@ var xml_make = "<%=xml_make%>";
 var xml_path = "<%=xml_path%>";
 var xml_config = "<%=xml_config%>";
 var xml_list = "<%=xml_list%>";
+//当前页
+var now_page = 1;
 if (xml_make == "1") {
 	//如果存在之前旧的数据则清理
 	show_step("step_clear");
@@ -163,21 +165,22 @@ function createHd(data) {
 		msg = data;
 	} 
 	show_msg("step_create_msg", msg);
-	//从1开始逐个生成文件，每次10个
+	//从当前页1开始逐页生成文件
 	show_step("step_make");
-	make(1);
+	make(now_page);
 }
 function make(page) {
 	var url = "system.asp?rd="+Math.random()+"&handler=ajax&cmd=make&xmlpath="+xmlpath+"&xmlconfig="+xmlconfig+"&xmllist="+xmllist+"&page="+page;
-	ajaxSend("GET",url,true,null,makeHd,errorHd);
+	ajaxSend("GET",url,true,null,makeHd,remakeHd);
 }
 function makeHd(data) {
 	if(data != ""){
 		if (data != "MakeComplete") {
 			//继续下一轮make
-			var page = parseInt(data);
-			make(page + 1);
-			show_msg("step_make_msg", "正在创建第" + page + '页<img src="images/loading.gif" align="absmiddle" />');
+			now_page = parseInt(data);
+			now_page ++;
+			make(now_page);
+			show_msg("step_make_msg", "正在创建第" + now_page + '页<img src="images/loading.gif" align="absmiddle" />');
 		} else {
 			show_msg("step_make_msg", "完成");
 			show_step("step_end");
@@ -186,7 +189,10 @@ function makeHd(data) {
 		show_msg("step_make_msg", "错误");
 	}
 }
-
+function remakeHd(errmsg) {
+	alert(errmsg);
+	show_msg("step_make_msg", "创建第" + page + '页时失败 <input type="button" value="点击重试" onclick="make('+now_page+');" />');
+}
 //
 function show_step(step) {
 	var obj = document.getElementById(step);
