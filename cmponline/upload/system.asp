@@ -55,20 +55,51 @@ sub ajax()
 			'创建新目录
 			makeFolder(Request.QueryString("xmlpath"))
 		Case "make"	
+			dim xmlpath,xmlconfig,xmllist
+			xmlpath = Trim(Request.QueryString("xmlpath"))
+			xmlconfig = Trim(Request.QueryString("xmlconfig"))
+			xmllist = Trim(Request.QueryString("xmllist"))
 			'生成文件
-			dim num
-			num = 0
+			dim page,CurrentPage
+			page=Checkstr(Request.QueryString("page"))
+			CurrentPage = 1
+			if page <> "" then
+				if IsNumeric(page) then
+					if page > 0 and page < 32768 then
+						CurrentPage = cint(page)
+					end if
+				end if
+			end if
+			dim PageC,MaxPerPage
+				PageC=0
+				MaxPerPage=20
 			sql = "select id,config,list from cmp_user where userstatus > 4"
-			set rs = conn.execute(sql)
-				do while not rs.eof
-					call makeFile(xmlpath & "/" & rs("id") & xmlconfig, UnCheckStr(rs("config")))
-					call makeFile(xmlpath & "/" & rs("id") & xmllist, UnCheckStr(rs("list")))
-					rs.movenext
-					num = num + 1
-				loop
-			rs.close
-			set rs = nothing
-		
+			set rs=Server.CreateObject("ADODB.RecordSet")
+			rs.Open sql,conn,1,1
+			IF not rs.EOF Then
+				Dim rs_nums,now_num
+				'记录总数
+				rs_nums=rs.RecordCount
+				'当前页数之前的总数
+				now_num=CurrentPage * MaxPerPage
+				if now_num < rs_nums then
+					rs.PageSize=MaxPerPage
+					rs.AbsolutePage=CurrentPage
+					Do Until rs.EOF OR PageC=rs.PageSize
+						call makeFile(xmlpath & "/" & rs("id") & xmlconfig, UnCheckStr(rs("config")))
+						call makeFile(xmlpath & "/" & rs("id") & xmllist, UnCheckStr(rs("list")))
+						rs.MoveNext
+						PageC=PageC+1
+					loop
+					Response.Write(CurrentPage)			
+				else
+					Response.Write("MakeComplete")
+				end if
+			else
+				Response.Write("MakeComplete")
+			end if
+			rs.Close
+			Set rs=Nothing
 		Case Else
 		
 	End Select
@@ -87,7 +118,7 @@ sub reMakeData(xmlmake, xmlpath, xmlconfig, xmllist)
   	<p>开始生成所有静态数据文件... <strong id="step_make_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
   </div>
   <div id="step_end" style="display:none;">
-    <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
+    <p><input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" /></p>
   </div>
 </div>
 <script type="text/javascript">
@@ -132,9 +163,30 @@ function createHd(data) {
 		msg = data;
 	} 
 	show_msg("step_create_msg", msg);
-	//开始逐个生成文件
-	
+	//从1开始逐个生成文件，每次10个
+	show_step("step_make");
+	make(1);
 }
+function make(page) {
+	var url = "system.asp?rd="+Math.random()+"&handler=ajax&cmd=make&xmlpath="+xmlpath+"&xmlconfig="+xmlconfig+"&xmllist="+xmllist+"&page="+page;
+	ajaxSend("GET",url,true,null,makeHd,errorHd);
+}
+function makeHd(data) {
+	if(data != ""){
+		if (data != "MakeComplete") {
+			//继续下一轮make
+			var page = parseInt(data);
+			make(page + 1);
+			show_msg("step_make_msg", "正在创建第" + page + '页<img src="images/loading.gif" align="absmiddle" />');
+		} else {
+			show_msg("step_make_msg", "完成");
+			show_step("step_end");
+		}
+	} else {
+		show_msg("step_make_msg", "错误");
+	}
+}
+
 //
 function show_step(step) {
 	var obj = document.getElementById(step);
