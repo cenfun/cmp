@@ -598,7 +598,7 @@ by=Checkstr(Request.QueryString("by"))
         <form>
           <%
 '查询串
-sql = "select id,username,userstatus,lasttime,email,qq,cmp_name from cmp_user where "
+sql = "select id,username,userstatus,lasttime,hits,logins,list,email,qq,cmp_name from cmp_user where "
 if username <> "" then
 	sql = sql & " username like '%"&username&"%' and "
 end if
@@ -622,8 +622,18 @@ select case by
         sql = sql & " order by userstatus " & order
 	case "username"
         sql = sql & " order by username " & order
+	case "hits"
+		sql = sql & " order by hits " & order
+	case "logins"
+		sql = sql & " order by logins " & order
+	case "qq"
+		sql = sql & " order by len(qq) " & order & " ,qq " & order
 	case "lasttime"
-        sql = sql & " order by lasttime " & order
+		sql = sql & " order by lasttime " & order
+	case "list"
+		sql = sql & " order by len(list) " & order
+	case "cmp_name"
+		sql = sql & " order by cmp_name " & order
 	case else
 		sql = sql & " order by id desc"
 		by = ""
@@ -658,9 +668,11 @@ IF not rs.EOF Then
             <th><a href="javascript:orderby('id');" title="点击按其排序">ID</a></th>
             <th><a href="javascript:orderby('username');" title="点击按其排序">用户名</a></th>
             <th><a href="javascript:orderby('lasttime');" title="点击按其排序">最后登录</a></th>
-            <th>Email</th>
-            <th>QQ</th>
-            <th>播放器</th>
+            <th><a href="javascript:orderby('hits');" title="点击按其排序">查看</a></th>
+            <th><a href="javascript:orderby('logins');" title="点击按其排序">登录</a></th>
+            <th><a href="javascript:orderby('list');" title="点击按其排序">音乐量</a></th>
+            <th><a href="javascript:orderby('qq');" title="点击按其排序">QQ</a></th>
+            <th><a href="javascript:orderby('cmp_name');" title="点击按其排序">播放器名</a></th>
             <th>操作</th>
           </tr>
           <%Do Until rs.EOF OR PageC=rs.PageSize%>
@@ -689,17 +701,19 @@ IF not rs.EOF Then
             <td><%=role%></td>
             <td><%=rs("id")%></td>
             <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>" title="点击查看和编辑详细资料"><%=rs("username")%></a></td>
-            <td><%=FormatDateTime(rs("lasttime"),2)%></td>
-            <td><a href="mailto:<%=rs("email")%>" target="_blank"><%=Left(rs("email"),20)%></a></td>
+            <td title="<%=rs("lasttime")%>"><%=FormatDateTime(rs("lasttime"),2)%></td>
+            <td><%=rs("hits")%></td>
+            <td><%=rs("logins")%></td>
+            <td><%=Len(Trim(rs("list")))%></td>
             <td><a href="<%=getQqUrl(rs("qq"))%>" target="_blank"><%=Left(rs("qq"),10)%></a></td>
-            <td><a href="<%=getCmpUrl(rs("id"))%>&" target="_blank" title="<%=rs("cmp_name")%>"><%=Left(rs("cmp_name"),12)%></a></td>
-            <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">详情查看和编辑</a></td>
+            <td><a href="<%=getCmpUrl(rs("id"))%>" target="_blank" title="<%=rs("cmp_name")%>"><%=Left(rs("cmp_name"),12)%></a></td>
+            <td><a href="system.asp?action=edituser&amp;id=<%=rs("id")%>">操作</a></td>
           </tr>
           <%rs.MoveNext%>
           <%PageC=PageC+1%>
           <%loop%>
           <tr>
-            <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div>
+            <td colspan="12"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=user&username="&username&"&userstatus="&userstatus&"&order="&order&"&by="&by&"",rs_nums,MaxPerPage,true,true,"个",CurrentPage)%></div>
               <div style="padding:5px 5px;">
                 <input type="button" value="删除" style="width:50px;" onClick="dealuser(this);" title="删除用户不能恢复" />
                 <input type="button" value="锁定" style="width:50px;" onClick="dealuser(this);" title="锁定用户" />
