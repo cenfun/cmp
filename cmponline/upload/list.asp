@@ -12,7 +12,8 @@ if id <> "" then
 			if trim(rs("list"))<>"" then
 				strContent = UnCheckStr(rs("list"))
 			else
-				strContent = "<list>" & Chr(13) & Chr(10) & "</list>"
+				strContent = "<list />"
+				conn.execute("update cmp_user set list='"&CheckStr(strContent)&"' where id=" & id & " ")
 			end if
 		end if
 		rs.close

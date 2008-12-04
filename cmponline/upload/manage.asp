@@ -206,17 +206,17 @@ end sub
 sub saveconfignow()
 	dim config,id
 	id = Session(CookieName & "_userid")
-	config = CheckStr(request.Form("config"))
-	conn.execute("update cmp_user set config='"&config&"' where userstatus > 4 and id=" & id & " ")
+	config = Request.Form("config")
+	conn.execute("update cmp_user set config='"&CheckStr(config)&"' where userstatus > 4 and id=" & id & " ")
 	'重建静态数据
 	if xml_make="1" then
-		call makeFile(xml_path & "/" & id & xml_config, UnCheckStr(config))
+		call makeFile(xml_path & "/" & id & xml_config, config)
 	end if
 end sub
 '从Form保存
 sub saveconfig()
 	saveconfignow()
-	SucMsg="修改成功！"
+	SucMsg="修改配置成功！"
 	Cenfun_suc("manage.asp?action=config&mode=code")
 end sub
 '从Flash编辑器保存
@@ -225,77 +225,11 @@ sub saveconfigdata()
 	Response.Write("CMPConfigComplete")
 end sub
 
+
 sub list()
-dim strContent,id
-sql = "select id,list from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
-set rs = conn.execute(sql)
-if not rs.eof then
-	id = rs("id")
-	if trim(rs("list"))<>"" then
-		strContent = UnCheckStr(rs("list"))
-	else
-		strContent = "<list>" & Chr(13) & Chr(10) & "</list>"
-	end if
-else
-	ErrMsg = "用户不存在或者被锁定！"
-	cenfun_error()
-end if
-rs.close
-set rs = nothing
+dim id
+id = Session(CookieName & "_userid")
 %>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <th align="left"><span style="float:right;margin-right:5px;">
-      <div>
-        <div align="right">
-          <form onsubmit="return getLrcList();">
-            <input id="lrc_name" type="text" size="35" />
-            <input type="submit" value="搜索歌词" />
-          </form>
-        </div>
-        <div id="lrclist"></div>
-        <div id="lrcupload" style="display:none;">
-          <script type="text/javascript">
-var vars = "";
-vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&u=<%=Session(CookieName & "_username")%>&p=<%=Session(CookieName & "_userpass")%>");
-vars += "&type=txt";
-document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
-          </script>
-          <div>注意：为安全性和下载兼容性考虑，仅支持上传*.txt的歌词文件<br />
-            如果是*.lrc类型的歌词，请直接修改后缀为txt再上传即可</div>
-        </div>
-      </div>
-      </span>CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
-      <%if request.QueryString("mode")="code" then%>
-      <input type="button" onclick="window.location='manage.asp?action=list';" value="&lt;&lt;返回普通编辑模式" />
-      <%else%>
-      <input type="button" onclick="window.location='manage.asp?action=list&mode=code';" value="进入代码编辑模式&gt;&gt;" />
-      <%end if%>
-      </span></th>
-  </tr>
-  <%if request.QueryString("mode")="code" then%>
-  <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
-    <tr>
-      <td align="center"><textarea name="list" rows="30" id="list" style="width:99%;"><%=strContent%></textarea></td>
-    </tr>
-    <tr>
-      <td align="center"><input name="list_submit" type="submit" style="width:50px;" value="提交" />
-        <input name="list_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
-    </tr>
-  </form>
-  <%else%>
-  <tr>
-    <td align="center"><script type="text/javascript">
-var vars = "";
-vars += "i="+encodeURIComponent("list.asp?id=<%=id%>&rd="+Math.random());
-vars += "&o="+encodeURIComponent("manage.asp?handler=savelistdata");
-//id, width, height, cmp url, vars
-showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
-</script>
-    </td>
-  </tr>
-  <%end if%>
-</table>
 <script type="text/javascript">
 function getLrcList() {
 	showUpload(false);
@@ -350,6 +284,57 @@ function showUpload(show) {
 		lrcupload.style.display = "none";
 	}
 }
+</script>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
+  <tr>
+    <th align="left"><span style="float:right;margin-right:5px;">
+      <div>
+        <div align="right">
+          <form onsubmit="return getLrcList();">
+            <input id="lrc_name" type="text" size="35" />
+            <input type="submit" value="搜索歌词" />
+          </form>
+        </div>
+        <div id="lrclist"></div>
+        <div id="lrcupload" style="display:none;">
+          <script type="text/javascript">
+var vars = "";
+vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&u=<%=Session(CookieName & "_username")%>&p=<%=Session(CookieName & "_userpass")%>");
+vars += "&type=txt";
+document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
+          </script>
+          <div>注意：为安全性和下载兼容性考虑，仅支持上传*.txt的歌词文件<br />
+            如果是*.lrc类型的歌词，请直接修改后缀为txt再上传即可</div>
+        </div>
+      </div>
+      </span>CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
+      <%if request.QueryString("mode")="code" then%>
+      <input type="button" onclick="window.location='manage.asp?action=list';" value="&lt;&lt;返回普通编辑模式" />
+      <%else%>
+      <input type="button" onclick="window.location='manage.asp?action=list&mode=code';" value="进入代码编辑模式&gt;&gt;" />
+      <%end if%>
+      </span></th>
+  </tr>
+  <%if request.QueryString("mode")="code" then%>
+  <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
+    <tr>
+      <td align="center"><textarea name="list" rows="30" id="list" style="width:99%;"></textarea></td>
+    </tr>
+    <tr>
+      <td align="center"><input name="list_submit" type="submit" style="width:50px;" value="提交" />
+        <input name="list_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
+    </tr>
+  </form>
+  <script type="text/javascript">
+ajaxSend("GET","list.asp?rd="+Math.random()+"&id=<%=id%>",true,null,completeHd,errorHd);
+function completeHd(data) {
+	if(data != ""){
+		document.getElementById("list").value = data;
+	} 
+}
+function errorHd(errmsg) {
+	alert(errmsg);
+}
 function check_xml(o) {
 	if (check_list(o.form)) {
 		alert("XML格式正确！");
@@ -375,47 +360,42 @@ function check_list(o){
 	return isok;
 }
 </script>
+  <%else%>
+  <tr>
+    <td align="center"><script type="text/javascript">
+var vars = "";
+vars += "i="+encodeURIComponent("list.asp?id=<%=id%>&rd="+Math.random());
+vars += "&o="+encodeURIComponent("manage.asp?handler=savelistdata");
+//id, width, height, cmp url, vars
+showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
+</script>
+    </td>
+  </tr>
+  <%end if%>
+</table>
 <%
+end sub
+'保存列表数据
+sub savelistnow()
+	dim list,id
+	id = Session(CookieName & "_userid")
+	list = Request.Form("list")
+	conn.execute("update cmp_user set list='"&CheckStr(list)&"' where userstatus > 4 and id=" & id & " ")
+	'重建静态数据
+	if xml_make="1" then
+		call makeFile(xml_path & "/" & id & xml_list, list)
+	end if
 end sub
 '从Form保存
 sub savelist()
-	dim list,id
-	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
-	set rs = conn.execute(sql)
-	if not rs.eof then
-		id = rs("id")
-		list = CheckStr(request.Form("list"))
-		conn.execute("update cmp_user set list='"&list&"' where id=" & id & " ")
-		SucMsg="修改成功！"
-		Cenfun_suc("manage.asp?action=list&mode=code")
-		'重建静态数据
-		if xml_make="1" then
-			call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
-		end if
-	else
-		ErrMsg = "用户不存在或者被锁定！"
-		cenfun_error()
-	end if
-	rs.close
-	set rs = nothing
+	savelistnow()
+	SucMsg="修改列表成功！"
+	Cenfun_suc("manage.asp?action=list&mode=code")
 end sub
 '从Flash编辑器保存
 sub savelistdata()
-	dim list,id
-	sql = "select id from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
-	set rs = conn.execute(sql)
-	if not rs.eof then
-		id = rs("id")
-		list = CheckStr(request.Form("list"))
-		conn.execute("update cmp_user set list='"&list&"' where id=" & id & " ")
-		Response.Write("CMPListComplete")
-		'重建静态数据
-		if xml_make="1" then
-			call makeFile(xml_path & "/" & id & xml_list, UnCheckStr(list))
-		end if
-	end if
-	rs.close
-	set rs = nothing
+	savelistnow()
+	Response.Write("CMPListComplete")
 end sub
 
 
