@@ -85,12 +85,21 @@ sub ajax()
 				if now_num < rs_nums then
 					rs.PageSize=MaxPerPage
 					rs.AbsolutePage=CurrentPage
+					dim re,strContent,id
+					Set re=new RegExp
+					re.IgnoreCase =True
+					re.Global=True
+					re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
 					Do Until rs.EOF OR PageC=rs.PageSize
-						call makeFile(xmlpath & "/" & rs("id") & xmlconfig, UnCheckStr(rs("config")))
-						call makeFile(xmlpath & "/" & rs("id") & xmllist, UnCheckStr(rs("list")))
+						id = rs("id")
+						strContent = UnCheckStr(rs("config"))
+						strContent=re.Replace(strContent,"$1" & xmlpath & "/" & id & xmllist & "$2")
+						call makeFile(xmlpath & "/" & id & xmlconfig, strContent)
+						call makeFile(xmlpath & "/" & id & xmllist, UnCheckStr(rs("list")))
 						rs.MoveNext
 						PageC=PageC+1
 					loop
+					Set re=nothing
 					Response.Write(CurrentPage)			
 				else
 					Response.Write("MakeComplete")
