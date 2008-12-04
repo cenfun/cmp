@@ -18,9 +18,9 @@ end if
 
 '站点关闭
 if Application(CookieName&"_site_close")="1" and not foundadmin then
-	Response.Charset = "utf-8"
-	Response.Write("<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />站点暂时关闭，请稍候访问！")	
-	Response.End()
+	'Response.Charset = "utf-8"
+	'Response.Write("<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />站点暂时关闭，请稍候访问！")	
+	'Response.End()
 end if
 '连接数据库
 If Not IsObject(conn) Then ConnectionDatabase()
