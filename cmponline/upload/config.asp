@@ -24,9 +24,9 @@ if id <> "" then
 				strContent = strContent & "<config language="""" play_mode="""" skin_id="""" list_id="""" volume="""" auto_play="""" max_video="""" bgcolor="""" "
 				strContent = strContent & "mixer_id="""" mixer_color="""" mixer_filter="""" mixer_displace="""" "
 				strContent = strContent & "buffer="""" timeout="""" show_tip="""" context_menu="""" video_smoothing="""" plugins_disabled="""" check_policyfile=""""  />" & cr
-				strContent = strContent & "<skins />" & cr 
-				strContent = strContent & "<plugins />" & cr
-				strContent = strContent & "<nolrc src="""" />" & cr
+				strContent = strContent & "<skins>" & cr & "</skins>" & cr
+				strContent = strContent & "<plugins>" & cr & "</plugins>" & cr
+				strContent = strContent & "<nolrc src="""" >" & cr & "</nolrc>" & cr
 				strContent = strContent & "<count src="""&XMLEncode(site_count)&""" />" & cr
 				strContent = strContent & "</cmp>"
 				conn.execute("update cmp_user set config='"&CheckStr(strContent)&"' where id=" & id & " ")
