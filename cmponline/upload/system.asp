@@ -600,7 +600,7 @@ by=Checkstr(Request.QueryString("by"))
 '查询串
 sql = "select id,username,userstatus,lasttime,hits,logins,list,email,qq,cmp_name from cmp_user where "
 if username <> "" then
-	sql = sql & " username like '%"&username&"%' and "
+	sql = sql & " InStr(1,LCase(username),LCase('"&username&"'),0)<>0 and "
 end if
 if userstatus <> "" then
 	if IsNumeric(userstatus) then
@@ -1385,7 +1385,7 @@ lrc_name=Checkstr(Request.QueryString("lrc_name"))
           <%
 sql = "select * from cmp_lrc "
 if lrc_name <> "" then
-	sql = sql & " where src like '%"&lrc_name&"%' "
+	sql = sql & " where InStr(1,LCase(src),LCase('"&lrc_name&"'),0)<>0 "
 end if
 sql = sql & " order by id desc "
 'response.Write(sql)

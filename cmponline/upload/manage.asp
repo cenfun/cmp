@@ -108,7 +108,7 @@ sub getlrcs()
 		dim keywords,key
 		keywords = Split(lrc_name, " ")
 		For Each key in keywords
-    		sql = sql & " and src like '%"&key&"%' "
+    		sql = sql & " and InStr(1,LCase(src),LCase('"&key&"'),0)<>0 "
 		Next
 		set rs=conn.Execute(sql)
 		if rs.eof then

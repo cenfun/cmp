@@ -40,7 +40,6 @@ if user_id <> "" then
 	end if
 else
 	if cmp_name <> "" then
-		'sql = sql & " cmp_name like '%"&cmp_name&"%' and "
 		sql = sql & " InStr(1,LCase(cmp_name),LCase('"&cmp_name&"'),0)<>0 and "
 	end if
 end if
