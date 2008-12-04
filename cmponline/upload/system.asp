@@ -933,7 +933,48 @@ function check(o){
 		o.cmp_name.focus();
 		return false;
 	}
+	if (!check_config(o)) {
+		o.config.focus();
+		return false;
+	}
+	if (!check_list(o)) {
+		o.list.focus();
+		return false;
+	}
 	return true;
+}
+function check_config(o){
+	var str = o.config.value;
+	var chk = checkXML(str);
+	var isok = chk[0];
+	var xmlDoc = chk[1];
+	//检测列表是否为空
+	if (isok) {
+		var root = xmlDoc.documentElement;
+		if (!root.getAttribute("list")) {
+			isok = false;
+			alert("必须配置对应的列表路径list");
+		}
+	}
+	return isok;
+}
+function check_list(o){
+	var str = o.list.value;
+	var chk = checkXML(str);
+	var isok = chk[0];
+	var xmlDoc = chk[1];
+	//是否有l专辑标记
+	if (isok) {
+		var root = xmlDoc.documentElement;
+		if (root.childNodes.length) {
+			var tagL = xmlDoc.firstChild.getElementsByTagName("l");
+			if (tagL.length == 0) {
+				isok = false;
+				alert(errMsg + "至少需要一个l标记的分类");
+			}
+		}
+	}
+	return isok;
 }
 </script>
 <%
