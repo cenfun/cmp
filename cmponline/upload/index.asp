@@ -173,7 +173,7 @@ function check_username(o){
 		ru.innerHTML = username_err;
 		return;
 	}
-	ajaxSend("GET","index.asp?rd="+Math.random()+"&username="+un,true,null,completeHd,errorHd);
+	ajaxSend("GET","index.asp?rd="+Math.random()+"&username="+encodeURIComponent(un),true,null,completeHd,errorHd);
 }
 function completeHd(data){
 	//alert(data);
