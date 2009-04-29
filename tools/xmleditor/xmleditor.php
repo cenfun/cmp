@@ -124,6 +124,10 @@ if ($_COOKIE['password'] != $editor_password) {
 <script type="text/javascript">
 function check(o){
 	var str = o.file_content.value;
+	//replace & to &amp;
+	str = str.replace(/&(?!amp;)/ig, '&amp;'); 
+	//o.file_content.value = str;
+	//check xml
 	var chk = checkXML(str);
 	var isok = chk[0];
 	var xmlDoc = chk[1];
