@@ -12,13 +12,13 @@ if (!empty($cmd)) {
 		$submit_password = $_POST[submit_password];
 		if ($submit_password == $editor_password) {
 			setcookie("password", $editor_password, time()+3600);
-			header("Refresh: 0; URL=\"$PHP_SELF\""); 
+			header("Refresh: 0; URL=\"$uri\""); 
 		} else {
 			echo '<div class="error_msg">密码错误！</div>';	
 		}
 	} elseif ($cmd == "logout") {
 		setcookie("password", $editor_password, time()-3600);
-		header("Refresh: 0; URL=\"$PHP_SELF\"");
+		header("Refresh: 0; URL=\"$uri\"");
 	} elseif ($cmd == "savefile") {
 		$file_content = $_POST[file_content];
 		if (!empty($file_content)) {
@@ -35,7 +35,15 @@ if (!empty($cmd)) {
 
 function file_write($filename,$contents) { 
 	if ($fp=fopen($filename,"w")) {
-		fwrite($fp,stripslashes($contents));
+		$charset[1] = substr($contents, 0, 1);
+ 		$charset[2] = substr($contents, 1, 1);
+ 		$charset[3] = substr($contents, 2, 1);
+ 		if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
+			$contents=stripslashes($contents);
+		} else {
+			$contents="\xEF\xBB\xBF".stripslashes($contents);
+		}
+		fwrite($fp, $contents);
 		fclose($fp);
 		return true;
 	} else {
@@ -52,6 +60,8 @@ function file_read($filename) {
 		return ""; 
 	}
 }
+
+$uri = $_SERVER['REQUEST_URI'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -76,7 +86,7 @@ input { vertical-align:middle; }
 if ($_COOKIE['password'] != $editor_password) {
 ?>
 <div class="login">
-  <form action="<? echo $PHP_SELF ?>" method="post">
+  <form action="<? echo $uri ?>" method="post">
     <input type="password" name="submit_password" />
     <input type="submit" value="登录" />
     <input type="hidden" name="cmd" value="login" />
@@ -86,13 +96,13 @@ if ($_COOKIE['password'] != $editor_password) {
 } else {
 ?>
 <div class="logout">
-  <form action="<? echo $PHP_SELF ?>" method="post">
+  <form action="<? echo $uri ?>" method="post">
     <input type="submit" name="" value="退出" />
     <input type="hidden" name="cmd" value="logout" />
   </form>
 </div>
 <div class="file_list">
-  <form action="<? echo $PHP_SELF ?>" method="get">
+  <form action="<? echo $uri ?>" method="get">
     <?
 	$num = sizeof($files);
 	for($i = 0; $i < $num; $i ++) {
@@ -111,7 +121,7 @@ if ($_COOKIE['password'] != $editor_password) {
   </form>
 </div>
 <div class="file_edit">
-  <form action="<? echo $PHP_SELF ?>" method="post" onsubmit="return check(this);">
+  <form action="<? echo $path ?>" method="post" onsubmit="return check(this);">
     <?
     $file_content = file_read($files[$file_id]);
 	?>
