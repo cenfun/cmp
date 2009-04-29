@@ -1,0 +1,90 @@
+﻿<cmp name="CenFun -『生活需要音乐』" url="http://bbs.cenfun.com/" list="list.xml">
+	<!--
+	CMP配置文件
+	name="播放器的名称" url="播放器的网址" list="音乐列表文件地址(默认为list.xml)"
+
+	注：编辑后推荐保存为UTF-8格式
+	-->
+
+	<!-- 
+	全局参数配置(不填将在第一次打开时使用系统默认值，之后将读取存储值，必须开启Flash本地存储)
+	language: 使用语言，支持三种：简体中文(zh-cn)；繁体中文(zh-tw)；英文(en)，括号中为其使用值
+	volume: 初始化音量值，可用值为0-1之间，默认0.8，表示80%的音量，0表示静音，1为最大音量
+	skin_id: 皮肤ID，如skin_id="3"表示使用皮肤列表的第3个皮肤；0为使用系统默认皮肤，默认为0；-1为随机
+	list_id: 指定初始的列表分类ID，如list_id="2"表示指定播放第2个分类，默认为1；-1为随机
+	play_mode: 播放模式，支持三种：顺序播放(0)；重复播放(1)；随机播放(2)；默认0
+	auto_play: 是否启用自动播放：不启用(0)；启用(1)；播放第n个(n)；默认0
+	max_video: 打开时是否最大化视频窗口：否(0)；是(1)；默认0
+	mixer_color: 混音器的颜色，如：#00ff00，默认为0xa4eb0c
+	mixer_filter: 是否开启混音器滤镜：关闭(0)；开启(1)；默认0
+	mixer_displace: 是否开启滤镜随机置换：关闭(0)；开启(1)；默认0
+	mixer_id: 混音器ID，如目前支持10种效果，即可选1至10，默认为1；-1为随机
+	video_smoothing: 是否启用视频缩放时进行平滑处理：不启用(0)；启用(1)；默认1
+	plugins_disabled: 是否禁用插件：不禁用(0)；禁用(1)；默认0
+	check_policyfile: 是否下载跨域策略文件：不下载(0)；下载(1)，仅对播放跨域mp3时显示soundmixer和id3有用，默认1
+	-->
+	<config 
+		language="" 
+		volume="" 
+		skin_id="" 
+		list_id="" 
+		play_mode="" 
+		auto_play="" 
+		max_video="" 
+		mixer_color="" 
+		mixer_filter="" 
+		mixer_displace="" 
+		mixer_id="" 
+		video_smoothing="" 
+		plugins_disabled="" 
+		check_policyfile=""  
+		/>
+	
+	<!-- 
+	皮肤列表
+	src: 皮肤包路径
+	mixer_id/mixer_color: 指定单个皮肤的混音器ID和颜色，为空则使用全局参数配置
+	-->
+	<skins>
+		<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" />
+		<skin src="skins/cmp2.zip" mixer_id="" mixer_color="" />
+	</skins>
+
+	<!-- 
+	插件列表
+	name: 插件名称，非必填
+	xywh: 为4个数值，用英文逗号(,)隔开，分别表示对象的x横坐标、y纵坐标、w宽、h高
+		若只有数字表示绝对像素值，也可数字加以下字母表相对值：
+		x/y:C(center水平/垂直居中对齐), R(reverse水平/垂直反向对齐，即从右下角对齐，默认为左上角)
+		w/h:P(percent宽/高百分比)
+		w宽h高填写0表示自动宽高，默认坐标为(0,0)
+		详情见CMP交流论坛：http://bbs.cenfun.com/
+	src: 插件路径，必填
+	lock: 是否锁定对象，锁定后将不能拖动对象：1表示锁定；0表示不锁定
+	display: 是否显示对象：1表示显示对象；0表示隐藏对象
+	istop: 是否置顶插件：0为最底层(默认)；1为顶层
+	多个插件的顺序即为其叠放层次，请注意不要被最大的背景遮挡，即将不用显示的插件和背景图放在最下层
+	-->
+	<plugins>
+		<plugin name="大背景" xywh="0, 0, 100P, 100P" src="plugins/bigbg.swf" lock="1" display="1" istop="0" />
+	</plugins>
+
+	<!-- 
+	无歌词配置
+	用于弥补无歌词或歌词加载失败时的空缺
+	src：配置背景，可用|隔开配置多个，使用时将随机加载一个，如：src="bg1.jpg|bg2.jpg|bg3.jpg"
+	内容支持简单html标签
+	-->
+	<nolrc src="">
+	<![CDATA[
+	<a href="http://bbs.cenfun.com/" target="_blank"><b>欢迎使用CenFun Music Player</b></a>
+	]]>
+	</nolrc>
+
+	<!-- 
+	设置CMP的统计系统
+	注意仅支持图片方式计数代码，如： 
+	-->
+	<count src="http://img.users.51.la/1797974.asp" />
+
+</cmp>
