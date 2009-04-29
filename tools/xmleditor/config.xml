@@ -1,4 +1,4 @@
-﻿<cmp name="CenFun -『生活需要音乐』" url="http://bbs.cenfun.com/" list="list.xml">
+﻿<cmp name="CMP v3.0 -『生活需要音乐』" url="http://bbs.cenfun.com/" list="list.xml">
 	<!--
 	CMP配置文件
 	name="播放器的名称" url="播放器的网址" list="音乐列表文件地址(默认为list.xml)"
@@ -9,45 +9,59 @@
 	<!-- 
 	全局参数配置(不填将在第一次打开时使用系统默认值，之后将读取存储值，必须开启Flash本地存储)
 	language: 使用语言，支持三种：简体中文(zh-cn)；繁体中文(zh-tw)；英文(en)，括号中为其使用值
-	volume: 初始化音量值，可用值为0-1之间，默认0.8，表示80%的音量，0表示静音，1为最大音量
+	play_mode: 播放模式，支持三种：顺序播放(0)；重复播放(1)；随机播放(2)；默认为0
 	skin_id: 皮肤ID，如skin_id="3"表示使用皮肤列表的第3个皮肤；0为使用系统默认皮肤，默认为0；-1为随机
 	list_id: 指定初始的列表分类ID，如list_id="2"表示指定播放第2个分类，默认为1；-1为随机
-	play_mode: 播放模式，支持三种：顺序播放(0)；重复播放(1)；随机播放(2)；默认0
-	auto_play: 是否启用自动播放：不启用(0)；启用(1)；播放第n个(n)；默认0
-	max_video: 打开时是否最大化视频窗口：否(0)；是(1)；默认0
-	mixer_color: 混音器的颜色，如：#00ff00，默认为0xa4eb0c
-	mixer_filter: 是否开启混音器滤镜：关闭(0)；开启(1)；默认0
-	mixer_displace: 是否开启滤镜随机置换：关闭(0)；开启(1)；默认0
+	volume: 初始化音量值，可用值为0-1之间，默认0.8，表示80%的音量，0表示静音，1为最大音量
+	auto_play: 是否启用自动播放：不启用(0)；启用(1)；播放第n个(n)；默认为0
+	max_video: 打开时是否最大化视频窗口：否(0)；是(1)；默认为0
+	bgcolor: 舞台背景色，位于最底层，使用背景色将不能透明，如：#181818；默认为空
 	mixer_id: 混音器ID，如目前支持10种效果，即可选1至10，默认为1；-1为随机
-	video_smoothing: 是否启用视频缩放时进行平滑处理：不启用(0)；启用(1)；默认1
-	plugins_disabled: 是否禁用插件：不禁用(0)；禁用(1)；默认0
-	check_policyfile: 是否下载跨域策略文件：不下载(0)；下载(1)，仅对播放跨域mp3时显示soundmixer和id3有用，默认1
+	mixer_color: 混音器的颜色，如：#00ff00，默认为0xa4eb0c
+	mixer_filter: 是否开启混音器滤镜：关闭(0)；开启(1)；默认为0
+	mixer_displace: 是否开启滤镜随机置换：关闭(0)；开启(1)；默认为0
+	buffer: 是否开启音乐缓冲：关闭(0)；开启(1)，并缓冲1个；缓冲n个(n)，最大3个；默认为1
+	timeout: 自定义连接超时，单位毫秒，默认15000，即15秒
+	show_tip: 是否延时显示按钮等文字提示信息：不显示(0)；显示(500)，数值表示延时的毫秒数，默认延时500毫秒
+	context_menu: 右键菜单选项：不显示(0)；显示(1)；仅显示名称，无功能菜单(2)；默认为1
+	video_smoothing: 是否启用视频缩放时进行平滑处理：不启用(0)；启用(1)；默认为1
+	plugins_disabled: 是否禁用插件：不禁用(0)；禁用(1)；默认为0
+	check_policyfile: 是否下载跨域策略文件：不下载(0)；下载(1)，仅对播放跨域mp3时显示soundmixer和id3有用，默认为1
 	-->
 	<config 
 		language="" 
-		volume="" 
-		skin_id="" 
-		list_id="" 
 		play_mode="" 
+		skin_id="-1" 
+		list_id="" 
+		volume="" 
 		auto_play="" 
-		max_video="" 
+		max_video=""
+		bgcolor=""
+		mixer_id="" 
 		mixer_color="" 
 		mixer_filter="" 
 		mixer_displace="" 
-		mixer_id="" 
+		buffer="" 
+		timeout=""
+		show_tip=""
+		context_menu=""
 		video_smoothing="" 
 		plugins_disabled="" 
-		check_policyfile=""  
+		check_policyfile="" 
 		/>
 	
 	<!-- 
-	皮肤列表
+	皮肤预载列表，推荐不超过3个，更多皮肤见CMP交流论坛：http://bbs.cenfun.com/
 	src: 皮肤包路径
-	mixer_id/mixer_color: 指定单个皮肤的混音器ID和颜色，为空则使用全局参数配置
+	bgcolor/mixer_id/mixer_color/show_tip: 指定单个皮肤的配置参数，为空则使用全局参数配置
 	-->
 	<skins>
-		<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" />
-		<skin src="skins/cmp2.zip" mixer_id="" mixer_color="" />
+		<skin src="skins/insomnis.zip" bgcolor="" mixer_id="" mixer_color="" show_tip="" />
+		<skin src="skins/realplayer11.zip" bgcolor="#000000" mixer_id="" mixer_color="" show_tip="" />
+		<skin src="skins/blog_snow.zip" bgcolor="#ffffff" mixer_id="" mixer_color="" show_tip="" />
+		<skin src="skins/qqplayer.zip" bgcolor="" mixer_id="" mixer_color="" show_tip="" />
+		<skin src="skins/blue_full.zip" bgcolor="" mixer_id="2" mixer_color="" show_tip="" />
+		<skin src="skins/exobud_plastic.zip" bgcolor="" mixer_id="" mixer_color="" show_tip="" />
 	</skins>
 
 	<!-- 
@@ -56,7 +70,7 @@
 	xywh: 为4个数值，用英文逗号(,)隔开，分别表示对象的x横坐标、y纵坐标、w宽、h高
 		若只有数字表示绝对像素值，也可数字加以下字母表相对值：
 		x/y:C(center水平/垂直居中对齐), R(reverse水平/垂直反向对齐，即从右下角对齐，默认为左上角)
-		w/h:P(percent宽/高百分比)
+		w/h:P(percent宽/高百分比), B(border宽的左右边距/高的上下边距)
 		w宽h高填写0表示自动宽高，默认坐标为(0,0)
 		详情见CMP交流论坛：http://bbs.cenfun.com/
 	src: 插件路径，必填
