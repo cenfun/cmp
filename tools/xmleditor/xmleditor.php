@@ -1,7 +1,59 @@
 <?php
+//登录密码
 $editor_password = "cenfuncmp";
-
+//可编辑文件地址列表
 $files = array("config.xml", "list.xml");
+//
+$uri = $_SERVER['REQUEST_URI'];
+//写文件
+function file_write($filename,$contents) { 
+	if ($fp=fopen($filename,"w")) {
+		$charset[1] = substr($contents, 0, 1);
+ 		$charset[2] = substr($contents, 1, 1);
+ 		$charset[3] = substr($contents, 2, 1);
+ 		if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
+			$contents=stripslashes($contents);
+		} else {
+			$contents="\xEF\xBB\xBF".stripslashes($contents);
+		}
+		fwrite($fp, $contents);
+		fclose($fp);
+		return true;
+	} else {
+		return false; 
+	}
+}
+//读文件
+function file_read($filename) {
+	if ($fp=fopen($filename,"r")) {
+		$contents=fread($fp,filesize($filename));
+		fclose($fp);
+		return $contents;
+	} else {
+		return ""; 
+	}
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>XML Editor</title>
+<style type="text/css">
+body { margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; }
+input { vertical-align:middle; }
+.error_msg { text-align:center; margin:10px 10px; color:#F00; }
+.login { text-align:center; margin:10px 10px; }
+.logout { position:absolute; right:0px; top:0px; margin:10px 10px; }
+.file_list { text-align:left; margin:10px 10px; }
+.file_list label { margin:0px 10px; height:24px; line-height:24px; cursor:pointer; font-weight:bold; font-size:14px; }
+.file_edit { text-align:center; margin:10px 10px; }
+.file_edit input { margin:10px 10px; }
+.file_content { width:98%; height:500px; font-size:12px; line-height:18px; }
+</style>
+</head>
+<body>
+<?
 $file_id = $_GET[id];
 if (empty($file_id) || !is_numeric($file_id) || $file_id >= sizeof($files)) {
 	$file_id = 0;	
@@ -33,56 +85,6 @@ if (!empty($cmd)) {
 	}
 }
 
-function file_write($filename,$contents) { 
-	if ($fp=fopen($filename,"w")) {
-		$charset[1] = substr($contents, 0, 1);
- 		$charset[2] = substr($contents, 1, 1);
- 		$charset[3] = substr($contents, 2, 1);
- 		if (ord($charset[1]) == 239 && ord($charset[2]) == 187 && ord($charset[3]) == 191) {
-			$contents=stripslashes($contents);
-		} else {
-			$contents="\xEF\xBB\xBF".stripslashes($contents);
-		}
-		fwrite($fp, $contents);
-		fclose($fp);
-		return true;
-	} else {
-		return false; 
-	}
-}
-
-function file_read($filename) {
-	if ($fp=fopen($filename,"r")) {
-		$contents=fread($fp,filesize($filename));
-		fclose($fp);
-		return $contents;
-	} else {
-		return ""; 
-	}
-}
-
-$uri = $_SERVER['REQUEST_URI'];
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>XML Editor</title>
-<style type="text/css">
-body { margin:0; padding:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; }
-input { vertical-align:middle; }
-.error_msg { text-align:center; margin:10px 10px; color:#F00; }
-.login { text-align:center; margin:10px 10px; }
-.logout { position:absolute; right:0px; top:0px; margin:10px 10px; }
-.file_list { text-align:left; margin:10px 10px; }
-.file_list label { margin:0px 10px; height:24px; line-height:24px; cursor:pointer; font-weight:bold; font-size:14px; }
-.file_edit { text-align:center; margin:10px 10px; }
-.file_edit input { margin:10px 10px; }
-.file_content { width:98%; height:500px; font-size:12px; line-height:18px; }
-</style>
-</head>
-<body>
-<?
 if ($_COOKIE['password'] != $editor_password) {
 ?>
 <div class="login">
