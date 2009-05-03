@@ -1,0 +1,44 @@
+/*
+
+当在本地直接打开flash时，如果flash尝试访问网络并进行通信
+则会由于flash player的安全限制，每次都会弹出对话框，并提示终止此操作
+“Adobe Flash Player已终止一项可能不安全的操作。”
+请按提示框中设置按钮，到flash player官方相关网站进行安全设置，并允许本地flash访问网络
+可添加一个或多个始终信任的位置，并在全局安全设置将始终询问改成始终允许
+http://www.macromedia.com/support/documentation/cn/flashplayer/help/settings_manager04a.html
+
+也可直接将本文件复制到以下目录中：
+C:\WINDOWS\system32\Macromed\Flash\FlashPlayerTrust\
+其中C为系统盘，请根据你的情况对号入座，如果FlashPlayerTrust目录不存在就新建一个该名称的目录
+即可对从A到Z所有盘符所在的所有flash进行信任
+
+完成后请去掉所有说明文字，即/* */中所有文字 http://bbs.cenfun.com
+
+*/
+
+A:\
+B:\
+C:\
+D:\
+E:\
+F:\
+G:\
+H:\
+I:\
+J:\
+K:\
+L:\
+M:\
+N:\
+O:\
+P:\
+Q:\
+R:\
+S:\
+T:\
+U:\
+V:\
+W:\
+X:\
+Y:\
+Z:\
