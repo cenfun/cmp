@@ -1,9 +1,11 @@
-详解xywh
+图文详解xywh
 
 CMP用参数[b]xywh[/b]来指定某个[b]可视对象[/b]在其[b]父可视对象[/b]中的[b]位置[/b]和[b]宽高[/b]
 
 我们所涉及到的长度单位都统一用像素px，下面进行详细说明：
 
+[img]http://farm4.static.flickr.com/3593/3511394729_0e536a005e_o_d.jpg[/img]
+备用图：[url]http://cenfunmusicplayer.googlecode.com/svn/trunk/tools/xywh/xywh.gif[/url]
 
 [b]一，认识2个对象[/b]
 
