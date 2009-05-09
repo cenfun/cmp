@@ -2,7 +2,7 @@
 
 CMP用参数[b]xywh[/b]来指定某个[b]可视对象[/b]在其[b]父可视对象[/b]中的[b]位置[/b]和[b]宽高[/b]
 
-我们所涉及到的长度单位都统一用像素px，下面进行详细说明：
+我们所涉及到的长度单位都统一用像素px，数值都用整数，下面进行详细说明：
 
 [img]http://farm4.static.flickr.com/3593/3511394729_0e536a005e_o.jpg[/img]
 图地址：[url]http://farm4.static.flickr.com/3593/3511394729_0e536a005e_o_d.jpg[/url]
