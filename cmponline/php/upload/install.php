@@ -1,5 +1,23 @@
 <?php
 
+
+/*
+table
+
+cmpo_user
+cmpo_config
+cmpo_list
+cmpo_plugins
+cmpo_skins
+
+cmpo_settings
+cmpo_template
+
+cmpo_gbook
+
+*/
+
+
 /** Create database tables SQL */
 $cmponline_sql = "
 CREATE TABLE $wpdb->terms (
