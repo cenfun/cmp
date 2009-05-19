@@ -31,6 +31,18 @@ function page_header($cache = true) {
 <?
 }
 
+function page_cmp($cache = true) {
+	global $db;
+	if ($cache) {
+		
+		
+		
+	}
+?>
+
+	
+<?	
+}
 
 
 function page_home($cache = true) {
