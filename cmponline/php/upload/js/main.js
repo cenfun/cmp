@@ -38,27 +38,7 @@ function getcmp(id, width, height, url, vars, transparent) {
 	html += '</object>';
 	return html;
 }
-function ajaxSend(method,url,async,data,completeHd,errorHd) {
-	var xmlHttp = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
-	if(xmlHttp){
-		xmlHttp.onreadystatechange = function() {
-			if(xmlHttp.readyState==4){
-				if(xmlHttp.status==200){
-					var data = xmlHttp.responseText;
-					completeHd(data);
-					xmlHttp = null;
-				}else{
-					errorHd("Request Error: " + xmlHttp.status);
-				}
-			} 
-		}
-		if(method.toUpperCase()!="POST"){
-			method = "GET";	
-		}
-		xmlHttp.open(method,url,async);
-		xmlHttp.send(data);
-	}
-}
+
 function highlight(o,c){
 	o.style.backgroundColor=c;
 	o.onmouseout=function(){
@@ -73,24 +53,7 @@ function CheckAll(o,form){
 		}
 	}
 }
-//检查非法字符
-//str 要检查的字符
-//badwords 非法字符 &|<>=
-function checkbadwords(str, badwords) {
-	if (typeof (str) != "string" || typeof (badwords) != "string") {
-		return (false);
-	}
-	for (i=0; i<badwords.length; i++) {
-		bad = badwords.charAt(i);
-		for (j=0; j<str.length; j++) {
-			if (bad == str.charAt(j)) {
-				return false;
-				break;
-			}
-		}
-	}
-	return true;
-}
+
 //检测xmlDom正确性
 function checkXML(str) {
 	var isok = true;
@@ -134,11 +97,7 @@ function checkXML(str) {
 	}
 	return [isok, xmlDoc];
 }
-//open a new window
-function winopen(url,name,width,height,str){
-	var winopen = window.open(url,name,'width='+width+',height='+height+','+str+',menubar=0,status=0');
-	//str:  resizable=0,scrollbars=yes,menubar=no,status=0
-}
+
 //coolie//////////////////////////////////////////
 function saveCookie(name, value, expires, path, domain, secure) {
 	var strCookie = name+"="+value;
