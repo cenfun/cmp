@@ -409,8 +409,8 @@
 			echo "<b>Last Query</b> [$this->num_queries]<b>:</b> ".($this->last_query?$this->last_query:"NULL")."\n";
 			echo "<b>Last Function Call:</b> " . ($this->func_call?$this->func_call:"None")."\n";
 			echo "<b>Last Rows Returned:</b> ".count($this->last_result)."\n";
-			echo "</font></pre></font></blockquote></td></tr></table>".$this->donation();
-			echo "\n<hr size=1 noshade color=dddddd>";
+			echo "</font></pre></font></blockquote></td></tr></table>\n";
+			echo "<hr size=1 noshade color=dddddd>";
 
 			// Stop output buffering and capture debug HTML
 			$html = ob_get_contents();
@@ -524,7 +524,7 @@
 				echo "<font face=arial size=2>No Results</font>";
 			}
 
-			echo "</blockquote></blockquote>".$this->donation()."<hr noshade color=dddddd size=1>";
+			echo "</blockquote></blockquote><hr noshade color=dddddd size=1>";
 
 			// Stop output buffering and capture debug HTML
 			$html = ob_get_contents();
@@ -541,15 +541,7 @@
 			return $html;
 
 		}
-
-		/**********************************************************************
-		*  Naughty little function to ask for some remuniration!
-		*/
-
-		function donation()
-		{
-			return "<font size=1 face=arial color=000000>If ezSQL has helped <a href=\"https://www.paypal.com/xclick/business=justin%40justinvincent.com&item_name=ezSQL&no_note=1&tax=0\" style=\"color: 0000CC;\">make a donation!?</a> &nbsp;&nbsp;<!--[ go on! you know you want to! ]--></font>";
-		}
+		
 
 	}
 
