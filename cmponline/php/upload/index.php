@@ -1,29 +1,64 @@
 <?php
-	require_once("config.php");
+
+//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
+ob_start();
+
+require_once("config.php");
+
+require_once("template.php");
+//user check===========================================
+$logged_in = false;
+
+
+
+
+
+//====================================================
+@header('Content-Type: text/html; charset='.$charset);
+
+//====================================================
+
+//model selection
+$area = $_REQUEST[area];
 	
+if($area == "ajax") {
 	
-	// Demo of getting a single variable from the db
-	// (and using abstracted function sysdate)
-	$current_time = $db->get_var("SELECT " . $db->sysdate());
-	print "ezSQL demo for mySQL database run @ $current_time";
+	include("ajax.php");
+	
+} else {
+	
+	//UI page
+	page_header();
+	
+	if($area == "account") {
+		
+		if(!$logged_in) { 
+		
+			$area = "login"; 
+			
+		} else {
+			
+		}
+		
+	} elseif($area == "userlist") {
+		
+		
+		
+	} elseif($area == "login") {
+		
+		
 
-	// Print out last query and results..
-	$db->debug();
+	} else {
+		
+		page_home();
 
-	// Get list of tables from current database..
-	$my_tables = $db->get_results("SHOW TABLES",ARRAY_N);
-
-	// Print out last query and results..
-	$db->debug();
-
-	// Loop through each row of results..
-	foreach ( $my_tables as $table )
-	{
-		// Get results of DESC table..
-		$db->get_results("DESC $table[0]");
-
-		// Print out last query and results..
-		$db->debug();
 	}
+
+	page_footer();
+
+}
+
+ob_flush();
 
 ?>
