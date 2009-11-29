@@ -1,7 +1,18 @@
 <? 
 
 $title = $_REQUEST[title]; 
-$artist = $_REQUEST[artist]; 
+
+$arr = split("-", $title);
+$size = sizeof($arr);
+
+if ($size > 1) {
+	$title = trim($arr[0]);
+	$artist = trim($arr[1]);
+} else {
+	$artist = $_REQUEST[artist];
+}
+
+
 
 $serverList = array("1"=>"http://ttlrcct.qianqian.com/dll/lyricsvr.dll", "2"=>"http://ttlrccnc.qianqian.com/dll/lyricsvr.dll");
 
