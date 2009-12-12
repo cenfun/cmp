@@ -1,82 +1,65 @@
-<? 
+<?
 
-$title = $_REQUEST[title]; 
+$title = urldecode($_REQUEST[title]);
+$artist = urldecode($_REQUEST[artist]);
 
-$arr = split("-", $title);
-$size = sizeof($arr);
+$title = iconv('UTF-8', 'GBK', $title);
+$artist = iconv('UTF-8', 'GBK', $artist);
 
-if ($size > 1) {
-	$title = trim($arr[0]);
-	$artist = trim($arr[1]);
-} else {
-	$artist = $_REQUEST[artist];
+if (empty($artist)) {
+	$arr = split("-", $title);
+	$size = sizeof($arr);
+	if ($size > 1) {
+		$artist = trim($arr[0]);
+		$title = trim($arr[1]);
+	}
 }
 
+//echo "artist:".$artist."|title:".$title;
 
-
-$serverList = array("1"=>"http://ttlrcct.qianqian.com/dll/lyricsvr.dll", "2"=>"http://ttlrccnc.qianqian.com/dll/lyricsvr.dll");
-
+$surl = "http://ttlrcct.qianqian.com//dll/lyricsvr.dll?svrlst";
+$sdata = file_get_contents($surl);
+$doc = new DOMDocument();
+$doc->loadXML($sdata);
+$slist = $doc->getElementsByTagName("server");
+$serverList = array();
+foreach($slist as $url) { 
+	array_push($serverList, $url->getAttribute("url"));
+}
 $sid = $_REQUEST[sid];
-if (empty($sid)) $sid = 1;
-
+if (empty($sid)) {
+	$sid = 1;
+}
 $server = $serverList[$sid];
+$lurl = $server."?sh?Artist=".qianqian_code($artist)."&Title=".qianqian_code($title)."&Flags=0";
+$ldata = file_get_contents($lurl);
 
 $doc = new DOMDocument();
-$doc->load($server."?sh?Artist=".qianqian_code($artist)."&Title=".qianqian_code($title)."&Flags=0");
-   
+$doc->loadXML($ldata);
+
+
 $lrcNode = $doc->getElementsByTagName("lrc");
 foreach($lrcNode as $lrc) {  
-   $id=$lrc->getAttribute("id");
-   $artist=iconv('UTF-8','GBK',$lrc->getAttribute("artist"));  
-   $title=iconv('UTF-8','GBK',$lrc->getAttribute("title"));  
-   $code=CodeFunc($id,$artist,$title);  
-   $lrcstr=iconv('UTF-8','GBK',file_get_contents($server."?dl?Id=".$id."&Code=".$code));  
-   echo $lrcstr;
-   break;
+	$id = $lrc->getAttribute("id");
+	$artist = $lrc->getAttribute("artist");
+	$title = $lrc->getAttribute("title");
+	$utf8Str = SetToHexString($artist.$title);  
+	$code = getCode($id, $utf8Str);
+	$url = $server."?dl?Id=".$id."&Code=".$code;
+	$data = file_get_contents($url);
+	$data = iconv('UTF-8','GBK', $data);
+	if (trim($data)) {
+		echo $data;
+		break;
+	}
 }
 
-function SingleDecToHex($dec){  
-    $tmp="";  
-    $dec=$dec%16;  
-    if($dec<10) return $tmp.$dec;  
-    $arr=array("A","B","C","D","E","F");  
-    return $tmp.$arr[$dec-10];  
-}  
-function SetToHexString($str){  
-    if(!$str) return false;  
-    $tmp="";  
-    for($i=0;$i<strlen($str);$i++)  
-    {  
-        $ord=ord($str[$i]);  
-        $tmp.=SingleDecToHex(($ord-$ord%16)/16);  
-        $tmp.=SingleDecToHex($ord%16);  
-    }  
-    return $tmp;  
-}  
-function qianqian_code($str){  
-        $s=strtolower($str);
-        $s=str_replace(" ","",$s);
-        $s=str_replace("'","",$s);
-        return SetToHexString(iconv('GBK','UTF-16LE',$s));
-}  
-function conv($num){  
-    $tp = bcmod($num,4294967296);  
- 
-    if(bccomp($num,0)>=0 && bccomp($tp,2147483648)>0)  
-        $tp=bcadd($tp,-4294967296);  
-    if(bccomp($num,0)<0 && bccomp($tp,2147483648)<0)  
-        $tp=bcadd($tp,4294967296);  
- 
-    return $tp;  
-}  
-function CodeFunc($Id,$artist,$title){  
-    $Id=(int)$Id;  
-    $utf8Str=SetToHexString(iconv('GBK','UTF-8',$artist.$title));  
- 
-    $length=strlen($utf8Str)/2;  
-    for($i=0;$i<=$length-1;$i++)  
+function getCode($Id, $utf8Str){  
+    $Id = (int) $Id;
+    $length = strlen($utf8Str) / 2;  
+    for($i=0;$i<$length;$i++)  {
         eval('$song['.$i.'] = 0x'.substr($utf8Str,$i*2,2).';');  
- 
+	}
     $tmp2=0;  
     $tmp3=0;  
 
@@ -129,6 +112,42 @@ function CodeFunc($Id,$artist,$title){
     if(bccomp($t , 2147483648)>0)  
          $t = bcadd($t ,- 4294967296);  
     return $t;
+}
+
+
+function SingleDecToHex($dec){  
+    $tmp="";  
+    $dec=$dec%16;  
+    if($dec<10) return $tmp.$dec;  
+    $arr=array("A","B","C","D","E","F");  
+    return $tmp.$arr[$dec-10];  
 }  
+function SetToHexString($str){  
+    if(!$str) return false;  
+    $tmp="";  
+    for($i=0;$i<strlen($str);$i++)  
+    {  
+        $ord=ord($str[$i]);  
+        $tmp.=SingleDecToHex(($ord-$ord%16)/16);  
+        $tmp.=SingleDecToHex($ord%16);  
+    }  
+    return $tmp;  
+}  
+function qianqian_code($str){  
+        $s=strtolower($str);
+        $s=str_replace(" ","",$s);
+        $s=str_replace("'","",$s);
+        return SetToHexString(iconv('GBK','UTF-16LE',$s));
+}  
+function conv($num){  
+    $tp = bcmod($num,4294967296);  
+ 
+    if(bccomp($num,0)>=0 && bccomp($tp,2147483648)>0)  
+        $tp=bcadd($tp,-4294967296);  
+    if(bccomp($num,0)<0 && bccomp($tp,2147483648)<0)  
+        $tp=bcadd($tp,4294967296);  
+ 
+    return $tp;  
+}
 
 ?> 
