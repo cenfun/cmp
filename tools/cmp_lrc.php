@@ -17,7 +17,7 @@ if (empty($artist)) {
 
 //echo "artist:".$artist."|title:".$title;
 
-$surl = "http://ttlrcct.qianqian.com//dll/lyricsvr.dll?svrlst";
+$surl = "http://ttlrcct.qianqian.com/dll/lyricsvr.dll?svrlst";
 $sdata = file_get_contents($surl);
 $doc = new DOMDocument();
 $doc->loadXML($sdata);
