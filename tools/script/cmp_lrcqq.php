@@ -1,4 +1,4 @@
-﻿<?
+<?
 
 $title = urldecode($_REQUEST[title]);
 $artist = urldecode($_REQUEST[artist]);
@@ -31,11 +31,11 @@ foreach($list as $song) {
 	if ($data) {
 		//echo $data;
 		$xml = simplexml_load_string($data);
-		echo (string) $xml;
+		$lrc = (string) $xml;
+		$lrc = iconv('UTF-8', 'GBK', $lrc);
+		echo $lrc;
 		break;
 	}
 }
 
-
-
-?> 
+?>
