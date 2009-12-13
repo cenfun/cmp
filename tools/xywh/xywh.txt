@@ -1,18 +1,21 @@
-图文详解xywh
+【xywh】CMP位置宽高参数详解
+
+xywh为CMP的核心参数，明白其原理对制作皮肤，使用插件等等都很有帮助
 
 CMP用参数[b]xywh[/b]来指定某个[b]可视对象[/b]在其[b]父可视对象[/b]中的[b]位置[/b]和[b]宽高[/b]
 
+顾名思义，x和y表示横坐标和纵坐标，w和h则表示宽度和高度
+形象的说，这些对象都是一个个长方形，如某个窗口、某个按钮等
+
 我们所涉及到的长度单位都统一用像素px，数值都用整数，下面进行详细说明：
 
-[img]http://farm4.static.flickr.com/3593/3511394729_0e536a005e_o.jpg[/img]
-图地址：[url]http://farm4.static.flickr.com/3593/3511394729_0e536a005e_o_d.jpg[/url]
-备用图：[url]http://cenfunmusicplayer.googlecode.com/svn/trunk/tools/xywh/xywh.gif[/url]
+[img]http://cenfunmusicplayer.googlecode.com/svn/trunk/tools/xywh/xywh.gif[/img]
 
 [b]一，认识2个对象[/b]
 
 [b]可视对象[/b]
 即能见的对象，能见不是说必须显示出来，而是指它可以显示也可以隐藏，下面都简称【对象】
-如某个窗口、某个按钮等，我们可以简单的将其看成一个【长方形】
+我们可以简单的将其看成一个【长方形】
 
 [b]父可视对象[/b]
 对象的上级(parent)，本身也是可视对象，像一个容器，包含了一个或多个子对象，下面也称【父容器】
@@ -34,7 +37,7 @@ CMP用参数[b]xywh[/b]来指定某个[b]可视对象[/b]在其[b]父可视对象[/b]中的[b]位置[/b
 (x,y)， (xC,y)， (xR,y)
 (x,yC)，(xC,yC)，(xR,yC)
 (x,yR)，(xC,yR)，(xR,yR)
-
+同时还可以引入P参数(或者用%)来表示百分比
 
 [b]二，指定位置[/b]
 
@@ -109,7 +112,7 @@ yR = 70R
 1，最直接的就是固定宽高，如宽120像素，高80像素：
 (w, h) = (120, 80)
 
-2，如果想要和父容器一样宽高，或者一半宽高等，即百分比宽高，这里引入百分比参数P(percent)
+2，如果想要和父容器一样宽高，或者一半宽高等，即百分比宽高，这里引入百分比参数P(percent)(或者用%来表示)
 如窗口满屏，或视频满窗口：
 (w, h) = (100P, 100P)
 如总是和父容器一半的宽度和高度：
@@ -154,6 +157,6 @@ w:  width 宽度
 h:  height 高度
 C:  center 居中
 R:  reverse 反向，相反
-P:  percent 百分比
+P:  percent 百分比，也可以使用%
 B:  border 边距，边界
 px: pixel 像素，点
