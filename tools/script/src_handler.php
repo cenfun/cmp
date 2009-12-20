@@ -22,15 +22,14 @@ if ($from == "sina") {
 	}
 }
 
-
 if (!empty($src)) {
 	if (!empty($start)) {
 		$src = $src."?start=".$start;
 	}
-	echo $src;
-	//header("Content-Type: application/force-download");
-	//header("Content-Transfer-Encoding: binary");
-	//header("location: $src");
+	//echo $src;
+	header("Content-Type: application/force-download");
+	header("Content-Transfer-Encoding: binary");
+	header("location: $src");
 }
 
 ?>
