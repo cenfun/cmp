@@ -5,7 +5,7 @@
 	import flash.net.*;
 	import flash.events.*;
 	import flash.utils.*;
-
+	import flash.system.*;
 	public final class Revolt extends Sprite {
 
 		public var config:Object = {gain:1, simple:false, sound:false, timeout:10};
