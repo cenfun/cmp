@@ -24,6 +24,7 @@
 		private var cmp_config:Object;
 
 		public function Revolt() {
+			Security.allowDomain("*");
 			presets = new Array(new LineFourier(), new Explosion(),new LineSmooth(),new LineWorm(),new Tunnel());
 			randomizer = new Randomizer(presets.length);
 			//插件初始化(插件不能由CMP跨域加载，否则无法初始化，请将插件和CMP放在同一域中)

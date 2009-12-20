@@ -5,6 +5,7 @@
 	import flash.media.*;
 	import flash.net.*;
 	import flash.utils.*;
+	import flash.system.*;
 	public class Mixer3D extends Sprite {
 		private var bytes: ByteArray;
 		private var output: BitmapData;
@@ -28,6 +29,7 @@
 		private var cmp_config:Object;
 
 		public function Mixer3D():void {
+			Security.allowDomain("*");
 			//插件初始化(插件不能由CMP跨域加载，否则无法初始化，请将插件和CMP放在同一域中)
 			this.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
 		}
