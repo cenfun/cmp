@@ -1,29 +1,23 @@
 <?
 
-$type = urldecode($_REQUEST[type]);
+$from = urldecode($_REQUEST[from]);
 
-if ($type == "sina") {
-
+if ($from == "sina") {
 	//http://v.iask.com/v_play.php?vid=27015444
-	
 	$vid = urldecode($_REQUEST[vid]);
-	if (empty($vid)) {
-		die();	
+	if (!empty($vid)) {
+		$url = "http://v.iask.com/v_play.php?vid=".$vid;
+		$data = file_get_contents($url);
+		if ($data) {
+			$doc = new DOMDocument();
+			$doc->loadXML($data);
+			$urls = $doc->getElementsByTagName("url");
+			if ($urls) {
+				$url = $urls->item(0);
+				$src = $url->firstChild->nodeValue;
+			}
+		}
 	}
-	
-	//echo $vid;
-	
-	$url = "http://v.iask.com/v_play.php?vid=".$vid;
-	$data = file_get_contents($url);
-	
-	//echo $data;
-	
-	$doc = new DOMDocument();
-	$doc->loadXML($data);
-	$urls = $doc->getElementsByTagName("url");
-	$url = $urls->item(0);
-	$src = $url->firstChild->nodeValue;
-	//echo $src;
 }
 
 
