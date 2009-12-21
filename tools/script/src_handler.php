@@ -4,14 +4,16 @@ $from = urldecode($_REQUEST[from]);
 
 $start = urldecode($_REQUEST[start]);
 
-
 session_start();
+
 if ($from == "sina") {
-	$src = $_SESSION["sina_src"];
-	if (empty($src)) {
-		//http://v.iask.com/v_play.php?vid=27015444
-		$vid = urldecode($_REQUEST[vid]);
-		if (!empty($vid)) {
+	//http://v.iask.com/v_play.php?vid=27015444
+	$vid = urldecode($_REQUEST[vid]);
+	if (!empty($vid)) {
+		$session_id = "sina_src".$vid;
+		$src = $_SESSION[$session_id];
+		//echo "session:[".$src."]";
+		if (empty($src)) {
 			$url = "http://v.iask.com/v_play.php?vid=".$vid;
 			$data = file_get_contents($url);
 			if ($data) {
@@ -21,20 +23,19 @@ if ($from == "sina") {
 				if ($urls) {
 					$url = $urls->item(0);
 					$src = $url->firstChild->nodeValue;
-					$_SESSION["sina_src"] = $src;
+					$_SESSION[$session_id] = $src;
 				}
 			}
 		}
 	}
 }
 
+//echo "\n".$src;
+
 if (!empty($src)) {
 	if (!empty($start)) {
 		$src = $src."?start=".$start;
 	}
-	//echo $src;
-	//header("Content-Type: application/force-download");
-	//header("Content-Transfer-Encoding: binary");
 	header("location: $src");
 }
 
