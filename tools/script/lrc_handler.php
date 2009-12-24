@@ -1,11 +1,15 @@
 <?
+/*
+lrc_handler.php
+歌词自动下载程序
+*/
 
+//音乐标题
 $title = urldecode($_REQUEST[title]);
+//艺术家名称
 $artist = urldecode($_REQUEST[artist]);
 
-$title = iconv('UTF-8', 'GBK', $title);
-$artist = iconv('UTF-8', 'GBK', $artist);
-
+//由-横杠分解出艺术家和标题
 if (empty($artist)) {
 	$arr = split("-", $title);
 	$size = sizeof($arr);
@@ -15,43 +19,65 @@ if (empty($artist)) {
 	}
 }
 
-//echo "artist:".$artist."|title:".$title;
-
-$surl = "http://ttlrcct.qianqian.com/dll/lyricsvr.dll?svrlst";
-$sdata = file_get_contents($surl);
-$doc = new DOMDocument();
-$doc->loadXML($sdata);
-$slist = $doc->getElementsByTagName("server");
-$serverList = array();
-foreach($slist as $url) { 
-	array_push($serverList, $url->getAttribute("url"));
+$lrc = tt($artist, $title);
+if (!$lrc) {
+	$lrc = qq($artist, $title);
 }
-$sid = $_REQUEST[sid];
-if (empty($sid)) {
-	$sid = 1;
-}
-$server = $serverList[$sid];
-$lurl = $server."?sh?Artist=".qianqian_code($artist)."&Title=".qianqian_code($title)."&Flags=0";
-$ldata = file_get_contents($lurl);
-
-$doc = new DOMDocument();
-$doc->loadXML($ldata);
+echo $lrc;
 
 
-$lrcNode = $doc->getElementsByTagName("lrc");
-foreach($lrcNode as $lrc) {  
-	$id = $lrc->getAttribute("id");
-	$artist = $lrc->getAttribute("artist");
-	$title = $lrc->getAttribute("title");
-	$utf8Str = SetToHexString($artist.$title);  
+function tt($artist, $title) {
+	$s_doc = new DOMDocument();
+	$s_doc->load("http://ttlrcct.qianqian.com/dll/lyricsvr.dll?svrlst");
+	$s_list = $s_doc->getElementsByTagName("server");
+	if ($s_list->length == 0) {
+		return;
+	}
+	$s = $s_list->item(0);
+	$s_url = $s->getAttribute("url");
+	$l_url = $s_url."?sh?Artist=".tt_code($artist)."&Title=".tt_code($title)."&Flags=0";
+	$l_doc = new DOMDocument();
+	$l_doc->load($l_url);
+	$l_list = $l_doc->getElementsByTagName("lrc");
+	if ($l_list->length == 0) {
+		return;
+	}
+	$l = $l_list->item(0);
+	$id = $l->getAttribute("id");
+	$ar = $l->getAttribute("artist");
+	$ti = $l->getAttribute("title");
+	$utf8Str = SetToHexString($ar.$ti);  
 	$code = getCode($id, $utf8Str);
-	$url = $server."?dl?Id=".$id."&Code=".$code;
+	$url = $s_url."?dl?Id=".$id."&Code=".$code;
 	$data = file_get_contents($url);
 	$data = iconv('UTF-8','GBK', $data);
-	if (trim($data)) {
-		echo $data;
-		break;
+	return $data;
+}
+
+function qq($artist, $title) {
+	$i_url = "http://qqmusic.qq.com/fcgi-bin/qm_getLyricId.fcg?name=".$title."&singer=".$artist."&from=qqplayer";
+	$xmlstring = file_get_contents($i_url);
+	$xmlstring = str_replace("gb2312", "gbk", $xmlstring);
+	$i_doc = new DOMDocument();
+	$i_doc->loadXML($xmlstring);
+	$i_list = $i_doc->getElementsByTagName("songinfo");
+	if ($i_list->length == 0) {
+		return;
 	}
+	$song = $i_list->item(0);
+	$id = $song->getAttribute("id");
+	$num = (int) substr($id, -2);
+	$l_url = "http://music.qq.com/miniportal/static/lyric/".$num."/".$id.".xml";
+	$l_doc = new DOMDocument();
+	$l_doc->load($l_url);
+	$l_list = $l_doc->getElementsByTagName("lyric");
+	if ($l_list->length == 0) {
+		return;
+	}
+	$l = $l_list->item(0);
+	$data = $l->firstChild->nodeValue;
+	$data = iconv('UTF-8', 'GBK', $data);
+	return $data;
 }
 
 function getCode($Id, $utf8Str){  
@@ -61,26 +87,22 @@ function getCode($Id, $utf8Str){
         eval('$song['.$i.'] = 0x'.substr($utf8Str,$i*2,2).';');  
 	}
     $tmp2=0;  
-    $tmp3=0;  
-
-	//右移8位后为0x0000015F  
+    $tmp3=0;   
     $tmp1 = ($Id & 0x0000FF00) >> 8; 
-	//tmp1 0x0000005F  
     if ( ($Id & 0x00FF0000) == 0 ) {  
-        $tmp3 = 0x000000FF & ~$tmp1; //CL 0x000000E7  
+        $tmp3 = 0x000000FF & ~$tmp1; 
     } else {  
-        $tmp3 = 0x000000FF & (($Id & 0x00FF0000) >> 16); //右移16位后为0x00000001  
+        $tmp3 = 0x000000FF & (($Id & 0x00FF0000) >> 16);
     }  
-    $tmp3 = $tmp3 | ((0x000000FF & $Id) << 8); //tmp3 0x00001801  
-    $tmp3 = $tmp3 << 8; //tmp3 0x00180100  
-    $tmp3 = $tmp3 | (0x000000FF & $tmp1); //tmp3 0x0018015F  
-    $tmp3 = $tmp3 << 8; //tmp3 0x18015F00  
+    $tmp3 = $tmp3 | ((0x000000FF & $Id) << 8);
+    $tmp3 = $tmp3 << 8;
+    $tmp3 = $tmp3 | (0x000000FF & $tmp1);
+    $tmp3 = $tmp3 << 8;
     if ( ($Id & 0xFF000000) == 0 ) {  
-        $tmp3 = $tmp3 | (0x000000FF & (~$Id)); //tmp3 0x18015FE7  
+        $tmp3 = $tmp3 | (0x000000FF & (~$Id));
     } else {  
-        $tmp3 = $tmp3 | (0x000000FF & ($Id >> 24)); //右移24位后为0x00000000  
+        $tmp3 = $tmp3 | (0x000000FF & ($Id >> 24));
     }  
- 
     $i=$length-1;  
     while($i >= 0){  
         $char = $song[$i];  
@@ -91,7 +113,6 @@ function getCode($Id, $utf8Str){
         $tmp2 = ($tmp1 + $tmp2) & 0x00000000FFFFFFFF;  
         $i -= 1;  
     }  
- 
     $i=0;  
     $tmp1=0;  
     while($i<=$length-1){  
@@ -102,8 +123,7 @@ function getCode($Id, $utf8Str){
         $tmp1 = ($tmp1 + $tmp7) & 0x00000000FFFFFFFF;  
  
         $i += 1;  
-    }  
- 
+    }
     $t = conv($tmp2 ^ $tmp3);  
     $t = conv(($t+($tmp1 | $Id)));  
     $t = conv(bcmul($t , ($tmp1 | $tmp3)));  
@@ -113,8 +133,6 @@ function getCode($Id, $utf8Str){
          $t = bcadd($t ,- 4294967296);  
     return $t;
 }
-
-
 function SingleDecToHex($dec){  
     $tmp="";  
     $dec=$dec%16;  
@@ -133,7 +151,7 @@ function SetToHexString($str){
     }  
     return $tmp;  
 }  
-function qianqian_code($str){  
+function tt_code($str){  
         $s=strtolower($str);
         $s=str_replace(" ","",$s);
         $s=str_replace("'","",$s);
