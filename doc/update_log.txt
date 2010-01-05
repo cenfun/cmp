@@ -2,12 +2,6 @@
 ---------------------------------------
 
 
-search加强 value="请输入关键字"
-
-tree显示状态支持
-
-
-
 stage.focus = textfeild;
 textfeild.setSelection(0, val.length);
 
