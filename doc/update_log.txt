@@ -1,9 +1,11 @@
 1，修正
 ---------------------------------------
 
-共享事件 插件皮肤和CMP互相通信接口 (混音器接口，提供当前b数据调用，或输入b数据)
 
-Youtube api http://apiblog.youtube.com/
+search加强 value="请输入关键字"
+
+tree显示状态支持
+
 
 
 stage.focus = textfeild;
@@ -12,31 +14,12 @@ textfeild.setSelection(0, val.length);
 支持socket下载，保密数据
 
 
-lighttpd start
-
-
-最大化视频后，视频画面会卡，明显有缓迟的现象
-
-后续事件控制SD时，更新百分比
-
-
 自写UI组件，减少cmp体积
 
-id3乱码 （中英混）
-mp3音乐读取到id3，则配置是否替换原mp3音乐名称
-
-尝试启动mic和cam，然后回放出mix
 
 
 滚动条，无上下按钮则隐藏，【自动宽度】
 
-皮肤上传功能
-
-可指定来源地址referer防盗链
-
-电影字幕支持
-
-更多Mix，跳舞Flash
 
 保存错误记录(php/asp)
 
