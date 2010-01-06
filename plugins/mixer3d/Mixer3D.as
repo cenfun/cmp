@@ -106,7 +106,18 @@
 		
 		private function triggerFrame(e:Event):void {
 			peaks.fillRect(peaks.rect, 0);
-			SoundMixer.computeSpectrum(bytes, true, 0);
+			
+			bytes = new ByteArray();
+			try {
+				SoundMixer.computeSpectrum(bytes, true, 0);
+			} catch(e:Error) {
+			}
+			if (!bytes.length) {
+				visible = false;
+				return;
+			}
+			visible = true;
+			//
 			var a:Number;
 			var h:Number;
 			var s:Number;

@@ -76,7 +76,16 @@
 		}
 
 		private function compute(ev:Event):void {
-			SoundMixer.computeSpectrum(array, current.fourier, 0);
+			array = new ByteArray();
+			try {
+				SoundMixer.computeSpectrum(array, current.fourier, 0);
+			} catch(e:Error) {
+			}
+			if (!array.length) {
+				clip.visible = false;
+				return;
+			}
+			clip.visible = true;
 			var soundArray:Array = new Array();
 			for (var i:int = 0; i < 512; i++) {
 				soundArray.push(array.readFloat() * config['gain']);
