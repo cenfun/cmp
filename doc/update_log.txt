@@ -1,10 +1,6 @@
 1，修正
 ---------------------------------------
 
-
-stage.focus = textfeild;
-textfeild.setSelection(0, val.length);
-
 支持socket下载，保密数据
 
 
