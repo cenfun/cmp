@@ -5,6 +5,11 @@
 用api做皮肤
 
 
+function cV(str:String):String {
+	return this.root.loaderInfo.parameters[str] || this.root.loaderInfo.loader.loaderInfo.parameters[str];
+}
+
+
 自动隐藏的皮肤
 
 
