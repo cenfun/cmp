@@ -3,7 +3,8 @@
 lrc_handler.php
 歌词自动下载程序
 */
-
+//禁止错误信息
+error_reporting(0);
 //音乐标题
 $title = urldecode($_REQUEST[title]);
 //艺术家名称
@@ -23,6 +24,11 @@ $lrc = tt($artist, $title);
 if (!$lrc) {
 	$lrc = qq($artist, $title);
 }
+
+if (!$lrc) {
+	$lrc = "[ti:歌词未找到]";
+}
+
 echo $lrc;
 
 
