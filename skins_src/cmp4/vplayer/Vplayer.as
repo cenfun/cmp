@@ -49,6 +49,7 @@
 			//api.tools.output("vplayer");
 			//
 			console = api.win_list.console;
+			console.bt_list.useHandCursor = true;
 			vol = console.volume;
 			vol_parent = vol.parent;
 			//隐藏时间提示框和声音调节器
@@ -98,6 +99,7 @@
 			console.removeEventListener(MouseEvent.ROLL_OUT, conOut);
 			//还原CMP的内部元件
 			showVol();
+			console.bt_list.useHandCursor = false;
 			//清楚引用，释放内存
 			vol_parent = null;
 			vol = null;
@@ -181,7 +183,12 @@
 
 		private function startHide():void {
 			clearTimeout(timeid);
-			timeid = setTimeout(cmpOut,2000);
+			var sx:Number = console.stage.mouseX;
+			var sy:Number = console.stage.mouseY;
+			var test:Boolean = console.hitTestPoint(sx, sy, true);
+			if (!test) {
+				timeid = setTimeout(cmpOut,2000);
+			}
 		}
 		//播放状态改变时调用
 		private function stateHandler(e:Event = null):void {
