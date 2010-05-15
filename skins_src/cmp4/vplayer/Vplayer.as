@@ -46,6 +46,8 @@
 		}
 
 		private function init():void {
+			//api.tools.output("vplayer");
+			//
 			console = api.win_list.console;
 			vol = console.volume;
 			vol_parent = vol.parent;
@@ -102,18 +104,6 @@
 			bt_mute = null;
 			bar = null;
 			console = null;
-		}
-		
-		//调试信息发送程序
-		private function o(str:*):void {
-			if (str == undefined) {
-				str = "undefined";
-			}
-			var lc:LocalConnection = new LocalConnection();
-			lc.addEventListener(StatusEvent.STATUS, function(e:Event):void{});
-			var s:String = str.toString();
-			trace(s);
-			lc.send("_cenfun_lc", "cenfunTrace", s);
 		}
 		
 
@@ -178,8 +168,6 @@
 			this.visible = true;
 			console.visible = true;
 			//
-			
-			
 			Mouse.show();
 		}
 
@@ -226,12 +214,15 @@
 		
 		//con =================================================
 		private function conOver(e:MouseEvent):void {
-			this.alpha = console.alpha = 1;
-			
+			if (console) {
+				this.alpha = console.alpha = 1;
+			}
 		}
 
 		private function conOut(e:MouseEvent = null):void {
-			this.alpha = console.alpha = 0.8;
+			if (console) {
+				this.alpha = console.alpha = 0.8;
+			}
 		}
 		
 		//functions ===========================================
