@@ -47,6 +47,14 @@
 
 		private function init():void {
 			//api.tools.output("vplayer");
+			//自动关闭右键中窗口项
+			var menus:Array = api.cmp.contextMenu.customItems;
+			if (menus.length > 3) {
+				var newMenu:ContextMenu = new ContextMenu();
+				newMenu.hideBuiltInItems();
+				newMenu.customItems = [menus[0], menus[1], menus[menus.length - 1]];
+				api.cmp.contextMenu = newMenu;
+			}
 			//
 			console = api.win_list.console;
 			console.bt_list.useHandCursor = true;
