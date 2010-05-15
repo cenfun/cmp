@@ -18,6 +18,8 @@
 		private var bar:DisplayObject;
 		//静音按钮引用
 		private var bt_mute:DisplayObject;
+		//控制台引用
+		private var console:Object;
 		//修正加载皮肤时找不到bitmapData属性报错的情况
 		public var bitmapData:BitmapData;
 
@@ -44,13 +46,14 @@
 		}
 
 		private function init():void {
-			vol = api.win_list.console.volume;
+			console = api.win_list.console;
+			vol = console.volume;
 			vol_parent = vol.parent;
 			//隐藏时间提示框和声音调节器
 			barOut();
 			hideVol();
 			//侦听静音按钮鼠标事件
-			bt_mute = api.win_list.console.bt_mute as DisplayObject;
+			bt_mute = console.bt_mute as DisplayObject;
 			bt_mute.addEventListener(MouseEvent.ROLL_OVER, btmuteOver);
 			bt_mute.addEventListener(MouseEvent.ROLL_OUT, btmuteOut);
 			//
@@ -60,10 +63,13 @@
 			api.cmp.addEventListener(MouseEvent.ROLL_OVER, cmpOver);
 			api.cmp.addEventListener(MouseEvent.ROLL_OUT, cmpOut);
 			//侦听进度条提示事件;
-			bar = api.win_list.console.progress;
+			bar = console.progress;
 			bar.addEventListener(MouseEvent.MOUSE_MOVE, barMove);
 			bar.addEventListener(MouseEvent.MOUSE_OVER, barOver);
 			bar.addEventListener(MouseEvent.MOUSE_OUT, barOut);
+			//控制台透明度侦听事件
+			console.addEventListener(MouseEvent.ROLL_OVER, conOver);
+			console.addEventListener(MouseEvent.ROLL_OUT, conOut);
 			//退出皮肤时调用，用于清理上面的侦听，以免应该到其他皮肤里，冲突
 			this.addEventListener(Event.REMOVED_FROM_STAGE, removeHandler);
 			//初始位置尺寸
@@ -85,6 +91,9 @@
 			bar.removeEventListener(MouseEvent.MOUSE_MOVE, barMove);
 			bar.removeEventListener(MouseEvent.MOUSE_OVER, barOver);
 			bar.removeEventListener(MouseEvent.MOUSE_OUT, barOut);
+			//
+			console.removeEventListener(MouseEvent.ROLL_OVER, conOver);
+			console.removeEventListener(MouseEvent.ROLL_OUT, conOut);
 			//还原CMP的内部元件
 			showVol();
 			//清楚引用，释放内存
@@ -92,9 +101,10 @@
 			vol = null;
 			bt_mute = null;
 			bar = null;
+			console = null;
 		}
 		
-		
+		//调试信息发送程序
 		private function o(str:*):void {
 			if (str == undefined) {
 				str = "undefined";
@@ -166,14 +176,17 @@
 
 		private function cmpOver(e:MouseEvent = null):void {
 			this.visible = true;
-			api.win_list.console.visible = true;
+			console.visible = true;
+			//
+			
+			
 			Mouse.show();
 		}
 
 		private function cmpOut(e:MouseEvent = null):void {
 			if (api.config.state == "playing") {
 				this.visible = false;
-				api.win_list.console.visible = false;
+				console.visible = false;
 				Mouse.hide();
 			}
 		}
@@ -210,6 +223,18 @@
 		private function barOut(e:MouseEvent = null):void {
 			tip_time.visible = false;
 		}
+		
+		//con =================================================
+		private function conOver(e:MouseEvent):void {
+			this.alpha = console.alpha = 1;
+			
+		}
+
+		private function conOut(e:MouseEvent = null):void {
+			this.alpha = console.alpha = 0.8;
+		}
+		
+		//functions ===========================================
 
 		//转化成时间字符串
 		private function sTime(p:Number):String {
