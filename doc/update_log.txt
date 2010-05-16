@@ -4,32 +4,21 @@
 
 最大化视窗时，大小不变，最大化按钮无改变问题
 
-自动根据音乐换皮肤插件
-
-api的皮肤放皮肤专题
 
 
-用api做皮肤
-
-
+支持跨级传参
 function cV(str:String):String {
 	return this.root.loaderInfo.parameters[str] || this.root.loaderInfo.loader.loaderInfo.parameters[str];
 }
 
 
-自动隐藏的皮肤
 
 
 
 
 自写UI组件，减少cmp体积
 
-
-
 滚动条，无上下按钮则隐藏，【自动宽度】
-
-
-
 
 
 保存错误记录(php/asp)
