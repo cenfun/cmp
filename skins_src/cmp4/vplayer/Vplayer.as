@@ -193,14 +193,19 @@
 			clearTimeout(timeid);
 			var sx:Number = console.stage.mouseX;
 			var sy:Number = console.stage.mouseY;
+			//api.tools.output("sx:"+sx + "|sy:"+sy);
 			var test:Boolean = console.hitTestPoint(sx, sy, true);
-			if (!test) {
-				timeid = setTimeout(cmpOut,2000);
+			if (sx == 0 || sx == api.config.width || sy == 0 || sy == api.config.height || !test) {
+				timeid = setTimeout(cmpOut, 2000);
 			}
 		}
 		//播放状态改变时调用
 		private function stateHandler(e:Event = null):void {
-			startHide();
+			if (api.config.state == "playing") {
+				startHide();
+			} else {
+				cmpOver();
+			}
 		}
 
 
