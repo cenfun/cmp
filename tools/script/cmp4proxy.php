@@ -1,5 +1,5 @@
 <?
-//保存以获取地址到session，节约资源
+//保存已经获取地址到session，节约资源
 session_start();
 //取得来源页地址
 $source = urldecode($_REQUEST[source]);
