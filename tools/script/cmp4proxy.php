@@ -36,7 +36,7 @@ function get_data($url) {
 		return file_get_contents($url);
 	}
 	//如果空间不支持file_get_contents，请在下面写其他程序抓取
-	//比他用curl
+	//比如用curl
 }
 //标签截取
 function str_cut($str, $pre, $end) {
@@ -68,7 +68,7 @@ function joy($id) {
 	$session_id = "joy_src".$id;
 	$src = $_SESSION[$session_id];
 	if (empty($src)) {
-		//注意msxv5v2值以后可能会变更，将导致无法获取
+		//注意msxv5v2可能是个验证值，以后可能会变更，将导致无法获取
 		$url="http://msx.app.joy.cn/service.php?action=msxv5v2&playertype=joyplayer&videoid=".$id;
 		$str = get_data($url);
 		if ($str) {
