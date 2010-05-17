@@ -4,6 +4,9 @@
 【完成】最大化视窗时，大小不变，最大化按钮无改变问题
 
 
+api卸载时，发送事件
+
+
 
 支持跨级传参
 function cV(str:String):String {
