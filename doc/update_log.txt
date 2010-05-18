@@ -6,6 +6,9 @@
 
 api卸载时，发送事件
 
+参数 align 必须是某个可接受的值。
+at flash.text::TextFormat/set align()
+
 
 
 支持跨级传参
