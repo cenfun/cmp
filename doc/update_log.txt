@@ -1,23 +1,8 @@
 【完成】随机播放会跳出播放列表后停止在目录 
-
-
 【完成】最大化视窗时，大小不变，最大化按钮无改变问题
-
-
-api卸载时，发送事件
-
-参数 align 必须是某个可接受的值。
-at flash.text::TextFormat/set align()
-
-
-
-支持跨级传参
-function cV(str:String):String {
-	return this.root.loaderInfo.parameters[str] || this.root.loaderInfo.loader.loaderInfo.parameters[str];
-}
-
-
-
+【完成】新增api卸载时，发送api_remove移除事件
+【完成】捕获皮肤设置中参数align必须是某个可接受的值错误
+【完成】支持CMP加载器对CMP跨级地址传参
 
 
 
