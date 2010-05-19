@@ -1,0 +1,14 @@
+﻿<cmp 
+	
+	iradio_source = "http://www.google.com.hk/ig/modules/chinagadgets/iradio/zh-CN_ALL.xml"
+
+	iradio_source1 = "proxy.php?url=http://www.google.com.hk/ig/modules/chinagadgets/iradio/zh-CN_ALL.xml"
+
+	iradio_label = "网络电台"
+	iradio_position = "2"
+	iradio_opened = "0"
+
+	plugins = "plugins/iradio.swf"
+
+	
+/>
