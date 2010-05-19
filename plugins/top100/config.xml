@@ -1,0 +1,12 @@
+﻿<cmp 
+	
+	top100_source = "http://cdn.top100.cn/flashremote/SongBO/GetSongListByWpID.as?WpID=4NLBFOImW0VxC/u2&songname=W1wZvXegNlq8JQ7mydf+VUIv05t9XoR/Bk9Dba2BOh03YfkB"
+
+	top100_source1 = "proxy.php?url=http%3A%2F%2Fcdn.top100.cn%2Fflashremote%2FSongBO%2FGetSongListByWpID.as%3FWpID%3D4NLBFOImW0VxC%2Fu2%26songname%3DW1wZvXegNlq8JQ7mydf%2BVUIv05t9XoR%2FBk9Dba2BOh03YfkB"
+	top100_label = "Top100专辑"
+	top100_position = "2"
+	top100_opened = "0"
+	plugins = "plugins/top100.swf"
+
+	
+/>
