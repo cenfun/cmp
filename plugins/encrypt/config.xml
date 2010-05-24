@@ -1,0 +1,8 @@
+﻿<cmp 
+	
+	encrypt_list = "encrypt_list.php"
+
+	plugins = "plugins/encrypt.swf"
+
+	
+/>
