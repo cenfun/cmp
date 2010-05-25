@@ -48,7 +48,7 @@
 			}
 			try {
 				data = decrypt(data);
-				var xml:XML = new XML(data);
+				var xml:XMLList = new XMLList(data);
 			} catch (e) {
 				output(e);
 				return;
