@@ -1,0 +1,52 @@
+﻿<!--
+CMP音乐列表文件
+
+注：编辑后推荐保存为UTF-8格式
+
+m标记节点，可以包含子节点，属性有
+type: 音乐类型，不填将根据文件后缀(扩展名)自动识别，支持：1,MP3音频  2,FLV/MP4视频  3,WMP类型 4,flash
+src: 音乐地址
+lrc: 歌词
+duration: 总时间，仅针对部分非标准视频，一般不用
+rotation: 视频旋转角度
+label: 标记名称(目录名或音乐名)
+
+
+bak: 备用地址
+xywh: 定位
+scalemode: 缩放模式
+stream:  是否为stream类视频
+
+bg_video: 指定视频区的背景
+bg_lrc: 指定歌词区的背景
+
+opened: 是否打开子节点
+
+-->
+<list>
+  <m type="" src="music/test.mp3" lrc="" label="MP3音乐" />
+  <m type="" src="music/test.flv" lrc="" label="FLV视频" />
+  <m type="" src="error.mp3" bak="music/test.mp3" lrc="" label="测试备份地址" />
+  <m type="" src="music/castle_in_the_sky.mid" lrc="" label="WMP音乐" />
+  <m type="" src="plugins/bigbg.swf" lrc="" scalemode="1" duration="10" label="Flash播放" />
+  <m type="" src="logo.png" lrc="" scalemode="1" duration="5" label="图片播放" />
+  <m type="" src="logo.png" lrc="" xywh="0C,0C,0,0" bg_video="{bgcolor:#ffffff}" duration="5" label="设置视频区白色背景" />
+  <m type="" src="music/test.mp3" lrc="" bg_video="{src:plugins/bigbg.swf,xywh:[0,0,100%,100%]}" duration="5" label="视频区加载flash背景" />
+  <m type="" src="music/castle_in_the_sky.mid" lrc="" bg_video="{src:plugins/bigbg.swf,xywh:[0,0,100%,100%]}" label="WMP音乐(视频区背景)" />
+  <m type="" src="music/test.mp3" lrc="" bg_lrc="{src:plugins/bigbg.swf,xywh:[0,0,100%,100%]}" duration="5" label="歌词区加载flash背景" />
+  <m type="" src="music/test.mp3" lrc="" bg_lrc="{src:plugins/revolt.swf,xywh:[0,0,100%,100%]}" duration="5" label="歌词区加载声波插件" />
+  <m label="目录">
+    <m label="二级目录">
+      <m label="三级目录">
+        <m type="" src="music/test.mp3" lrc="" label="MP3音乐" />
+      </m>
+    </m>
+    <m type="" src="music/castle_in_the_sky.mid" lrc="" label="WMP音乐" />
+  </m>
+  <m label="打开的目录" opened="1">
+    <m type="" src="music/secret_garden.mid" lrc="" label="WMP音乐" />
+  </m>
+  <m label="目录也可以播放" src="music/test.mp3">
+    <m type="" src="music/secret_garden.mid" lrc="" label="WMP音乐" />
+  </m>
+</list>

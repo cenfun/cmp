@@ -71,18 +71,17 @@
 		}
 
 		private function decrypt(str:String):String {
-			var strOut:String;
-			var keyBytes:ByteArray;
-			var bytes:ByteArray;
-			var newBytes:ByteArray;
-			keyBytes = new ByteArray();
+			var keyBytes:ByteArray = new ByteArray();
 			keyBytes.writeUTFBytes(key);
 			keyBytes.position = 0;
-			bytes = api.tools.base64.decode(str);
+			//
+			var bytes:ByteArray = Base64.decode(str);
 			bytes.position = 0;
-			newBytes = XXTEA.decrypt(bytes,keyBytes);
+			//
+			var newBytes:ByteArray = XXTEA.decrypt(bytes, keyBytes);
 			newBytes.position = 0;
-			strOut = newBytes.readUTFBytes(newBytes.length);
+			//
+			var strOut:String = newBytes.readUTFBytes(newBytes.length);
 			return strOut;
 		}
 
