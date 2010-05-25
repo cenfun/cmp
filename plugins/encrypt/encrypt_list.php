@@ -3,7 +3,7 @@ error_reporting(0);
 
 //加密密钥，如果需要改动，请一定保持与插件程序里的解密密匙一样，并重新编译一下flash插件
 $key = "756e35bd9441e66e001ca73024b9b426";
-//多个列表可以加在数字里，如array("list1.xml", "list2.xml")
+//多个列表可以加在数组里，如array("list1.xml", "list2.xml")
 $lists = array("list.xml");
 //读取每个列表并加密
 $data = "";
