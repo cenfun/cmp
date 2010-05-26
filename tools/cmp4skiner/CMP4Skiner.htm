@@ -9,51 +9,24 @@ html, body { background:#D4D0C8; overflow:hidden; }
 #skin_main { background:#181818; display:block; overflow:hidden; padding:0px 0px; margin:0px 0px; }
 #skin_edit { background:#D4D0C8; width:300px; position:absolute; z-index:1000; right:0px; top:0px; padding-left:3px; padding-right:2px; }
 #skin_split { background-color:#D4D0C8; position:absolute; z-index:2000; top:0px; right:303px; width:5px; cursor:w-resize; filter:alpha(opacity=10); }
+#skin_menu { padding:5px 5px; text-align:center; }
 #skin_content { line-height:180%; color:#000000; width:100%; }
-.buttons { padding:5px 5px; text-align:center; }
 </style>
 </head>
 <body>
-<script type="text/javascript">  
-if (window.Event) {
-	document.captureEvents(Event.MOUSEUP); 
-}
-function nocontextmenu(){ 
-	event.cancelBubble = true; 
-	event.returnValue = false; 
-	return false; 
-} 
-function norightclick(e){ 
-	if (window.Event){ 
-		if (e.which == 2 || e.which == 3) {
-			return false; 
-		}
-	} else if (event.button == 2 || event.button == 3){ 
-		event.cancelBubble = true;
-		event.returnValue = false; 
-		return false; 
-	} 
-} 
-document.oncontextmenu = nocontextmenu;
-document.onmousedown = norightclick;
-</script>
 <div id="skin_main"></div>
 <div id="skin_split"></div>
 <div id="skin_edit">
-  <div id="skin_menu" class="buttons">
+  <div id="skin_menu">
     <input type="button" id="bt_open" value="打开皮肤配置文件" title="打开皮肤配置文件skin.xml" onclick="skin_open();" accesskey="o" />
     <input type="button" id="bt_save" value="保存" title="保存配置文件" onclick="skin_save();" accesskey="s" />
     <input type="button" id="bt_save_other" value="另存为" title="另存配置文件" onclick="skin_save_other();" />
-  </div>
-  <textarea id="skin_content" wrap="off"></textarea>
-  <div class="buttons">
-    <input type="button" id="bt_reload" onclick="skin_reload();" value="刷新预览" accesskey="r" />
     <input type="button" id="bt_test" onclick="skin_test();" title="检测XML文件格式" value="检测格式" accesskey="c" />
   </div>
+  <textarea id="skin_content" wrap="off"></textarea>
 </div>
 <script type="text/javascript">
 var cmp3skiner = "CMP4皮肤制作辅助工具 v1.0";
-//全局变量
 var skin_url;
 var one = true;
 //
@@ -63,6 +36,7 @@ var skin_menu = $("skin_menu");
 var skin_split = $("skin_split");
 var skin_content = $("skin_content");
 //===================================
+var skin_xml;
 var skin_file;
 var skin_info = false;
 var skin_doc = new ActiveXObject("Microsoft.XMLDOM");
@@ -70,6 +44,9 @@ skin_doc.async = "false";
 var save_doc = new ActiveXObject("Microsoft.XMLDOM");
 skin_doc.async = "false";
 //===================================
+function output(str) {
+	alert(str);	
+}
 function createInput(){
 	if(skin_file){
 		skin_menu.removeChild(skin_file);
@@ -90,7 +67,7 @@ function skin_save_other() {
 	if (skin_info) {
 		var theResponse = window.prompt("请输入皮肤配置文件名：", "skin_bak.xml");
 		if (theResponse) {
-			//alert(theResponse);
+			//output(theResponse);
 			skin_url = fU(theResponse);
 			skin_save();
 		}
@@ -112,26 +89,30 @@ function skin_save() {
 						stream.SaveToFile(skin_url, 2);
 						stream.Close();
 					} catch (e) {
-						alert("没有操作权限");
+						output("没有操作权限");
 					}
 				} else {
-					alert("皮肤配置文件格式错误：" + err);
+					output("皮肤配置文件格式错误：" + err);
 				}
 			} else {
-				alert("保存错误，请检查XML文件格式是否正确");
+				output("保存错误，请检查XML文件格式是否正确");
 			}
 		} catch (e) {
-			alert("未知错误" + e);
+			output("未知错误" + e);
 		}
 	}
 }
 function skin_init() {
 	one = true;
 	skin_content.value = "";
-	skin_content.onchange = null;
+	skin_content.onchange = skin_content.onkeyup = skin_content.onclick = null;
 }
 function skin_change() {
 	$("bt_save").disabled = "";
+	if (skin_xml != skin_content.value) {
+		skin_xml = skin_content.value;
+		skin_reload();
+	}
 }
 function skin_reload() {
 	if (skin_info) {
@@ -140,10 +121,10 @@ function skin_reload() {
 			if (result) {
 				skin_parse();
 			} else {
-				alert("刷新错误，请检查XML文件格式是否正确");
+				output("刷新错误，请检查XML文件格式是否正确");
 			}
 		} catch (e) {
-			alert("未知错误" + e);
+			output("未知错误" + e);
 		}
 	}
 }
@@ -168,10 +149,10 @@ function skin_load(url) {
 			if (result) {
 				skin_parse();
 			} else {
-				alert("加载错误");
+				output("加载错误");
 			}
 		} catch (e) {
-			alert("未知错误" + e);
+			output("未知错误" + e);
 		}
 	}
 }
@@ -187,14 +168,14 @@ function skin_check(doc) {
 function skin_parse() {
 	var err = skin_check(skin_doc);
 	if (err != "") {
-		alert("皮肤配置文件格式错误或不完整：" + err);
+		output("皮肤配置文件格式错误或不完整：" + err);
 	}
 	//无错
 	if (one) {
 		one = false;
-		skin_content.value = skin_doc.documentElement.xml;
+		skin_xml = skin_content.value = skin_doc.documentElement.xml;
 	}
-	skin_content.onchange = function() {
+	skin_content.onchange = skin_content.onkeyup = skin_content.onclick = function() {
 		skin_change();
 	}
 	skin_info = true;
@@ -265,6 +246,8 @@ function getWin(win, name, display, pw, ph) {
 		} else if (name == "media") {
 			return getMedia(win, pw, ph);
 		}
+	} else {
+		return ""	;
 	}
 }
 function getOption(win, pw, ph) {
@@ -347,7 +330,7 @@ function getBt(bt, pw, ph) {
 		str += 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+url+'\',sizingMethod=\'crop\'); ';
 		str += '" >';
 		str += '</div>';
-		//alert(str);
+		//output(str);
 	}
 	return str;
 }
@@ -375,7 +358,7 @@ function getBorder(obj, pw, ph, text) {
 	if (obj) {
 		var xywh = obj.getAttribute("xywh");
 		var p = getP(xywh, pw, ph);
-		//alert(pane.xml);
+		//output(pane.xml);
 		str += '<div id="'+obj.nodeName+'" ';
 		str += 'style="position:absolute; overflow:hidden; ';
 		str += 'left:'+p[0]+'px; top:'+p[1]+'px; width:'+p[2]+'px; height:'+p[3]+'px; ';
@@ -535,7 +518,7 @@ function setWH() {
 	skin_main.style.width = Math.abs(w - skin_edit.offsetWidth) + "px";
 	skin_split.style.height = h + "px";
 	skin_split.style.left = (w - skin_edit.offsetWidth) + "px";
-	skin_content.style.height = Math.abs(h - skin_menu.offsetHeight * 2 - 6) + "px";
+	skin_content.style.height = Math.abs(h - skin_menu.offsetHeight - 3) + "px";
 	//window.status = w + "|" + h;
 	skin_refresh();
 }
