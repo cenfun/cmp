@@ -67,38 +67,48 @@ function skin_save_other() {
 	if (skin_info) {
 		var theResponse = window.prompt("请输入皮肤配置文件名：", "skin_bak.xml");
 		if (theResponse) {
-			//output(theResponse);
 			skin_url = fU(theResponse);
 			skin_save();
 		}
 	}
 }
+function check_error(xmlDoc) {
+	if (xmlDoc) {
+		if (xmlDoc.parseError != 0) {
+			var errMsg = xmlDoc.parseError.reason + "\n";
+			errMsg += "行:" +xmlDoc.parseError.line + " 位置:" +xmlDoc.parseError.linepos + "\n";
+			errMsg += xmlDoc.parseError.srcText + "\n";
+			alert(errMsg);
+			return true;
+		}
+	}
+	return false;
+}
 function skin_save() {
 	if (skin_info) {
 		try {
-			var result = save_doc.loadXML(skin_content.value);
-			if (result) {
-				var err = skin_check(save_doc);
-				if (err == "") {
-					try {
-						var stream = new ActiveXObject("ADODB.Stream");
-						stream.Type = 2;
-						stream.Charset = "UTF-8";
-						stream.Open();
-						stream.WriteText(skin_content.value);
-						stream.SaveToFile(skin_url, 2);
-						stream.Close();
-					} catch (e) {
-						output("没有操作权限");
-					}
-				} else {
-					output("皮肤配置文件格式错误：" + err);
-				}
-			} else {
-				output("保存错误，请检查XML文件格式是否正确");
-			}
+			save_doc.loadXML(skin_content.value);
 		} catch (e) {
-			output("未知错误" + e);
+			output("保存皮肤配置XML时，发生错误:" + e);
+		}
+		if (check_error(save_doc)) {
+			return;	
+		}
+		var err = skin_check(save_doc);
+		if (err == "") {
+			try {
+				var stream = new ActiveXObject("ADODB.Stream");
+				stream.Type = 2;
+				stream.Charset = "UTF-8";
+				stream.Open();
+				stream.WriteText(skin_content.value);
+				stream.SaveToFile(skin_url, 2);
+				stream.Close();
+			} catch (e) {
+				output("没有操作权限");
+			}
+		} else {
+			output("皮肤配置文件格式错误：" + err);
 		}
 	}
 }
@@ -117,14 +127,12 @@ function skin_change() {
 function skin_reload() {
 	if (skin_info) {
 		try {
-			var result = skin_doc.loadXML(skin_content.value);
-			if (result) {
-				skin_parse();
-			} else {
-				output("刷新错误，请检查XML文件格式是否正确");
-			}
+			skin_doc.loadXML(skin_content.value);
 		} catch (e) {
-			output("未知错误" + e);
+			output("重新加载皮肤配置XML时，发生错误:" + e);
+		}
+		if (!check_error(skin_doc)) {
+			skin_parse();
 		}
 	}
 }
@@ -146,13 +154,11 @@ function skin_load(url) {
 	if (url) {
 		try {
 			var result = skin_doc.load(url);
-			if (result) {
-				skin_parse();
-			} else {
-				output("加载错误");
-			}
 		} catch (e) {
-			output("未知错误" + e);
+			output("加载皮肤配置文件时，发生错误:" + e);
+		}
+		if (!check_error(skin_doc)) {
+			skin_parse();
 		}
 	}
 }
@@ -426,58 +432,76 @@ function fU(src) {
 	url += src;
 	return url;
 }
+
+function array(input) {
+	input = input.toString();
+	var arr = input.split(/\s*\,\s*/);
+	var out = [];
+	for (var i = 0; i < arr.length; i ++) {
+		if (arr[i]) {
+			out.push(arr[i]);
+		}
+	}
+	return out;
+}
+function ns(str) {
+	if (!str) {
+		return [0, ""];
+	}
+	var n = parseFloat(str);
+	if (isNaN(n)) {
+		n = 0;
+	}
+	var s = str.replace(n, "");
+	if (s == "%") {
+		s = "P";
+	}
+	return [Math.round(n), s.toUpperCase()];
+}
+function woh(n, s, v, p) {
+	var r;
+	if (s == "P") {
+		r = (p - v) * n * 0.01;
+	} else if (s == "B") {
+		r = p - 2 * n;
+	} else {
+		r = n;
+	}
+	if (r < 0) {
+		r = 0;
+	}
+	return Math.round(r);
+}
+function xoy(n, s, v, p) {
+	var r;
+	if (s == "C") {
+		r = (p - v) * 0.5 + n;
+	} else if (s == "R") {
+		r = p - v - n;
+	} else if (s == "P") {
+		r = p * n * 0.01;
+	} else {
+		r = n;
+	}
+	return Math.round(r);
+}
 //计算位置
 function getP(xywh, pw, ph) {
-	var t = xywh.split(/\s*\,\s*/);
-	var tx = getNS(t[0]);
-	var ty = getNS(t[1]);
-	var tw = getNS(t[2]);
-	var th = getNS(t[3]);
-	//
-	var rw;
-	if (tw[1] == "P") {
-		rw = (pw-tx[0])*tw[0] * 0.01;
-	} else {
-		rw = tw[0];
+	if (!xywh) {
+		return [0, 0, 0, 0];
 	}
-	if (rw < 0) {
-		rw = 0;
-	}
-	var rh;
-	if (th[1] == "P") {
-		rh = (ph-ty[0])*th[0] * 0.01;
-	} else {
-		rh = th[0];
-	}
-	if (rh < 0) {
-		rh = 0;
-	}
-	//
-	var rx;
-	if (tx[1] == "C") {
-		rx = pw * 0.5 - rw * 0.5 + tx[0];
-	} else if (tx[1] == "R") {
-		rx = pw - rw - tx[0];
-	} else {
-		rx = tx[0];
-	}
-	var ry;
-	if (ty[1] == "C") {
-		ry = ph * 0.5 - rh * 0.5 + ty[0];
-	} else if (ty[1] == "R") {
-		ry = ph - rh - ty[0];
-	} else {
-		ry = ty[0];
-	}
-	return [Math.round(rx), Math.round(ry), Math.round(rw), Math.round(rh)];
-}
-function getNS(ns) {
-	var tn = parseFloat(ns)?parseFloat(ns):0;
-	var ts = "";
-	if (ns) {
-		ts = ns.replace(tn,"").toUpperCase();
-	}
-	return [tn, ts];
+	var a = array(xywh);
+	var tx = ns(a[0]);
+	var ty = ns(a[1]);
+	var tw = ns(a[2]);
+	var th = ns(a[3]);
+	//宽度高度
+	var rw = woh(tw[0], tw[1], tx[0], pw);
+	var rh = woh(th[0], th[1], ty[0], ph);
+	//横坐标纵坐标
+	var rx = xoy(tx[0], tx[1], rw, pw);
+	var ry = xoy(ty[0], ty[1], rh, ph);
+	return [rx, ry, rw, rh];
 }
 //过滤同级注释
 function comment_clear(node) {
@@ -557,6 +581,37 @@ function noselect(flag) {
 	} else {
 		document.onselectstart=function() {return(true)};
 	}
+}
+
+//cookie===============================================
+function cookie_set(name, value, expires) {
+	var str = prefix + name + "=" + encodeURIComponent(value);
+	if (expires) {
+		var date = new Date();
+		date.setTime(date.getTime() + expires * 1000);
+		str += "; expires=" + date.toGMTString();
+	}
+	document.cookie = str;
+}
+function cookie_get(name) {
+	var str = document.cookie;
+	var cookieName = prefix + name + "=";
+	valueBegin = str.indexOf(cookieName);
+	if (valueBegin == -1) {
+		return "";
+	}
+	valueEnd = str.indexOf(";", valueBegin);
+	if (valueEnd == -1) {
+		valueEnd = str.length;
+	}
+	value = str.substring(valueBegin + cookieName.length, valueEnd);
+	if (value) {
+		value = decodeURIComponent(value);	
+	}
+	return value;
+}
+function cookie_del(name) {
+	cookie_set(name, "", -1);
 }
 </script>
 </body>
