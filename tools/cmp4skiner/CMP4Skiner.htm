@@ -1,0 +1,580 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<style type="text/css">
+* { padding:0px 0px; margin:0px 0px; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; color:#333333; }
+html, body { background:#D4D0C8; overflow:hidden; }
+#skin_main { background:#181818; display:block; overflow:hidden; padding:0px 0px; margin:0px 0px; }
+#skin_edit { background:#D4D0C8; width:300px; position:absolute; z-index:1000; right:0px; top:0px; padding-left:3px; padding-right:2px; }
+#skin_split { background-color:#D4D0C8; position:absolute; z-index:2000; top:0px; right:303px; width:5px; cursor:w-resize; filter:alpha(opacity=10); }
+#skin_content { line-height:180%; color:#000000; width:100%; }
+.buttons { padding:5px 5px; text-align:center; }
+</style>
+</head>
+<body>
+<script type="text/javascript">  
+if (window.Event) {
+	document.captureEvents(Event.MOUSEUP); 
+}
+function nocontextmenu(){ 
+	event.cancelBubble = true; 
+	event.returnValue = false; 
+	return false; 
+} 
+function norightclick(e){ 
+	if (window.Event){ 
+		if (e.which == 2 || e.which == 3) {
+			return false; 
+		}
+	} else if (event.button == 2 || event.button == 3){ 
+		event.cancelBubble = true;
+		event.returnValue = false; 
+		return false; 
+	} 
+} 
+document.oncontextmenu = nocontextmenu;
+document.onmousedown = norightclick;
+</script>
+<div id="skin_main"></div>
+<div id="skin_split"></div>
+<div id="skin_edit">
+  <div id="skin_menu" class="buttons">
+    <input type="button" id="bt_open" value="打开皮肤配置文件" title="打开皮肤配置文件skin.xml" onclick="skin_open();" accesskey="o" />
+    <input type="button" id="bt_save" value="保存" title="保存配置文件" onclick="skin_save();" accesskey="s" />
+    <input type="button" id="bt_save_other" value="另存为" title="另存配置文件" onclick="skin_save_other();" />
+  </div>
+  <textarea id="skin_content" wrap="off"></textarea>
+  <div class="buttons">
+    <input type="button" id="bt_reload" onclick="skin_reload();" value="刷新预览" accesskey="r" />
+    <input type="button" id="bt_test" onclick="skin_test();" title="检测XML文件格式" value="检测格式" accesskey="c" />
+  </div>
+</div>
+<script type="text/javascript">
+var cmp3skiner = "CMP4皮肤制作辅助工具 v1.0";
+//全局变量
+var skin_url;
+var one = true;
+//
+var skin_main = $("skin_main");
+var skin_edit = $("skin_edit");
+var skin_menu = $("skin_menu");
+var skin_split = $("skin_split");
+var skin_content = $("skin_content");
+//===================================
+var skin_file;
+var skin_info = false;
+var skin_doc = new ActiveXObject("Microsoft.XMLDOM");
+skin_doc.async = "false";
+var save_doc = new ActiveXObject("Microsoft.XMLDOM");
+skin_doc.async = "false";
+//===================================
+function createInput(){
+	if(skin_file){
+		skin_menu.removeChild(skin_file);
+	}
+	skin_file = document.createElement("input");
+	skin_file.style.display = "none";
+	skin_file.type = "file";
+	skin_menu.appendChild(skin_file);
+	skin_file.onchange = function(){
+		skin_load(skin_file.value);
+	};
+}
+function skin_open(){
+	createInput();
+	skin_file.click();
+}
+function skin_save_other() {
+	if (skin_info) {
+		var theResponse = window.prompt("请输入皮肤配置文件名：", "skin_bak.xml");
+		if (theResponse) {
+			//alert(theResponse);
+			skin_url = fU(theResponse);
+			skin_save();
+		}
+	}
+}
+function skin_save() {
+	if (skin_info) {
+		try {
+			var result = save_doc.loadXML(skin_content.value);
+			if (result) {
+				var err = skin_check(save_doc);
+				if (err == "") {
+					try {
+						var stream = new ActiveXObject("ADODB.Stream");
+						stream.Type = 2;
+						stream.Charset = "UTF-8";
+						stream.Open();
+						stream.WriteText(skin_content.value);
+						stream.SaveToFile(skin_url, 2);
+						stream.Close();
+					} catch (e) {
+						alert("没有操作权限");
+					}
+				} else {
+					alert("皮肤配置文件格式错误：" + err);
+				}
+			} else {
+				alert("保存错误，请检查XML文件格式是否正确");
+			}
+		} catch (e) {
+			alert("未知错误" + e);
+		}
+	}
+}
+function skin_init() {
+	one = true;
+	skin_content.value = "";
+	skin_content.onchange = null;
+}
+function skin_change() {
+	$("bt_save").disabled = "";
+}
+function skin_reload() {
+	if (skin_info) {
+		try {
+			var result = skin_doc.loadXML(skin_content.value);
+			if (result) {
+				skin_parse();
+			} else {
+				alert("刷新错误，请检查XML文件格式是否正确");
+			}
+		} catch (e) {
+			alert("未知错误" + e);
+		}
+	}
+}
+function skin_refresh(){
+	if (skin_info) {
+		skin_show();
+	}
+}
+function skin_test() {
+	if (skin_info) {
+        var winname = window.open(skin_url, "_blank", '');
+		winname.opener = null;
+	}
+}
+function skin_load(url) {
+	skin_init();
+	skin_url = url
+	document.title = cmp3skiner + " - " + url; 
+	if (url) {
+		try {
+			var result = skin_doc.load(url);
+			if (result) {
+				skin_parse();
+			} else {
+				alert("加载错误");
+			}
+		} catch (e) {
+			alert("未知错误" + e);
+		}
+	}
+}
+function skin_check(doc) {
+	if (!doc.documentElement) {
+		return "无根节点";
+	}
+	if (!doc.documentElement.hasChildNodes()) {
+		return "没人任何子节点";
+	}
+	return "";
+}
+function skin_parse() {
+	var err = skin_check(skin_doc);
+	if (err != "") {
+		alert("皮肤配置文件格式错误或不完整：" + err);
+	}
+	//无错
+	if (one) {
+		one = false;
+		skin_content.value = skin_doc.documentElement.xml;
+	}
+	skin_content.onchange = function() {
+		skin_change();
+	}
+	skin_info = true;
+	//显示预览
+	skin_show();
+}
+//====================================================
+function skin_show() {
+	//清除显示
+	skin_clear();
+	//插入代码
+	var html = "";
+	//父宽高
+	var pw = skin_main.offsetWidth;
+	var ph = skin_main.offsetHeight;
+	//
+	var root = skin_doc.documentElement;
+	root = comment_clear(root);
+	var wins = root.childNodes;
+	var wl = wins.length;
+	for (var i = 0; i < wl; i++) {
+		var win = wins[i];
+		var name = win.nodeName;
+		var xywh = win.getAttribute("xywh");
+		var src = win.getAttribute("src");
+		var display = parseInt(win.getAttribute("display"));
+		//var lock = win.getAttribute("lock");
+		//var group = win.getAttribute("group");
+		var url = fU(src);
+		//
+		var p = getP(xywh, pw, ph);
+		//window.status = p[0] + "|" + p[1] + "|" + p[2] + "|" + p[3];
+		var str = "";
+		str += '<div id="'+name+'" ';
+		str += 'style="position:absolute; overflow:hidden; ';
+		str += 'z-index:'+(wl - i)+'; left:'+p[0]+'px; top:'+p[1]+'px; width:'+p[2]+'px; height:'+p[3]+'px; ';
+		if (display) {
+			if (src.substring(src.length - 4).toLowerCase() == ".swf") {
+				str += createFlash(url, p[2], p[3]);
+			}
+			//str += 'background:url('+url+'); ';
+			str += 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+url+'\',sizingMethod=\'scale\'); ';
+		} else {
+			str += 'filter:alpha(opacity=20); border:1px dotted #777777; ';
+		}
+		str += '" >';
+		//----------------------
+		str += getWin(win, name, display, p[2], p[3]);
+		//----------------------
+		str += '</div>';
+		html += str;
+	}
+	skin_main.innerHTML = html;
+}
+function getWin(win, name, display, pw, ph) {
+	//过滤同级注释
+	win = comment_clear(win);
+	//
+	if (display) {
+		if (name == "option") {
+			return getOption(win, pw, ph);
+		} else if (name == "console") {
+			return getConsole(win, pw, ph);
+		} else if (name == "list") {
+			return getList(win, pw, ph);
+		} else if (name == "lrc") {
+			return getLrc(win, pw, ph);
+		} else if (name == "media") {
+			return getMedia(win, pw, ph);
+		}
+	}
+}
+function getOption(win, pw, ph) {
+	var str = "";
+	//
+	var pane = getTag(win, "pane");
+	str += getBorder(pane, pw, ph, "选项列表")
+	//bt_close=========================
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	//=================================
+	return str;
+}
+function getConsole(win, pw, ph) {
+	var str = "";
+	//
+	var btList = ["bt_play", "bt_stop", "bt_close", "bt_prev", "bt_next", "bt_mute", "bt_random", "bt_repeat", "bt_list", "bt_video", "bt_lrc", "bt_option", "bt_fullscreen"];
+	for (var i = 0; i < btList.length; i++){
+		var bt = getTag(win, btList[i]);
+		str += getBt(bt, pw, ph);
+	}
+	//
+	var volume = getTag(win, "volume");
+	str += getPer(volume, pw, ph);
+	var progress = getTag(win, "progress");
+	str += getPer(progress, pw, ph);
+	//
+	var title = getTag(win, "title");
+	str += getBorder(title, pw, ph, "标题")
+	var status = getTag(win, "status");
+	str += getBorder(status, pw, ph, "状态")
+	var time = getTag(win, "time");
+	str += getBorder(time, pw, ph, "00:00 / 00:00")
+	//
+	return str;
+}
+function getList(win, pw, ph) {
+	var str = "";
+	//
+	var tree = getTag(win, "tree");
+	str += getBorder(tree, pw, ph, "列表树")
+	//bt_close=========================
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	//=================================
+	return str;
+}
+function getLrc(win, pw, ph) {
+	var str = "";
+	//
+	var text = getTag(win, "text");
+	str += getBorder(text, pw, ph, "歌词")
+	//bt_close=========================
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	//=================================
+	return str;
+}
+function getMedia(win, pw, ph) {
+	var str = "";
+	//
+	var video = getTag(win, "video");
+	str += getBorder(video, pw, ph, "视频区域")
+	//bt_close=========================
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	//=================================
+	return str;
+}
+function getBt(bt, pw, ph) {
+	var str = "";
+	if (bt) {
+		var src = bt.getAttribute("src");
+		var url = fU(src);
+		var xywh = bt.getAttribute("xywh");
+		var p = getP(xywh, pw, ph);
+		str += '<div id="'+bt.nodeName+'" ';
+		str += 'style="position:absolute; overflow:hidden; ';
+		str += 'left:'+p[0]+'px; top:'+p[1]+'px; width:'+p[2]+'px; height:'+p[3]+'px; ';
+		str += 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+url+'\',sizingMethod=\'crop\'); ';
+		str += '" >';
+		str += '</div>';
+		//alert(str);
+	}
+	return str;
+}
+function getPer(per, pw, ph) {
+	//<volume xywh="128C, 4C, 50, 6" thumb_src="volume_thumb.png" track_src="volume_track.png"/>
+	//<progress xywh="0C, 26, 320, 7" thumb_src="progress_thumb.png" track_src="progress_track.png"/>
+	var str = "";
+	if (per) {
+		var track_src = per.getAttribute("track_src");
+		var track_url = fU(track_src);
+		var xywh = per.getAttribute("xywh");
+		var p = getP(xywh, pw, ph);
+		str += '<div id="'+per.nodeName+'" ';
+		str += 'style="position:absolute; overflow:hidden; ';
+		str += 'left:'+p[0]+'px; top:'+p[1]+'px; width:'+p[2]+'px; height:'+p[3]+'px; ';
+		str += 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+track_url+'\',sizingMethod=\'crop\'); ';
+		str += '" onmouseover="this.style.border=\'1px solid #777777\';" onmouseout="this.style.border=\'\';">';
+		str += '</div>';
+	}
+	return str;
+}
+	
+function getBorder(obj, pw, ph, text) {
+	var str = "";
+	if (obj) {
+		var xywh = obj.getAttribute("xywh");
+		var p = getP(xywh, pw, ph);
+		//alert(pane.xml);
+		str += '<div id="'+obj.nodeName+'" ';
+		str += 'style="position:absolute; overflow:hidden; ';
+		str += 'left:'+p[0]+'px; top:'+p[1]+'px; width:'+p[2]+'px; height:'+p[3]+'px; ';
+		str += 'border:1px dotted #777777; ';
+		str += '" >';
+		//
+		if (text) {
+			//文本格式
+			var style = "";
+			var align = obj.getAttribute("align");
+			if (align) {
+				style += 'text-align:'+align+'; ';
+			}
+			var font = obj.getAttribute("font");
+			if (font) {
+				style += 'font-family:'+font+'; ';
+			}
+			var size = obj.getAttribute("size");
+			if (size) {
+				style += 'font-size:'+size+'; ';
+			}
+			var color = obj.getAttribute("color");
+			if (color) {
+				var cl = color.split(/\s*\,\s*/);
+				style += 'color:'+cl[0]+'; ';
+			}
+			var bold = obj.getAttribute("bold");
+			if (bold) {
+				style += 'font-weight:bold; ';
+			}
+			var borderColor = obj.getAttribute("borderColor");
+			if (borderColor) {
+				style += 'border:1px solid '+borderColor+'; ';
+			}
+			var backgroundColor = obj.getAttribute("backgroundColor");
+			if (backgroundColor) {
+				style += 'background-color:'+backgroundColor+'; ';
+			}
+			str += '<div style="'+style+'" onselectstart="return false;">'+text+'</div>';
+		}
+		//
+		str += '</div>';
+	}
+	return str;
+}
+//
+function getTag(parent, name) {
+	return parent.getElementsByTagName(name).item(0);
+}
+function createFlash(url, pw, ph) {
+	var html = '';
+	html += '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" width="'+pw+'" height="'+ph+'">';
+	html += '<param name="movie" value="'+url+'" />';
+	html += '<param name="quality" value="high" />';
+	html += '<param name="wmode" value="Transparent"/>';
+	html += '<param name="scale" value="Exactfit"/>';
+	html += '<embed src="'+url+'" width="'+pw+'" height="'+ph+'" quality="high" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" wmode="Transparent" scale="Exactfit"></embed>';
+	html += '</object>';
+	return html;
+}
+//计算路径
+function fU(src) {
+	var url = skin_url;
+	url  = url.substring(0, url.lastIndexOf("\\") + 1);
+	url += src;
+	return url;
+}
+//计算位置
+function getP(xywh, pw, ph) {
+	var t = xywh.split(/\s*\,\s*/);
+	var tx = getNS(t[0]);
+	var ty = getNS(t[1]);
+	var tw = getNS(t[2]);
+	var th = getNS(t[3]);
+	//
+	var rw;
+	if (tw[1] == "P") {
+		rw = (pw-tx[0])*tw[0] * 0.01;
+	} else {
+		rw = tw[0];
+	}
+	if (rw < 0) {
+		rw = 0;
+	}
+	var rh;
+	if (th[1] == "P") {
+		rh = (ph-ty[0])*th[0] * 0.01;
+	} else {
+		rh = th[0];
+	}
+	if (rh < 0) {
+		rh = 0;
+	}
+	//
+	var rx;
+	if (tx[1] == "C") {
+		rx = pw * 0.5 - rw * 0.5 + tx[0];
+	} else if (tx[1] == "R") {
+		rx = pw - rw - tx[0];
+	} else {
+		rx = tx[0];
+	}
+	var ry;
+	if (ty[1] == "C") {
+		ry = ph * 0.5 - rh * 0.5 + ty[0];
+	} else if (ty[1] == "R") {
+		ry = ph - rh - ty[0];
+	} else {
+		ry = ty[0];
+	}
+	return [Math.round(rx), Math.round(ry), Math.round(rw), Math.round(rh)];
+}
+function getNS(ns) {
+	var tn = parseFloat(ns)?parseFloat(ns):0;
+	var ts = "";
+	if (ns) {
+		ts = ns.replace(tn,"").toUpperCase();
+	}
+	return [tn, ts];
+}
+//过滤同级注释
+function comment_clear(node) {
+	if (node.hasChildNodes()) {
+		var childNodes = node.childNodes;
+		for (var i = 0; i < childNodes.length; i++) {
+			if (childNodes[i].nodeType == 8) {
+				node.removeChild(childNodes[i]);
+				i--;
+			}
+		}
+	}
+	return node;
+}
+function skin_clear() {
+	skin_main.innerHTML = "";
+}
+//====================================================
+window.onload = function(){
+	document.title = cmp3skiner;
+	setWH();
+	drag(skin_split);
+	skin_init();
+	window.focus();
+}
+window.onresize = function() {
+	setWH();
+	skin_refresh();
+}
+//=====================================================
+function $(o) {
+	return document.getElementById(o);
+}
+function setWH() {
+	var w = document.documentElement.clientWidth;
+	var h = document.documentElement.clientHeight;
+	skin_main.style.height = h + "px";
+	skin_main.style.width = Math.abs(w - skin_edit.offsetWidth) + "px";
+	skin_split.style.height = h + "px";
+	skin_split.style.left = (w - skin_edit.offsetWidth) + "px";
+	skin_content.style.height = Math.abs(h - skin_menu.offsetHeight * 2 - 6) + "px";
+	//window.status = w + "|" + h;
+	skin_refresh();
+}
+function drag(o){
+	o.onmousedown=function(){
+		noselect(true);
+		var e = window.event;
+		e.cancelBubble = true;
+		var x = e.layerX || e.offsetX;
+		document.onmousemove=function(){
+			o.style.left = (window.event.clientX-x-2)+"px";
+		};
+		document.onmouseup=function(){
+			document.onmousemove = null;
+			document.onmouseup = null;
+			noselect(false);
+			var fw = 7;
+			var mw = 300;
+			var w = document.documentElement.clientWidth;
+			var tr = parseInt(o.style.left) + fw;
+			var tw = w - tr;
+			if (tw > mw) {
+				skin_edit.style.width = tw + "px";
+				setWH();
+			} else {
+				skin_edit.style.width = mw + "px";
+				skin_split.style.left = (w - mw - fw) + "px";
+				setWH();
+			}
+		};
+	};
+}
+function noselect(flag) {
+	if (flag) {
+		document.onselectstart=function() {return(false)};
+	} else {
+		document.onselectstart=function() {return(true)};
+	}
+}
+</script>
+</body>
+</html>
