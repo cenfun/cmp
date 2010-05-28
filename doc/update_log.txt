@@ -1,20 +1,4 @@
 
-mask支持
-
-RangeError: DataProvider index (-1) is not in acceptable range (0 - 52)
-	at fl.data::DataProvider/checkIndex()
-	at fl.data::DataProvider/invalidateItemAt()
-	at fl.data::DataProvider/invalidateItem()
-	at com.cenfun.cmp::MM/errorHandler()
-	at flash.events::EventDispatcher/dispatchEventFunction()
-	at flash.events::EventDispatcher/dispatchEvent()
-	at com.cenfun.cmp::CMP$/sendEvent()
-	at com.cenfun.cmp::M2/nsError()
-	at com.cenfun.cmp::M2/statusHandler()
-
-
-
-单击模式播放问题！播放前一个了
 
 
 自写UI组件，减少cmp体积
