@@ -19,15 +19,15 @@ div { padding:0; margin:0; font-family:Arial; font-size:12px; color:#333333; }
 <div id="skin_split"></div>
 <div id="skin_edit">
   <div id="skin_menu">
-    <input type="button" id="bt_open" value="打开" title="打开皮肤配置文件skin.xml" onclick="skin_open();" />
+    <input type="button" id="bt_open" value="打开skin.xml" title="打开皮肤配置文件skin.xml" onclick="skin_open();" />
     <input type="button" id="bt_save" value="保存" title="保存配置文件" onclick="skin_save();" />
     <input type="button" id="bt_save_other" value="另存" title="另存配置文件" onclick="skin_save_other();" />
-    <input type="button" id="bt_test" value="检测" title="检测XML文件格式" onclick="skin_test();" />
+    <input type="button" id="bt_test" value="检测" title="新打开窗口检测XML文件格式" onclick="skin_test();" />
   </div>
   <textarea id="skin_content" wrap="off"></textarea>
 </div>
 <script type="text/javascript">
-var cmp3skiner = "CMP4皮肤制作辅助工具 v1.0";
+var cmp3skiner = "CMP4皮肤制作辅助工具 b100528";
 var skin_url;
 var one = true;
 var skin_main = $("skin_main");
@@ -103,7 +103,7 @@ function skin_save() {
 				stream.SaveToFile(skin_url, 2);
 				stream.Close();
 			} catch (e) {
-				output("没有操作权限");
+				output("没有保存文件权限：" + e);
 			}
 		} else {
 			output("皮肤配置文件格式错误：" + err);
@@ -141,8 +141,12 @@ function skin_refresh(){
 }
 function skin_test() {
 	if (skin_info) {
-        var winname = window.open(skin_url, "_blank", '');
-		winname.opener = null;
+		try {
+        	var winname = window.open(skin_url, "_blank", '');
+			winname.opener = null;
+		} catch (e) {
+			output("没有打开窗口权限：" + e);
+		}
 	}
 }
 function skin_load(url) {
@@ -200,45 +204,36 @@ function skin_show() {
 			continue;
 		}
 		var xywh = win.getAttribute("xywh");
-		var src = win.getAttribute("src");
+		var src = fU(win.getAttribute("src"));
+		var mask = fU(win.getAttribute("mask"));
 		var display = parseInt(win.getAttribute("display"));
-		var lock = win.getAttribute("lock");
-		var group = win.getAttribute("group");
-		var url = fU(src);
 		var p = getP(xywh, pw, ph);
 		var str = "";
 		str += '<div id="'+name+'" class="skin" style="z-index:'+(wl - i)+';left:'+p[0]+'px;top:'+p[1]+'px;width:'+p[2]+'px;height:'+p[3]+'px;">';
 		if (display) {
-			if (src.substring(src.length - 4).toLowerCase() == ".swf") {
-				str += createFlash(url, p[2], p[3]);
-			} else {
-				str += '<div class="skin" style="left:0px;top:0px;width:'+p[2]+'px;height:'+p[3]+'px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+url+'\',sizingMethod=\'scale\');"></div>';
-			}
+			str += getBg(src, p[2], p[3]);
+			str += getWin(win, name, p[2], p[3]);
+			str += getBg(mask, p[2], p[3]);
 		} else {
 			str += '<div class="skin" style="left:0px;top:0px;width:'+(p[2]-1)+'px;height:'+(p[3]-1)+'px;filter:alpha(opacity=20);border:1px dotted #777777;"></div>';
 		}
-		str += getWin(win, name, display, p[2], p[3]);
 		str += '</div>';
 		html += str;
 	}
 	skin_main.innerHTML = html;
 }
-function getWin(win, name, display, pw, ph) {
+function getWin(win, name, pw, ph) {
 	win = comment_clear(win);
-	if (display) {
-		if (name == "option") {
-			return getOption(win, pw, ph);
-		} else if (name == "console") {
-			return getConsole(win, pw, ph);
-		} else if (name == "list") {
-			return getList(win, pw, ph);
-		} else if (name == "lrc") {
-			return getLrc(win, pw, ph);
-		} else if (name == "media") {
-			return getMedia(win, pw, ph);
-		}
-	} else {
-		return "";
+	if (name == "option") {
+		return getOption(win, pw, ph);
+	} else if (name == "console") {
+		return getConsole(win, pw, ph);
+	} else if (name == "list") {
+		return getList(win, pw, ph);
+	} else if (name == "lrc") {
+		return getLrc(win, pw, ph);
+	} else if (name == "media") {
+		return getMedia(win, pw, ph);
 	}
 }
 function getOption(win, pw, ph) {
@@ -309,6 +304,16 @@ function getEvt(arr, pos) {
 	evt += 'onmousedown="this.style.backgroundPosition=\''+arr[2]+'px '+pos+'\';" ';
 	evt += 'onmouseup="this.style.backgroundPosition=\''+arr[3]+'px '+pos+'\';" ';
 	return evt;
+}
+function getBg(src, pw, ph) {
+	if (!src) {
+		return "";	
+	}
+	if (src.substring(src.length - 4).toLowerCase() == ".swf") {
+		return createFlash(src, pw, ph);
+	} else {
+		return '<div class="skin" style="left:0px;top:0px;width:'+pw+'px;height:'+ph+'px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+src+'\',sizingMethod=\'scale\');"></div>';
+	}
 }
 function getBt(bt, pw, ph) {
 	if (!bt) {
