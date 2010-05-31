@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CMP4应用开发指南</title>
+<style type="text/css">
+body { color:#000000; text-align:center; margin:0px auto; background-color:#F5FAFE; }
+body, a, td, th, span, div { font-family:Verdana; font-size:14px; }
+input, textarea { font-family:Verdana; font-size:12px; vertical-align:middle; }
+a:link, a:visited { text-decoration:none; color:#000000; }
+a:hover { text-decoration:underline; }
+a img { border:none; }
+.breakwords { overflow:hidden; word-wrap: break-word; word-break: break-all; }
+.clearfix:after { content: ' '; clear: both; display: block; font-size: 0; line-height: 0; width: 0; height: 0; visibility: hidden; }
+.clearfix { display: inline-block; }
+* html .clearfix { zoom: 1; }
+.clearfix { display: block; }
+.left { float:left; }
+.right { float:right; }
+.red { color:#ff0000; }
+.header { margin:10px 10px; color:#428EFF; font-size:20px; font-weight:bold; text-align:left; }
+.bodyer { margin:10px 10px; border:1px solid #CAD9EA; background-color:#FFFFFF; text-align:left; }
+.mbox { padding:10px 10px; border-top:1px dashed #CCCCCC; }
+.footer { margin:10px 10px; text-align:left; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; font-size:11px; }
+</style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+//CMP主程序地址，请将最新的CMP4主程序文件cmp.swf放入同级目录，这里使用远程的
+var cmp = "http://cmp.cenfun.com/cmp4/cmp.swf";
+function showCMP1() {
+	var flashvars = {
+		src:"music/test.mp3",
+		skin_id:1,
+		skins:"skins/scplayer.zip",
+		bgcolor:"#ffffff",
+		auto_play:false,
+		play_mode:"3",
+		config:0,
+		lists:"",
+		context_menu:2
+	};
+	var id = "cmp_1";
+	var params = {allowfullscreen:"true", allowscriptaccess:"always", wmode:"transparent"};
+	var result = swfobject.embedSWF(cmp, id, "290", "24", "10", "", flashvars, params);
+	
+	swfobject.registerObject(id, "10", "expressInstall.swf");
+	var cmpo = swfobject.getObjectById(id); 
+	if (cmpo) {
+		alert(cmpo);
+	}
+}
+
+
+</script>
+<div class="header">CMP4应用开发指南</div>
+<div class="bodyer">
+  <div class="mbox" style="border:none;">播放单个音乐：</div>
+  <div class="mbox">
+    <div id="cmp_1"></div>
+  </div>
+</div>
+<div class="footer"></div>
+<script type="text/javascript">
+showCMP1();
+
+</script>
+</body>
+</html>
