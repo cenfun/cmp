@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CMP4应用开发指南</title>
+<style type="text/css">
+body { color:#000000; text-align:center; margin:0px auto; background-color:#F5FAFE; }
+body, a, td, th, span, div { font-family:Arial; font-size:12px; }
+b { font-size:14px; }
+input, textarea { font-family:Arial; font-size:12px; vertical-align:middle; }
+a:link, a:visited { text-decoration:none; }
+a:hover { text-decoration:underline; }
+a img { border:none; }
+.breakwords { overflow:hidden; word-wrap: break-word; word-break: break-all; }
+.clearfix:after { content: ' '; clear: both; display: block; font-size: 0; line-height: 0; width: 0; height: 0; visibility: hidden; }
+.clearfix { display: inline-block; }
+* html .clearfix { zoom: 1; }
+.clearfix { display: block; }
+.left { float:left; }
+.right { float:right; }
+.red { color:#ff0000; }
+.header { margin:10px 10px; color:#428EFF; font-size:20px; font-weight:bold; text-align:left; }
+.bodyer { margin:10px 10px; border:1px solid #CAD9EA; background-color:#FFFFFF; text-align:left; }
+.footer { margin:10px 10px; text-align:left; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; font-size:11px; }
+.mbox { padding:10px 10px; border-top:1px dashed #CCCCCC; }
+.main { margin-top:8px; }
+.tablehead { padding:8px 8px; font-size:14px; color:333; font-weight:bold; background:#E5ECF9; border-bottom:1px solid #C0D0F0; }
+.tablelist td { padding:8px 10px; border-bottom:1px solid #E5ECF9; }
+.tablelist td a { margin:0px 30px; }
+.tablefoot td { padding:8px 10px; }
+</style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+function highlight(o, c){
+	o.style.backgroundColor = c;
+	o.onmouseout = function(){
+		o.style.backgroundColor = "";
+	}
+}
+var win_cmp;
+function cmp_play(ids) {
+	if (!win_cmp || win_cmp.closed) {
+		var params = 'width=600,height=400,menubar=0,resizable=1,status=0,titlebar=0,toolbar=0,location=0';
+		win_cmp = window.open('cmp.htm', 'win_cmp', params);
+	}
+	
+	//win_cmp.cmp_loaded("cmp");
+	
+	win_cmp.focus();	
+}
+function play(id) {
+	addToList(id);
+	cmp_play();
+}
+function addToList(id) {
+	//alert(id);
+	
+	
+}
+function playSelected() {
+	addSelectedToList();
+	
+	
+	cmp_play();
+}
+function addSelectedToList() {
+	
+}
+</script>
+<div class="header">CMP4应用开发指南</div>
+<div class="bodyer">
+  <div class="mbox" style="border:none;"><b>单个音乐播放：</b>
+    <div class="main" style="height:24px;">
+      <div id="cmp"></div>
+    </div>
+  </div>
+  <div class="mbox"><b>专辑列表的播放：</b>
+    <div class="main">
+      <div class="tablehead">迈克尔 杰克逊(Michael Jackson)金曲专辑</div>
+      <table cellpadding="0" cellspacing="0" class="tablelist">
+        <tr onmouseover="highlight(this, '#f5f5f5');">
+          <td ><input type="checkbox" value="Sb085ad586f0447da" /></td>
+          <td>Beat It</td>
+          <td><a href="javascript:void(0)" onclick="play('Sb085ad586f0447da');">试听</a></td>
+          <td><a href="javascript:void(0)" onclick="addToList('Sb085ad586f0447da');">加入播放列表</a></td>
+        </tr>
+        <tr onmouseover="highlight(this, '#f5f5f5');">
+          <td ><input type="checkbox" value="S8cb5aca953275cee" /></td>
+          <td>Heal The World</td>
+          <td><a href="javascript:void(0)" onclick="play('S8cb5aca953275cee');">试听</a></td>
+          <td><a href="javascript:void(0)" onclick="addToList('S8cb5aca953275cee');">加入播放列表</a></td>
+        </tr>
+        <tr onmouseover="highlight(this, '#f5f5f5');">
+          <td ><input type="checkbox" value="Scc4303034e7e5084" /></td>
+          <td>Black Or White</td>
+          <td><a href="javascript:void(0)" onclick="play('Scc4303034e7e5084');">试听</a></td>
+          <td><a href="javascript:void(0)" onclick="addToList('Scc4303034e7e5084');">加入播放列表</a></td>
+        </tr>
+        <tr onmouseover="highlight(this, '#f5f5f5');">
+          <td ><input type="checkbox" value="S22d8bbcea49c613b" /></td>
+          <td>Smooth Criminal</td>
+          <td><a href="javascript:void(0)" onclick="play('S22d8bbcea49c613b');">试听</a></td>
+          <td><a href="javascript:void(0)" onclick="addToList('S22d8bbcea49c613b');">加入播放列表</a></td>
+        </tr>
+        <tr onmouseover="highlight(this, '#f5f5f5');">
+          <td ><input type="checkbox" value="S0b1f53146d0018e3" /></td>
+          <td>Dangerous</td>
+          <td><a href="javascript:void(0)" onclick="play('S0b1f53146d0018e3');">试听</a></td>
+          <td><a href="javascript:void(0)" onclick="addToList('S0b1f53146d0018e3');">加入播放列表</a></td>
+        </tr>
+        <tr onmouseover="highlight(this, '#f5f5f5');">
+          <td ><input type="checkbox" value="S2ea55c81db66cdc2" /></td>
+          <td>Remember The Time</td>
+          <td><a href="javascript:void(0)" onclick="play('S2ea55c81db66cdc2');">试听</a></td>
+          <td><a href="javascript:void(0)" onclick="addToList('S2ea55c81db66cdc2');">加入播放列表</a></td>
+        </tr>
+        <tr onmouseover="highlight(this, '#f5f5f5');">
+          <td ><input type="checkbox" value="Sb8db8b122b882e72" /></td>
+          <td>You Are Not Alone</td>
+          <td><a href="javascript:void(0)" onclick="play('Sb8db8b122b882e72');">试听</a></td>
+          <td><a href="javascript:void(0)" onclick="addToList('Sb8db8b122b882e72');">加入播放列表</a></td>
+        </tr>
+      </table>
+      <table cellspacing="0" cellpadding="0" class="tablefoot">
+        <tr>
+          <td><input type="checkbox" onclick="$('input:checkbox').attr('checked', this.checked);"/></td>
+          <td>全选</td>
+          <td><button onclick="playSelected();">试听选中的音乐</button></td>
+          <td><button onclick="addSelectedToList();">加入播放列表</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="footer"></div>
+<script type="text/javascript">
+//CMP主程序地址，请将最新的CMP4主程序文件cmp.swf放入同级目录，这里使用远程的
+var cmp = "http://cmp.cenfun.com/cmp4/cmp.swf";
+function showCMP() {
+	var flashvars = {
+		src:"music/test.mp3",
+		skin_id:1,
+		skins:"skins/scplayer.zip",
+		bgcolor:"#ffffff",
+		auto_play:false,
+		play_mode:"3",
+		config:0,
+		lists:"",
+		context_menu:2
+	};
+	var id = "cmp";
+	var params = {allowfullscreen:"true", allowscriptaccess:"always", wmode:"transparent"};
+	swfobject.embedSWF(cmp, id, "290", "24", "10", "", flashvars, params);
+}
+function cmp_loaded(id) {
+	var cmpo = swfobject.getObjectById(id); 
+	alert(cmpo);
+}
+
+showCMP();
+
+</script>
+</body>
+</html>
