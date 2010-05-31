@@ -13,6 +13,7 @@ html, body { height:100%; margin:0; padding:0; overflow:hidden; text-align:cente
 <script type="text/javascript">
 //CMP主程序地址，请将最新的CMP4主程序文件cmp.swf放入同级目录，这里使用远程的
 var cmp = "http://cmp.cenfun.com/cmp4/cmp.swf";
+cmp = "cmp.swf";
 function showCMP() {
 	var flashvars = {
 		skin_id:0,
@@ -30,7 +31,7 @@ function showCMP() {
 }
 function cmp_loaded(id) {
 	var cmpo = swfobject.getObjectById(id); 
-	alert(cmpo);
+	//alert(id.toString());
 }
 showCMP();
 

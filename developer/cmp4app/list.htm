@@ -101,8 +101,9 @@ function getSelected() {
 <div class="header">CMP4应用开发指南</div>
 <div class="bodyer">
   <div class="mbox" style="border:none;"><b>单个音乐播放：</b>
-    <div class="main" style="height:24px;">
-      <div id="cmp"></div>
+    <div class="main" style="">
+      <div id="cmp1"></div>
+      <div id="cmp2"></div>
     </div>
   </div>
   <div class="mbox"><b>专辑列表的播放：</b>
@@ -162,33 +163,65 @@ function getSelected() {
       </table>
     </div>
   </div>
+  <div class="mbox">
+    <div class="output"></div>
+  </div>
 </div>
 <div class="footer"></div>
 <script type="text/javascript">
 //CMP主程序地址，请将最新的CMP4主程序文件cmp.swf放入同级目录，这里使用远程的
-var cmp = "http://cmp.cenfun.com/cmp4/cmp.swf";
-function showCMP() {
+var cmp = "cmp.swf";
+function showCMP(id, w, h, api) {
 	var flashvars = {
+		api:api,
 		src:"music/test.mp3",
-		skin_id:1,
-		skins:"skins/scplayer.zip",
+		skin_id:0,
+		skins1:"skins/scplayer.zip",
 		bgcolor:"#ffffff",
 		auto_play:false,
 		play_mode:"3",
-		config:0,
-		lists:"",
+		config1:0,
+		lists1:"",
 		context_menu:2
 	};
-	var id = "cmp";
 	var params = {allowfullscreen:"true", allowscriptaccess:"always", wmode:"transparent"};
-	swfobject.embedSWF(cmp, id, "290", "24", "10", "", flashvars, params);
-}
-function cmp_loaded(id) {
-	var cmpo = swfobject.getObjectById(id); 
-	alert(cmpo);
+	swfobject.embedSWF(cmp, id, w, h, "10", "", flashvars, params);
 }
 
-showCMP();
+showCMP("cmp1", 600, 400, "cmp_loaded1");
+
+showCMP("cmp2", 600, 400, "cmp_loaded2");
+
+
+function cmp_loaded1(key) {
+	var cmpo = swfobject.getObjectById("cmp1");
+	if (cmpo) {
+		$(".output").prepend("cmp1:" +cmpo.config().key+ " = " +key+ "<br />");
+		cmpo.addEventListener("model_state", "stateHandler");
+		cmpo.addEventListener("skin_change", "skinHandler");
+	}
+}
+function cmp_loaded2(key) {
+	var cmpo = swfobject.getObjectById("cmp2");
+	if (cmpo) {
+		$(".output").prepend("cmp2:" +cmpo.config().key+ " = " +key+ "<br />");
+		//cmpo.addEventListener("model_state", "stateHandler");
+		//cmpo.addEventListener("skin_change", "skinHandler");
+	}
+}
+
+
+
+function stateHandler(data) {
+	$(".output").prepend("state:" + data + "<br />");
+}
+function skinHandler(data) {
+	var cmpo = swfobject.getObjectById("cmp1");
+	if (cmpo) {
+		data = cmpo.config().skin_id;
+	}
+	$(".output").prepend("skin:" + data + "<br />");
+}
 
 </script>
 </body>
