@@ -26,6 +26,8 @@ play_list = "1"
 
 js能够侦听事件
 
+统一调用js方法初始化，cmp_loaded(id, src);
+
 
 
 
