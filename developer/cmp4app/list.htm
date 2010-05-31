@@ -40,34 +40,62 @@ function highlight(o, c){
 		o.style.backgroundColor = "";
 	}
 }
+function checkAll(o){
+	$('input:checkbox').attr('checked', o.checked);	
+}
 var win_cmp;
-function cmp_play(ids) {
+function cmp_open() {
 	if (!win_cmp || win_cmp.closed) {
 		var params = 'width=600,height=400,menubar=0,resizable=1,status=0,titlebar=0,toolbar=0,location=0';
 		win_cmp = window.open('cmp.htm', 'win_cmp', params);
 	}
-	
-	//win_cmp.cmp_loaded("cmp");
-	
-	win_cmp.focus();	
+	win_cmp.focus();
 }
+
+function cmp_play(ids) {
+	cmp_open();
+	win_cmp.play(ids);
+}
+function cmp_add(ids) {
+	cmp_open();
+	win_cmp.add(ids);
+}
+
+
 function play(id) {
-	addToList(id);
-	cmp_play();
+	cmp_play([id]);
 }
-function addToList(id) {
-	//alert(id);
-	
-	
+function add(id) {
+	cmp_add([id]);
 }
 function playSelected() {
-	addSelectedToList();
-	
-	
-	cmp_play();
+	var ids = getSelected();
+	if (ids.length) {
+		cmp_play(ids);
+	} else {
+		alert("请至少选择一个");	
+	}
 }
-function addSelectedToList() {
-	
+function addSelected() {
+	var ids = getSelected();
+	if (ids.length) {
+		cmp_add(ids);
+	} else {
+		alert("请至少选择一个");	
+	}
+}
+
+function getSelected() {
+	var ids = [];
+	var cbs = $('input:checked');
+	if (cbs.length) {
+		cbs.each(function(i){
+			if (this.value) {
+				ids.push(this.value);
+			}
+		});
+	}
+	return ids;
 }
 </script>
 <div class="header">CMP4应用开发指南</div>
@@ -85,51 +113,51 @@ function addSelectedToList() {
           <td ><input type="checkbox" value="Sb085ad586f0447da" /></td>
           <td>Beat It</td>
           <td><a href="javascript:void(0)" onclick="play('Sb085ad586f0447da');">试听</a></td>
-          <td><a href="javascript:void(0)" onclick="addToList('Sb085ad586f0447da');">加入播放列表</a></td>
+          <td><a href="javascript:void(0)" onclick="add('Sb085ad586f0447da');">加入播放列表</a></td>
         </tr>
         <tr onmouseover="highlight(this, '#f5f5f5');">
           <td ><input type="checkbox" value="S8cb5aca953275cee" /></td>
           <td>Heal The World</td>
           <td><a href="javascript:void(0)" onclick="play('S8cb5aca953275cee');">试听</a></td>
-          <td><a href="javascript:void(0)" onclick="addToList('S8cb5aca953275cee');">加入播放列表</a></td>
+          <td><a href="javascript:void(0)" onclick="add('S8cb5aca953275cee');">加入播放列表</a></td>
         </tr>
         <tr onmouseover="highlight(this, '#f5f5f5');">
           <td ><input type="checkbox" value="Scc4303034e7e5084" /></td>
           <td>Black Or White</td>
           <td><a href="javascript:void(0)" onclick="play('Scc4303034e7e5084');">试听</a></td>
-          <td><a href="javascript:void(0)" onclick="addToList('Scc4303034e7e5084');">加入播放列表</a></td>
+          <td><a href="javascript:void(0)" onclick="add('Scc4303034e7e5084');">加入播放列表</a></td>
         </tr>
         <tr onmouseover="highlight(this, '#f5f5f5');">
           <td ><input type="checkbox" value="S22d8bbcea49c613b" /></td>
           <td>Smooth Criminal</td>
           <td><a href="javascript:void(0)" onclick="play('S22d8bbcea49c613b');">试听</a></td>
-          <td><a href="javascript:void(0)" onclick="addToList('S22d8bbcea49c613b');">加入播放列表</a></td>
+          <td><a href="javascript:void(0)" onclick="add('S22d8bbcea49c613b');">加入播放列表</a></td>
         </tr>
         <tr onmouseover="highlight(this, '#f5f5f5');">
           <td ><input type="checkbox" value="S0b1f53146d0018e3" /></td>
           <td>Dangerous</td>
           <td><a href="javascript:void(0)" onclick="play('S0b1f53146d0018e3');">试听</a></td>
-          <td><a href="javascript:void(0)" onclick="addToList('S0b1f53146d0018e3');">加入播放列表</a></td>
+          <td><a href="javascript:void(0)" onclick="add('S0b1f53146d0018e3');">加入播放列表</a></td>
         </tr>
         <tr onmouseover="highlight(this, '#f5f5f5');">
           <td ><input type="checkbox" value="S2ea55c81db66cdc2" /></td>
           <td>Remember The Time</td>
           <td><a href="javascript:void(0)" onclick="play('S2ea55c81db66cdc2');">试听</a></td>
-          <td><a href="javascript:void(0)" onclick="addToList('S2ea55c81db66cdc2');">加入播放列表</a></td>
+          <td><a href="javascript:void(0)" onclick="add('S2ea55c81db66cdc2');">加入播放列表</a></td>
         </tr>
         <tr onmouseover="highlight(this, '#f5f5f5');">
           <td ><input type="checkbox" value="Sb8db8b122b882e72" /></td>
           <td>You Are Not Alone</td>
           <td><a href="javascript:void(0)" onclick="play('Sb8db8b122b882e72');">试听</a></td>
-          <td><a href="javascript:void(0)" onclick="addToList('Sb8db8b122b882e72');">加入播放列表</a></td>
+          <td><a href="javascript:void(0)" onclick="add('Sb8db8b122b882e72');">加入播放列表</a></td>
         </tr>
       </table>
       <table cellspacing="0" cellpadding="0" class="tablefoot">
         <tr>
-          <td><input type="checkbox" onclick="$('input:checkbox').attr('checked', this.checked);"/></td>
+          <td><input type="checkbox" onclick="checkAll(this);" value=""/></td>
           <td>全选</td>
           <td><button onclick="playSelected();">试听选中的音乐</button></td>
-          <td><button onclick="addSelectedToList();">加入播放列表</button></td>
+          <td><button onclick="addSelected();">加入播放列表</button></td>
         </tr>
       </table>
     </div>
