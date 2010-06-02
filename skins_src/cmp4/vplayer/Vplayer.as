@@ -43,7 +43,7 @@
 			if (menus.length > 3) {
 				var newMenu:ContextMenu = new ContextMenu();
 				newMenu.hideBuiltInItems();
-				newMenu.customItems = [menus[0], menus[1]];
+				newMenu.customItems = [menus[0]];
 				api.cmp.contextMenu = newMenu;
 			}
 			//
