@@ -40,7 +40,7 @@
 			//api.tools.output("vplayer");
 			//自动关闭右键中窗口项
 			var menus:Array = api.cmp.contextMenu.customItems;
-			if (menus.length > 3) {
+			if (menus.length > 1) {
 				var newMenu:ContextMenu = new ContextMenu();
 				newMenu.hideBuiltInItems();
 				newMenu.customItems = [menus[0]];
