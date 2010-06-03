@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4 WMP视频播放</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; text-align:center; overflow:hidden; }
+</style>
+</head>
+<body>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
+<div id="cmp_area" style="position:relative;width:580px;height:380px;margin:0px auto;"> 
+  <script type="text/javascript">
+	//将cmp放在一个固定容器里，便于后面设置位置
+	CMP.write("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", "skin_id=0&api=cmp_loaded&lists=");
+  </script> 
+</div>
+<script type="text/javascript">
+var cmpo,wmpo;
+function cmp_loaded(key) {
+	//获取cmp对象
+	cmpo = CMP.get("cmp");
+	if (!cmpo) {
+		return;	
+	}
+	cmpo.addEventListener("model_start", "startHandler");
+	cmpo.addEventListener("model_state", "stateHandler");
+	//放入一个新测试列表
+	var xml = '<list><m type="wmp" label="WMP类型，在wmp中播放" src="music/test.mp3" /><m label="MP3类型，在cmp中播放" src="music/test.mp3" /></list>';
+	cmpo.list_xml(xml);
+	//取得cmp的配置
+	var config = cmpo.config();
+	//取得wmp对象，并添加到cmp所在容器
+	wmpo = document.getElementById("WMP_" + key);
+	cmpo.parentNode.appendChild(wmpo);
+	//设置wmp的宽高和cmp里的视频宽高一样
+	wmpo.width = config.video_width;
+	wmpo.height = config.video_height;
+	//隐藏wmp控制面板等，仅显示视频窗
+	wmpo.uiMode = "None";
+	wmpo.enableContextMenu = false;
+	wmpo.style.position = "absolute";
+	//移动到视频窗口的位置，每个皮肤都有不同位置，这里是默认皮肤的位置
+	var top = 27;
+	var left = 6;
+	wmpo.style.top = top + "px";
+	wmpo.style.left = left + "px";
+	showWmp(false);
+}
+function showWmp(display) {
+	if (wmpo) {
+		wmpo.style.visibility = display ? "visible" : "hidden";
+	}
+}
+function startHandler(data) {
+	var item = cmpo.item();
+	//仅在当前项为wmp类型时，显示wmp，否则隐藏wmp
+	if (item.type == "wmp") {
+		showWmp(true);
+	} else {
+		showWmp(false);
+	}
+}
+function stateHandler(data) {
+	//播放状态为完成或停止时，隐藏wmp
+	if (data == "completed" || data == "stopped") {
+		showWmp(false);
+	}
+}
+</script>
+</body>
+</html>
