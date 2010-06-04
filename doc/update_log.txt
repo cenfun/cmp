@@ -1,3 +1,7 @@
+http%3A%2F%2Fcmp.cenfun.com%2Fcmp4%2Flist.xml
+encodeURIcomponent后有问题
+
+
 
 制作wmp视频播放支持的脚本
 
