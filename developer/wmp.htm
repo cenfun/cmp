@@ -25,11 +25,6 @@ function cmp_loaded(key) {
 	}
 	cmpo.addEventListener("model_start", "startHandler");
 	cmpo.addEventListener("model_state", "stateHandler");
-	//wmp全屏支持
-	//禁止cmp使用全屏
-	cmpo.allowFullScreen = false;
-	//假设cmp已经是全屏状态，这样cmp就不会去全屏了
-	cmpo.config("fullscreen", true);
 	//全屏按钮点击时侦听事件
 	cmpo.addEventListener("view_fullscreen", "fsHandler");
 	//放入一个新测试列表
@@ -63,12 +58,14 @@ function showWmp(display) {
 }
 function startHandler(data) {
 	var item = cmpo.item();
-	//仅在当前项为wmp类型时，显示wmp，否则隐藏wmp
+	var iswmp = false;
+	//当前项是否为wmp类型
 	if (item.type == "wmp") {
-		showWmp(true);
-	} else {
-		showWmp(false);
+		iswmp = true;
 	}
+	showWmp(iswmp);
+	cmpo.allowFullScreen = !iswmp;
+	cmpo.config("fullscreen", iswmp);
 }
 function stateHandler(data) {
 	//播放状态为完成或停止时，隐藏wmp
