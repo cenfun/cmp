@@ -1,15 +1,3 @@
-http%3A%2F%2Fcmp.cenfun.com%2Fcmp4%2Flist.xml
-encodeURIcomponent后有问题
-
-
-删除则立即停止播放删除项目，并发生删除事件
-
-
-
-制作wmp视频播放支持的脚本
-
-
-
 XML格式对齐编辑器
 
 
