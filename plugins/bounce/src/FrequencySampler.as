@@ -18,7 +18,7 @@
 				samplelist[i] = spectrum.readFloat();
 				i ++;
 			}
-			dispatchEvent(new Event("sample"));
+			//dispatchEvent(new Event("sample"));
 		}
 
 		public static function getInstance():FrequencySampler {

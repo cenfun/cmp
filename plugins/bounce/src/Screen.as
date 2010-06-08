@@ -4,52 +4,45 @@
 	import flash.display.*;
 
 	public class Screen extends Shape {
-
+		public static const GRAVITY:Number = 2;
+		
+		public var rect:Rectangle;
+		public var color:uint = 0xffffff;
+		
 		private var newFloorPts:Array;
-		private var rect:Rectangle;
 		private var oldFloorPts:Array;
 		private var spacing:Number;
 		private var waveSampler:WaveformSampler;
 		private var length:int;
-
-		public static const GRAVITY:Number = 2;
-
-		public function Screen(_rect:Rectangle) {
+		private var bh:uint = 50;
+		
+		public function Screen() {
 			newFloorPts = [new Point(0,0)];
 			oldFloorPts = [new Point(0,0)];
 			waveSampler = WaveformSampler.getInstance();
-			rect = _rect;
-			addEventListener(Event.ENTER_FRAME, enterframeHandler, false, 0, true);
 		}
-		private function enterframeHandler(e:Event):void {
-			this.graphics.clear();
-			this.graphics.lineStyle(1, 0);
-			this.graphics.beginFill(0xFFFFFF, 0.5);
-			this.graphics.moveTo(rect.left, rect.top);
-			this.graphics.lineTo(rect.left, rect.bottom);
-			
+		public function update():void {
+			graphics.clear();
+			graphics.lineStyle(1, color);
+			graphics.beginFill(color, 0.1);
+			graphics.moveTo(rect.left, rect.bottom);
 			var arr:Array = waveSampler.getSamples(WaveformSampler.MONO);
 			length = arr.length;
 			spacing = (rect.width / (length - 0.5));
 			var i:int = 0;
 			while (i < length) {
 				oldFloorPts[i] = newFloorPts[i];
-				newFloorPts[i] = new Point(((rect.left + (i * spacing)) + (spacing / 2)), ((arr[i] * 50) + rect.bottom));
-				this.graphics.curveTo((rect.left + (i * spacing)), rect.bottom, newFloorPts[i].x, newFloorPts[i].y);
+				newFloorPts[i] = new Point(((rect.left + (i * spacing)) + (spacing * 0.5)), ((arr[i] * bh) + rect.bottom));
+				graphics.curveTo((rect.left + (i * spacing)), rect.bottom, newFloorPts[i].x, newFloorPts[i].y);
 				i ++;
 			}
-			this.graphics.lineTo(rect.right, rect.top);
-			this.graphics.lineTo(rect.left, rect.top);
-			this.graphics.endFill();
+			graphics.lineStyle(1, color, 0);
+			graphics.lineTo(rect.right, rect.bottom + bh);
+			graphics.lineTo(rect.left, rect.bottom + bh);
+			graphics.endFill();
 		}
 		public function applyForces(b:Ball):void {
-			var fb:FreeBody;
-			var i:int;
-			var _local4:Number;
-			var _local5:Number;
-			var _local6:Number;
-			var _local7:Number;
-			fb = b.freebody;
+			var fb:FreeBody = b.freebody;
 			if ((b.x - b.r) < rect.left) {
 				b.x = (rect.left + b.r);
 				fb.addNormal(0);
@@ -61,10 +54,10 @@
 			}
 			if ((b.y - b.r) < rect.top) {
 				b.y = (rect.top + b.r);
-				fb.addNormal((Math.PI / 2));
+				fb.addNormal((Math.PI * 0.5));
 			} else {
-				if ((b.y + b.r) > (rect.bottom - 50)) {
-					i = Math.round((((b.x - rect.left) - (spacing / 2)) / spacing));
+				if ((b.y + b.r) > (rect.bottom - bh)) {
+					var i:int = Math.round((((b.x - rect.left) - (spacing * 0.5)) / spacing));
 					if (i >= (newFloorPts.length - 1)) {
 						i = (newFloorPts.length - 2);
 					} else {
@@ -72,18 +65,17 @@
 							i = 1;
 						}
 					}
-					_local4 = newFloorPts[(i - 1)].y;
-					_local5 = newFloorPts[(i + 1)].y;
-					_local6 = ((_local4 + _local5) / 2);
-					if ((b.y + b.r) > _local6) {
-						b.y = (_local6 - b.r);
-						_local7 = (Math.atan2((_local5 - _local4), 3) - (Math.PI / 2));
-						fb.addNormal(_local7);
+					var py:Number = newFloorPts[(i - 1)].y;
+					var ny:Number = newFloorPts[(i + 1)].y;
+					var ty:Number = ((py + ny) * 0.5);
+					if ((b.y + b.r) > ty) {
+						b.y = (ty - b.r);
+						var p:Number = (Math.atan2((ny - py), 3) - (Math.PI * 0.5));
+						fb.addNormal(p);
 						fb.addForce(new Force(0, Math.min(0, (newFloorPts[i].y - oldFloorPts[i].y))));
 					}
 				}
 			}
 		}
-
 	}
 }

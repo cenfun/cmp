@@ -58,7 +58,7 @@
 				samplelist[i] = spectrum.readFloat();
 				i++;
 			}
-			dispatchEvent(new Event("sample"));
+			//dispatchEvent(new Event("sample"));
 		}
 		public function getSample(m:Number, type:String = "mono"):Number {
 			var n:int = int(size * 0.5);
@@ -91,7 +91,7 @@
 				instance = new (WaveformSampler);
 				allowInstantiation = false;
 			}
-			return (instance);
+			return instance;
 		}
 
 	}
