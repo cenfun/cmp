@@ -66,6 +66,7 @@
 			colorHandler();
 			filterHandler();
 			resizeHandler();
+			startHandler();
 		}
 		
 		private function nextHandler(e:Event):void {
@@ -118,10 +119,12 @@
 			}
 		}
 		
-		private function startHandler(e:Event) {
+		private function startHandler(e:Event = null) {
 			clear();
-			if (api.item.type == "sound") {
-				start();
+			if (api.item) {
+				if (api.item.type == "sound") {
+					start();
+				}
 			}
 		}
 		
