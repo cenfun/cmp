@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CMP v4.0</title>
+<style type="text/css">
+html, body { height:100%; margin:0px 0px; }
+body { background:#FFFFFF url(bg.gif) repeat-x top; }
+#open { position:absolute; top:0px; left:0px; cursor:pointer; }
+</style>
+<script type="text/javascript">
+function opencmp(img) {
+	var w=window.parent;
+	var c=w.document.getElementById("cmpFrame");
+	if (c) {
+		if(c.rows=="*,24"){
+			c.rows="*,224";
+			img.src = "close.gif";
+			img.title="关闭";
+		}else{
+			c.rows="*,24";
+			img.src = "open.gif";
+			img.title="打开";
+		}
+	}
+}
+</script>
+</head>
+<body>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
+<script type="text/javascript">
+CMP.write("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", "skins=skins/exobud_plastic.zip&skin_id=1&plugins_disabled=1");
+</script>
+<div id="open"><img src="open.gif" alt="" title="打开" onclick="opencmp(this);" /></div>
+</body>
+</html>

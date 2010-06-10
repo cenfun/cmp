@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="CMP,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
+<meta name="Description" content="CenFun Music Player v3.0 - bbs.cenfun.com" />
+<meta name="copyright" content="2006-2008 Cenfun.Com" />
+<title>CMP交流论坛 CMP3,Flash,QQ空间,Qzone,MP3,FLV,视频,博客,音乐播放器,免费播放器 - bbs.cenfun.com</title>
+</head>
+<script type="text/javascript">
+var browser = navigator.appName;
+var version = navigator.appVersion;
+var scrolling = "auto";
+if(browser == "Microsoft Internet Explorer" && version.indexOf("MSIE 6.0") != -1) { 
+	scrolling = "yes";
+}
+var html = "";
+html += '<frameset rows="*,24" frameborder="no" border="0" framespacing="0" id="cmpFrame">';
+html += '<frame src="http://bbs.cenfun.com/" name="mainFrame" id="mainFrame" scrolling="'+scrolling+'"/>';
+html += '<frame src="cmp.htm" name="bottomFrame" scrolling="No" noresize="noresize" id="bottomFrame" />';
+html += '</frameset>';
+html += '<noframes><body></body></noframes>';
+document.write(html);
+//
+var main = document.getElementById("mainFrame");
+main.onload = function(){
+	if (main.title) {
+		document.title = main.title;
+	}
+}
+</script>
+
+</html>
