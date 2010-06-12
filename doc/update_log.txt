@@ -15,3 +15,40 @@ http://www.mtvzz.com/
 http://www.qq57.com/
 http://www.phpstcms.com/
 
+
+
+在编写或者修改用UTF-8编码保存的PHP文件时，有时会莫名其妙出现一些问题：
+
+1. 页面显示一个“锘”字，其他一片空白；
+2. 不能登入或者不能登出；
+3. 页顶出现一条空白；
+4. 页顶出现错误警告；
+5. 其它不正常的情况；
+6. 生成的图片浏览器无法识别。
+
+分析原因：
+　文件以UTF-8编码保存时，有两种情情况：带Unicode签名（BOM）和不带Unicode签名。BOM信息是文件开头的一串隐藏的字符，用于让某些编辑器识别这是个UTF-8编码的文件。
+
+    类似WINDOWS自带的记事本等软件，在保存一个以UTF-8编码的文件时，会在文件开始的地方插入三个不可见的字符（0xEF 0xBB 0xBF，即BOM——Byte Order Mark）。它是一串隐藏的字符，用于让记事本等编辑器识别这个文件是否以UTF-8编码。对于一般的文件，这样并不会产生什么麻烦。
+   
+    但对于 PHP来说，PHP在设计时就没有考虑BOM的问题，不会忽略UTF-8编码的文件开头BOM的那三个字符，会把BOM作为该文件开头正文的一部分。由于必须在<?或者<?php后面的代码才会作为PHP代码执行，所以将会造成在页面上输出这三个字符，显示效果就要看浏览器了，一般是一个空行或是一个乱码。由于在html一开头有这3个字符的存在，即使页面的 top padding 设置为0，也无法让整个网页紧贴浏览器顶部。由于受COOKIE送出机制的限制，在这些文件开头已经有BOM的文件中，COOKIE无法送出（因为在 COOKIE送出前PHP已经送出了文件头），所以登入和登出功能失效。一切依赖COOKIE、SESSION实现的功能全部无效。
+
+解决办法：
+
+    在编辑、更改任何文本文件时，请务必使用不会乱加BOM的编辑器。Linux下的编辑器应该都没有这个问题。WINDOWS下，请勿使用记事本等编辑器。推荐的编辑器是：Editplus 2.12版本以上；EmEditor；UltraEdit（需要取消‘添加BOM’的相关选项）；Dreamweaver（需要取消‘添加BOM’的相关选项）等。
+
+    对于已经添加了BOM的文件，要取消的话，可以用以上编辑器另存一次。（Editplus需要先另存为gb，再另存为UTF-8。）
+
+    ultraedit, editplus, notepad四个工具对UTF-8 的支持不相同，下面是对四个工具对UTF-8 支持的总结:
+　　UTF-8 BOM header: 是三个字符: EF BB BF。
+　　1. notepad
+        notepad 在保存时，选择UTF-8 格式，会在文件头写上BOM header.
+　　2. editplus
+        文件保存时，选择UTF-8 格式，不会在文件头写上 BOM header.
+　　3. ultraedit
+        ultraedit 对UTF-8 的支持最为完备。在advanced->configuration中可以    选择文件保存时是否写上BOM header.
+　　4. vi
+        指的是Linux 下的vim, 如果UTF-8 文件开头有BOM header, 其能够正常显示UTF-8编码，否则，显示为乱码。
+　　还有一些编码转换工具，比如，可以用java 写一个简单的编码转换工具，这些工具是不会增加BOM header的。
+
+
