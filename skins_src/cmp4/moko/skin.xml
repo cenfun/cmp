@@ -1,0 +1,9 @@
+﻿<skin name="MOKO" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" mask_color="" show_tips="0">
+  <console xywh="0C, 0C, 550, 40" src="console.swf" mask="" lock="1" display="1" group="">
+    <bt_play xywh="41, 1, 49, 38" src="bt_play.png"/>
+    <bt_mute xywh="103R, 1, 49, 38" src="bt_mute.png"/>
+    <volume xywh="10R, 13, 96, 14" track_src="volume_track.png"/>
+    <progress xywh="105, 13, 230, 14" track_src="progress_track.png"/>
+    <time xywh="155R, 10, 50, 17" align="left" font="Verdana" size="12" color="#333333" bold="1" />
+  </console>
+</skin>
