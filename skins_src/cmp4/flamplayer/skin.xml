@@ -1,0 +1,47 @@
+﻿<skin version="1.0" name="FlamPlayer" url="http://bbs.cenfun.com/" author="CenFun" email="cenfun@gmail.com">
+  <option xywh="0C, 45C, 272, 162" src="" mask="mask.swf" lock="1" display="0" group="A">
+    <pane xywh="0, 0, 100P, 100P" align="left" font="宋体" size="12" color="#333333, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="" />
+	<event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+	<event type="open" target="media" property="display" value="0" />
+	<event type="close" target="list" property="display" value="1" />
+  </option>
+  <list xywh="0C, 60C, 272, 192" src="list.swf" mask="mask.swf" lock="0" display="1" group="A">
+    <tree xywh="0, 30R, 100P, 100P" align="left" font="宋体" size="12" bold="0,1" color="#333333, #ffffff" />
+	<search xywh="2, 3R, 120, 18" align="left" font="Arial" size="12" color="#999999, #cccccc" value="请输入关键字" glow="#000000,0.8,4,4,1,1" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="" />
+	<event type="open" target="option" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+	<event type="open" target="media" property="display" value="0" />
+  </list>
+  <lrc xywh="0C, 45C, 272, 162" src="" mask="mask.swf" lock="1" display="0" group="A">
+    <text xywh="0, 0, 100P, 100P" align="center" font="宋体" size="12" color="#333333, #ffffff" />
+	<event type="open" target="list" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+	<event type="open" target="media" property="display" value="0" />
+	<event type="close" target="list" property="display" value="1" />
+  </lrc>
+  <media xywh="0C, 45C, 272, 162" src="back.swf" mask="" lock="1" display="0" group="A">
+    <video xywh="0, 0, 100P, 100P" />
+	<event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+	<event type="open" target="option" property="display" value="0" />
+	<event type="close" target="list" property="display" value="1" />
+  </media>
+  <console xywh="0C, 0C, 300, 320" src="console.swf" mask="" lock="0" display="1" group="A" shadow="1,45,#000000,1,4,4,1,3" >
+    <bt_play xywh="8, 74, 28, 28" src="bt_play.png" />
+    <bt_stop xywh="38, 74, 28, 28" src="bt_stop.png" />
+    <bt_prev xywh="68, 74, 28, 28" src="bt_prev.png" />
+    <bt_next xywh="98, 74, 28, 28" src="bt_next.png" />
+    <bt_mute xywh="74R, 83, 20, 20" src="bt_mute.png" />
+    <volume xywh="143, 91, 58, 4" thumb_src="volume_thumb.png" track_src="progress_track.png" />
+    <progress xywh="0C, 63, 10B, 4" thumb_src="progress_thumb.png" track_src="progress_track.png" />
+    <bt_video xywh="52R, 83, 20, 20" src="bt_video.png" tips="关闭视频,打开视频" />
+    <bt_lrc xywh="30R, 83, 20, 20" src="bt_lrc.png" tips="关闭歌词,打开歌词" />
+    <bt_option xywh="8R, 83, 20, 20" src="bt_option.png" tips="关闭设置,打开设置" />
+    <title xywh="16, 16, 190, 17" align="left" font="宋体" size="12" color="#2F2F2F" />
+    <status xywh="16, 35, 190, 17" align="left" font="宋体" size="12" color="#ffffff" />
+    <number xywh="15R, 16, 72, 19" src="number.png" />
+  </console>
+</skin>

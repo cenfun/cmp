@@ -1,0 +1,6 @@
+﻿<skin name="FSC" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="qq music皮肤代理" show_tips="0">
+  <list xywh="0, 0, 100P, 100P" src="list.png" mask="fsc.swf" lock="1" display="0">
+    <tree xywh="0, 15, 100P, 100P" font="Arial" size="12" color="#666666, #ffffff" />
+	<bt_close src="bt_close.png" xywh="2R,2,10,10" />
+  </list>
+</skin>
