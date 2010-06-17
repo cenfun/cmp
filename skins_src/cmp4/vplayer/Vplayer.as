@@ -32,11 +32,7 @@
 			api.addEventListener(apikey.key, 'resize', resizeHandler);
 			//状态改变时调用
 			api.addEventListener(apikey.key, 'model_state', stateHandler);
-			//初始化
-			init();
-		}
-
-		private function init():void {
+			//初始化====================================================================
 			//api.tools.output("vplayer");
 			//自动关闭右键中窗口项
 			var menus:Array = api.cmp.contextMenu.customItems;
@@ -113,7 +109,10 @@
 			back.y = ch - 50;
 			//设置bar背景的位置
 			bg_bar.y = ch - 10 - bg_bar.height;
-			bg_bar.width = cw - 150;
+			bg_bar.width = loading.width = cw - 150;
+			//
+			bg_sld.y = loading_mask.y = loading.y = bg_bar.y + 3;
+			bg_sld.width = loading_mask.width = cw - 250;
 			//设置音量背景位置
 			bg_vol.x = cw - 80;
 			bg_vol.y = ch - 10;
@@ -179,6 +178,10 @@
 		}
 		//播放状态改变时调用
 		private function stateHandler(e:Event = null):void {
+			loading_mask.visible = loading.visible = false;
+			if (api.config.state == "buffering" || api.config.state == "connecting") {
+				loading_mask.visible = loading.visible = true;
+			}
 			if (api.config.state == "playing") {
 				startHide();
 			} else {
