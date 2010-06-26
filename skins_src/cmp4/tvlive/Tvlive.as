@@ -47,6 +47,7 @@
 			
 			//隐藏时间提示框和声音调节器
 			hideVol();
+			conOut();
 			//侦听静音按钮鼠标事件
 			api.win_list.console.bt_mute.addEventListener(MouseEvent.ROLL_OVER, btmuteOver);
 			api.win_list.console.bt_mute.addEventListener(MouseEvent.ROLL_OUT, btmuteOut);
