@@ -56,6 +56,9 @@
 			api.cmp.addEventListener(MouseEvent.MOUSE_MOVE, cmpMove);
 			api.cmp.addEventListener(MouseEvent.ROLL_OVER, cmpOver);
 			api.cmp.addEventListener(MouseEvent.ROLL_OUT, cmpOut);
+			//控制台透明度侦听事件
+			api.win_list.console.addEventListener(MouseEvent.ROLL_OVER, conOver);
+			api.win_list.console.addEventListener(MouseEvent.ROLL_OUT, conOut);
 			//退出皮肤时调用，用于清理上面的侦听，以免应该到其他皮肤里，冲突
 			this.addEventListener(Event.REMOVED_FROM_STAGE, removeHandler);
 			//初始位置尺寸
@@ -73,6 +76,9 @@
 			api.cmp.removeEventListener(MouseEvent.MOUSE_MOVE, cmpMove);
 			api.cmp.removeEventListener(MouseEvent.ROLL_OVER, cmpOver);
 			api.cmp.removeEventListener(MouseEvent.ROLL_OUT, cmpOut);
+			//
+			api.win_list.console.removeEventListener(MouseEvent.ROLL_OVER, conOver);
+			api.win_list.console.removeEventListener(MouseEvent.ROLL_OUT, conOut);
 			//还原CMP的内部元件
 			showVol();
 		}
@@ -89,7 +95,7 @@
 			bg.width = cw;
 			bg.height = ch;
 			//控制台透明背景
-			back.width = cw;
+			back.x = (cw - 200) * 0.5;
 			back.y = ch - 50;
 			//设置音量背景位置
 			bg_vol.x = Math.round(cw * 0.5) + 10;
@@ -158,6 +164,18 @@
 				startHide();
 			} else {
 				cmpOver();
+			}
+		}
+		
+		private function conOver(e:MouseEvent):void {
+			if (api.win_list.console) {
+				this.alpha = api.win_list.console.alpha = 1;
+			}
+		}
+
+		private function conOut(e:MouseEvent = null):void {
+			if (api.win_list.console) {
+				this.alpha = api.win_list.console.alpha = 0.8;
 			}
 		}
 
