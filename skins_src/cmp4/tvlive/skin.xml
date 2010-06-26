@@ -1,0 +1,12 @@
+﻿<skin name="TV Live" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" show_tips="0">
+  <console xywh="0, 0, 100P, 100P" src="tvlive.swf" lock="1" display="1" group="A">
+    <bt_play xywh="-60C, 10R, 40, 30" src="bt_play.png" />
+    <bt_stop xywh="-15C, 10R, 30, 30" src="bt_stop.png" />
+    <bt_mute xywh="25C, 10R, 30, 30" src="bt_mute.png" />
+	<bt_fullscreen xywh="65C, 10R, 30, 30" src="bt_fullscreen.png" />
+    <volume xywh="63C, 30R, 100, 24" track_src="track_volume.png" rotation="-90" />
+  </console>
+  <media xywh="0, 0, 100P, 100P" src="bg.swf" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P" />
+  </media>
+</skin>
