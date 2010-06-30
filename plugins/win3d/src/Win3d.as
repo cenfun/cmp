@@ -67,14 +67,16 @@
 		private function init():void {
 			//
 			main = new DisplayObject3D();
-			box = new Box(api);
+			box = new Box(api, this);
 			box.init();
 			main.addChild(box);
 			//
 			view = new BasicView();
+			view.buttonMode = true;
 			view.scene.addChild(main);
 			view.camera.y = 0;
             view.camera.z = - 800;
+			view.viewport.interactive = true;
 			view.startRendering();
   			addChild(view);
 			
@@ -86,7 +88,7 @@
 			//
 			bg.addEventListener(MouseEvent.MOUSE_DOWN, downHandler);
 		}
-		
+
 		//============================================================================================
 		private var is_down:Boolean = false;
 		private var is_move:Boolean = false;
@@ -167,11 +169,7 @@
 		private function fixPos():void {
 			stopHandler();
 			//
-			var ry:int = Math.round(main.rotationY % 360);
-			if (ry < 0) {
-				ry += 360;
-			}
-			main.rotationY = ry;
+			var ry:int = getRY();
 			win_idx = 0;
 			if (ry in box.ds) {
 				box.showWin(win_idx);
@@ -218,6 +216,24 @@
 			main.rotationY = pos_end;
 			box.showWin(win_idx);
 			//api.tools.output("fixed");
+		}
+		
+		public function goto(i:int):void {
+			box.hideWin(win_idx);
+			win_idx = i;
+			pos_end = box.ds[i];
+			var ry:int = getRY();
+			pos_spd = (ry - pos_end) * 0.2;
+			addEventListener(Event.ENTER_FRAME, endHandler);
+		}
+		
+		private function getRY():int {
+			var ry:int = Math.round(main.rotationY % 360);
+			if (ry < 0) {
+				ry += 360;
+			}
+			main.rotationY = ry;
+			return ry;
 		}
 		
 	}

@@ -15,15 +15,18 @@
 	import org.papervision3d.materials.shadematerials.*;
 	import org.papervision3d.core.geom.*;
 	import org.papervision3d.core.geom.renderables.*;
+	import org.papervision3d.events.*;
 
 	public final class Box extends DisplayObject3D {
 		public var api:Object;
+		public var w3d:Win3d;
 		public var ws:Array;
 		public var ds:Array = [];
 		public var ps:Array = [];
 		public var ms:Array = [];
-		public function Box(_api:Object):void {
+		public function Box(_api:Object, _w3d:Win3d):void {
 			api = _api;
+			w3d = _w3d;
 		}
 		
 		public function init():void {
@@ -65,7 +68,7 @@
 			var ml:MovieMaterial = new MovieMaterial(logo, true, false, false);
 			ml.smooth = true;
 			ml.doubleSided = true;
-			var pl:Plane = new Plane(ml, logo.width, logo.height, 3, 3);
+			var pl:Plane = new Plane(ml, logo.width * 2, logo.height * 2, 3, 3);
 			pl.x = 0;
             pl.z = 0;
 			addChild(pl);
@@ -80,18 +83,30 @@
 				var mm:MovieMaterial = new MovieMaterial(w, true, true, false);
 				mm.smooth = true;
 				mm.doubleSided = true;
+				mm.interactive = true;
 				ms[i] = mm;
 				var p:Plane = new Plane(mm, w.width, w.height, 3, 3);
 				p.x = Math.round(Math.sin(a * i) * r);
                 p.z = - Math.round(Math.cos(a * i) * r);
 				ds[i] = Math.round(d * i);
 				p.rotationY = - ds[i];
+				p.addEventListener(InteractiveScene3DEvent.OBJECT_CLICK, winClick);
 				addChild(p);
 				ps[i] = p;
 			}
 			showWin();
 		}
+
 		
+		private function winClick(e:InteractiveScene3DEvent):void {
+			for (var i:int = 0; i < ps.length; i ++) {
+				if (e.displayObject3D == ps[i]) {
+					w3d.goto(i);
+					break;
+				}
+			}
+		}
+
 		public function showWin(i:int = 0):void {
 			var win:Object = ws[i];
 			win.x = (api.config.width - win.width) * 0.5;
