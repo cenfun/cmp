@@ -42,7 +42,7 @@
 			}
 			api = apikey.api;
 			//添加侦听事件
-			api.addEventListener(apikey.key, 'skin_loaded', boxInit);
+			api.addEventListener(apikey.key, 'skin_complete', boxInit);
 			api.addEventListener(apikey.key, 'resize', resize);
 			resize();
 			//

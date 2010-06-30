@@ -18,7 +18,6 @@
 
 	public final class Box extends DisplayObject3D {
 		public var api:Object;
-		public var tid:uint;
 		public var ws:Array;
 		public var ds:Array = [];
 		public var ps:Array = [];
@@ -59,8 +58,7 @@
 				w.lock = true;
 			}
 			//
-			clearTimeout(tid);
-			tid = setTimeout(draw, 200);
+			draw();
 		}
 		private function draw():void {
 			//围绕的半径
