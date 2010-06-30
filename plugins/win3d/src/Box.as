@@ -61,6 +61,15 @@
 			draw();
 		}
 		private function draw():void {
+			var logo:Logo = new Logo();
+			var ml:MovieMaterial = new MovieMaterial(logo, true, false, false);
+			ml.smooth = true;
+			ml.doubleSided = true;
+			var pl:Plane = new Plane(ml, logo.width, logo.height, 3, 3);
+			pl.x = 0;
+            pl.z = 0;
+			addChild(pl);
+			
 			//围绕的半径
 			var r:uint = 450;
 			//平均角度和弧度
@@ -69,6 +78,7 @@
 			for (var i:int = 0; i < ws.length; i ++) {
 				var w:DisplayObject = ws[i];
 				var mm:MovieMaterial = new MovieMaterial(w, true, true, false);
+				mm.smooth = true;
 				mm.doubleSided = true;
 				ms[i] = mm;
 				var p:Plane = new Plane(mm, w.width, w.height, 3, 3);

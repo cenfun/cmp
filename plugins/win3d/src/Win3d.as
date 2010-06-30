@@ -10,6 +10,8 @@
 	
 	import org.papervision3d.objects.*;
 	import org.papervision3d.view.*;
+	import org.papervision3d.lights.*;
+	import org.papervision3d.render.*;
 
 	public final class Win3d extends Sprite {
 		public var view:BasicView;
@@ -75,6 +77,12 @@
             view.camera.z = - 800;
 			view.startRendering();
   			addChild(view);
+			
+			//光影，必须光影材质，否则无效
+			//var pl3d:PointLight3D = new PointLight3D(true);
+			//pl3d.y = 500;
+			//view.scene.addChild(pl3d);
+			
 			//
 			bg.addEventListener(MouseEvent.MOUSE_DOWN, downHandler);
 		}
@@ -134,6 +142,8 @@
 					speed_evg = Math.round(speed_evg * 100);
 				}
 				addEventListener(Event.ENTER_FRAME, autoHandler);
+			} else {
+				box.showWin(win_idx);
 			}
 		}
 		private function autoHandler(e:Event):void {
@@ -162,12 +172,13 @@
 				ry += 360;
 			}
 			main.rotationY = ry;
+			win_idx = 0;
 			if (ry in box.ds) {
+				box.showWin(win_idx);
 				return;
 			}
 			var val:int = speed_now > 0 ? 1 : -1;
 			//
-			win_idx = 0;
 			if (val < 0) {
 				pos_end = 360;
 				for (var i:int = 0; i < box.ds.length; i++) {
@@ -196,6 +207,7 @@
 			addEventListener(Event.ENTER_FRAME, endHandler);
 		}
 		private function endHandler(e:Event):void {
+			//api.tools.output("end");
 			main.rotationY -= pos_spd;
 			if ((pos_spd > 0 && main.rotationY <= pos_end) || (pos_spd < 0 && main.rotationY >= pos_end)) {
 				fixed();
@@ -205,6 +217,7 @@
 			removeEventListener(Event.ENTER_FRAME, endHandler);
 			main.rotationY = pos_end;
 			box.showWin(win_idx);
+			//api.tools.output("fixed");
 		}
 		
 	}
