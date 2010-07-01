@@ -6,32 +6,44 @@ karaoke\.add\('([^']+)', '([^']+)', '([^']+)', '([^']+)'\);
 <l t="$1,$2,$4">$3</l>
 
 所有设置放到kmc属性里
+
+Rows="2" 
+TimeOffset="500" 
+TimeAfterAnimate="0" 
+TimeBeforeAnimate="0" 
+SetColor="女,#ff0000"
+TopMargin="3"
+
+NormalColor="#ffffff"
+NormalBorderColor="#cccccc"
+NormalBorderThickness="2"
+
+AnimateColor="#ff0000"
+AnimateBorderColor="#cccccc"
+AnimateBorderThickness="2"
+
+LineSpace="3"
+Font="宋体, 20, true"
+
+FirstAlignment="left"
+FirstIndent="3"
+NextAlignment="left"
+NextIndent="3"
+
+========================================================
+新属性：
+
+offset 总体时间偏移 毫秒
+font  字体名称,字体大小,是否加粗,是否斜体
+align  行对齐，包括第一行和第二行
+margin  外边距 
+leading  两行之间垂直的行距
+
+normal  一般状态，文字的颜色，边框颜色，边框粗细 
+animate  动画状态，同上
+
 -->
-<kmc 
-	Rows="2" 
-	TimeOffset="500" 
-	TimeAfterAnimate="0" 
-	TimeBeforeAnimate="0" 
-	SetColor="女,#ff0000"
-	TopMargin="3"
-	
-	NormalColor="#ffffff"
-	NormalBorderColor="#cccccc"
-	NormalBorderThickness="2"
-	
-	AnimateColor="#ff0000"
-	AnimateBorderColor="#cccccc"
-	AnimateBorderThickness="2"
-	
-	LineSpace="3"
-	Font="宋体, 20, true"
-	
-	FirstAlignment="left"
-	FirstIndent="3"
-	NextAlignment="left"
-	NextIndent="3"
-	
-  >
+<kmc offset="500" font="宋体,20,true, false" align="left,right" margin="5" leading="5" normal="#ffffff,#cccccc,2" animate="#ff0000,#cccccc,2"   >
 	
   <l t="00:34.205,00:36.451,176,197,227,566,1080">不要再想你</l>
   <l t="00:37.289,00:39.591,322,257,287,534,902">不要再爱你</l>
