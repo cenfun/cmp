@@ -99,7 +99,7 @@
 			back.x = (cw - 200) * 0.5;
 			back.y = ch - 50;
 			//设置音量背景位置
-			bg_vol.x = Math.round(cw * 0.5) + 10;
+			bg_vol.x = api.win_list.console.bt_mute.x;
 			bg_vol.y = ch - 10;
 			cmpOut();
 			hideVol();
