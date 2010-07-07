@@ -50,8 +50,16 @@ function checkAll(o){
 }
 
 var win_data;
+var connected;
 function sendData(data){
 	win_data = data;
+	
+	//alert(data + connected + win_cmp);
+	
+	if (data != "test" && !connected && (!win_cmp || win_cmp.closed)) {
+		win_open();
+		return;
+	}
 	var sender = CMP.get("sender");
 	if (sender) {
 		sender.sendData(data);
@@ -59,22 +67,36 @@ function sendData(data){
 }
 
 function ondata(data) {
+	alert("back:" + data);
+	if (data == "closed") {
+		connected = false;
+		win_cmp = null;	
+	}
 }
 
 function onstate(data) {
 	//status, error, warning
 	if (data == "error") {
+		connected = false;
 		//发送错误，新打开播放器页面
-		win_open();
+		//win_open();
+	} else if (data == "status") {
+		connected = true;
 	}
 }
+
+function onloaded() {
+	//sendData("test");
+}
+
 //发送者
-var htm = CMP.create("sender", "1", "1", "sender.swf", {lc:"connect_name", ondata:"ondata", onstate:"onstate"});
+var htm = CMP.create("sender", "1", "1", "sender.swf", {lc:"connect_name", ondata:"ondata", onstate:"onstate", onloaded:"onloaded"});
 $("sender_div").innerHTML = htm;
 
+var win_cmp;
 function win_open() {
 	var params = 'width=600,height=400,menubar=0,resizable=1,status=0,titlebar=0,toolbar=0,location=0';
-	var win_cmp = window.open('player.htm', 'win_cmp', params);
+	win_cmp = window.open('player.htm', 'win_cmp', params);
 }
 
 function win_play(ids) {

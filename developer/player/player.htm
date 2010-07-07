@@ -24,15 +24,26 @@ function sendData(data){
 }
 
 function ondata(data) {
-	cmp_init(data);	
+	cmp_init(data);
+	//sendData(data);
 }
 
 function onstate(data) {
 	//status, error, warning
 }
+
+function onloaded(data) {
+	window.opener.sendData("test");
+}
+
 //收听者
-var htm = CMP.create("listener", "1", "1", "listener.swf", {lc:"connect_name", ondata:"ondata", onstate:"onstate"});
+var htm = CMP.create("listener", "1", "1", "listener.swf", {lc:"connect_name", ondata:"ondata", onstate:"onstate", onloaded:"onloaded"});
 $("listener_div").innerHTML = htm;
+
+//window.onbeforeunload = window.onunload = function() {
+	//sendData("closed");
+//}
+
 //载入一个cmp，相关设置详情见cmp交流论坛相关专贴
 var flashvars = {
 	api:"cmp_loaded",
@@ -55,7 +66,7 @@ function cmp_loaded(key) {
 }
 
 function cmp_init(data) {
-	if (!data) {
+	if (!data || typeof data === "string" || data.length != 2) {
 		return;	
 	}
 	var cmd = data[0];
