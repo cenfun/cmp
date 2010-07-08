@@ -35,6 +35,11 @@ a img { border:none; }
 <script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script> 
 <script type="text/javascript">
 function $(id) { return document.getElementById(id); }
+function output(msg) {
+	var div = document.createElement("div");
+	div.innerHTML = msg;
+	document.body.appendChild(div);	
+}
 function highlight(o, c){
 	o.style.backgroundColor = c;
 	o.onmouseout = function(){ o.style.backgroundColor = ""; }
@@ -49,44 +54,46 @@ function checkAll(o){
 	}
 }
 
+var sender;
 var win_data;
 var connected;
 function sendData(data){
-	win_data = data;
+	if (data != "test") {
+		win_data = data;
+	}
+	//output = connected + (!win_cmp || win_cmp.closed);
 	
-	//alert(data + connected + win_cmp);
 	
 	if (data != "test" && !connected && (!win_cmp || win_cmp.closed)) {
 		win_open();
 		return;
 	}
-	var sender = CMP.get("sender");
-	if (sender) {
-		sender.sendData(data);
+	if (!sender) {
+		sender = CMP.get("sender");
 	}
+	sender.sendData(data);
 }
 
 function ondata(data) {
-	alert("back:" + data);
 	if (data == "closed") {
+		win_cmp = null;
 		connected = false;
-		win_cmp = null;	
 	}
 }
 
 function onstate(data) {
+	output(data);
 	//status, error, warning
 	if (data == "error") {
 		connected = false;
-		//发送错误，新打开播放器页面
-		//win_open();
 	} else if (data == "status") {
 		connected = true;
 	}
 }
 
-function onloaded() {
-	//sendData("test");
+function onloaded(data) {
+	sendData("test");
+	output(data);
 }
 
 //发送者

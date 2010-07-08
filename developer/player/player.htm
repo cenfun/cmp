@@ -16,16 +16,17 @@ html, body { height:100%; margin:0; padding:0; overflow:hidden; text-align:cente
 <script type="text/javascript">
 function $(id) { return document.getElementById(id); }
 
-function sendData(data){
+function sendData(data) {
 	var listener = CMP.get("listener");
 	if (listener) {
 		listener.sendData(data);
-	}
+	}	
 }
 
 function ondata(data) {
-	cmp_init(data);
-	//sendData(data);
+	if (data != "test") {
+		cmp_init(data);
+	}
 }
 
 function onstate(data) {
@@ -33,16 +34,20 @@ function onstate(data) {
 }
 
 function onloaded(data) {
-	window.opener.sendData("test");
+	output(data);
 }
 
 //收听者
-var htm = CMP.create("listener", "1", "1", "listener.swf", {lc:"connect_name", ondata:"ondata", onstate:"onstate", onloaded:"onloaded"});
+var htm = CMP.create("listener", "1", "1", "listener.swf", {lc:"connect_name", ondata:"ondata", onstate:"onstate", onloaded:"onloaded"}, {wmode:"window"} );
 $("listener_div").innerHTML = htm;
 
-//window.onbeforeunload = window.onunload = function() {
-	//sendData("closed");
-//}
+window.onbeforeunload = window.onunload = function() {
+	if (window.opener && !window.opener.closed) {
+		window.opener.connected = false;
+	} else {
+		sendData("closed");	
+	}
+}
 
 //载入一个cmp，相关设置详情见cmp交流论坛相关专贴
 var flashvars = {
@@ -54,7 +59,7 @@ var flashvars = {
 	lists:"",
 	context_menu:2
 };
-var htm = CMP.create("cmp", "600", "400", "http://cmp.cenfun.com/cmp4/cmp.swf", flashvars);
+var htm = CMP.create("cmp", "600", "400", "http://cmp.cenfun.com/cmp4/cmp.swf", flashvars, {wmode:"window"} );
 $("player").innerHTML = htm;
 //加载完成
 var cmpo;
