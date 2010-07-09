@@ -69,7 +69,7 @@
 			//api.tools.output(e);
 		}
 		private function bgComplete(e:Event):void {
-			bg_back.addChild(e.target.content);
+			bg_back.addChild(e.target);
 			resizeHandler();
 		}
 
