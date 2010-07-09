@@ -6,7 +6,8 @@
 	import flash.utils.*;
 
 	public class Manila extends Sprite {
-
+		private var cw:Number;
+		private var ch:Number;
 		//cmp的api接口
 		private var api:Object;
 		//延时id
@@ -67,8 +68,8 @@
 		//尺寸改变时调用
 		private function resizeHandler(e:Event=null):void {
 			//获取cmp的宽高
-			var cw:Number = api.config.width;
-			var ch:Number = api.config.height;
+			cw = api.config.width;
+			ch = api.config.height;
 			//还原缩放，因为cmp会把背景大小改变，这样要还原，以免比例失调
 			//并且设置背景框和cmp一样大小
 			this.scaleX = this.scaleY = 1;
@@ -101,13 +102,24 @@
 				default :
 					time_pos.text = time_dua.text = "00:00";
 			}
-			api.win_list.list.display = ! playing;
-			api.win_list.media.display = playing;
 			if (playing && api.item.type == "video") {
 				bg_video.visible = true;
 			} else {
 				bg_video.visible = false;
 			}
+			//
+			if (api.win_list.list.visible == playing) {
+				api.win_list.list.display = ! playing;
+				api.win_list.media.display = playing;
+				if (playing) {
+					api.win_list.media.x = cw;
+					api.tools.effects.m(api.win_list.media, "x", 0, cw + 10);
+				} else {
+					api.win_list.list.x = - cw;
+					api.tools.effects.m(api.win_list.list, "x", 0, cw + 10);
+				}
+			}
+			//
 		}
 
 		private function timeHandler(e:Event=null):void {

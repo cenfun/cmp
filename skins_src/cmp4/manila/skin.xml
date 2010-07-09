@@ -15,7 +15,7 @@
     <bt_prev xywh="-98C, 10R, 20, 25" src="bt_prev.png" />
     <bt_mute xywh="35C, 10R, 20, 25" src="bt_mute.png" />
     <volume xywh="82C, 17R, 46, 8" thumb_src="" track_src="volume_track.png" />
-    <progress xywh="0C, 45R, 150, 3" thumb_src="progress_thumb.png" track_src="progress_track.png" />
+    <progress xywh="0C, 43R, 150, 7" thumb_src="progress_thumb.png" track_src="progress_track.png" />
     <title xywh="0C, 0, 240, 18" align="center" font="Verdana" size="12" color="#cccccc" bold="1" borderColor="" />
     <status xywh="0C, 20, 240, 18" align="center" font="Verdana" size="12" color="#999999" borderColor="" />
   </console>
