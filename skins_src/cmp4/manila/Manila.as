@@ -45,11 +45,19 @@
 				newMenu.customItems = [menus[0]];
 				api.cmp.contextMenu = newMenu;
 			}
-			var bg_url:String = api.skin_xml.console. @ bg;
-
-			//api.tools.output(bg_url);
-			api.tools.zip.gZ(bg_url,bgComplete,bgError);
-
+			
+			var bg_url:String = api.config.manila_bg;
+			if (bg_url) {
+				var loader:Loader = new Loader();
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, bgComplete);
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, bgError);
+				var request:URLRequest = new URLRequest(bg_url);
+				loader.load(request);
+			} else {
+				bg_url = api.skin_xml.console.@bg
+				//api.tools.output(bg_url);
+				api.tools.zip.gZ(bg_url, bgComplete, bgError);
+			}
 			//初始位置尺寸
 			resizeHandler();
 			//初始化播放状态
