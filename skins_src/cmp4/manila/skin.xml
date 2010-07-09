@@ -1,6 +1,7 @@
 ﻿<skin name="Manila" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" preview="" mask_color="" show_tips="0">
   <list xywh="0C, -20C, 100P, 60B" src="" mask="" lock="1" display="1" group="A" fade="0">
-    <tree xywh="0, 0, 100P, 100P" align="left" font="Arial" size="12" color="#cccccc, #ffffff" glow="#000000,1,4,4,1,1" />
+    <tree xywh="0, 0, 100P, 100P" align="left" font="Arial" size="12" underline="0, 1" color="#ffffff, #ffffff" glow="#000000,1,4,4,1,1" />
+	<scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src=""/>
   </list>
   <lrc xywh="0C, 60R, 100P, 20" src="" mask="" lock="1" display="1" group="A" glow="">
     <text xywh="0, 0, 100P, 100P" align="center" font="Arial" size="12" leading="0" color="#666666, #eeeeee" horizontal="1" max_scale="2" max_button="0" />
