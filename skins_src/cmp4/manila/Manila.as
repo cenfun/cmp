@@ -69,8 +69,12 @@
 			//api.tools.output(e);
 		}
 		private function bgComplete(e:Event):void {
+			
+			bg_back.scaleX = bg_back.scaleY = 1;
 			bg_back.addChild(e.target.loader);
-			resizeHandler();
+			bg_back.width = cw;
+			bg_back.height = ch;
+			
 		}
 
 		//尺寸改变时调用
