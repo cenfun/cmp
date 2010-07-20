@@ -1,5 +1,10 @@
 ﻿<skin name="MOKO" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" mask_color="" show_tips="0">
-  <console xywh="0C, 0C, 550, 40" src="console.swf" mask="" lock="1" display="1" group="">
+  <lrc xywh="0C, 40, 550, 100P" src="lrc.png" mask="" lock="1" display="1" group="A">
+    <text xywh="0, 0, 100P, 100P" align="center" font="黑体" size="16" leading="10" color="#666666, #ffffff" horizontal="0" max_scale="2" max_button="0">
+		<kmc time_preview="5000" time_sec3="8000" show_info="1" margin="15" size="30" bold="1" align="left, right" color="#FF0098, #1e90ff" shadow="2,45,#000000,0.5,2,2,1,1" />
+	</text>
+  </lrc>
+  <console xywh="0C, 0, 550, 40" src="console.swf" mask="" lock="1" display="1" group="A">
     <bt_play xywh="41, 1, 49, 38" src="bt_play.png"/>
     <bt_mute xywh="103R, 1, 49, 38" src="bt_mute.png"/>
     <volume xywh="10R, 13, 96, 14" track_src="volume_track.png"/>
