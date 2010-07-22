@@ -79,9 +79,9 @@ function cmp_init(data) {
 	//
 	var xml = makeListXml(ids);
 	//取得配置
-	var config = cmpo.config();
+	var state = cmpo.config("state");
 	//如果状态为正在播放，则先停止播放
-	if (cmd == "play" && config["state"] == "playing") {
+	if (cmd == "play" && state == "playing") {
 		cmpo.sendEvent("view_stop");
 	}
 	var play_id = cmpo.list().length + 1;
