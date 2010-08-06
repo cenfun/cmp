@@ -26,50 +26,20 @@
 				return;
 			}
 			api = apikey.api;
-			//用户操作跟踪
-			//播放项相关事件
-			var evts_item:Array = [
-			"view_item",
-			"view_mute",
-			"view_next",
-			"view_play",
-			"view_prev",
-			"view_progress",
-			"view_stop",
-			"view_volume",
-			"mixer_color",
-			"mixer_displace",
-			"mixer_filter",
-			"mixer_next",
-			"mixer_prev",
-			"lrc_resize",
-			"video_resize",
-			"video_effect",
-			"video_smoothing",
-			];
-			//其他界面操作事件
-			var evts_view:Array = [
-			"view_console",
-			"view_fullscreen",
-			"view_list",
-			"view_lrc",
-			"view_option",
-			"view_random",
-			"view_repeat",
-			"view_video",
-			"skin_change",
-			"video_max",
-			"lrc_max"
-			];
-			var type:String;
-			for each(type in evts_item) {
-				api.addEventListener(apikey.key, type, itemHandler);
+			//用户操作事件跟踪
+			var str:String = api.toString();
+			var arr = str.match(/"\w+";/g);
+			for (var i = 0; i < arr.length; i ++) {
+				var s:String = arr[i];
+				s = s.replace(/"|;/g, "");
+				var a:Array = s.split("_");
+				if (a.length == 2) {
+					var t:String = a[0];
+					if (t == "view" || t == "mixer" || t == "lrc" || t == "video" || t == "item") {
+						api.addEventListener(apikey.key, s, eventHandler);
+					}
+				}
 			}
-			for each(type in evts_view) {
-				api.addEventListener(apikey.key, type, viewHandler);
-			}
-			api.addEventListener(apikey.key, "item_deleted", delHandler);
-			
 			//开始对cmp跟踪统计
 			init();
 		}
@@ -92,31 +62,16 @@
 		}
 		
 		//跟踪用户事件
-		private function itemHandler(e):void {
+		private function eventHandler(e):void {
 			var type:String = "view";
 			if (api.item) {
 				type = api.item.type;
 			}
 			var action:String = e.type;
-			var desc:String = "";
+			var desc:String = "cmp";
 			if (api.item) {
 				desc = api.item.label || api.item.src;
 			}
-			track(type, action, desc);
-		}
-		private function viewHandler(e):void {
-			var type:String = "view";
-			var action:String = e.type;
-			var desc:String = "";
-			track(type, action, desc);
-		}
-		private function delHandler(e):void {
-			var type:String = e.data.type || "view";
-			var action:String = e.type;
-			var desc:String = e.data.label;
-			track(type, action, desc);
-		}
-		private function track(type:String, action:String, desc:String):void {
 			if (tracker) {
 				tracker.trackEvent(type, action, desc);
 			}
