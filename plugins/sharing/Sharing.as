@@ -4,42 +4,41 @@
 	import flash.events.*;
 	import flash.system.*;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
 
 	public class Sharing extends MovieClip {
-		
-		//QQ书签分享
-		private var qq_shuqian:String = "http://shuqian.qq.com/post?from=3&jumpback=2&noui=1&uri=&title=";
-		
-		//分享到renren/kaixin
-		private var renren:String = "http://share.renren.com/share/buttonshare.do?link=&title=";
-		private var kaixin:String = "http://share.kaixin.com/share/buttonshare.do?link=&title=";
-		
-		//豆瓣
-		private var douban:String = "http://www.douban.com/recommend/?url=&title=&comment=";
-		
-		//新浪微博
-		private var sina:String = "http://v.t.sina.com.cn/share/share.php?url=&title=&rcontent=";
-		
-		//百度收藏
-		private var baidu_cang:String = "http://cang.baidu.com/do/add?it=&iu=&dc=";
-		//百度空间
-		private var baidu_hi:String = "http://apps.hi.baidu.com/share/?title&url=";
-		
-		//谷歌书签
-		private var google:String = "http://www.google.com/bookmarks/mark?op=add&bkmk=&title=&labels=&annotation=";
-		
-		//雅虎收藏
-		private var yahoo:String = "http://myweb.cn.yahoo.com/popadd.html?src=iebookmark&url=&title=";
-
-
 		private var api:Object;
 		private var tw:Number;
 		private var th:Number;
+		
+		private var share_list:Array = [
+		
+		["qq_zone","QQ空间","http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url={url}&title={title}"],
+		["qq_shuqian","QQ书签","http://shuqian.qq.com/post?from=3&jumpback=2&noui=1&uri={url}&title={title}"],
+		["renren","人人网","http://share.renren.com/share/buttonshare.do?link={url}&title={title}"],
+		
+		["sina","新浪微博","http://v.t.sina.com.cn/share/share.php?url={url}&title={title}"],
+		["sohu","白社会","http://bai.sohu.com/share/blank/addbutton.do?title={title}&link={url}"],
+		["s51","51空间","http://share.51.com/share/share.php?type=8&title={title}&vaddr={url}"],
+		
+		["baidu","百度收藏","http://cang.baidu.com/do/add?it={title}&iu={url}"],
+		["baidu_hi","百度空间","http://apps.hi.baidu.com/share/?title={title}&url={url}"],
+		["douban","豆瓣网","http://www.douban.com/recommend/?url={url}&title={title}"],
+		
+		
+		["google","谷歌书签","http://www.google.com/bookmarks/mark?op=add&bkmk={url}&title={title}"],
+		["yahoo","雅虎收藏","http://myweb.cn.yahoo.com/popadd.html?src=iebookmark&url={url}&title={title}"],
+		["kaixin","开心网","http://www.kaixin001.com/repaste/share.php?rtitle={title}&rurl={url}"]
+		
+		];
+		
+		private var bt_format:TextFormat = new TextFormat();
+		
 		public function Sharing() {
 			Security.allowDomain("*");
 			root.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
 			
-			var bcolor:uint = 0x999999;
+			var bcolor:uint = 0x555555;
 			main.code_flash.border = true;
 			main.code_flash.background = true;
 			main.code_flash.backgroundColor = bcolor - 0x111111;
@@ -55,6 +54,70 @@
 			main.bt_flash.addEventListener(MouseEvent.CLICK, flashCopy);
 			main.code_html.addEventListener(MouseEvent.CLICK, htmlCopy);
 			main.bt_html.addEventListener(MouseEvent.CLICK, htmlCopy);
+			
+			main.icons.visible = false;
+			bt_format.color = 0xcccccc;
+			for each(var a:Array in share_list) {
+				addBT(a);
+			}
+			
+		}
+		
+		private function addBT(a:Array):void {
+			var mc:MovieClip = new MovieClip();
+			mc.name = a[0];
+			mc.link = a[2];
+			//背景
+			var sp:Sprite = new Sprite();
+			mc.addChild(sp);
+			//图标
+			var icon:MovieClip = main.icons.getChildByName(a[0]);
+			if (icon) {
+				icon.x = 1;
+				icon.y = 1;
+				icon.mouseEnabled = false;
+				mc.addChild(icon);
+			}
+			//标题
+			var label:TextField = new TextField();
+			label.autoSize = "left";
+			label.selectable = false;
+			label.mouseEnabled = false;
+			label.x = 20;
+			label.htmlText = a[1];
+			label.setTextFormat(bt_format);
+			mc.addChild(label);
+			//绘制背景
+			sp.graphics.beginFill(0x999999, 0.5);
+			sp.graphics.drawRoundRect(0, 0, 75, 18, 5);
+			sp.graphics.endFill();
+			sp.alpha = 0;
+			mc.bg = sp;
+			//
+			var index:int = main.bts.numChildren;
+			var bx:int = (index % 3) * (main.bg.width + 20) / 3;
+			var by:int = Math.floor(index / 3) * 24;
+			mc.x = bx;
+			mc.y = by;
+			mc.buttonMode = true;
+			mc.addEventListener(MouseEvent.CLICK, btClick);
+			mc.addEventListener(MouseEvent.ROLL_OVER, btOver);
+			mc.addEventListener(MouseEvent.ROLL_OUT, btOut);
+			main.bts.addChild(mc);
+		}
+		private function btClick(e:MouseEvent):void {
+			if (api) {
+				var link:String = e.currentTarget.link;
+				link = link.replace("{url}", encodeURIComponent(api.config.share_url));
+				link = link.replace("{title}", encodeURIComponent(api.config.name));
+				api.tools.strings.open(link);
+			}
+		}
+		private function btOver(e:MouseEvent):void {
+			e.currentTarget.bg.alpha = 1;
+		}
+		private function btOut(e:MouseEvent):void {
+			e.currentTarget.bg.alpha = 0;
 		}
 		
 		private function mainDown(e:MouseEvent):void {
