@@ -119,9 +119,9 @@
 				var link:String = e.currentTarget.link;
 				link = link.replace("{url}", encodeURIComponent(api.config.share_url));
 				link = link.replace("{title}", encodeURIComponent(api.config.name));
+				api.tools.strings.copy(link);
 				var ok:Boolean = api.tools.strings.open(link);
 				if (!ok) {
-					api.tools.strings.copy(link);
 					showMsg('flash存在网络限制，无法打开窗口，已经将地址复制到剪贴板，请手动粘贴到浏览器打开');
 				}
 			}
