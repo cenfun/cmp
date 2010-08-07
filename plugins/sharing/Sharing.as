@@ -3,9 +3,8 @@
 	import flash.display.*;
 	import flash.events.*;
 	import flash.system.*;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
-
+	import flash.text.*;
+	import flash.utils.*;
 	public class Sharing extends MovieClip {
 		private var api:Object;
 		private var tw:Number;
@@ -143,20 +142,33 @@
 			main.stopDrag();
 		}
 		private function flashCopy(e:MouseEvent):void {
-			copy(main.code_flash);
+			copy(main.code_flash, e.currentTarget);
 		}
 		private function htmlCopy(e:MouseEvent):void {
-			copy(main.code_html);
+			copy(main.code_html, e.currentTarget);
 		}
-		public function copy(tf:TextField):void {
+		public function copy(tf:TextField, tgt:*):void {
 			if (api) {
-				api.tools.strings.copy(tf.text);
+				var ok:Boolean = api.tools.strings.copy(tf.text);
+				if (tgt is TextField) {
+					selectAllText(tf);
+				} else {
+					var str:String;
+					if (ok) {
+						str = "已经复制到剪贴板";
+					} else {
+						str = "无法复制，请检查Flash Player是否安装正确";
+					}
+					showMsg(str);
+				}
 			}
+		}
+		public function selectAllText(tf:TextField):void {
 			stage.focus = tf;
 			tf.setSelection(0, tf.length);
 			tf.scrollH = 0;
-			tf.scrollV = 0;
 		}
+		
 		
 		private function apiHandler(e):void {
 			//取得cmp的api对象和侦听key，包含2个属性{api,key}
@@ -195,17 +207,27 @@
 		
 		
 		private function shareOver(e:MouseEvent):void {
+			clearTimeout(tid);
 			share.share_arrow.visible = false;
 			if (api) {
-				api.tools.effects.m(share, "x", tw - share.width + 10, share.width);
+				var edx:Number = tw - share.width + 10;
+				if (share.x != edx) {
+					api.tools.effects.m(share, "x", edx, share.width);
+				}
 			}
 		}
 		private function shareOut(e:MouseEvent):void {
+			clearTimeout(tid);
+			tid = setTimeout(outNow, 1000);
+		}
+		private var tid:uint;
+		private function outNow():void {
 			share.share_arrow.visible = true;
 			if (api) {
 				api.tools.effects.m(share, "x", tw - 10, share.width);
 			}
 		}
+		
 		private function shareClick(e:MouseEvent):void {
 			main.visible = !main.visible;
 		}
