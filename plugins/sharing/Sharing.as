@@ -123,6 +123,8 @@
 				var ok:Boolean = api.tools.strings.open(link);
 				if (!ok) {
 					showMsg('flash存在网络限制，无法打开窗口，已经将地址复制到剪贴板，请手动粘贴到浏览器打开');
+				} else {
+					showMsg('已经将地址复制到剪贴板，如果打开的窗口被拦截，请手动粘贴到浏览器打开');
 				}
 			}
 		}
