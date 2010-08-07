@@ -183,7 +183,6 @@
 			//
 			api.addEventListener(apikey.key, "resize", resizeHandler);
 			resizeHandler();
-			
 			share.visible = false;
 			main.visible = false;
 			//取得播放器绝对地址并附带参数
@@ -255,6 +254,13 @@
 		private function resizeHandler(e:Event = null):void {
 			tw = api.config.width || stage.stageWidth;
 			th = api.config.height || stage.stageHeight;
+			
+			//播放器小于380，240将不显示
+			if (tw < 380 || th < 240) {
+				visible = false;
+			} else {
+				visible = true;
+			}
 			
 			win.x = tw * 0.5;
 			win.y = th * 0.5;
