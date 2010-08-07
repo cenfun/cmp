@@ -61,7 +61,17 @@
 				addBT(a);
 			}
 			
+			win.visible = false;
+			win.bt_ok.addEventListener(MouseEvent.CLICK, okClick);
 		}
+		private function okClick(e:MouseEvent):void {
+			win.visible = false;
+		}
+		private function showMsg(msg:String):void {
+			win.msg.htmlText = String(msg);
+			win.visible = true;
+		}
+		
 		
 		private function addBT(a:Array):void {
 			var mc:MovieClip = new MovieClip();
@@ -110,7 +120,11 @@
 				var link:String = e.currentTarget.link;
 				link = link.replace("{url}", encodeURIComponent(api.config.share_url));
 				link = link.replace("{title}", encodeURIComponent(api.config.name));
-				api.tools.strings.open(link);
+				var ok:Boolean = api.tools.strings.open(link);
+				if (!ok) {
+					api.tools.strings.copy(link);
+					showMsg('flash存在网络限制，无法打开窗口，已经将地址复制到剪贴板，请手动粘贴到浏览器打开');
+				}
 			}
 		}
 		private function btOver(e:MouseEvent):void {
@@ -155,14 +169,20 @@
 			//
 			api.addEventListener(apikey.key, "resize", resizeHandler);
 			resizeHandler();
+			
+			share.visible = false;
+			main.visible = false;
+			//取得播放器绝对地址并附带参数
+			if (api.config.share_url) {
+				main.code_flash.text = api.config.share_url;
+				main.code_html.text = api.config.share_html;
+			} else {
+				showMsg('本分享插件(sharing.swf)需最新版本的CMP4支持，请到 <a href="http://bbs.cenfun.com/" target="_blank">http://bbs.cenfun.com/</a> 更新升级！');
+				return;
+			}
 			api.addEventListener(apikey.key, MouseEvent.ROLL_OVER, cmpOver);
 			api.addEventListener(apikey.key, MouseEvent.MOUSE_MOVE, cmpMove);
 			api.addEventListener(apikey.key, MouseEvent.ROLL_OUT, cmpOut);
-			init();
-		}
-		private function init():void {
-			share.visible = false;
-			main.visible = false;
 			//
 			share.buttonMode = true;
 			share.addEventListener(MouseEvent.ROLL_OVER, shareOver);
@@ -170,10 +190,6 @@
 			share.addEventListener(MouseEvent.CLICK, shareClick);
 			//
 			main.bt_close.addEventListener(MouseEvent.CLICK, mainClose);
-			//
-			//取得播放器绝对地址并附带参数
-			main.code_flash.text = api.config.share_url;
-			main.code_html.text = api.config.share_html;
 		}
 		
 		
@@ -216,6 +232,8 @@
 			tw = api.config.width || stage.stageWidth;
 			th = api.config.height || stage.stageHeight;
 			
+			win.x = tw * 0.5;
+			win.y = th * 0.5;
 			share.x = tw - 10;
 			share.y = (th - share.height) * 0.5;
 			main.x = (tw - main.width) * 0.5;
