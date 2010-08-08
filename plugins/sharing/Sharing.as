@@ -183,7 +183,6 @@
 			//
 			api.addEventListener(apikey.key, "resize", resizeHandler);
 			resizeHandler();
-			share.visible = false;
 			main.visible = false;
 			//取得播放器绝对地址并附带参数
 			if (api.config.share_url) {
@@ -194,41 +193,29 @@
 				return;
 			}
 			api.addEventListener(apikey.key, MouseEvent.ROLL_OVER, cmpOver);
-			api.addEventListener(apikey.key, MouseEvent.MOUSE_MOVE, cmpMove);
 			api.addEventListener(apikey.key, MouseEvent.ROLL_OUT, cmpOut);
 			//
-			share.buttonMode = true;
-			share.addEventListener(MouseEvent.ROLL_OVER, shareOver);
-			share.addEventListener(MouseEvent.ROLL_OUT, shareOut);
 			share.addEventListener(MouseEvent.CLICK, shareClick);
 			//
 			main.bt_close.addEventListener(MouseEvent.CLICK, mainClose);
 		}
 		
 		
-		
-		private function shareOver(e:MouseEvent):void {
-			clearTimeout(tid);
-			share.share_arrow.visible = false;
+		private function cmpOver(e:MouseEvent = null):void {
 			if (api) {
-				var edx:Number = tw - share.width + 10;
+				var sw:Number = share.width;
+				var edx:Number = tw - sw;
 				if (share.x != edx) {
-					api.tools.effects.m(share, "x", edx, share.width);
+					api.tools.effects.m(share, "x", edx, sw);
 				}
 			}
 		}
-		private function shareOut(e:MouseEvent):void {
-			clearTimeout(tid);
-			tid = setTimeout(outNow, 1000);
-		}
-		private var tid:uint;
-		private function outNow():void {
-			share.share_arrow.visible = true;
+		private function cmpOut(e:MouseEvent = null):void {
 			if (api) {
-				api.tools.effects.m(share, "x", tw - 10, share.width);
+				api.tools.effects.m(share, "x", tw, share.width);
 			}
 		}
-		
+
 		private function shareClick(e:MouseEvent):void {
 			main.visible = !main.visible;
 		}
@@ -236,19 +223,6 @@
 			if (api) {
 				api.tools.effects.f(main);
 			}
-		}
-		
-		private function cmpOver(e:MouseEvent):void {
-			share.visible = true;
-		}
-		private function cmpMove(e:MouseEvent):void {
-			if (!share.visible) {
-				share.visible = true;
-			}
-		}
-		private function cmpOut(e:MouseEvent):void {
-			share.visible = false;
-			share.x = tw - 10;
 		}
 		
 		private function resizeHandler(e:Event = null):void {
@@ -264,7 +238,7 @@
 			
 			win.x = tw * 0.5;
 			win.y = th * 0.5;
-			share.x = tw - 10;
+			share.x = tw;
 			share.y = (th - share.height) * 0.5;
 			main.x = (tw - main.width) * 0.5;
 			main.y = (th - main.height) * 0.5;
