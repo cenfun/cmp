@@ -203,6 +203,9 @@
 		
 		private function cmpOver(e:MouseEvent = null):void {
 			clearTimeout(tid);
+			if (main.visible) {
+				return;
+			}
 			if (api) {
 				var sw:Number = share.width;
 				var edx:Number = tw - sw;
