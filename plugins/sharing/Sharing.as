@@ -202,6 +202,7 @@
 		
 		
 		private function cmpOver(e:MouseEvent = null):void {
+			clearTimeout(tid);
 			if (api) {
 				var sw:Number = share.width;
 				var edx:Number = tw - sw;
@@ -210,7 +211,13 @@
 				}
 			}
 		}
+		private var tid:uint;
 		private function cmpOut(e:MouseEvent = null):void {
+			clearTimeout(tid);
+			tid = setTimeout(hide, 2000);
+		}
+		
+		private function hide():void {
 			if (api) {
 				api.tools.effects.m(share, "x", tw, share.width);
 			}
