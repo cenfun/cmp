@@ -11,11 +11,14 @@
 
 		private var ga_id:String = "UA-56301-7";
 		private var ga_debug:Boolean = false;
+		
+		private var url:String;
 
 		public function GA() {
 			Security.allowDomain("*");
 			root.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
 			//init(this);
+			url = root.loaderInfo.loaderURL;
 		}
 
 		private function apiHandler(e):void {
@@ -57,8 +60,7 @@
 			//
 			tracker = new GATracker(api.cmp, ga_id, "AS3", ga_debug);
 			//跟踪页面位置
-			tracker.trackPageview( "/cmp");
-
+			tracker.trackPageview(url);
 		}
 		
 		//跟踪用户事件
@@ -68,7 +70,7 @@
 				type = api.item.type;
 			}
 			var action:String = e.type;
-			var desc:String = "cmp";
+			var desc:String = url;
 			if (api.item) {
 				desc = api.item.label || api.item.src;
 			}
