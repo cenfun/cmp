@@ -11,8 +11,8 @@ html, body { height:100%; margin:0; padding:0; text-align:center; overflow:hidde
 <script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
 <div id="cmp_area" style="position:relative;width:800px;height:600px;margin:0px auto;"> 
   <script type="text/javascript">
-	//将cmp放在一个固定容器里，便于后面设置位置
-	CMP.write("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", "skin_id=0&api=cmp_loaded&lists=");
+	//将cmp放在一个固定容器里，便于后面设置位置，必须把cmp垫底，即设置wmode="opaque"
+	CMP.write("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", "skin_id=0&api=cmp_loaded&lists=", {wmode:"opaque"});
   </script> 
 </div>
 <div style="margin:10px auto;text-align:left;width:800px;">
@@ -28,7 +28,7 @@ html, body { height:100%; margin:0; padding:0; text-align:center; overflow:hidde
     </select>
   </div>
   <div style="margin:5px 0px;">地址：
-    <input id="music_src" type="text" style="width:630px;" onclick="this.select();" value="rtsp://59.42.249.189:1755/30325NfWL5jwG------gk5cRU-5c05c0---5ckRHURHlXlw4kg0YgXrwSewTejjjTm7ijN--5N5mfWL5j5N.I.o5j0XU5c0k--k5c-5cL5cR5c0---5c-5N5m.I.o5j5NpoF5j0k0J0gJXRJg5lH-5c0k0J0gJXRJ0H5lH-H-5cH-H-5N5mpoF5j5NK8z5jvBovIp5l0-g5cdfdK5l00RJ0-XJrkJg5lH-5c.sQ.o5lBsd.5cds5lDCF5csA5l0kHkkYH0gk5cvf5l0-kg5N5mK8z5j5NxdoB5jSewTTu5w0HR-0Y0H00Xr5c0HRJ0YJ0H0J0Xr5N5mxdoB5j" />
+    <input id="music_src" type="text" style="width:630px;" onclick="this.select();" value="mms://222.77.190.24:9090/fhzw" />
     wma/wmv/h264</div>
   <div>
     <input type="button" value="添加到列表进行播放" onclick="addToList();" />
@@ -46,9 +46,15 @@ function cmp_loaded(key) {
 	cmpo.addEventListener("model_state", "stateHandler");
 	//全屏按钮点击时侦听事件
 	cmpo.addEventListener("view_fullscreen", "fsHandler");
+	
+	
 	//添加一个测试列表
+	//===============================================================================================================================================
 	var xml = '<list><m type="wmp" label="WMP类型，在wmp中播放" src="music/test.mp3" /><m label="MP3类型，在cmp中播放" src="music/test.mp3" /></list>';
 	cmpo.list_xml(xml);
+	//===============================================================================================================================================
+	
+	
 	//取得wmp对象，并添加到cmp所在容器
 	wmpo = document.getElementById("WMP_" + key);
 	cmpo.parentNode.appendChild(wmpo);
