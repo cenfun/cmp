@@ -28,6 +28,11 @@
 			api.addEventListener(apikey.key, "model_start", startHandler);
 			api.addEventListener(apikey.key, 'resize', resizeHandler);
 			resizeHandler();
+			
+			if (api.config.bg) {
+				loadBg(api.config.bg);
+			}
+			
 		}
 		
 		private function resizeHandler(e:Event = null):void {
