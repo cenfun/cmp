@@ -112,7 +112,7 @@
 			bg_bar.width = loading.width = cw - 150;
 			//
 			bg_sld.y = loading_mask.y = loading.y = bg_bar.y + 3;
-			bg_sld.width = loading_mask.width = cw - 250;
+			bg_sld.width = loading_mask.width = cw - 220;
 			//设置音量背景位置
 			bg_vol.x = cw - 80;
 			bg_vol.y = ch - 10;

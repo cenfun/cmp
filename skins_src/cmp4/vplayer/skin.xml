@@ -5,7 +5,7 @@
 		<volume xywh="-23R, 30R, 100, 24" track_src="track_volume.png" rotation="-90" />
 		<progress xywh="63, 13R, 125B, 24" track_src="track_progress.png" />
 		<bt_fullscreen xywh="10R, 10R, 30, 30" src="bt_fullscreen.png" tips="" />
-		<time xywh="90R, 18R, 98, 16" align="center" font="Verdana" size="11" color="#cccccc" borderColor=""  />
+		<time xywh="90R, 18R, 67, 16" align="center" font="Arial Narrow" size="11" color="#cccccc" borderColor=""  />
 	</console>
 	<media xywh="0, 0, 100P, 100P" src="image.swf" lock="1" display="1" mask="" group="A">
 		<video xywh="0, 0, 100%, 100%" show_icon="1" show_buttons="0" />
