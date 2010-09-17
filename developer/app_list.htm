@@ -64,11 +64,10 @@ function highlight(o, c){
 	o.onmouseout = function(){ o.style.backgroundColor = ""; }
 }
 function selectAll(obj) {
-	
 	var form = obj.form;
-	
-	for (var k in form) {
-		var item = form[k];
+	var eles = form.elements;
+	for (var k in eles) {
+		var item = eles[k];
 		if (item && item.type == "checkbox" && item != obj) {
 			item.checked = obj.checked;
 		}
