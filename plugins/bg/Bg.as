@@ -60,6 +60,12 @@
 		}
 		
 		private function loadBg(url:String):void {
+			if (url) {
+				url = api.cmp.constructor.fU(url);
+			} else {
+				return;
+			}
+			
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler);
             loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
