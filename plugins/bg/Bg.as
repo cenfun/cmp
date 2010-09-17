@@ -8,6 +8,8 @@
 		//cmp的api接口引用
 		private var api:Object;
 		
+		private var bg_src:String = "bg";
+		
 		private var tw:Number;
 		private var th:Number;
 
@@ -28,6 +30,10 @@
 			api.addEventListener(apikey.key, "model_start", startHandler);
 			api.addEventListener(apikey.key, 'resize', resizeHandler);
 			resizeHandler();
+			
+			if (api.config.bg_src) {
+				bg_src = api.config.bg_src;
+			}
 			
 			if (api.config.bg) {
 				loadBg(api.config.bg);
