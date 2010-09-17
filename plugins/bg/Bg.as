@@ -35,8 +35,8 @@
 				bg_src = api.config.bg_src;
 			}
 			
-			if (api.config.bg) {
-				loadBg(api.config.bg);
+			if (api.config[bg_src]) {
+				loadBg(api.config[bg_src]);
 			}
 			
 		}
@@ -57,7 +57,7 @@
 		}
 		
 		private function startHandler(e:Event = null):void {
-			var bg_url:String = api.item.bg;
+			var bg_url:String = api.item[bg_src];
 			if (!bg_url) {
 				return;
 			}
