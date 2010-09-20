@@ -63,7 +63,6 @@
 			}
 			
 			//default
-			//req_vars.publisherId = "pub-7261651305684526";
 			//video, text_overlay, text_or_graphical, text_full_slot, overlay, graphical_overlay, graphical_full_slot, graphical, full_slot
 			req_vars.adType = "overlay";
 			
