@@ -18,6 +18,7 @@
 		public function Image() {
 			//侦听api的发送
 			this.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
+			this.loaderInfo.sharedEvents.addEventListener('api_remove', apiRemoveHandler);
 		}
 
 		private function apiHandler(e):void {
@@ -43,6 +44,10 @@
 			resizeHandler();
 			//初始化播放状态
 			stateHandler();
+		}
+		
+		private function apiRemoveHandler(e:Event = null):void {
+			api.win_list.media.video.vi.ip.visible = false;
 		}
 		
 		
