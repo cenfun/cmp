@@ -1,22 +1,29 @@
-﻿<skin name="WebPlayer" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="最佳宽高640x328" mask_color="" show_tips="0.5">
-  <option xywh="0R, 28R, 260, 240" src="option.png" lock="1" display="0" group="A" fade="0">
-    <pane xywh="5, 20, 5B, 20B" align="left" font="宋体" size="12" color="#666666, #ffffff" />
+﻿<skin name="WebPlayer" version="1.2" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="最佳宽高640x328" mask_color="" show_tips="0.5">
+  <option xywh="13R, 28R, 320, 240" src="option.png" lock="1" display="0" group="A" fade="0">
+    <pane xywh="5, 20, 5B, 20B" align="left" font="Arial" size="12" color="#666666, #ffffff" />
     <scrollbar thumb_src="scrollbar_thumb.png"/>
+    <bt_close xywh="10R, 3, 30, 12" src="bt_close.png"/>
+    <event type="open" target="list" property="display" value="0" />
   </option>
+  <list xywh="36R, 28R, 320, 240" src="option.png" mask="" lock="1" display="0" group="">
+    <tree xywh="5, 20, 5B, 20B" align="left" font="Arial" size="12" color="#666666, #ffffff"/>
+    <scrollbar thumb_src="scrollbar_thumb.png"/>
+    <bt_close xywh="10R, 3, 30, 12" src="bt_close.png"/>
+    <event type="open" target="option" property="display" value="0" />
+  </list>
   <lrc xywh="0, 30R, 100%, 18" lock="1" display="1" group="A" alpha="0.8">
-	<text xywh="0, 0, 100P, 100P" align="center" font="宋体" size="12" color="#7F8FA5, #ffffff" horizontal="1" max_scale="3" shadow="1,90,#000000,0.5,4,4,1,3" />
+    <text xywh="0, 0, 100P, 100P" align="center" font="宋体" size="12" color="#7F8FA5, #ffffff" horizontal="1" max_scale="3" shadow="1,90,#000000,0.5,4,4,1,3" />
   </lrc>
   <console xywh="0, 0R, 100P, 28" src="console.png" mask="" lock="1" display="1" group="">
     <bt_play xywh="5, 4R, 20, 20" src="bt_play.png"/>
-
-	<progress xywh="32, 8R, 155B, 10" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="0" />
-    <time xywh="185R, 7R, 88, 15" align="center" font="Verdana" size="9" color="#ffffff" borderColor="" backgroundColor="" bold="" shadow="1,90,#000000,0.5,4,4,1,3" />
-	
+    <bt_stop xywh="30, 4R, 20, 20" src="bt_stop.png"/>
+    <progress xywh="56, 8R, 170B, 10" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="0" />
+    <time xywh="187R, 6R, 90, 16" align="center" font="Verdana" size="9" color="#ffffff" borderColor="" backgroundColor="#222222" bold="" shadow="1,90,#000000,0.5,4,4,1,3,true" />
     <bt_mute xywh="160R, 4R, 20, 20" src="bt_mute.png"/>
-    <volume xywh="75R, 9R, 80, 8" thumb_src="volume_thumb.png" track_src="volume_track.png"/>
-
-	<bt_fullscreen xywh="45R, 4R, 20, 20" src="bt_fullscreen.png" tips="全屏" />
-    <bt_option xywh="0R, 4R, 40, 20" src="bt_option.png" tips="设置" />
+    <volume xywh="80R, 9R, 75, 8" thumb_src="volume_thumb.png" track_src="volume_track.png"/>
+    <bt_list xywh="55R, 4R, 20, 20" src="bt_list.png" tips="列表" />
+    <bt_option xywh="30R, 4R, 20, 20" src="bt_option.png" tips="设置" />
+    <bt_fullscreen xywh="5R, 4R, 20, 20" src="bt_fullscreen.png" tips="全屏" />
   </console>
   <media xywh="0, 28R, 100P, 100P" src="media.swf" mask="" lock="1" display="1" group="">
     <video xywh="0, 0, 100P, 100P"/>
