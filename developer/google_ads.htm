@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4 Google Ads</title>
+<meta name="keywords" content="生活需要音乐,Flash播放器,MP3,FLV,视频,博客,音乐播放器,免费播放器,免费音乐,免费空间" />
+<meta name="description" content="生活需要音乐,Flash播放器,MP3,FLV,视频,博客,音乐播放器,免费播放器,免费音乐,免费空间 ,CMP交流论坛" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; text-align:center; overflow:hidden; font-size:12px; }
+</style>
+</head>
+<body>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
+<div style="width:600px;height:400px;margin:0px auto;position:relative;"> 
+  <!-- cmp区域 -->
+  <div id="cmp_area"></div>
+  <!-- 广告区域 覆盖cmp区域，默认隐藏 -->
+  <div id="ads_area" style="width:100%;height:100%;display:none;position:absolute;top:0px;left:0px;background:#000;"> 
+    <!-- 倒计时层 右下角 -->
+    <div id="num_time" style="position:absolute;bottom:2px;right:2px;color:#000;background:#fff;padding:0px 5px;"></div>
+    <!-- 谷歌广告层 居中 -->
+    <div style="position:absolute;left:50%;top:50%;width:200px;height:200px;margin-left:-100px;margin-top:-100px;"> 
+      <script type="text/javascript"> 
+		google_ad_client = "pub-7261651305684526";
+		google_ad_slot = "2439061759";
+		google_ad_width = 200;
+		google_ad_height = 200;
+	  </script> 
+      <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script> 
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+function $(id) { return document.getElementById(id); }
+var cmpo, done, time, tid;
+//插入cmp播放器
+$("cmp_area").innerHTML = CMP.create("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", {skin_id:0, api:"cmp_loaded"}, {wmode:"opaque"});
+//cmp初始化完成时调用
+function cmp_loaded(key) {
+	cmpo = CMP.get("cmp");
+	if (!cmpo) {
+		return;	
+	}
+	cmpo.addEventListener("model_start", "startHandler");
+	cmpo.addEventListener("model_state", "stateHandler");
+}
+//开始播放时调用
+function startHandler(data) {
+	time = 5;
+	done = false;
+	var gads = $("ads_area");
+	gads.style.display = '';
+	clearInterval(tid);
+	tid = setInterval(function() {
+		var str = "广告倒计时 " + time;
+		time --;
+		if (time == 0) {
+			str = "";
+			clearInterval(tid);
+			gads.style.display = 'none';
+			done = true;
+			if (cmpo.config("state") == "paused") {
+				cmpo.sendEvent("view_play");
+			}
+		}
+		$("num_time").innerHTML = str;
+	}, 1000);
+}
+//状态改变时调用
+function stateHandler(data) {
+	if (data == "playing") {
+		if (done == false) {
+			cmpo.sendEvent("view_play");
+		}
+	}
+}
+</script>
+</body>
+</html>
