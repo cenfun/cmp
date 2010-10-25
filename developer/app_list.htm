@@ -80,7 +80,8 @@ function add2cmp(obj, autoplay) {
 		ids.push(obj);
 	} else {
 		var form = obj.form;
-		for (var k in form) {
+		var eles = form.elements;
+		for (var k in eles) {
 			var item = form[k];
 			if (item && item.type == "checkbox") {
 				if (item.checked) {
