@@ -1,0 +1,52 @@
+﻿<skin name="Beveled" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" mask_color="" show_tips="0.5">
+  <option xywh="0C, 10C, 348, 110" src="" lock="1" display="0" group="A">
+    <pane xywh="0, 0, 100%, 100%" align="left" font="Arial" size="12" color="#222222, #0d8fda" />
+    <scrollbar thumb_src="scrollbar_thumb.png" track_src="scrollbar_track.png" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </option>
+  <list xywh="0C, 10C, 348, 110" src="" lock="1" display="1" group="A">
+    <tree xywh="0, 0, 100%, 100%" align="left" font="Arial" size="12" color="#222222, #ffffff" row_src="row.png" />
+    <scrollbar thumb_src="scrollbar_thumb.png" track_src="scrollbar_track.png" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+    <event type="close" target="media" property="display" value="1" />
+  </list>
+  <lrc xywh="0C, 10C, 348, 110" src="" lock="1" display="0" group="A">
+    <text xywh="0, 0, 100P, 100P" align="center" font="Arial" size="12" color="#222222, #006699" horizontal="0" max_scale="3" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </lrc>
+  <media xywh="0C, 10C, 348, 110" src="back.swf" lock="1" display="0" group="A">
+    <video xywh="0, 0, 100P, 100P"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </media>
+  <console xywh="0C, 0C, 350, 200" src="console.png" mask="" lock="1" display="1" group="A">
+    <bt_play xywh="5, 18, 30, 30" src="bt_play.png"/>
+    <bt_stop xywh="36, 25, 16, 16" src="bt_stop.png"/>
+    <bt_prev xywh="52, 25, 16, 16" src="bt_prev.png"/>
+    <bt_next xywh="68, 25, 16, 16" src="bt_next.png"/>
+    <title xywh="90, 5, 210, 18" font="Verdana" size="12" color="#ffffff" bold="1" shadow="1,-90,#000000,0.5,1,1,1,3" />
+    <bt_fullscreen xywh="6R, 6, 30, 17" src="bt_fullscreen.png" tips="全屏" />
+    <progress xywh="92, 30, 252, 6" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="1" />
+    <time_position xywh="90, 36, 100, 16" align="left" font="Verdana" size="9" color="#c1c4c5" borderColor="" shadow="1,-90,#000000,0.5,1,1,1,3" />
+    <time_duration xywh="4R, 36, 100, 16" align="right" font="Verdana" size="9" color="#c1c4c5" borderColor="" shadow="1,-90,#000000,0.5,1,1,1,3" />
+    <bt_list xywh="11, 9R, 17, 17" src="bt_list.png" tips="列表" />
+    <bt_video xywh="33, 9R, 17, 17" src="bt_video.png" tips="视频" />
+    <bt_lrc xywh="55, 9R, 17, 17" src="bt_lrc.png" tips="歌词" />
+    <bt_option xywh="77, 9R, 17, 17" src="bt_option.png" tips="设置" />
+    <status xywh="105, 9R, 100, 18" align="left" font="Verdana" size="12" color="#adb1b4" borderColor="" shadow="1,-90,#000000,0.5,1,1,1,3"/>
+    <bt_mute xywh="120R, 8R, 17, 17" src="bt_mute.png" tips="静音,打开声音" />
+    <volume xywh="64R, 14R, 50, 5" thumb_src="volume_thumb.png" track_src="volume_track.png" />
+    <bt_repeat xywh="31R, 9R, 17, 17" src="bt_repeat.png" tips="重复模式" />
+    <bt_random xywh="11R, 9R, 17, 17" src="bt_random.png" tips="随机模式" />
+  </console>
+</skin>
