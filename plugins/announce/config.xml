@@ -1,0 +1,9 @@
+﻿<cmp 
+
+	announce_content = "生活需要音乐，欢迎使用<font color='#ff00ff'>CMP</font>！Life needs music, Welcome to <b>CMP</b>!"
+	announce_xywh = "0,0,100P,20"
+	announce_speed = "1"
+
+	plugins = "plugins/announce.swf"
+
+/>
