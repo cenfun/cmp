@@ -13,7 +13,7 @@
 		private var pw:Number;
 		private var ph:Number;
 		
-		private var announce_content:String = "生活需要音乐，欢迎使用<font color='#ff00ff'>CMP</font>！Life needs music, Welcome to <b>CMP</b>!";
+		private var announce_content:String = "生活需要音乐，欢迎使用<a href='http://bbs.cenfun.com/'><font color='#ff0000'><b>CMP</b></font></a> Life needs music, Welcome to CMP";
 		private var announce_xywh:String = "0,0,100P,20";
 		private var announce_speed:Number = 1;
 		
@@ -30,9 +30,11 @@
 		
 		private function over(e:Event):void {
 			bt_close.visible = true;
+			pause();
 		}
 		private function out(e:Event):void {
 			bt_close.visible = false;
+			start();
 		}
 
 		private function apiHandler(e):void {
@@ -45,7 +47,7 @@
 			api.addEventListener(apikey.key, 'resize', resizeHandler);
 			
 			if (api.config.announce_content) {
-				announce_content = api.config.announce_content;
+				announce_content = decodeURIComponent(api.config.announce_content);
 			}
 			if (api.config.announce_xywh) {
 				announce_xywh = api.config.announce_xywh;
@@ -68,13 +70,21 @@
 			
 			resizeHandler();
 			
+			start();
+		}
+		
+		private function start():void {
 			addEventListener(Event.ENTER_FRAME, run);
 			running = true;
 		}
+		private function pause():void {
+			removeEventListener(Event.ENTER_FRAME, run);
+		}
+		
 		
 		private function remove(e:Event):void {
 			
-			removeEventListener(Event.ENTER_FRAME, run);
+			pause();
 			visible = false;
 			
 		}
