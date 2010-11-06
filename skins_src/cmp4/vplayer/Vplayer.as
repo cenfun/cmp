@@ -16,7 +16,12 @@
 
 		public function Vplayer() {
 			//侦听api的发送
-			this.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
+			root.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
+			root.loaderInfo.sharedEvents.addEventListener('api_remove', removeHandler);
+		}
+		override public function set width(v:Number):void {
+		}
+		override public function set height(v:Number):void {
 		}
 
 		private function apiHandler(e):void {
@@ -33,26 +38,10 @@
 			//状态改变时调用
 			api.addEventListener(apikey.key, 'model_state', stateHandler);
 			//初始化====================================================================
-			//api.tools.output("vplayer");
-			//自动关闭右键中窗口项
-			var menus:Array = api.cmp.contextMenu.customItems;
-			if (menus.length > 1) {
-				var newMenu:ContextMenu = new ContextMenu();
-				newMenu.hideBuiltInItems();
-				newMenu.customItems = [menus[0]];
-				api.cmp.contextMenu = newMenu;
-			}
-			//
-			api.win_list.console.bt_list.useHandCursor = true;
 			
-			//隐藏时间提示框和声音调节器
-			hideVol();
+			//隐藏时间提示框
 			barOut();
-			//侦听静音按钮鼠标事件
-			api.win_list.console.bt_mute.addEventListener(MouseEvent.ROLL_OVER, btmuteOver);
-			api.win_list.console.bt_mute.addEventListener(MouseEvent.ROLL_OUT, btmuteOut);
 			//
-			bg_vol.addEventListener(MouseEvent.ROLL_OUT, btmuteOut);
 			//侦听控制台显示隐藏事件;
 			api.cmp.addEventListener(MouseEvent.MOUSE_MOVE, cmpMove);
 			api.cmp.addEventListener(MouseEvent.ROLL_OVER, cmpOver);
@@ -64,8 +53,6 @@
 			//控制台透明度侦听事件
 			api.win_list.console.addEventListener(MouseEvent.ROLL_OVER, conOver);
 			api.win_list.console.addEventListener(MouseEvent.ROLL_OUT, conOut);
-			//退出皮肤时调用，用于清理上面的侦听，以免应该到其他皮肤里，冲突
-			this.addEventListener(Event.REMOVED_FROM_STAGE, removeHandler);
 			//初始位置尺寸
 			resizeHandler();
 			//初始化播放状态
@@ -75,8 +62,6 @@
 		private function removeHandler(e:Event):void {
 			//移除所有事件，防止冲突
 			clearTimeout(timeid);
-			api.win_list.console.bt_mute.removeEventListener(MouseEvent.ROLL_OVER, btmuteOver);
-			api.win_list.console.bt_mute.removeEventListener(MouseEvent.ROLL_OUT, btmuteOut);
 			//
 			api.cmp.removeEventListener(MouseEvent.MOUSE_MOVE, cmpMove);
 			api.cmp.removeEventListener(MouseEvent.ROLL_OVER, cmpOver);
@@ -88,9 +73,6 @@
 			//
 			api.win_list.console.removeEventListener(MouseEvent.ROLL_OVER, conOver);
 			api.win_list.console.removeEventListener(MouseEvent.ROLL_OUT, conOut);
-			//还原CMP的内部元件
-			showVol();
-			api.win_list.console.bt_list.useHandCursor = false;
 		}
 		
 
@@ -101,7 +83,6 @@
 			var ch:Number = api.config.height;
 			//还原缩放，因为cmp会把背景大小改变，这样要还原，以免比例失调
 			//并且设置背景框和cmp一样大小
-			this.scaleX = this.scaleY = 1;
 			bg.width = cw;
 			bg.height = ch;
 			//控制台透明背景
@@ -112,38 +93,12 @@
 			bg_bar.width = loading.width = cw - 150;
 			//
 			bg_sld.y = loading_mask.y = loading.y = bg_bar.y + 3;
-			bg_sld.width = loading_mask.width = cw - 220;
-			//设置音量背景位置
-			bg_vol.x = cw - 80;
-			bg_vol.y = ch - 10;
+			bg_sld.width = loading_mask.width = api.win_list.console.progress.width;
 			//时间提示位置
 			tip_time.y = ch - 43;
 			cmpOut();
-			hideVol();
 		}
-
-		//vol ==================================================
-
-		private function hideVol():void {
-			bg_vol.visible = false;
-			api.win_list.console.volume.visible = false;
-		}
-		private function showVol():void {
-			bg_vol.visible = true;
-			api.win_list.console.volume.visible = true;
-		}
-		private function btmuteOver(e:MouseEvent):void {
-			showVol();
-		}
-
-		private function btmuteOut(e:MouseEvent):void {
-			var sx:Number = bg_vol.stage.mouseX;
-			var sy:Number = bg_vol.stage.mouseY;
-			var test:Boolean = bg_vol.hitTestPoint(sx,sy,true);
-			if (! test) {
-				hideVol();
-			}
-		}
+		
 
 		//cmp ==================================================
 		private function cmpMove(e:MouseEvent):void {
