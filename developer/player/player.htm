@@ -94,13 +94,11 @@ function cmp_init(data) {
 	window.focus();
 }
 
-
 function makeListXml(ids) {
 	var xml = "<list>";
 	for (var i = 0; i < ids.length; i ++) {
 		var o = ids[i];
-		
-		xml += '<m label="'+o+'" src="'+o+'" />';
+		xml += '<m label="'+o+'" src="music/'+o+'" />';
 	}
 	xml += "</list>";
 	return xml;

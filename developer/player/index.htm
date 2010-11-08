@@ -61,9 +61,6 @@ function sendData(data){
 	if (data != "test") {
 		win_data = data;
 	}
-	//output = connected + (!win_cmp || win_cmp.closed);
-	
-	
 	if (data != "test" && !connected && (!win_cmp || win_cmp.closed)) {
 		win_open();
 		return;
@@ -105,7 +102,6 @@ function win_open() {
 	var params = 'width=600,height=400,menubar=0,resizable=1,status=0,titlebar=0,toolbar=0,location=0';
 	win_cmp = window.open('player.htm', 'win_cmp', params);
 }
-
 function win_play(ids) {
 	sendData(["play", ids]);
 }
@@ -155,22 +151,28 @@ function getSelected() {
     <div class="tablehead">专辑列表播放：</div>
     <table cellpadding="0" cellspacing="0" class="tablelist">
       <tr onmouseover="highlight(this, '#f5f5f5');">
-        <td ><input type="checkbox" value="http://cmp.cenfun.com/cmp4/music/test.mp3" /></td>
-        <td>music/test.mp3</td>
-        <td><a href="javascript:void(0)" onclick="play('http://cmp.cenfun.com/cmp4/music/test.mp3');">试听</a></td>
-        <td><a href="javascript:void(0)" onclick="add('http://cmp.cenfun.com/cmp4/music/test.mp3');">加入播放列表</a></td>
+        <td ><input type="checkbox" value="test.mp3" /></td>
+        <td>test.mp3</td>
+        <td><a href="javascript:void(0)" onclick="play('test.mp3');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="add('test.mp3');">加入播放列表</a></td>
       </tr>
       <tr onmouseover="highlight(this, '#f5f5f5');">
-        <td ><input type="checkbox" value="http://cmp.cenfun.com/cmp4/music/secret_garden.mid" /></td>
-        <td>music/secret_garden.mid</td>
-        <td><a href="javascript:void(0)" onclick="play('http://cmp.cenfun.com/cmp4/music/secret_garden.mid');">试听</a></td>
-        <td><a href="javascript:void(0)" onclick="add('http://cmp.cenfun.com/cmp4/music/secret_garden.mid');">加入播放列表</a></td>
+        <td ><input type="checkbox" value="test.flv" /></td>
+        <td>test.flv</td>
+        <td><a href="javascript:void(0)" onclick="play('test.flv');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="add('test.flv');">加入播放列表</a></td>
       </tr>
       <tr onmouseover="highlight(this, '#f5f5f5');">
-        <td ><input type="checkbox" value="http://cmp.cenfun.com/cmp4/music/castle_in_the_sky.mid" /></td>
-        <td>music/castle_in_the_sky.mid</td>
-        <td><a href="javascript:void(0)" onclick="play('http://cmp.cenfun.com/cmp4/music/castle_in_the_sky.mid');">试听</a></td>
-        <td><a href="javascript:void(0)" onclick="add('http://cmp.cenfun.com/cmp4/music/castle_in_the_sky.mid');">加入播放列表</a></td>
+        <td ><input type="checkbox" value="secret_garden.mid" /></td>
+        <td>secret_garden.mid</td>
+        <td><a href="javascript:void(0)" onclick="play('secret_garden.mid');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="add('secret_garden.mid');">加入播放列表</a></td>
+      </tr>
+      <tr onmouseover="highlight(this, '#f5f5f5');">
+        <td ><input type="checkbox" value="castle_in_the_sky.mid" /></td>
+        <td>castle_in_the_sky.mid</td>
+        <td><a href="javascript:void(0)" onclick="play('castle_in_the_sky.mid');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="add('castle_in_the_sky.mid');">加入播放列表</a></td>
       </tr>
     </table>
     <table cellspacing="0" cellpadding="0" class="tablefoot">
