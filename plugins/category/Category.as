@@ -59,7 +59,7 @@
 			tw = api.config.width || stage.stageWidth;
 			th = api.config.height || stage.stageHeight;
 			//播放器小于将不显示
-			if (tw < main.width || th < 240) {
+			if (tw < category_width || th < main.list.height) {
 				visible = false;
 				return;
 			} else if (! visible) {
