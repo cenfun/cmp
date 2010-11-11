@@ -149,9 +149,6 @@
 			
 			//清理列表==============================================
 			var ls:MovieClip = main.list as MovieClip;
-			while (ls.numChildren) {
-				ls.removeChildAt(0);
-			}
 			//生成列表
 			var i:int = 0;
 			for each (var xml:XML in xl.children()) {
