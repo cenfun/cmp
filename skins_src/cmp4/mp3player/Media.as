@@ -102,7 +102,7 @@
 			y = api.win_list.media.video.y;
 			
 			
-			api.tools.output(cw + "|" + ch);
+			//api.tools.output(cw + "|" + ch);
 		}
 
 		//播放状态改变时调用
