@@ -236,7 +236,7 @@
 			//api.tools.output(lists);
 			if (lists != api.config.lists) {
 				api.config.lists = lists;
-				api.sendEvent("list_load", true);
+				api.sendEvent("list_load");
 			}
 			//新的皮肤id
 			var skin_id:int = parseInt(gOP(xml,"skin_id",api.config.skin_id));
