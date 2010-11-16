@@ -5,23 +5,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<style type="text/css">
-html, body { overflow:hidden; }
-</style>
 <script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
-<div style="position:absolute;left:9999px;">
+<div style="position:absolute;left:-1000px;">
   <div id="cenfun_cmp_area"></div>
   <div id="client_cmp_area"></div>
 </div>
 <h3>CMP4最新版本在线检测</h3>
-<div>请输入您的CMP4地址：(如：http://cmp.cenfun.com/cmp4/cmp.swf)</div>
-<div style="margin-top:10px;">
-  <form onsubmit="return checkCMP(this)">
-    <input id="cmp_url" type="text" value="" style="width:300px;margin-right:5px;" />
+<div>请输入要检测的CMP4地址：(如：http://cmp.cenfun.com/cmp4/cmp.swf)</div>
+<form onsubmit="return checkCMP(this)">
+  <div style="margin-top:10px;">
+    <input id="cmp_url" type="text" value="" style="width:450px;margin-right:5px;" onfocus="this.select()" />
+  </div>
+  <div style="margin-top:10px;">
     <input type="submit" value="开始检测版本" />
-  </form>
-</div>
-<div id="msg" style="margin-top:10px;"></div>
+  </div>
+</form>
+<div id="msg" style="margin-top:10px;line-height:150%;"></div>
 <script type="text/javascript">
 function $(id) { return document.getElementById(id); }
 function checkCMP(form) {
@@ -33,7 +32,7 @@ function checkCMP(form) {
 		$("msg").innerHTML = "正则检测...";
 		
 	} else {
-		alert("请输入您的CMP4地址");	
+		$("msg").innerHTML = '<font color="#ff0000">请输入要检测的CMP4地址</font>';
 	}
 	return false;
 }
@@ -57,7 +56,7 @@ function check_version() {
 		
 		var cenfun_version = cenfun_cmpo.cmp_version();
 		var client_version = client_cmpo.cmp_version();	
-		var str = "<div>检测完成</div><div>官方最新的版本： " + cenfun_version + "</div><div>当前检测的版本： " + client_version + "</div>";
+		var str = "<div>检测完成</div><div>官方最新的版本： " + cenfun_version + "</div><div>当前使用的版本： " + client_version + "</div>";
 		
 		var cenfun_num = cenfun_version.substr(cenfun_version.length - 6);
 		var client_num = client_version.substr(client_version.length - 6);
@@ -66,9 +65,10 @@ function check_version() {
 		client_num = client_num * 1;
 		
 		if (cenfun_num > client_num) {
-			str += '<div style="color:#ff0000;">您使用的CMP4不是最新版本，需要进行升级<div><a href="http://cmp.cenfun.com/download/cmp4"><img src="http://cmp.cenfun.com/download/cmp4/?img" border="0" alt=""/></a></div></div>';
+			str += '<div style="color:#ff0000;">您使用的不是最新版本，需要进行升级</div>'
+			str += '<div style="margin-top:10px;"><a href="http://cmp.cenfun.com/download/cmp4"><img src="http://cmp.cenfun.com/download/cmp4/?img" border="0" alt=""/></a></div>';
 		} else {
-			str += '<div>您使用的CMP4已经最新版本</div>';	
+			str += '<div>您使用的已经最新版本</div>';	
 		}
 		
 		$("msg").innerHTML = str;
