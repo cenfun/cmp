@@ -223,7 +223,7 @@
 			var sx:int = e.stageX;
 			var sy:int = e.stageY;
 			var ol:Boolean = false;
-			if (sx < tw - share.width || sy < share.y || sy > share.y + share.height) {
+			if (sx < tw - share.width || sy < share.y || sy > share.y + share.height || e.buttonDown) {
 				ol = true;
 			}
 			slideNow(ol);
