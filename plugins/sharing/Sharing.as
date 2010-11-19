@@ -33,9 +33,12 @@
 		
 		private var bt_format:TextFormat = new TextFormat();
 		
+		private var onleft:Boolean = true;
+		
 		public function Sharing() {
 			Security.allowDomain("*");
 			root.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
+			root.loaderInfo.sharedEvents.addEventListener('api_remove',removeHandler);
 			
 			var bcolor:uint = 0x555555;
 			main.code_flash.border = true;
@@ -63,6 +66,16 @@
 			win.visible = false;
 			win.bt_ok.addEventListener(MouseEvent.CLICK, okClick);
 		}
+		override public function set width(v:Number):void {
+		}
+		override public function set height(v:Number):void {
+		}
+		public function removeHandler(e):void {
+			//api.tools.output("api remove");
+			api.cmp.stage.removeEventListener(MouseEvent.MOUSE_MOVE, moving);
+			api.cmp.stage.removeEventListener(Event.MOUSE_LEAVE, leave);
+		}
+
 		private function okClick(e:MouseEvent):void {
 			win.visible = false;
 		}
@@ -184,6 +197,7 @@
 			api.addEventListener(apikey.key, "resize", resizeHandler);
 			resizeHandler();
 			main.visible = false;
+			arrow.visible = false;
 			//取得播放器绝对地址并附带参数
 			if (api.config.share_url) {
 				main.code_flash.text = api.config.share_url;
@@ -192,38 +206,63 @@
 				showMsg('本分享插件(sharing.swf)需最新版本的CMP4支持，请到 <a href="http://bbs.cenfun.com/" target="_blank">http://bbs.cenfun.com/</a> 更新升级！');
 				return;
 			}
-			api.addEventListener(apikey.key, MouseEvent.ROLL_OVER, cmpOver);
-			api.addEventListener(apikey.key, MouseEvent.ROLL_OUT, cmpOut);
+			
+			
+			api.cmp.stage.addEventListener(MouseEvent.MOUSE_MOVE, moving);
+			api.cmp.stage.addEventListener(Event.MOUSE_LEAVE, leave);
+			
 			//
 			share.addEventListener(MouseEvent.CLICK, shareClick);
-			//
 			main.bt_close.addEventListener(MouseEvent.CLICK, mainClose);
 		}
 		
-		
-		private function cmpOver(e:MouseEvent = null):void {
-			clearTimeout(tid);
+		private function moving(e:MouseEvent):void {
 			if (main.visible) {
 				return;
 			}
-			if (api) {
-				var sw:Number = share.width;
-				var edx:Number = tw - sw;
-				if (share.x != edx) {
-					api.tools.effects.m(share, "x", edx, sw);
-				}
+			var sx:int = e.stageX;
+			var sy:int = e.stageY;
+			var ol:Boolean = false;
+			if (sx < tw - share.width || sy < share.y || sy > share.y + share.height) {
+				ol = true;
+			}
+			slideNow(ol);
+			if (ol && !arrow.visible) {
+				arrow.visible = true;
+			} else if (!ol) {
+				arrow.visible = false;
 			}
 		}
+		//鼠标离开flash舞台区域
+		private function leave(e:Event):void {
+			//api.tools.output(e);
+			arrow.visible = false;
+			slideNow(true);
+		}
+		
+		private function slideNow(ol:Boolean):void {
+			if (ol == onleft || !api) {
+				return;
+			}
+			onleft = ol;
+			api.tools.effects.e(share);
+			//api.tools.output(onleft);
+			if (onleft) {
+				api.tools.effects.m(share, "x", tw, tw);
+			} else {
+				api.tools.effects.m(share, "x", tw - 60, tw);
+				startOut();
+			}
+		}
+		
 		private var tid:uint;
-		private function cmpOut(e:MouseEvent = null):void {
+		private function startOut(e:MouseEvent = null):void {
 			clearTimeout(tid);
 			tid = setTimeout(hide, 2000);
 		}
 		
 		private function hide():void {
-			if (api) {
-				api.tools.effects.m(share, "x", tw, share.width);
-			}
+			slideNow(true);
 		}
 
 		private function shareClick(e:MouseEvent):void {
@@ -250,6 +289,9 @@
 			win.y = th * 0.5;
 			share.x = tw;
 			share.y = (th - share.height) * 0.5;
+			arrow.x = tw - arrow.width;
+			arrow.y = (th - arrow.height) * 0.5;
+			
 			main.x = (tw - main.width) * 0.5;
 			main.y = (th - main.height) * 0.5;
 		}
