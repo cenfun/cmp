@@ -45,6 +45,6 @@
     <bt_list xywh="5, 2R, 60, 25" src="bt_list.png" />
     <bt_lrc xywh="65, 2R, 60, 25" src="bt_lrc.png" />
     <bt_video xywh="125, 2R, 60, 25" src="bt_video.png" />
-    <bt_link xywh="5R, 1R, 50, 25" src="bt_link.png" link="http://bbs.cenfun.com/" tips="欢迎使用CMP" />
+    <bt_link xywh="5R, 1R, 50, 25" src="bt_link.png" link="http://bbs.cenfun.com/" target="_blank" tips="欢迎使用CMP" />
   </console>
 </skin>
