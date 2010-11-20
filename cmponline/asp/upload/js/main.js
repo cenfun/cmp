@@ -24,16 +24,16 @@ function show_vars(type, cls) {
 		});
 	} else {
 		var str;
-		if (type == "config" && typeof CMP_CONFIG !== "undefined") {
-			str = $('<div class="clearfix"></div>');
-			for (var k in CMP_CONFIG) {
-				$("<div></div>").addClass("vars_item").append(k).attr("title", CMP_CONFIG[k]).appendTo(str);
+		if ((type == "config" && typeof CMP_CONFIG !== "undefined") || (type == "list" && typeof CMP_LIST !== "undefined")) {
+			str = '<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+			var obj = type == "config" ? CMP_CONFIG : CMP_LIST;
+			for (var k in obj) {
+				str += '<tr onmouseover="highlight(this,\'#F9F9F9\');">';
+				str += '<td nowrap="nowrap" align="right">'+k+'</td>';
+				str += '<td>'+obj[k]+'</td>';
+				str += '</tr>';
 			}
-		} else if (type == "list" && typeof CMP_LIST !== "undefined") {
-			str = $('<div class="clearfix"></div>');
-			for (var k in CMP_LIST) {
-				$("<div></div>").addClass("vars_item").append(k).attr("title", CMP_LIST[k]).appendTo(str);
-			}
+			str += '</table>';
 		} else {
 			str = "错误";	
 		}

@@ -109,6 +109,7 @@ sub getplugins()
   <tr>
     <td>&nbsp;</td>
     <td>如果想在背景层加载，请用backgrounds=&quot;&quot;<br />
+      多个插件可以用英文逗号隔开<br />
       某些插件可能需要在配置传入专属参数，需参见插件的具体使用说明<br />
       如果需要设置插件显示类特殊参数，请参见CMP相关使用说明</td>
   </tr>

@@ -50,4 +50,4 @@ a:hover { color:#428EFF; text-decoration:underline; }
 .xml { line-height:150%; padding:10px 10px; background:#eee; margin:3px 0px; }
 .xml_area { line-height:150%; padding:2px 5px; }
 .vars_list { height:200px; overflow:auto; border:1px solid #999; margin-top:5px; }
-.vars_item { cursor:pointer; border-bottom:1px dotted #eee; padding:3px 5px; }
+.vars_list td { padding:3px 5px; border-bottom:1px solid #eee; }
