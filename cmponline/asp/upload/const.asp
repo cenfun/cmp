@@ -68,6 +68,9 @@ if Ubound(site_ads)=2 then
 	site_ad_bottom=site_ads(2)
 end if
 
+'site_ad_top=""
+'site_ad_bottom=""
+
 '清理Application信息
 function clearApp()
 	Application.Lock

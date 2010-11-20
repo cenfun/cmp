@@ -189,7 +189,7 @@ if (xml_make == "1") {
 	//如果存在之前旧的数据则清理
 	show_step("step_clear");
 	//直接删除之前数据目录xml_path
-	$.get("system.asp?handler=ajax&cmd=clear&xmlpath="+xml_path, function(data){
+	$.get("system.asp?rd="+Math.random()+"&handler=ajax&cmd=clear&xmlpath="+xml_path, function(data){
 		var msg = "完成";
 		if(data != ""){
 			msg = data;
@@ -205,7 +205,7 @@ function start_make() {
 	if (xmlmake == "1") {
 		show_step("step_create");
 		//创建新的数据目录xmlpath
-		$.get("system.asp?handler=ajax&cmd=create&xmlpath="+xmlpath, function(data){
+		$.get("system.asp?rd="+Math.random()+"&handler=ajax&cmd=create&xmlpath="+xmlpath, function(data){
 			var msg = "完成";
 			if(data != ""){
 				msg = data;
@@ -222,7 +222,7 @@ function start_make() {
 
 function make(page) {
 	show_msg("step_make_msg", "正在创建第" + now_page + '页<img src="images/loading.gif" align="absmiddle" />');
-	var url = "system.asp?handler=ajax&cmd=make&xmlpath="+xmlpath+"&xmlconfig="+xmlconfig+"&xmllist="+xmllist+"&page="+page;
+	var url = "system.asp?rd="+Math.random()+"&handler=ajax&cmd=make&xmlpath="+xmlpath+"&xmlconfig="+xmlconfig+"&xmllist="+xmllist+"&page="+page;
 	$.get(url, function(data){
 		if(data != ""){
 			if (data != "MakeComplete") {
