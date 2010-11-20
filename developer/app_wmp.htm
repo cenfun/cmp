@@ -82,7 +82,7 @@ function showWmp(display) {
 		wmpo.width = cmpo.config().video_width;
 		wmpo.height = cmpo.config().video_height;
 		//锁定窗口，防止拖动时，wmp的视频会错位
-		cmpo.skin("console", "lock", display);
+		cmpo.skin("console", "lock", 1);
 	}
 }
 function startHandler(data) {
