@@ -1,8 +1,9 @@
 ﻿<!--#include file="conn.asp"-->
-<!--#include file="const.asp"-->
+<!--#include file="const.asp"--> 
 <!--#include file="md5.asp"-->
 <%
 site_title = "系统管理"
+
 '检测管理员是否登录
 If founduser and foundadmin Then
 	if Request.QueryString("handler")="ajax" then
@@ -10,6 +11,7 @@ If founduser and foundadmin Then
 	else
 		header()
 		menu()
+		top_menu()
 		Select Case Request.QueryString("action")
 			Case "config"
 				config()
@@ -29,10 +31,6 @@ If founduser and foundadmin Then
 				skins()
 			Case "plugins"
 				plugins()
-			Case "lrc"
-				lrc()
-			Case "create_lrc"
-				create_lrc()
 			Case Else
 				config()
 		End Select
@@ -45,6 +43,21 @@ else
 end if
 	
 	
+sub top_menu()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder menu_bar" width="98%">
+  <tr>
+    <td><div class="clearfix">
+        <div class="lt"><a href="system.asp?action=config" title="System">系统设置</a></div>
+        <div class="lt"><a href="system.asp?action=user" title="Users">用户管理</a></div>
+        <div class="lt"><a href="system.asp?action=skins" title="Skins">皮肤管理</a></div>
+        <div class="lt"><a href="system.asp?action=plugins" title="Plugins">插件管理</a></div>
+      </div></td>
+  </tr>
+</table>
+<%
+end sub	
+
 	
 sub ajax()
 	Select Case Request.QueryString("cmd")
@@ -148,13 +161,15 @@ sub reMakeData(xmlmake, xmlpath, xmlconfig, xmllist)
     <p>开始清除所有旧的静态数据... <strong id="step_clear_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
   </div>
   <div id="step_create" style="display:none;">
-  	<p>开始创建新的静态数据目录... <strong id="step_create_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
+    <p>开始创建新的静态数据目录... <strong id="step_create_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
   </div>
   <div id="step_make" style="display:none;">
-  	<p>开始生成所有静态数据文件... <strong id="step_make_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
+    <p>开始生成所有静态数据文件... <strong id="step_make_msg"><img src="images/loading.gif" align="absmiddle" /></strong></p>
   </div>
   <div id="step_end" style="display:none;">
-    <p><input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" /></p>
+    <p>
+      <input name="" type="button" value="&lt;&lt;返回系统设置" onClick="window.location='system.asp?action=config';" />
+    </p>
   </div>
 </div>
 <script type="text/javascript">
@@ -174,65 +189,60 @@ if (xml_make == "1") {
 	//如果存在之前旧的数据则清理
 	show_step("step_clear");
 	//直接删除之前数据目录xml_path
-	ajaxSend("GET","system.asp?rd="+Math.random()+"&handler=ajax&cmd=clear&xmlpath="+xml_path,true,null,clearHd,errorHd);
+	$.get("system.asp?rd="+Math.random()+"&handler=ajax&cmd=clear&xmlpath="+xml_path, function(data){
+		var msg = "完成";
+		if(data != ""){
+			msg = data;
+		}
+		show_msg("step_clear_msg", msg);
+		start_make();
+	});
 } else {
 	start_make();
 }
-function clearHd(data) {
-	var msg = "完成";
-	if(data != ""){
-		msg = data;
-	}
-	show_msg("step_clear_msg", msg);
-	start_make();
-}
+
 function start_make() {
 	if (xmlmake == "1") {
 		show_step("step_create");
 		//创建新的数据目录xmlpath
-		ajaxSend("GET","system.asp?rd="+Math.random()+"&handler=ajax&cmd=create&xmlpath="+xmlpath,true,null,createHd,errorHd);
+		$.get("system.asp?rd="+Math.random()+"&handler=ajax&cmd=create&xmlpath="+xmlpath, function(data){
+			var msg = "完成";
+			if(data != ""){
+				msg = data;
+			} 
+			show_msg("step_create_msg", msg);
+			//从当前页1开始逐页生成文件
+			show_step("step_make");
+			make(now_page);
+		});
 	} else {
 		show_step("step_end");
 	}
 }
-function createHd(data) {
-	var msg = "完成";
-	if(data != ""){
-		msg = data;
-	} 
-	show_msg("step_create_msg", msg);
-	//从当前页1开始逐页生成文件
-	show_step("step_make");
-	make(now_page);
-}
+
 function make(page) {
 	show_msg("step_make_msg", "正在创建第" + now_page + '页<img src="images/loading.gif" align="absmiddle" />');
 	var url = "system.asp?rd="+Math.random()+"&handler=ajax&cmd=make&xmlpath="+xmlpath+"&xmlconfig="+xmlconfig+"&xmllist="+xmllist+"&page="+page;
-	ajaxSend("GET",url,true,null,makeHd,remakeHd);
-}
-function makeHd(data) {
-	if(data != ""){
-		if (data != "MakeComplete") {
-			//继续下一轮make
-			var page = parseInt(data);
-			if(isNaN(page)) {
-				remakeHd("当前页码错误！");
+	$.get(url, function(data){
+		if(data != ""){
+			if (data != "MakeComplete") {
+				//继续下一轮make
+				var page = parseInt(data);
+				if(isNaN(page)) {
+					remakeHd("当前页码错误！");
+				} else {
+					now_page = page
+					now_page ++;
+					make(now_page);
+				}
 			} else {
-				now_page = page
-				now_page ++;
-				make(now_page);
+				show_msg("step_make_msg", "完成");
+				show_step("step_end");
 			}
 		} else {
-			show_msg("step_make_msg", "完成");
-			show_step("step_end");
+			show_msg("step_make_msg", "错误");
 		}
-	} else {
-		show_msg("step_make_msg", "错误");
-	}
-}
-function remakeHd(errmsg) {
-	alert(errmsg);
-	show_msg("step_make_msg", "创建第" + now_page + '页时失败 <input type="button" value="点击重试" onclick="make('+now_page+');" />');
+	});
 }
 //
 function show_step(step) {
@@ -243,9 +253,7 @@ function show_msg(step, msg) {
 	var obj = document.getElementById(step);
 	obj.innerHTML = msg;
 }
-function errorHd(errmsg) {
-	alert(errmsg);
-}
+
 </script>
 <%
 '更新Application信息
@@ -255,29 +263,23 @@ end sub
 
 sub database()
 %>
-<div><input type="button" value="压缩和修复数据库" onclick="fixmdb(this);" /> <strong id="fix_status"></strong></div>
+<div>
+  <input type="button" value="压缩和修复数据库" onClick="fixmdb(this);" />
+  <strong id="fix_status"></strong></div>
 <script type="text/javascript">
-var bt_fix;
 function fixmdb(o) {
-	bt_fix = o;
-	bt_fix.disabled = "disabled";
+	o.disabled = "disabled";
 	show_status('<img src="images/loading.gif" align="absmiddle" />');
-	ajaxSend("GET","system.asp?rd="+Math.random()+"&handler=ajax&cmd=fixmdb",true,null,fixHd,errorHd);
-}
-function fixHd(data) {
-	if(data != ""){
-		show_status(data);
-	} 
-	bt_fix.disabled = "";
+	$.get("system.asp?handler=ajax&cmd=fixmdb", function(data){
+		if(data != ""){
+			show_status(data);
+		} 
+		o.disabled = "";
+	});
 }
 function show_status(status) {
 	var obj = document.getElementById("fix_status");
 	obj.innerHTML = status;
-}
-function errorHd(errmsg) {
-	alert(errmsg);
-	show_status('错误');
-	bt_fix.disabled = "";
 }
 </script>
 <%
@@ -356,12 +358,12 @@ sub config()
             </tr>
             <%if xml_make="1" then%>
             <tr>
-              <td><input type="button" value="手动重建所有静态数据文件" onclick="window.location='system.asp?action=remake';" /></td>
+              <td><input type="button" value="手动重建所有静态数据文件" onClick="window.location='system.asp?action=remake';" /></td>
             </tr>
             <%end if%>
             <tr>
               <td><div style="color:#0000FF;">
-                  <div>注：文件夹名请勿用同级目录下系统已存文件夹名称，如images,data,lrc,skins,plugins等，以防止重建时被一起删除</div>
+                  <div>注：文件夹名请勿用同级目录下系统已存文件夹名称，如images,data,skins,plugins等，以防止重建时被一起删除</div>
                   <div>ID匹配文件名推荐用config.xml和list.xml，请勿用*.asp,*.asa等服务端程序后缀名，以防止恶意脚本执行</div>
                   <div>修改静态数据设置，所有用户静态数据将被重建或全部删除，且CMP调用地址将改变，请务必通知用户</div>
                   <div>请勿经常改动静态数据设置，尤其用户过多时，重建所有静态数据将耗费大量服务器资源和时间</div>
@@ -413,7 +415,7 @@ function check(o){
 		return false;
 	}
 	if(o.xml_make.checked) {
-		if(o.xml_path.value=="" || o.xml_path.value=="images" || o.xml_path.value=="data" || o.xml_path.value=="lrc" || o.xml_path.value=="skins" || o.xml_path.value=="plugins" || !checkbadwords(o.xml_path.value, "./\\:*?<>\"|")){
+		if(o.xml_path.value=="" || o.xml_path.value=="images" || o.xml_path.value=="data" || o.xml_path.value=="skins" || o.xml_path.value=="plugins" || !checkbadwords(o.xml_path.value, "./\\:*?<>\"|")){
 			alert("生成静态数据的文件夹名不正确！");
 			o.xml_path.select();
 			return false;
@@ -590,8 +592,7 @@ by=Checkstr(Request.QueryString("by"))
         <option value="1" <%if userstatus="1" then%>selected="selected"<%end if%>>被锁定用户</option>
         <option value="5" <%if userstatus="5" then%>selected="selected"<%end if%>>普通用户</option>
         <option value="8" <%if userstatus="8" then%>selected="selected"<%end if%>>管理员</option>
-      </select>
-    </td>
+      </select></td>
   </tr>
   <tr>
     <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
@@ -694,7 +695,7 @@ IF not rs.EOF Then
 			role = "未定义"
 		end select
 		%>
-          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
+          <tr align="center" onMouseOver="highlight(this,'#F9F9F9');">
             <td><%if ustatus<>9 then%>
               <input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" />
               <%end if%></td>
@@ -812,7 +813,7 @@ else
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
   <tr>
-    <th colspan="2" align="left"><input type="button" value="&lt;&lt;返回用户列表" onclick="window.location='<%=referer%>';" /></th>
+    <th colspan="2" align="left"><input type="button" value="&lt;&lt;返回用户列表" onClick="window.location='<%=referer%>';" /></th>
   </tr>
   <%
 sql = "select * from cmp_user where id = " & id & " "
@@ -914,8 +915,7 @@ if not rs.eof then
     <tr>
       <td width="20%">&nbsp;</td>
       <td width="80%"><input name="submit" type="submit" value="修改" style="width:50px;" />
-        <input name="" type="button" value="取消" style="width:50px;" onclick="window.location='<%=referer%>';" />
-      </td>
+        <input name="" type="button" value="取消" style="width:50px;" onClick="window.location='<%=referer%>';" /></td>
     </tr>
   </form>
   <%
@@ -1022,8 +1022,6 @@ if id <> "" then
 			else
 				setinfo=0
 			end if
-			'正则替换配置文件列表地址，名称，网站
-			config = CheckStr(setLNU(request.Form("config"), xml_make, xml_path, xml_list, id, cmp_name, cmp_url))
 			list = CheckStr(request.Form("list"))
 			'生成静态文件
 			if xml_make="1" then
@@ -1061,18 +1059,14 @@ sub skins()
 dim deal
 deal = Request.QueryString("deal")
 if deal<>"" then
-	dim id,title,src,bgcolor,mixer_id,mixer_color,show_tip
+	dim id,title,src
 	select case deal
 		case "add"
 			title = Checkstr(Request.Form("skin_title"))
 			src = Checkstr(Request.Form("skin_src"))
-			bgcolor = Checkstr(Request.Form("skin_bgcolor"))
-			mixer_id = Checkstr(Request.Form("skin_mixer_id"))
-			mixer_color = Checkstr(Request.Form("skin_mixer_color"))
-			show_tip = Checkstr(Request.Form("skin_show_tip"))
 			sql = "insert into cmp_skins "
-			sql = sql & "(title,src,bgcolor,mixer_id,mixer_color,show_tip) values("
-			sql = sql & "'"&title&"','"&src&"','"&bgcolor&"','"&mixer_id&"','"&mixer_color&"','"&show_tip&"')"
+			sql = sql & "(title,src) values("
+			sql = sql & "'"&title&"','"&src&"')"
 			conn.execute(sql)
 		case "del"
 			id = Checkstr(Request.QueryString("id"))
@@ -1081,12 +1075,8 @@ if deal<>"" then
 			id = Checkstr(Request.QueryString("id"))
 			title = Checkstr(Request.Form("skin_title"))
 			src = Checkstr(Request.Form("skin_src"))
-			bgcolor = Checkstr(Request.Form("skin_bgcolor"))
-			mixer_id = Checkstr(Request.Form("skin_mixer_id"))
-			mixer_color = Checkstr(Request.Form("skin_mixer_color"))
-			show_tip = Checkstr(Request.Form("skin_show_tip"))
 			sql = "update cmp_skins set "
-			sql = sql & "title='"&title&"',src='"&src&"',bgcolor='"&bgcolor&"',mixer_id='"&mixer_id&"',mixer_color='"&mixer_color&"',show_tip='"&show_tip&"' "
+			sql = sql & "title='"&title&"',src='"&src&"' "
 			sql = sql & "where id="&id&" "
 			conn.execute(sql)
 		case else
@@ -1104,21 +1094,12 @@ else
           <tr align="center">
             <td><input name="skin_title" type="text" maxlength="50" /></td>
             <td><input name="skin_src" type="text" maxlength="200" /></td>
-            <td>背景色
-              <input name="skin_bgcolor" type="text" size="7" maxlength="7" />
-              混音器ID
-              <input name="skin_mixer_id" type="text" size="2" maxlength="2" />
-              混音器颜色
-              <input name="skin_mixer_color" type="text" size="7" maxlength="7" />
-              提示信息延时
-              <input name="skin_show_tip" type="text" size="5" maxlength="10" /></td>
             <td colspan="3"><input name="add_submit" type="submit" value="添加皮肤" /></td>
           </tr>
         </form>
         <tr>
           <th>名称</th>
           <th>路径</th>
-          <th>默认设置</th>
           <th colspan="3">操作</th>
         </tr>
         <%
@@ -1132,20 +1113,12 @@ else
 		Do Until rs.EOF
 		%>
         <form action="system.asp?action=skins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
-          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
+          <tr align="center" onMouseOver="highlight(this,'#F9F9F9');">
             <td><input name="skin_title" type="text" value="<%=trim(rs("title"))%>" maxlength="50" /></td>
             <td><input name="skin_src" type="text" value="<%=trim(rs("src"))%>" maxlength="200" /></td>
-            <td>背景色
-              <input name="skin_bgcolor" type="text" value="<%=trim(rs("bgcolor"))%>" size="7" maxlength="7" />
-              混音器ID
-              <input name="skin_mixer_id" type="text" value="<%=trim(rs("mixer_id"))%>" size="2" maxlength="2" />
-              混音器颜色
-              <input name="skin_mixer_color" type="text" value="<%=trim(rs("mixer_color"))%>" size="7" maxlength="7" />
-              提示信息延时
-              <input name="skin_show_tip" type="text" value="<%=trim(rs("show_tip"))%>" size="5" maxlength="10" /></td>
             <td><input name="edit_submit" type="submit" value="修改" /></td>
-            <td><input name="show_submit" type="button" value="预览" onclick="skin_show('<%=cmp_show_url & "&amp;skin_src=" & rs("src")%>');" /></td>
-            <td><input name="del_submit" type="button" value="删除" onclick="skin_del('<%=rs("id")%>');" /></td>
+            <td><input name="show_submit" type="button" value="预览" onClick="skin_show('<%=cmp_show_url & "&skin=" & rs("src")%>');" /></td>
+            <td><input name="del_submit" type="button" value="删除" onClick="skin_del('<%=rs("id")%>');" /></td>
           </tr>
         </form>
         <%
@@ -1156,6 +1129,7 @@ else
 		%>
       </table></td>
   </tr>
+  <tr><td>注意，如果所有皮肤都加载错误，可能是因为空间不支持zip文件的访问，请尝试将皮肤包文件的后缀zip改为swf</td></tr>
 </table>
 <script type="text/javascript">
 function skin_del(id){
@@ -1190,18 +1164,14 @@ sub plugins()
 dim deal
 deal = Request.QueryString("deal")
 if deal<>"" then
-	dim id,title,src,plugin_xywh,plugin_lock,plugin_display,plugin_istop
+	dim id,title,src
 	select case deal
 		case "add"
 			title = Checkstr(Request.Form("plugin_title"))
 			src = Checkstr(Request.Form("plugin_src"))
-			plugin_xywh = Checkstr(Request.Form("plugin_xywh"))
-			plugin_lock = Checkstr(Request.Form("plugin_lock"))
-			plugin_display = Checkstr(Request.Form("plugin_display"))
-			plugin_istop = Checkstr(Request.Form("plugin_istop"))
 			sql = "insert into cmp_plugins "
-			sql = sql & "(title,src,xywh,lock,display,istop) values("
-			sql = sql & "'"&title&"','"&src&"','"&plugin_xywh&"','"&plugin_lock&"','"&plugin_display&"','"&plugin_istop&"')"
+			sql = sql & "(title,src) values("
+			sql = sql & "'"&title&"','"&src&"')"
 			conn.execute(sql)
 		case "del"
 			id = Checkstr(Request.QueryString("id"))
@@ -1210,11 +1180,7 @@ if deal<>"" then
 			id = Checkstr(Request.QueryString("id"))
 			title = Checkstr(Request.Form("plugin_title"))
 			src = Checkstr(Request.Form("plugin_src"))
-			plugin_xywh = Checkstr(Request.Form("plugin_xywh"))
-			plugin_lock = Checkstr(Request.Form("plugin_lock"))
-			plugin_display = Checkstr(Request.Form("plugin_display"))
-			plugin_istop = Checkstr(Request.Form("plugin_istop"))
-			conn.execute("update cmp_plugins set title='"&title&"',src='"&src&"',xywh='"&plugin_xywh&"',lock='"&plugin_lock&"',display='"&plugin_display&"',istop='"&plugin_istop&"' where id="&id&" ")
+			conn.execute("update cmp_plugins set title='"&title&"',src='"&src&"' where id="&id&" ")
 		case else
 	end select
 	response.Redirect("system.asp?action=plugins")
@@ -1230,44 +1196,27 @@ else
           <tr align="center">
             <td><input name="plugin_title" type="text" maxlength="50" /></td>
             <td><input name="plugin_src" type="text" maxlength="200" /></td>
-            <td>xywh:
-              <input name="plugin_xywh" type="text" value="0, 0, 100P, 100P" maxlength="50" />
-              <input name="plugin_lock" type="checkbox" value="1" checked="checked" />
-              锁定
-              <input name="plugin_display" type="checkbox" value="1" checked="checked" />
-              显示
-              <input name="plugin_istop" type="checkbox" value="1" />
-              前置</td>
             <td colspan="3"><input name="add_submit" type="submit" value="添加插件" /></td>
           </tr>
         </form>
         <tr>
           <th>名称</th>
           <th>路径</th>
-          <th>默认设置</th>
           <th colspan="3">操作</th>
         </tr>
         <%
 		'所有插件
-		sql = "select id,title,src,xywh,lock,display,istop from cmp_plugins order by id desc"
+		sql = "select id,title,src from cmp_plugins order by id desc"
 		set rs = conn.execute(sql)
 		Do Until rs.EOF
 		%>
         <form action="system.asp?action=plugins&amp;deal=edit&amp;id=<%=rs("id")%>" method="post" onSubmit="return check(this);">
-          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
+          <tr align="center" onMouseOver="highlight(this,'#F9F9F9');">
             <td><input name="plugin_title" type="text" value="<%=rs("title")%>" maxlength="50" /></td>
             <td><input name="plugin_src" type="text" value="<%=rs("src")%>" maxlength="200" /></td>
-            <td>xywh:
-              <input name="plugin_xywh" type="text" value="<%=rs("xywh")%>" maxlength="50" />
-              <input name="plugin_lock" type="checkbox" value="1" <%if rs("lock")="1" then%>checked="checked"<%end if%> />
-              锁定
-              <input name="plugin_display" type="checkbox" value="1" <%if rs("display")="1" then%>checked="checked"<%end if%> />
-              显示
-              <input name="plugin_istop" type="checkbox" value="1" <%if rs("istop")="1" then%>checked="checked"<%end if%>/>
-              前置</td>
             <td><input name="edit_submit" type="submit" value="修改" /></td>
-            <td><input name="show_submit" type="button" value="预览" onclick="plugin_show('<%=rs("src")%>');" /></td>
-            <td><input name="del_submit" type="button" value="删除" onclick="plugin_del('<%=rs("id")%>');" /></td>
+            <td><input name="show_submit" type="button" value="预览" onClick="plugin_show('<%=rs("src")%>');" /></td>
+            <td><input name="del_submit" type="button" value="删除" onClick="plugin_del('<%=rs("id")%>');" /></td>
           </tr>
         </form>
         <%
@@ -1308,222 +1257,5 @@ function check(o){
 end if
 end sub
 
-
-sub lrc()
-'删除处理
-dim idlist
-idlist = Checkstr(Request.QueryString("idlist"))
-if idlist <> "" then
-	set rs = conn.execute("select id,src from cmp_lrc where id in ("&idlist&")")
-	Do Until rs.EOF
-		'删除idlist的歌词文件
-		delFile("lrc/" & rs("src"))
-		rs.MoveNext
-    loop
-	rs.close
-	set rs = nothing
-	'删除数据库记录
-	conn.execute("delete from cmp_lrc where id in ("&idlist&")")
-end if
-%>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <th colspan="2" align="left">歌词库管理</th>
-  </tr>
-  <tr>
-    <td align="right">当前数据库中的歌词总数：</td>
-    <td>共 <strong>
-      <%
-	set rs=conn.execute("select count(*) from cmp_lrc") 
-		Response.Write(rs(0))
-	rs.close
-	set rs=nothing
-	%>
-      </strong> 条</td>
-  </tr>
-  <tr>
-    <td align="right">歌词库创建：</td>
-    <td><input type="submit" value="从lrc目录创建歌词库" onclick="createLrc();" />
-      程序将自动从lrc目录读取所有歌词文件，并保存其文件名到数据库(重建时将覆盖之前的记录)<br />
-      考虑到安全性和下载兼容性仅保存*.txt类型的文件名；管理员可将常见歌词上传至lrc目录，自动创建歌词库后供用户使用</td>
-  </tr>
-  <tr>
-    <td align="right">歌词库优化(重建数据后释放无效空间)：</td>
-    <td><%database()%></td>
-  </tr>
-  <%if Request.QueryString("showlrc")<>1 then%>
-  <tr>
-    <td align="right">&nbsp;</td>
-    <td><input type="submit" value="打开歌词详细列表" onclick="showLrc();" /></td>
-  </tr>
-  <%end if%>
-</table>
-<script type="text/javascript">
-function createLrc() {
-	window.location="system.asp?action=create_lrc";
-}
-function showLrc() {
-	window.location="system.asp?action=lrc&showlrc=1";
-}
-</script>
-<%
-if Request.QueryString("showlrc")=1 then
-dim lrc_name
-lrc_name=Checkstr(Request.QueryString("lrc_name"))
-%>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <td align="center"><form onSubmit="return searcher();">
-        歌词名
-        <input type="text" name="lrc_name" id="lrc_name" value="<%=lrc_name%>" />
-        <input type="submit" name="search" id="search" value="搜索" />
-      </form></td>
-  </tr>
-  <tr>
-    <td><table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
-        <form>
-          <%
-sql = "select * from cmp_lrc "
-if lrc_name <> "" then
-	sql = sql & " where InStr(1,LCase(src),LCase('"&lrc_name&"'),0)<>0 "
-end if
-sql = sql & " order by id desc "
-'response.Write(sql)
-'分页设置
-dim page,CurrentPage
-page=Checkstr(Request.QueryString("page"))
-CurrentPage = 1
-if page <> "" then
-	if IsNumeric(page) then
-		if page > 0 and page < 32768 then
-			CurrentPage = cint(page)
-		end if
-	end if
-end if
-dim PageC,MaxPerPage
-	PageC=0
-	MaxPerPage=20
-set rs=Server.CreateObject("ADODB.RecordSet")
-rs.Open sql,conn,1,1
-IF not rs.EOF Then
-	rs.PageSize=MaxPerPage
-	rs.AbsolutePage=CurrentPage
-	Dim rs_nums
-	rs_nums=rs.RecordCount
-%>
-          <tr>
-            <th><input type="checkbox" onClick="CheckAll(this,this.form);" /></th>
-            <th align="left">歌词名</th>
-          </tr>
-          <%Do Until rs.EOF OR PageC=rs.PageSize%>
-          <%
-		  dim filename
-		  filename = UnCheckStr(rs("src"))
-		  %>
-          <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
-            <td><input type="checkbox" name="idlist" id="idlist" value="<%=rs("id")%>" /></td>
-            <td align="left"><a href="lrc/<%=filename%>" target="_blank"><%=filename%></a></td>
-          </tr>
-          <%rs.MoveNext%>
-          <%PageC=PageC+1%>
-          <%loop%>
-          <tr>
-            <td colspan="10"><div style="float:right;padding-top:5px;"><%=showpage("zh",1,"system.asp?action=lrc&showlrc=1&lrc_name="&lrc_name&"",rs_nums,MaxPerPage,true,true,"条",CurrentPage)%></div>
-              <div style="padding:5px 5px;">
-                <input type="button" value="删除所选歌词" onClick="dellrc(this);" />
-                (可多选批量操作) </div></td>
-          </tr>
-          <%
-else
-%>
-          <tr>
-            <td><span style="color:#FF0000;">没有找到任何相关记录</span></td>
-          </tr>
-          <%
-end if
-rs.Close
-Set rs=Nothing
-%>
-        </form>
-      </table></td>
-  </tr>
-</table>
-<script type="text/javascript">
-function searcher() {
-	var str = document.getElementById("lrc_name").value;
-	if(str != "<%=lrc_name%>"){
-		window.location = "system.asp?action=lrc&showlrc=1&lrc_name="+encodeURIComponent(str);
-	}
-	return false;
-}
-function get_idlist(o){
-	var ids = new Array();
-	var arr = o.idlist;
-	if(arr){
-		var l = arr.length;
-		if(l){
-			for(var i = 0; i < l; i++){
-				if(arr[i].checked){
-					ids.push(arr[i].value);
-				}
-			}
-		}else if(arr.checked){
-			ids.push(arr.value);
-		}
-	}
-	return ids;
-}
-function dellrc(o){
-	var id_list = get_idlist(o.form);
-	if(id_list.length > 0){
-		if(confirm("删除记录的同时，也将删除lrc目录下对应的歌词文件，确定操作吗？")){
-			window.location = "system.asp?action=lrc&showlrc=1&idlist="+id_list;
-		}
-	} else {
-		alert("请先选择要删除的项");
-	}
-}
-</script>
-<%
-end if
-
-end sub
-
-sub create_lrc()
-	if CheckObjInstalled("Scripting.FileSystemObject")=true then
-		dim FSO
-		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
-		if FSO.FolderExists(Server.MapPath("lrc")) then
-			dim folder,lrcs,lrc,lrc_name,ext
-			Set folder = FSO.GetFolder(Server.MapPath("lrc"))
-				Set lrcs = folder.Files
-				'清除之前的记录
-				'删除表cmp_lrc
-				conn.execute("drop table cmp_lrc ")
-				'建表cmp_lrc  AutoNumber 
-				conn.execute("create table cmp_lrc (id COUNTER PRIMARY KEY, src char(150) with compression)")
-				'保存记录
-				For Each lrc in lrcs
-					lrc_name = lrc.Name
-					ext = LCase(Right(lrc_name, 4))
-					'过滤，仅保存txt类型
-					if ext=".txt" then
-						conn.execute("insert into cmp_lrc (src) values('"&CheckStr(lrc_name)&"')")
-					end if
-				Next
-				Set lrcs = nothing
-			Set folder = nothing
-			SucMsg="创建歌词库完成！"
-			Cenfun_suc("system.asp?action=lrc")
-		else
-			ErrMsg = "没有找到歌词目录：lrc"
-			cenfun_error()
-		end if
-		Set FSO=Nothing	
-	else
-		ErrMsg = "创建歌词库失败，请检查服务器是否支持FSO！"
-		cenfun_error()
-	end if
-end sub
 
 %>

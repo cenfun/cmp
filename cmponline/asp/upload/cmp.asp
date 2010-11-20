@@ -1,29 +1,29 @@
 <!--#include file="conn.asp"-->
 <!--#include file="const.asp"-->
 <%
-header()
-dim id
+dim id,strContent
 id=Checkstr(Request.QueryString("id"))
 if id <> "" then
-if IsNumeric(id) then
-	set rs = conn.execute("select cmp_name from cmp_user where id="&id&" ")
-	if not rs.eof then
-		'取得页面标题
-		if rs("cmp_name") <> "" then
-			response.Write("<script type=""text/javascript"">document.title="""&rs("cmp_name")&""";</script>")	
+	if IsNumeric(id) then
+		dim str,url
+		
+		if xml_make = "1" then
+			'支持从缓存文件读取
+			url = xml_path & "/" & id & xml_config
+			if isFileExists(url)=true then
+				str = readFile(url)
+			else
+				str = getConfig(id)
+				call makeFile(url, str)
+			end if
+		else
+			str = getConfig(id)
 		end if
-%>
-<script type="text/javascript">
-//CMP v3.0 show 
-//id, width, height, cmp url, vars
-showcmp("cmp", "100%", "100%", "cmp.swf", "url=<%=geturl(id)%>");
-</script>
-<%
+
+		addUTFBOM()
+		Response.Write(UnCheckStr(str))
+		
 	end if
-	rs.close
-	set rs = nothing
 end if
-end if
+
 %>
-</body>
-</html>

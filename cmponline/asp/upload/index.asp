@@ -9,6 +9,7 @@ elseif Request.QueryString("verify")="1" then
 	verify()
 else
 	header()
+	
 	Select Case Request.QueryString("action")
 		Case "login"
 			login()	
@@ -19,16 +20,40 @@ else
 		Case "logout"
 			logout()
 		Case Else
-			main()
+		
+			dim id,uid
+			id = Request.QueryString("id")
+			if id<>"" and IsNumeric(id) then
+				uid = id
+			elseif founduser then
+				uid = Session(CookieName & "_userid")
+			end if
+			if uid<>"" then
+				user_cmp(uid)	
+			else
+				main()
+			end if
+			
 	End Select
 	footer()
 end if
+
+sub user_cmp(userid)
+	menu()
+	dim cmp_url
+	cmp_url = getCmpUrl(userid)
+%>
+<script type="text/javascript">
+CMP.write("cmp", "100%", "100%", "<%=cmp_url%>", {}, {});
+</script>
+<%
+end sub
 
 sub main()
 	menu()
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form action="index.asp?action=login" method="post" onsubmit="return check(this);">
+  <form action="index.asp?action=login" method="post" onSubmit="return check(this);">
     <tr>
       <th colspan="2" align="left">用户登录:</th>
     </tr>
@@ -44,8 +69,8 @@ sub main()
     </tr>
     <tr>
       <td align="right">验证码：</td>
-      <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" onfocus="showcode(this);" />
-        <span id="verifycodeobj" title="点击更换验证码" style="font-weight:bold;-moz-user-select:none;cursor:pointer;display:inline-block;" onclick="getcode();"></span><img src="images/loading.gif" width="1" height="1"/></td>
+      <td><input name="verifycode" type="text" id="verifycode" size="6" maxlength="4" tabindex="3" onFocus="showcode(this);" />
+        <span id="verifycodeobj" title="点击更换验证码" style="font-weight:bold;-moz-user-select:none;cursor:pointer;display:inline-block;" onClick="getcode();"></span><img src="images/loading.gif" width="1" height="1"/></td>
     </tr>
     <tr>
       <td width="10%">&nbsp;</td>
@@ -80,22 +105,13 @@ function showcode(o) {
 	getcode();
 }
 function getcode() {
-	ajaxSend("GET","index.asp?rd="+Math.random()+"&verify=1",true,null,completeHd,errorHd);
-}
-function completeHd(data) {
-	//alert(data);
-	if(data != ""){
+	$.get("index.asp?rd="+Math.random()+"&verify=1", function(data){
 		var html = data;
 		var obj = document.getElementById("verifycodeobj");
 		obj.onselectstart = function(){return false;}
 		obj.style.background = "#000000";
 		obj.innerHTML = html;
-	} else {
-		
-	}
-}
-function errorHd(errmsg) {
-	alert(errmsg);
+	});
 }
 </script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
@@ -114,13 +130,13 @@ sub reg()
 if user_reg="1" then
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form action="index.asp?action=save_reg" method="post" onsubmit="return check(this);">
+  <form action="index.asp?action=save_reg" method="post" onSubmit="return check(this);">
     <tr>
       <th colspan="2" align="left">用户注册:</th>
     </tr>
     <tr>
       <td align="right">用户名：</td>
-      <td><input name="username" type="text" id="username" size="30" maxlength="200" onblur="check_username(this)" />
+      <td><input name="username" type="text" id="username" size="30" maxlength="200" onBlur="check_username(this)" />
         *<span id="reg_username" style="color:#FF0000;"></span></td>
     </tr>
     <tr>
@@ -173,20 +189,16 @@ function check_username(o){
 		ru.innerHTML = username_err;
 		return;
 	}
-	ajaxSend("GET","index.asp?rd="+Math.random()+"&username="+encodeURIComponent(un),true,null,completeHd,errorHd);
+	$.get("index.asp?rd="+Math.random()+"&username="+encodeURIComponent(un), function(data){
+		if(data != ""){
+			username_err = data;
+			ru.innerHTML = username_err;
+		} else {
+			ru.innerHTML = "";
+		}
+	});
 }
-function completeHd(data){
-	//alert(data);
-	if(data != ""){
-		username_err = data;
-		ru.innerHTML = username_err;
-	} else {
-		ru.innerHTML = "";
-	}
-}
-function errorHd(errmsg){
-	alert(errmsg);
-}
+
 function check(o){
 	if(o.username.value==""){
 		alert("用户名不能为空！");

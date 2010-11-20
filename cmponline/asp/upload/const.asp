@@ -1,7 +1,7 @@
 ﻿<%
 '当前版本
 Dim siteVersion
-	siteVersion = "b081205"
+	siteVersion = "b101120"
 '用户登录状况
 Dim founduser,foundadmin
 if Session(CookieName & "_username")<>"" then
@@ -109,9 +109,7 @@ end function
 function getCmpUrl(id)
 	dim cmp
 	cmp = getCmpPath()
-	cmp = cmp & "?url=" & geturl(id)
-	'添加flash后缀
-	cmp = cmp & "&c.swf"
+	cmp = cmp & "?asp=" & id
 	getCmpUrl = cmp
 end function
 
@@ -119,51 +117,9 @@ end function
 function getCmpPageUrl(id)
 	dim this_path
 	this_path="http://"&Request.ServerVariables("HTTP_HOST")&left(Request.ServerVariables("PATH_INFO"),InStrRev(Request.ServerVariables("PATH_INFO"),"/"))
-	if xml_make = "1" then
-		getCmpPageUrl = this_path & "cmp.htm#" & geturl(id)
-	else
-		getCmpPageUrl = this_path & "cmp.asp?id=" & id
-	end if
+	getCmpPageUrl = this_path & "index.asp?id=" & id
 end function
 
-'取得动静态地址
-function geturl(id)
-	dim url
-	if xml_make = "1" then
-		url = xml_path & "/" & id & xml_config
-	else
-		'config.asp%3Fid%3D1 
-		'config.asp?  id=  1 
-		url = "config.asp%3Fid%3D" & id
-	end if
-	geturl = url
-end function
-
-'正则替换配置文件列表地址，名称，网站
-function setLNU(strContent, xml_make, xml_path, xml_list, id, cmp_name, cmp_url)
-	If IsNull(strContent) Then
-		setLNU = ""
-		Exit Function 
-	End If
-	'替换列表地址
-	dim re
-	Set re=new RegExp
-	re.IgnoreCase =True
-	re.Global=True
-	re.Pattern="(<cmp[^>]+list *= *\"")[^\r]*?(\""[^>]*>)"
-	if xml_make="1" then
-		strContent=re.Replace(strContent,"$1" & xml_path & "/" & id & xml_list & "$2")
-	else
-		strContent=re.Replace(strContent,"$1list.asp?id="&id&"$2")
-	end if
-	'名称，网址替换
-	re.Pattern="(<cmp[^>]+name *= *\"")[^\r]*?(\""[^>]*>)"
-	strContent=re.Replace(strContent,"$1" & cmp_name & "$2")
-	re.Pattern="(<cmp[^>]+url *= *\"")[^\r]*?(\""[^>]*>)"
-	strContent=re.Replace(strContent,"$1" & cmp_url & "$2")
-	Set re=nothing
-	setLNU = strContent
-end function
 
 '验证码简单混淆
 function getCode(code)
@@ -350,6 +306,23 @@ Function EditDeHTML(byVal Content)
 		EditDeHTML=Replace(EditDeHTML,chr(39),"&#39;")
 	End IF
 End Function
+
+
+'文件是否存在
+function isFileExists(FileName)
+	dim FSO,result
+	result = false
+	if CheckObjInstalled("Scripting.FileSystemObject")=true then
+		Set FSO=Server.CreateObject("Scripting.FileSystemObject")
+		if FSO.FileExists(Server.MapPath(FileName)) then
+			result = true
+		end if
+		Set FSO=Nothing
+	end if
+	isFileExists=result
+end function
+
+
 '获取文件信息
 function getFileInfo(FileName)
 	dim FSO,File,FileInfo(3)
@@ -483,7 +456,7 @@ function makeFile(byVal path, byVal text)
 		With objStream
 		.Open
 		.Charset = "utf-8"
-		.Position = objStream.Size
+		.Position = .Size
 		.WriteText = text
 		.SaveToFile Server.Mappath(path),2 
 		.Close
@@ -496,6 +469,27 @@ function makeFile(byVal path, byVal text)
 	end if
 	Set objStream = Nothing
 end function
+
+'读取文件
+function readFile(byVal path)
+	'On Error Resume Next
+	dim objStream
+	Set objStream = Server.CreateObject("ADODB.Stream")
+	If Err Then 
+		Err.Clear
+	else
+		With objStream
+			.Open
+			.Charset = "utf-8"
+			.Position = .Size
+			.LoadFromFile Server.Mappath(path)
+			readFile=.ReadText
+			.Close
+		End With
+	end if
+	Set objStream = Nothing
+end function
+
 
 '删除单个文件
 function delFile(byVal path)
@@ -547,6 +541,33 @@ function delFolder(byVal path)
 	end if
 end function
 
+'从数据库读取配置
+function getConfig(id)
+	dim str
+	sql = "select config from cmp_user where userstatus > 4 and id=" & id
+	set rs = conn.execute(sql)
+	if not rs.eof then
+		str = rs("config")
+	end if
+	rs.close
+	set rs = nothing
+	getConfig = str
+end function
+
+'从数据库读取列表
+function getList(id)
+	dim str
+	sql = "select list from cmp_user where userstatus > 4 and id=" & id
+	set rs = conn.execute(sql)
+	if not rs.eof then
+		str = rs("list")
+	end if
+	rs.close
+	set rs = nothing
+	getList = str
+end function
+
+
 '公共头
 Sub header()
 dim mytitle
@@ -560,12 +581,14 @@ end if
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="Keywords" content="CMP,Manage,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
-<meta name="Description" content="CenFun Music Player v3.0 - bbs.cenfun.com" />
-<meta name="Copyright" content="2006-2008 Cenfun.Com" />
+<meta name="Keywords" content="CMP,CMP4,cmponline,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
+<meta name="Description" content="CMP,CMP4,cmponline,Flash,MP3,FLV,H264,Video,Music,Player,Blog,Zone,BBS,CenFun" />
+<meta name="Copyright" content="2006-2010 Cenfun.Com" />
 <title><%=mytitle%></title>
-<link rel="stylesheet" type="text/css" href="<%=dbpath%>images/main.css" />
-<script type="text/javascript" src="<%=dbpath%>images/main.js"></script>
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="js/cmp.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
 <%
@@ -573,73 +596,28 @@ end sub
 
 sub menu()
 %>
-<div id="menu">
-  <ul class="nav" id="mymenu">
-    <%If Session(CookieName & "_username")<>"" then%>
-    <li class="right"><a href="index.asp?action=logout">退出</a></li>
-    <%If Session(CookieName & "_admin")<>"" then%>
-    <li class="right"><a href="system.asp">系统管理</a>
-      <ul>
-        <li><a href="system.asp?action=config" title="System">系统设置</a></li>
-        <li><a href="system.asp?action=user" title="Users">用户管理</a></li>
-        <li><a href="system.asp?action=skins" title="Skins">皮肤管理</a></li>
-        <li><a href="system.asp?action=plugins" title="Plugins">插件管理</a></li>
-		<li><a href="system.asp?action=lrc" title="LRC">歌词管理</a></li>
-      </ul>
-    </li>
+<div class="menu clearfix">
+  <div class="lt">
+    <div class="lt menu_item"><a href="index.asp"><%=site_name%></a></div>
+    <div class="lt menu_item"><a href="userlist.asp">排行榜</a></div>
+    <div class="lt menu_item"><a href="mini.htm" target="_blank">单曲调用</a></div>
+    <div class="lt menu_item"><a href="gbook.asp">留言簿</a></div>
+  </div>
+  <div class="rt">
+    <%If founduser then%>
+    <div class="lt menu_item"><span>欢迎：<%=Session(CookieName & "_username")%></span></div>
+    <%If foundadmin then%>
+    <div class="lt menu_item"><a href="system.asp">系统管理</a></div>
     <%end if%>
-    <li class="right"><a href="manage.asp?action=userinfo">个人资料</a></li>
-    <li class="right"><span>欢迎：<%=Session(CookieName & "_username")%></span></li>
-    <li><a href="manage.asp">调用代码</a></li>
-    <li><a href="manage.asp?action=config" title="Config">配置编辑</a>
-      <ul>
-        <li><a href="manage.asp?action=config">普通编辑模式</a></li>
-        <li><a href="manage.asp?action=config&mode=code">代码编辑模式</a></li>
-      </ul>
-    </li>
-    <li><a href="manage.asp?action=list" title="List">列表编辑</a>
-      <ul>
-        <li><a href="manage.asp?action=list">普通编辑模式</a></li>
-        <li><a href="manage.asp?action=list&mode=code">代码编辑模式</a></li>
-      </ul>
-    </li>
+    <div class="lt menu_item"><a href="manage.asp">播放器管理</a></div>
+    <div class="lt menu_item"><a href="manage.asp?action=userinfo">个人资料</a></div>
+    <div class="lt menu_item"><a href="index.asp?action=logout">退出</a></div>
     <%else%>
-    <li><a href="index.asp">登录</a></li>
-    <li><a href="index.asp?action=reg">免费注册</a></li>
-    <li class="right"><a href="index.asp"><%=site_name%></a></li>
+    <div class="lt menu_item"><a href="index.asp">登录</a></div>
+    <div class="lt menu_item"><a href="index.asp?action=reg">免费注册</a></div>
     <%end if%>
-    <!--#include file="menu.asp"-->
-  </ul>
+  </div>
 </div>
-<script type="text/javascript">
-function initmenu(o) {
-	var menu = document.getElementById(o);
-	var as = menu.getElementsByTagName("a");
-	for (var i = 0; i < as.length; i ++) {
-		var ta = as[i];
-		var tn = ta.nextSibling;
-		checkDropList(ta, tn);
-	}
-}
-function checkDropList(ta, tn) {
-	if (tn) {
-		if (tn.nodeType == 1) {
-			addMenuEvent(ta, tn);
-		} else {
-			checkDropList(ta, tn.nextSibling);
-		}
-	}
-}
-function addMenuEvent(ta, tn) {
-	ta.className = "drop";
-	var tp = ta.parentNode;
-	if (tp) {
-		tp.onmouseover = function(e) {tn.style.display = "block";}
-		tp.onmouseout = function(e) {tn.style.display = "none";}
-	}
-}
-initmenu("mymenu");
-</script>
 <%
 if site_ad_top<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_top&"</div>")
@@ -668,10 +646,9 @@ function countDown(secs){
   <tr>
     <td align="center"><%=SucMsg%>
       <%if url<>"" then%>
-      <span id="timeout">3</span>秒钟后自动返回
+      <span id="timeout">3</span>秒钟后自动返回 
       <script type="text/javascript">countDown(3);</script>
-      <%end if%>
-    </td>
+      <%end if%></td>
   </tr>
   <tr>
     <td align="center"><a href="<%=url%>">如果您的浏览器没有自动跳转，请点击这里</a></td>
@@ -704,7 +681,7 @@ if site_ad_bottom<>"" then
 	Response.Write("<div class=""ads"">"&site_ad_bottom&"</div>")
 end if
 %>
-<div id="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a> All Rights Reserved. Powered by <a href="mailto:<%=site_email%>" target="_blank" style="font-size:10px;">CMPOnline</a> <a href="http://bbs.cenfun.com/" target="_blank" style="font-size:10px;"><%=siteVersion%></a><span><img src="<%=site_count%>" /></span></div>
+<div class="footer">Copyright &copy; <a href="<%=site_url%>" target="_blank"><%=site_name%></a> All Rights Reserved. Powered by <a href="mailto:<%=site_email%>" target="_blank" style="font-size:10px;">CMPOnline</a> <a href="http://bbs.cenfun.com/" target="_blank" style="font-size:10px;"><%=siteVersion%></a><span><img src="<%=site_count%>" /></span></div>
 <%
 response.Write("</body></html>")
 '关闭所有连接

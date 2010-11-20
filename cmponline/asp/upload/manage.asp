@@ -6,19 +6,14 @@ site_title = "管理中心"
 '检测用户是否登录
 If founduser Then
 	Select Case Request.QueryString("handler")
-		Case "savelistdata"
-			savelistdata()
-		Case "saveconfigdata"
-			saveconfigdata()
 		Case "getskins"
 			getskins()
 		Case "getplugins"
 			getplugins()
-		Case "getlrcs"
-			getlrcs()
 		Case Else
 			header()
 			menu()
+			top_menu()
 			Select Case Request.QueryString("action")
 				Case "userinfo"
 					userinfo()
@@ -43,123 +38,167 @@ else
 	cenfun_error()
 end if
 
+sub top_menu()
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tableborder menu_bar" width="98%">
+  <tr>
+    <td><div class="clearfix">
+        <div class="lt"><a href="manage.asp">调用代码</a></div>
+        <div class="lt"><a href="manage.asp?action=config">配置管理</a></div>
+        <div class="lt"><a href="manage.asp?action=list">列表管理</a></div>
+      </div></td>
+  </tr>
+</table>
+<%
+end sub	
+
 
 sub getskins()
-addUTFBOM()
-dim userid,cmp_show_url
-userid = Session(CookieName & "_userid")
-cmp_show_url = getCmpUrl(userid)
-dim skinlist
-skinlist = "<cmp_skins>"
-sql = "select * from cmp_skins order by id desc"
-set rs = conn.execute(sql)
-if not rs.eof then
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
+  <tr>
+    <th>皮肤名称</th>
+    <th>配置代码</th>
+  </tr>
+  <%
+	'所有皮肤
+	sql = "select * from cmp_skins order by id desc"
+	set rs = conn.execute(sql)
 	Do Until rs.EOF
-		'<skin src="skins/wmp11.zip" mixer_id="" mixer_color="" show_tip="" />
-		skinlist = skinlist & "<skin title=""" & XMLEncode(rs("title")) & """ "
-		skinlist = skinlist & "preview=""" & cmp_show_url & "&amp;skin_src=" & XMLEncode(trim(rs("src"))) & "&amp;c.swf"" "
-		skinlist = skinlist & "src=""" & XMLEncode(trim(rs("src"))) & """ "
-		skinlist = skinlist & "bgcolor=""" & XMLEncode(trim(rs("bgcolor"))) & """ "
-		skinlist = skinlist & "mixer_id=""" & XMLEncode(trim(rs("mixer_id"))) & """ "
-		skinlist = skinlist & "mixer_color=""" & XMLEncode(trim(rs("mixer_color"))) & """ "
-		skinlist = skinlist & "show_tip=""" & XMLEncode(trim(rs("show_tip"))) & """ />"
+  %>
+  <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
+    <td align="right" nowrap="nowrap"><%=trim(rs("title"))%></td>
+    <td><input type="text" value="skin=&quot;<%=trim(rs("src"))%>&quot;" onfocus="this.select()" style="width:98%;" /></td>
+  </tr>
+  <%
 	rs.MoveNext
-    loop
-end if
-rs.close
-set rs = nothing
-skinlist = skinlist & "</cmp_skins>"
-Response.Write(skinlist)
+	loop
+	rs.close
+	set rs = nothing
+  %>
+  <tr>
+    <td>&nbsp;</td>
+    <td>如果需要预载多个皮肤，请用skins=&quot;&quot; 中间用英文逗号隔开</td>
+  </tr>
+</table>
+<%
 end sub
 
 sub getplugins()
-addUTFBOM()
-dim pluginlist
-pluginlist = "<cmp_plugins>"
-sql = "select * from cmp_plugins order by id desc"
-set rs = conn.execute(sql)
-if not rs.eof then
+%>
+<table border="0" cellpadding="2" cellspacing="1" class="tablelist" width="100%">
+  <tr>
+    <th>插件名称</th>
+    <th>配置代码</th>
+  </tr>
+  <%
+	sql = "select * from cmp_plugins order by id desc"
+	set rs = conn.execute(sql)
 	Do Until rs.EOF
-		'<plugin name="大背景" xywh="0, 0, 100P, 100P" src="plugins/bigbg.swf" lock="1" display="1" istop="0" />
-		pluginlist = pluginlist & "<plugin title=""" & XMLEncode(rs("title")) & """ "
-		pluginlist = pluginlist & "src=""" & XMLEncode(rs("src")) & """ "
-		pluginlist = pluginlist & "xywh=""" & XMLEncode(rs("xywh")) & """ "
-		pluginlist = pluginlist & "lock=""" & rs("lock") & """ "
-		pluginlist = pluginlist & "display=""" & rs("display") & """ "
-		pluginlist = pluginlist & "istop=""" & rs("istop") & """ />"
+  %>
+  <tr align="center" onmouseover="highlight(this,'#F9F9F9');">
+    <td align="right" nowrap="nowrap"><%=trim(rs("title"))%></td>
+    <td><input type="text" value="plugins=&quot;<%=trim(rs("src"))%>&quot;" onfocus="this.select()" style="width:98%;" /></td>
+  </tr>
+  <%
 	rs.MoveNext
-    loop
-end if
-rs.close
-set rs = nothing
-pluginlist = pluginlist & "</cmp_plugins>"
-Response.Write(pluginlist)
+	loop
+	rs.close
+	set rs = nothing
+  %>
+  <tr>
+    <td>&nbsp;</td>
+    <td>如果想在背景层加载，请用backgrounds=&quot;&quot;<br />
+      某些插件可能需要在配置传入专属参数，需参见插件的具体使用说明<br />
+      如果需要设置插件显示类特殊参数，请参见CMP相关使用说明</td>
+  </tr>
+</table>
+<%
 end sub
 
-
-sub getlrcs()
-	dim lrc_name
-	lrc_name = CheckStr(Request.QueryString("lrc_name"))
-	if lrc_name="" then
-		Response.Write("null")
-	else
-		'模糊搜索
-		sql = "select top 5 src from cmp_lrc where 1=1 "
-		dim keywords,key
-		keywords = Split(lrc_name, " ")
-		For Each key in keywords
-    		sql = sql & " and InStr(1,LCase(src),LCase('"&key&"'),0)<>0 "
-		Next
-		set rs=conn.Execute(sql)
-		if rs.eof then
-			Response.Write("null")
-		else
-			Do Until rs.EOF
-				Response.Write(trim(rs("src")) & "{|}")
-				rs.MoveNext
-			loop
-		end if
-		rs.close
-		set rs=nothing
-	end if
-end sub
 
 
 sub config()
-dim id
+dim id,cmp_name,cmp_url,config_xml
 id = Session(CookieName & "_userid")
-dim pagetitle
-pagetitle = "CMP配置文件编辑: "
-if request.QueryString("mode")="code" then
+if IsNumeric(id) then
+	sql = "select cmp_name,cmp_url,config from cmp_user where username = '" & Session(CookieName & "_username") & "' and userstatus > 4 "
+	set rs = conn.execute(sql)
+	if not rs.eof then
+		cmp_name=rs("cmp_name")
+		cmp_url=rs("cmp_url")
+		config_xml=rs("config")
+	end if
+	rs.close
+	set rs=nothing
+end if
 %>
+<script type="text/javascript" src="js/cmpvars.js"></script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <th align="left"><%=pagetitle%><span style="margin-left:20px;font-weight:normal;">
-      <input type="button" onclick="window.location='manage.asp?action=config';" value="&lt;&lt;返回普通编辑模式" />
-      </span></th>
-  </tr>
   <form method="post" action="manage.asp?action=saveconfig" onsubmit="return check_config(this);">
     <tr>
-      <td align="center"><img src="images/loading.gif" align="absmiddle" id="loading" />
-        <textarea name="config" rows="30" id="config_area" style="width:99%;"></textarea></td>
+      <th colspan="2" align="left">CMP配置文件编辑: </th>
     </tr>
     <tr>
-      <td align="center"><input name="config_submit" type="submit" style="width:50px;" value="提交" />
-        <input name="config_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
+      <td valign="top" width="60%"><textarea name="config" rows="20" id="config_area" class="xml_area" style="width:98%;"><%=config_xml%></textarea></td>
+      <td valign="top"><div>
+          <div>配置内容的XML格式要求：</div>
+          <div class="xml">&lt;cmp<br />
+            <span class="red">lists=&quot;list.asp?id=<%=id%>&quot;</span><br />
+            name=&quot;<%=cmp_name%>&quot;<br />
+            link=&quot;<%=cmp_url%>&quot;<br />
+            description=&quot;Welcome to CMP&quot;<br />
+            skin=&quot;&quot;<br />
+            plugins=&quot;plugins/sharing.swf&quot;<br />
+            backgrounds=&quot;plugins/announce.swf&quot;<br />
+            logo=&quot;{src:images/logo.png,xywh:[5,5,0,0]}&quot;<br />
+            play_mode=&quot;&quot;<br />
+            auto_play=&quot;&quot;<br />
+            counter=&quot;<%=site_count%>&quot;<br />
+            /&gt;</div>
+          <div>参数转义工具：<a href="http://tools.cenfun.com/" target="_blank">http://tools.cenfun.com/</a></div>
+        </div></td>
+    </tr>
+    <tr>
+      <td valign="top"><div class="clearfix">
+          <div class="lt">
+            <input type="submit" style="width:50px;" value="提交" />
+            <input type="button" style="width:50px;" onclick="check_xml(this);" value="检测" />
+            <input type="button" style="width:50px;" onclick="preview(this);" value="预览" />
+          </div>
+          <div class="rt">
+            <input type="button" style="width:70px;" onclick="showList('skins')" value="选择皮肤" />
+            <input type="button" style="width:110px;" onclick="showList('plugins')" value="选择插件或背景" />
+          </div>
+        </div>
+        <div class="area_skins" style="display:none;margin-top:8px;"></div>
+        <div class="area_plugins" style="display:none;margin-top:8px;"></div></td>
+      <td valign="top"><div>
+          <input type="button" value="所有配置支持的参数" onclick="show_vars('config', '.vars_list')" />
+        </div>
+        <div class="vars_list" style="display:none;"></div></td>
     </tr>
   </form>
 </table>
 <script type="text/javascript">
-ajaxSend("GET","config.asp?rd="+Math.random()+"&id=<%=id%>",true,null,configHd,errorHd);
-function configHd(data) {
-	document.getElementById("loading").style.display = "none";
-	if(data != ""){
-		document.getElementById("config_area").value = data;
-	} 
+function showList(type) {
+	var o = $(".area_" + type);
+	if (type == "skins") {
+		$(".area_plugins").slideUp();
+	} else {
+		$(".area_skins").slideUp();
+	}
+	
+	if (o.html()) {
+		o.slideToggle();
+	} else {
+		o.html(loading).show();
+		$.get("manage.asp?handler=get" + type, function(data) {
+			o.hide().html(data).slideDown();
+		});
+	}
 }
-function errorHd(errmsg) {
-	alert(errmsg);
-}
+
 function check_xml(o) {
 	if (check_config(o.form)) {
 		alert("XML格式正确！");
@@ -173,39 +212,21 @@ function check_config(o){
 	//检测列表是否为空
 	if (isok) {
 		var root = xmlDoc.documentElement;
-		if (!root.getAttribute("list")) {
-			isok = false;
-			alert("必须配置对应的列表路径list");
-		}
 	}
 	return isok;
 }
+function preview(o) {
+	if (check_config(o.form)) {
+		var str = encodeURIComponent(o.form.config.value);
+		window.open("<%=getCmpPath()%>?config=" + str);
+	}	
+}
 </script>
-<%else%>
-<table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <th align="left"><%=pagetitle%><span style="margin-left:20px;font-weight:normal;">
-      <input type="button" onclick="window.location='manage.asp?action=config&mode=code';" value="进入代码编辑模式&gt;&gt;" />
-      </span></th>
-  </tr>
-  <tr>
-    <td align="center"><script type="text/javascript">
-var vars = "";
-vars += "i="+encodeURIComponent("config.asp?id=<%=id%>&rd="+Math.random());
-vars += "&o="+encodeURIComponent("manage.asp?handler=saveconfigdata");
-vars += "&sl="+encodeURIComponent("manage.asp?handler=getskins&rd="+Math.random());
-vars += "&pl="+encodeURIComponent("manage.asp?handler=getplugins&rd="+Math.random());
-//id, width, height, cmp url, vars
-showcmp("cmp_config_editer", "100%", "600", "CConfig.swf", vars, false);
-</script>
-    </td>
-  </tr>
-</table>
 <%
-end if
 end sub
-'保存配置数据
-sub saveconfignow()
+
+'从Form保存
+sub saveconfig()
 	dim config,id
 	id = Session(CookieName & "_userid")
 	config = Request.Form("config")
@@ -214,177 +235,63 @@ sub saveconfignow()
 	if xml_make="1" then
 		call makeFile(xml_path & "/" & id & xml_config, config)
 	end if
-end sub
-'从Form保存
-sub saveconfig()
-	saveconfignow()
 	SucMsg="修改配置成功！"
-	Cenfun_suc("manage.asp?action=config&mode=code")
+	Cenfun_suc("manage.asp?action=config")
 end sub
-'从Flash编辑器保存
-sub saveconfigdata()
-	saveconfignow()
-	Response.Write("CMPConfigComplete")
-end sub
+
 
 
 sub list()
 dim id
 id = Session(CookieName & "_userid")
 %>
-<script type="text/javascript">
-function getLrcList() {
-	showUpload(false);
-	var lrc_name = document.getElementById("lrc_name");
-	if (lrc_name.value) {
-		showList(true);
-		showListMsg('<img src="images/loading.gif" align="absmiddle" />');
-		ajaxSend("GET","manage.asp?rd="+Math.random()+"&handler=getlrcs&lrc_name="+encodeURIComponent(lrc_name.value),true,null,completeHd,errorHd);
-	} else {
-		showList(false);
-	}
-	return false;
-}
-function completeHd(data) {
-	//alert(data);
-	if(data != ""){
-		var html = '<table border="0" cellpadding="2" cellspacing="1" >';
-		if (data == "null") {
-			html += '<tr><td>没有找到相关的歌词！<a href="javascript:showUpload(true);void(0);">上传歌词</a></td></tr>';
-		} else {
-			var lrcs = data.split("{|}");
-			for (var i = 0; i < lrcs.length - 1; i ++) {
-				var url = "lrc/"+lrcs[i];
-				html += '<tr><td><a href="'+url+'" target="_blank" title="直接打开歌词">查看</a> <input value="'+url+'" onfocus="this.select();" size="60" /></td></tr>';
-			}
-			html += '<tr><td align="center">最多搜索出5个结果，请输入适当的关键字，以便更精确的找到歌词';
-			html += '<tr><td align="center">请复制输入框中的歌词路径，粘贴到列表编辑器中即可！ <a href="javascript:showList(false);void(0);">【关闭】</a></td></tr>';
-		}
-		html += '</table>';
-		//
-		showListMsg(html);
-	} else {
-		showListMsg("返回为空");
-	}
-}
-function showListMsg(msg) {
-	var obj = document.getElementById("lrclist");
-	obj.innerHTML = msg;
-}
-function showList(show) {
-	var obj = document.getElementById("lrclist");
-	if (show) {
-		obj.style.display = "";
-	} else {
-		obj.style.display = "none";
-	}
-}
-function errorHd(errmsg) {
-	alert(errmsg);
-}
-function showUpload(show) {
-	var lrcupload = document.getElementById("lrcupload");
-	if (show) {
-		lrcupload.style.display = "";
-	} else {
-		lrcupload.style.display = "none";
-	}
-}
-</script>
+<script type="text/javascript" src="js/cmpvars.js"></script>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <tr>
-    <th align="left"><span style="float:right;margin-right:5px;">
-      <div>
-        <div align="right">
-          <form onsubmit="return getLrcList();">
-            <input id="lrc_name" type="text" size="35" />
-            <input type="submit" value="搜索歌词" />
-          </form>
-        </div>
-        <div id="lrclist"></div>
-        <div id="lrcupload" style="display:none;">
-          <script type="text/javascript">
-var vars = "";
-vars += "url="+encodeURIComponent("upload.asp?action=uploadlrc&u=<%=Session(CookieName & "_username")%>&p=<%=Session(CookieName & "_userpass")%>");
-vars += "&type=txt";
-document.write(getcmp("lrcupload", "500", "26", "upload.swf", vars, false));
-          </script>
-          <div>注意：为安全性和下载兼容性考虑，仅支持上传*.txt的歌词文件<br />
-            如果是*.lrc类型的歌词，请直接修改后缀为txt再上传即可</div>
-        </div>
-      </div>
-      </span>CMP列表文件编辑: <span style="margin-left:20px;font-weight:normal;">
-      <%if request.QueryString("mode")="code" then%>
-      <input type="button" onclick="window.location='manage.asp?action=list';" value="&lt;&lt;返回普通编辑模式" />
-      <%else%>
-      <input type="button" onclick="window.location='manage.asp?action=list&mode=code';" value="进入代码编辑模式&gt;&gt;" />
-      <%end if%>
-      </span></th>
-  </tr>
-  <%if request.QueryString("mode")="code" then%>
   <form method="post" action="manage.asp?action=savelist" onsubmit="return check_list(this);">
     <tr>
-      <td align="center"><img src="images/loading.gif" align="absmiddle" id="loading" />
-        <textarea name="list" rows="30" id="list_area" style="width:99%;"></textarea></td>
+      <th align="left" colspan="2">CMP列表文件编辑: </th>
     </tr>
     <tr>
-      <td align="center"><input name="list_submit" type="submit" style="width:50px;" value="提交" />
-        <input name="list_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" /></td>
+      <td valign="top" width="60%"><textarea name="list" rows="30" id="list_area" class="xml_area" style="width:98%;"><%=getList(id)%></textarea></td>
+      <td valign="top"><div>
+          <div>列表内容的XML格式要求：</div>
+          <div class="xml">&lt;list&gt;<br />
+            &lt;m type=&quot;&quot; src=&quot;music/test.mp3&quot; lrc=&quot;&quot; label=&quot;MP3音乐&quot; /&gt;<br />
+            &lt;m type=&quot;&quot; src=&quot;music/test.flv&quot; lrc=&quot;&quot; label=&quot;FLV视频&quot; /&gt;<br />
+            &lt;/list&gt;</div>
+          <div>参数转义工具：<a href="http://tools.cenfun.com/" target="_blank">http://tools.cenfun.com/</a></div>
+          <div>
+          <input type="button" value="所有列表支持的参数" onclick="show_vars('list', '.vars_list')" />
+        </div>
+        <div class="vars_list" style="display:none;"></div>
+        </div></td>
+    </tr>
+    <tr>
+      <td valign="top"><input name="list_submit" type="submit" style="width:50px;" value="提交" />
+        <input name="list_check" type="button" style="width:50px;" onclick="check_xml(this);" value="检测" />
+        注意：列表生效必须在配置中添加 <b class="red">lists=&quot;list.asp?id=<%=id%>&quot;</b></td>
+      <td valign="top">&nbsp;</td>
     </tr>
   </form>
-  <script type="text/javascript">
-ajaxSend("GET","list.asp?rd="+Math.random()+"&id=<%=id%>",true,null,listHd,errorHd);
-function listHd(data) {
-	document.getElementById("loading").style.display = "none";
-	if(data != ""){
-		document.getElementById("list_area").value = data;
-	} 
-}
-function errorHd(errmsg) {
-	alert(errmsg);
-}
+</table>
+<script type="text/javascript">
 function check_xml(o) {
 	if (check_list(o.form)) {
 		alert("XML格式正确！");
 	}
 }
-//检测列表文件格式
 function check_list(o){
 	var str = o.list.value;
 	var chk = checkXML(str);
 	var isok = chk[0];
-	var xmlDoc = chk[1];
-	//是否有l专辑标记
-	if (isok) {
-		var root = xmlDoc.documentElement;
-		if (root.childNodes.length) {
-			var tagL = xmlDoc.firstChild.getElementsByTagName("l");
-			if (tagL.length == 0) {
-				isok = false;
-				alert(errMsg + "至少需要一个l标记的分类");
-			}
-		}
-	}
 	return isok;
 }
 </script>
-  <%else%>
-  <tr>
-    <td align="center"><script type="text/javascript">
-var vars = "";
-vars += "i="+encodeURIComponent("list.asp?id=<%=id%>&rd="+Math.random());
-vars += "&o="+encodeURIComponent("manage.asp?handler=savelistdata");
-//id, width, height, cmp url, vars
-showcmp("cmp_list_editer", "100%", "600", "CList.swf", vars, false);
-</script>
-    </td>
-  </tr>
-  <%end if%>
-</table>
 <%
 end sub
-'保存列表数据
-sub savelistnow()
+
+
+sub savelist()
 	dim list,id
 	id = Session(CookieName & "_userid")
 	list = Request.Form("list")
@@ -393,18 +300,10 @@ sub savelistnow()
 	if xml_make="1" then
 		call makeFile(xml_path & "/" & id & xml_list, list)
 	end if
-end sub
-'从Form保存
-sub savelist()
-	savelistnow()
 	SucMsg="修改列表成功！"
-	Cenfun_suc("manage.asp?action=list&mode=code")
+	Cenfun_suc("manage.asp?action=list")
 end sub
-'从Flash编辑器保存
-sub savelistdata()
-	savelistnow()
-	Response.Write("CMPListComplete")
-end sub
+
 
 
 sub userinfo()
@@ -413,7 +312,7 @@ set rs = conn.execute(sql)
 if not rs.eof then
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form method="post" action="manage.asp?action=saveinfo&do=info" onsubmit="return check_info(this);">
+  <form method="post" action="manage.asp?action=saveinfo&amp;do=info" onsubmit="return check_info(this);">
     <tr>
       <th colspan="2" align="left">个人资料:</th>
     </tr>
@@ -472,7 +371,7 @@ rs.close
 set rs = nothing
 %>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form method="post" action="manage.asp?action=saveinfo&do=pass" onsubmit="return check_pass(this);">
+  <form method="post" action="manage.asp?action=saveinfo&amp;do=pass" onsubmit="return check_pass(this);">
     <tr>
       <th colspan="2" align="left">修改密码:</th>
     </tr>
@@ -538,7 +437,7 @@ function check_pass(o){
 </script>
 <%if Session(CookieName & "_username") = Session(CookieName & "_admin") then%>
 <table border="0" cellpadding="2" cellspacing="1" class="tableborder" width="98%">
-  <form method="post" action="manage.asp?action=saveinfo&do=name" onsubmit="return check_name(this);">
+  <form method="post" action="manage.asp?action=saveinfo&amp;do=name" onsubmit="return check_name(this);">
     <tr>
       <th colspan="2" align="left">修改用户名:</th>
     </tr>
@@ -600,8 +499,6 @@ if Request.QueryString("do")="info" then
 	end if
 	
 	set rs = conn.execute("select id,config from cmp_user where username='"&username&"' ")
-	'正则替换配置文件列表地址，名称，网站
-	config = setLNU(UnCheckStr(rs("config")), xml_make, xml_path, xml_list, rs("id"), cmp_name, cmp_url)
 	'重建静态数据
 	if xml_make="1" then
 		call makeFile(xml_path & "/" & rs("id") & xml_config, config)
@@ -697,8 +594,8 @@ cmp_page_url = getCmpPageUrl(userid)
       <a href="<%=cmp_page_url%>" target="_blank" title="点击在新窗口中打开">打开预览</a></td>
   </tr>
   <tr>
-    <td align="right" nowrap="nowrap">常用论坛调用标签：</td>
-    <td><input type="text" value="[flash=100%,600]<%=cmp_url%>[/flash]" onfocus="this.select();" style="width:99%;" /></td>
+    <td align="right" nowrap="nowrap">UBB调用标签：</td>
+    <td><input type="text" value="[flash=600,400]<%=cmp_url%>[/flash]" onfocus="this.select();" style="width:99%;" /></td>
   </tr>
   <tr>
     <td align="right" nowrap="nowrap">内框架页面调用：</td>
@@ -706,16 +603,16 @@ cmp_page_url = getCmpPageUrl(userid)
   </tr>
   <tr>
     <td align="right">HTML调用代码：</td>
-    <td><textarea id="html_code" name="html_code" style="width:99%;" wrap="virtual" rows="12" onfocus="this.select();"></textarea></td>
+    <td><textarea id="html_code" name="html_code" style="width:99%;" wrap="virtual" rows="5" onfocus="this.select();"></textarea></td>
   </tr>
   <tr>
     <td align="right">&nbsp;</td>
-    <td>宽100% 高600</td>
+    <td>注意：上面的宽高设置为600x400，请自行修改</td>
   </tr>
 </table>
 <script type="text/javascript">
 function show_code() {
-	html = getcmp("cmp<%=userid%>", "100%", "600", "<%=cmp_url%>", "");
+	html = getcmp("cmp<%=userid%>", "600", "400", "<%=cmp_url%>", "");
 	var textarea = document.getElementById("html_code");
 	textarea.value = html;
 }

@@ -9,34 +9,10 @@
 <style type="text/css">
 html, body { height:100%; margin:0px 0px; }
 </style>
-<script type="text/javascript" src="images/main.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
 <script type="text/javascript">
-var url = window.location.hash.substring(1);
-//id, width, height, cmp url, vars
-showcmp("cmp", "100%", "100%", "cmp.swf", "url=" + url);
-ajaxSend("GET",url,true,null,completeHd,function(e){});
-function completeHd(data) {
-	if(data != ""){
-		var str = data;
-		var msie = /msie/.test(navigator.userAgent.toLowerCase());
-		var xmlDoc;
-		try {
-			if (msie) {
-				xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-				xmlDoc.async= false;
-				xmlDoc.loadXML(str);
-			} else {
-				var parser = new DOMParser();
-				xmlDoc = parser.parseFromString(str, "text/xml");
-			}
-			var root = xmlDoc.documentElement;
-			var title = root.getAttribute("name");
-			document.title = title;
-		} catch (e) {}
-	}
-}
 </script>
 </body>
 </html>

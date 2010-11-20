@@ -8,7 +8,7 @@ Session.LCID = 2057
 
 '站点数据库路径
 Dim sitedb,dbpath
-	sitedb = "data/#cmp3_2008.mdb"
+	sitedb = "data/#cmponline_for_cmp4.mdb"
 	dbpath = ""
 Dim Startime,SqlNowString,SystemTime
 Dim conn,rs,sql,FoundErr,ErrMsg,SucMsg
@@ -28,7 +28,7 @@ Sub ConnectionDatabase()
 		err.Clear
 		Set Conn = Nothing
 		Response.Charset = "utf-8"
-		Response.Write("<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />数据库连接出错，请检查连接字串")
+		Response.Write("<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"" />can not connect to database")
 		Response.End()
 	end If
 End Sub

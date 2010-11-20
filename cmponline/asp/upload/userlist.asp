@@ -149,13 +149,8 @@ function orderby(by) {
 	window.location = "userlist.asp?cmp_name=<%=cmp_name%>&order="+order+"&by="+by;
 }
 function addHits(id) {
-	ajaxSend("GET","userlist.asp?action=hits&rd="+Math.round()+"&id="+id,true,null,completeHd,errorHd);
-}
-function completeHd(data){
-	//alert(data);
-}
-function errorHd(errmsg){
-	//alert(errmsg);
+	$.get("userlist.asp?action=hits&rd="+Math.round()+"&id="+id, function(data){
+	});
 }
 </script>
 <%
