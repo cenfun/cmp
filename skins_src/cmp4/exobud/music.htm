@@ -2,14 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>CMP4</title>
+<title></title>
 </head>
-<frameset rows="*,24" frameborder="no" border="0" framespacing="0">
-  <frame src="http://bbs.cenfun.com/" />
-  <frame src="cmp.htm" scrolling="No" noresize="noresize" />
-</frameset>
-<noframes>
-<body>
-</body>
-</noframes>
+<!--[if lte IE 6]>
+<script type="text/javascript">var ie6=true;</script>
+<![endif]-->
+<script type="text/javascript">
+//修正ie6横滚动条问题
+var scrolling = typeof(ie6) == "undefined" ? "auto" : "yes";
+document.write('<frameset rows="*,24" frameborder="no" border="0" framespacing="0">')
+document.write('<frame src="http://bbs.cenfun.com/" scrolling="'+scrolling+'" />');
+document.write('<frame src="cmp.htm" scrolling="No" noresize="noresize" />');
+document.write('</frameset>');
+</script>
 </html>
