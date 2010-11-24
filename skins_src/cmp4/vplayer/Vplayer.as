@@ -34,7 +34,7 @@
 			api = apikey.api;
 			//添加侦听事件，必须传入通信key
 			//改变大小时调用
-			api.addEventListener(apikey.key, 'resize', resizeHandler);
+			api.addEventListener(apikey.key, 'video_resize', resizeHandler);
 			//状态改变时调用
 			api.addEventListener(apikey.key, 'model_state', stateHandler);
 			//初始化====================================================================
@@ -79,8 +79,8 @@
 		//尺寸改变时调用
 		private function resizeHandler(e:Event = null):void {
 			//获取cmp的宽高
-			var cw:Number = api.config.width;
-			var ch:Number = api.config.height;
+			var cw:Number = api.config.video_width;
+			var ch:Number = api.config.video_height;
 			//还原缩放，因为cmp会把背景大小改变，这样要还原，以免比例失调
 			//并且设置背景框和cmp一样大小
 			bg.width = cw;
@@ -93,7 +93,7 @@
 			bg_bar.width = loading.width = cw - 150;
 			//
 			bg_sld.y = loading_mask.y = loading.y = bg_bar.y + 3;
-			bg_sld.width = loading_mask.width = api.win_list.console.progress.width;
+			bg_sld.width = loading_mask.width = cw - 220;
 			//时间提示位置
 			tip_time.y = ch - 43;
 			cmpOut();
