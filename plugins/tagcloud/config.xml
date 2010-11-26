@@ -1,0 +1,32 @@
+﻿<!--
+
+播放视频类型时，是否自动隐藏
+tagcloud_autohide = "1"
+
+读取到云标签的最多列表长度
+tagcloud_length = "30"
+
+旋转速度
+tagcloud_speed = "1"
+
+标签的字体大小设置，包含一个最小尺寸和一个最大尺寸
+tagcloud_sizes = "12,24"
+
+标签的字体颜色组，如果没有则随机出一个颜色，否则采用颜色组里面的颜色进行随机读取
+颜色组之间用英文逗号隔开，每个组用|隔开，表示常规显示颜色和鼠标移入时的颜色
+tagcloud_colors = "#ff0000|#ffffff,#ffff00|#ffffff,#ff00ff|#ffffff,#0000ff|#ffffff,#00ff00|#ffffff"
+
+下面是使用云标签插件的cmp配置config.xml例子
+
+-->
+<cmp 
+	
+	tagcloud_autohide = "1"
+	tagcloud_length = "30"
+	tagcloud_speed = "1"
+	tagcloud_sizes = "12,24"
+	tagcloud_colors = "#ff0000|#ffffff,#ffff00|#ffffff,#ff00ff|#ffffff,#0000ff|#ffffff,#00ff00|#ffffff"
+	
+	plugins = "plugins/tagcloud.swf"
+
+/>

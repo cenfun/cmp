@@ -158,7 +158,7 @@
 				var color_up:uint;
 				var color_on:uint;
 				for (var i:int = 0; i < td.length; i ++) {
-					if (i > length) {
+					if (i >= length) {
 						break;
 					}
 					var tn:Object = td.getItemAt(i);
