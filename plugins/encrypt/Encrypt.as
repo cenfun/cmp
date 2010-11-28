@@ -4,69 +4,74 @@
 	import flash.events.*;
 	import flash.net.*;
 	import flash.utils.*;
+	import flash.system.*;
 
 	public class Encrypt extends MovieClip {
-		//解密密匙，如果需要改动，请一定保持与php程序里的加密密匙一样
-		private var key:String = "756e35bd9441e66e001ca73024b9b426";
-		private var encrypt_source:String;
-		private var encrypt_position:String;
+		//解密钥匙，必须与加密钥匙一致
+		private var key:String = "cmp";
+		private var encrypt_lists:String;
+		private var lists:Array = [];
 		//cmp的api接口
 		private var api:Object;
 		public function Encrypt():void {
-			this.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
+			Security.allowDomain("*");
+			root.loaderInfo.sharedEvents.addEventListener('api',apiHandler);
+			root.loaderInfo.sharedEvents.addEventListener('api_remove',removeHandler);
+		}
+		override public function set width(v:Number):void {
+		}
+		override public function set height(v:Number):void {
+		}
+		public function removeHandler(e):void {
 		}
 
 		private function apiHandler(e):void {
-			//取得cmp的api对象和侦听key，包含2个属性{api,key}
 			var apikey:Object = e.data;
-			//如果没有取到则直接返回
 			if (! apikey) {
 				return;
 			}
 			api = apikey.api;
-			encrypt_source = api.config.encrypt_source;
-			encrypt_position = api.config.encrypt_position;
-			load();
+			encrypt_lists = api.config.encrypt_lists;
+			if (encrypt_lists) {
+				lists = array(encrypt_lists);
+			}
+			next();
 		}
 
 		private function load():void {
+			var url:String = lists.shift();
+			url = api.cmp.constructor.fU(url);
+			//api.tools.output(url);
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, completeHandler);
 			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
-			loader.load(new URLRequest(encrypt_source));
+			loader.load(new URLRequest(url));
 		}
 
 		private function errorHandler(e:Event):void {
-			output(e);
+			next();
 		}
 
 		private function completeHandler(e:Event):void {
-			var data:String = e.target.data;
-			if (! data) {
+			var str:String = e.target.data;
+			if (! str) {
+				next();
 				return;
 			}
 			try {
-				data = decrypt(data);
-				var xml:XMLList = new XMLList(data);
+				str = decrypt(str);
 			} catch (e) {
-				output(e);
+				next();
 				return;
 			}
-			var cmp_list:XML = api.list_xml as XML;
-			var pos:uint = parseInt(encrypt_position) || 1;
-			var child:XML = cmp_list.children()[pos - 1];
-			if (child) {
-				cmp_list.insertChildBefore(child, xml);
-			} else {
-				cmp_list.appendChild(xml);
-			}
-			api.sendEvent("list_loaded");
+			api.sendEvent("list_loaded", str);
+			next();
 		}
 
-		private function output(input:*):void {
-			if (api) {
-				api.tools.output(input);
+		private function next():void {
+			if (lists.length) {
+				load();
 			}
 		}
 
@@ -83,6 +88,19 @@
 			//
 			var strOut:String = newBytes.readUTFBytes(newBytes.length);
 			return strOut;
+		}
+		
+		public const COMMA:RegExp = /\s*\,\s*/;
+		public function array(input:String):Array {
+			input = String(input);
+			var arr:Array = input.split(COMMA);
+			var out:Array = [];
+			for each(var str:String in arr) {
+				if (str) {
+					out.push(str);
+				}
+			}
+			return out;
 		}
 
 

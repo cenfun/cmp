@@ -1,8 +1,6 @@
 ﻿<cmp 
 	
-	encrypt_source = "http://www.cmp.com/encrypt/encrypt_list.php"
-	encrypt_position = "1"
+	encrypt_lists = "encrypt_list.xml"
 	plugins = "encrypt/encrypt.swf"
 
-	
 />
