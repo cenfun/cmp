@@ -8,7 +8,7 @@
 
 	public class Encrypt extends MovieClip {
 		//解密钥匙，必须与加密钥匙一致
-		private var key:String = "cmp";
+		private var key:String = "bbs.cenfun.com";
 		private var encrypt_lists:String;
 		private var lists:Array = [];
 		//cmp的api接口
