@@ -43,7 +43,7 @@
 			addChild(effect);
 			addChild(balls);
 			//api侦听
-			loaderInfo.sharedEvents.addEventListener('api', apiHandler);
+			root.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
 		}
 		
 		private function apiHandler(e:Event):void {
@@ -77,12 +77,8 @@
 		}
 		
 		private function colorHandler(e:Event = null):void {
-			var mc:String = String(api.config['mixer_color']);
-			mc = mc.replace("#", "");
-			screen.color = parseInt(mc, 16);
-			
+			screen.color = api.tools.strings.color(api.config['mixer_color']);
 			//api.tools.output(mc);
-			
 		}
 		
 		private function displaceHandler(e:Event):void {

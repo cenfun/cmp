@@ -20,7 +20,7 @@
 		public function Main() {
 			Security.allowDomain("*");
 			//插件初始化(插件不能由CMP跨域加载，否则无法初始化，请将插件和CMP放在同一域中)
-			loaderInfo.sharedEvents.addEventListener('api', apiHandler);
+			root.loaderInfo.sharedEvents.addEventListener('api', apiHandler);
 		}
 		
 		private function apiHandler(e):void {
@@ -74,7 +74,7 @@
 			}
 		}
 		private function colorHandler(e = null):void {
-			var color:uint = cmp_api.config['mixer_color'] + 0xff000000;
+			var color:uint = cmp_api.tools.strings.color(cmp_api.config['mixer_color']) + 0xff000000;
 			settings.colorManager = new SolidBarColor(color);
 			equalizer.update(settings);
 		}
