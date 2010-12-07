@@ -77,7 +77,9 @@
 		}
 		
 		private function colorHandler(e:Event = null):void {
-			screen.color = api.config['mixer_color'];
+			var mc:String = String(api.config['mixer_color']);
+			mc = mc.replace("#", "");
+			screen.color = parseInt(mc, 16);
 		}
 		
 		private function displaceHandler(e:Event):void {
