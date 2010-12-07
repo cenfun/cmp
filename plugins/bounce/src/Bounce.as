@@ -80,6 +80,9 @@
 			var mc:String = String(api.config['mixer_color']);
 			mc = mc.replace("#", "");
 			screen.color = parseInt(mc, 16);
+			
+			//api.tools.output(mc);
+			
 		}
 		
 		private function displaceHandler(e:Event):void {
