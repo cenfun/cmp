@@ -68,11 +68,12 @@
 
 			bg.width = tw;
 			
-			split_volume.x = tw - 88;
-			split_fullscreen.x = tw - 54;
+			split_volume.x = tw - 34 * 3;
+			split_list.x = tw - 34 * 2;
+			split_fullscreen.x = tw - 34;
 			
 			bt_rt.x = tw - 17;
-			bt_hl.x = tw - 118;
+			bt_hl.x = tw - 34 * 3 - bt_hl.width - 1;
 			
 			
 		}
