@@ -74,10 +74,15 @@
             loader.load(request);
           	img.addChild(loader);
 		}
-		private function completeHandler(event:Event):void {
+		private function completeHandler(e:Event):void {
+			//尝试平滑处理图片，跨域则无法启用，忽略一切错误
+			try {
+				e.target.content.smoothing = true;
+			}catch(e:Error) {
+			}
 			resizeHandler();
         }
-		private function ioErrorHandler(event:IOErrorEvent):void {
+		private function ioErrorHandler(e:IOErrorEvent):void {
         }
 		
 		//video_scalemode: 缩放模式 默认为1
