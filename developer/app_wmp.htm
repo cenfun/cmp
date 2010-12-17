@@ -8,16 +8,114 @@ html, body { height:100%; margin:0; padding:0; text-align:center; overflow:hidde
 </style>
 </head>
 <body>
-<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
-<div id="cmp_area" style="position:relative;width:800px;height:600px;margin:0px auto;"> 
-  <script type="text/javascript">
-	//将cmp放在一个固定容器里，便于后面设置位置，必须把cmp垫底，即设置wmode="opaque"
-	CMP.write("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", "skin_id=0&api=cmp_loaded&lists=", {wmode:"opaque"});
-  </script> 
-</div>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script> 
+<script type="text/javascript">
+//已经封装好WMP类，也可保存为wmp.js进行调用
+if(typeof window.WMP==="undefined") {
+	var WMP=window.WMP=new (function(){
+		var cmpo,wmpo;
+		this.init=function(_cmpo, _wmpo){
+			cmpo = _cmpo;
+			wmpo = _wmpo;
+			cmpo.addEventListener("model_start", "WMP.update");
+			cmpo.addEventListener("model_state", "WMP.update");
+			cmpo.addEventListener("resize", "WMP.update");
+			cmpo.addEventListener("view_fullscreen", "WMP.fullscreen");
+			cmpo.parentNode.appendChild(wmpo);
+			wmpo.uiMode = "None";
+			wmpo.fullScreen = false;
+			wmpo.stretchToFit = true;
+			wmpo.enableContextMenu = true;
+			wmpo.style.position = "absolute";
+			this.update();
+		};
+		this.update = function(data) {
+			var display = false;
+			var item = cmpo.item();
+			if (item && item.type == "wmp") {
+				var state = cmpo.config("state");
+				if (state == "playing") {
+					var is_show = cmpo.skin("media", "display");
+					if (is_show) {
+						display = true;		
+					}
+				}
+			}
+			wmpo.style.visibility = display ? "visible" : "hidden";
+			if (display) {
+				var tx = 0;
+				var ty = 0;
+				if (!cmpo.config("video_max")) {
+					tx = parseInt(cmpo.skin("media", "x")) + parseInt(cmpo.skin("media.video", "x"));
+					ty = parseInt(cmpo.skin("media", "y")) + parseInt(cmpo.skin("media.video", "y"));
+				}
+				var tw = cmpo.config("video_width");
+				var th = cmpo.config("video_height");
+				wmpo.style.top = ty + "px";
+				wmpo.style.left = tx + "px";
+				wmpo.width = tw;
+				wmpo.height = th;
+				var xywh = tx +","+ ty +","+ tw +","+ th;
+			}
+		}
+		this.fullscreen = function(data) {
+			var item = cmpo.item();
+			if (item.type == "wmp") {
+				wmpo.fullScreen = true;
+			}
+		}
+	})();
+}
+</script>
+<div id="cmp_area" style="position:relative;width:80%;height:600px;margin:0px auto;"></div>
+<script type="text/javascript">
+var cmpo,wmpo;
+//定义getElementById到简便函数$
+function $(id) { return document.getElementById(id); }
+//cmp回调函数，即cmp第一次加载完成时调用，将对wmp进行初始化操作
+function cmp_loaded(key) {
+	//获取cmp对象
+	cmpo = CMP.get("cmp");
+	if (!cmpo) {
+		alert("CMP初始化错误");
+		return;	
+	}
+	wmpo = $("WMP_" + key);
+	if (!wmpo || typeof WMP === "undefined") {
+		alert("WMP初始化错误");
+		return;	
+	}
+	//初始化wmp设置
+	WMP.init(cmpo, wmpo);
+}
+
+
+
+//将cmp放在一个固定容器cmp_area里，便于后面设置位置，宽高都设置成100%，也就是随容器宽高进行改变
+//必须把cmp垫底，即设置wmode="opaque"，这样wmp窗口才能覆盖显示在cmp上面
+//必须设置api=cmp_loaded回调函数
+var htm = CMP.create("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", "skin_id=0&api=cmp_loaded&skin=skins/tudou.zip", {wmode:"opaque"});
+$("cmp_area").innerHTML = htm;
+
+
+//将内容添加到cmp列表函数
+function addToList() {
+	var label = $("music_label").value;
+	var type = $("music_type").value;
+	var src = $("music_src").value;
+	var xml = '<list><m type="'+type+'" label="'+label+'" src="'+src+'" /></list>';
+	if (cmpo) {
+		cmpo.list_xml(xml);
+		//发送播放事件
+		var len = cmpo.skin("list.tree", "length");
+		//如果没有打开的目录，推荐使用var len = cmpo.list().length;
+		cmpo.sendEvent("view_play", len);
+	}
+}
+</script>
 <div style="margin:10px auto;text-align:left;width:800px;">
   <div>名称：
-    <input id="music_label" type="text" value="凤凰卫视" onclick="this.select();" />
+    <input id="music_label" type="text" value="ChannelV" onclick="this.select();" />
     类型：
     <select id="music_type">
       <option value="">自动识别</option>
@@ -28,100 +126,11 @@ html, body { height:100%; margin:0; padding:0; text-align:center; overflow:hidde
     </select>
   </div>
   <div style="margin:5px 0px;">地址：
-    <input id="music_src" type="text" style="width:630px;" onclick="this.select();" value="mms://222.77.190.24:9090/fhzw" />
+    <input id="music_src" type="text" style="width:630px;" onclick="this.select();" value="mms://222.77.190.24/ChannelV" />
     wma/wmv/h264</div>
   <div>
     <input type="button" value="添加到列表进行播放" onclick="addToList();" />
   </div>
 </div>
-<script type="text/javascript">
-var cmpo,wmpo;
-function cmp_loaded(key) {
-	//获取cmp对象
-	cmpo = CMP.get("cmp");
-	if (!cmpo) {
-		return;	
-	}
-	cmpo.addEventListener("model_start", "startHandler");
-	cmpo.addEventListener("model_state", "stateHandler");
-	//全屏按钮点击时侦听事件
-	cmpo.addEventListener("view_fullscreen", "fsHandler");
-	
-	
-	//添加一个测试列表
-	//===============================================================================================================================================
-	var xml = '<list><m type="wmp" label="WMP类型，在wmp中播放" src="http://cmp.cenfun.com/cmp4/music/test.mp3" /><m label="MP3类型，在cmp中播放" src="music/test.mp3" /></list>';
-	cmpo.list_xml(xml);
-	//===============================================================================================================================================
-	
-	
-	//取得wmp对象，并添加到cmp所在容器
-	wmpo = document.getElementById("WMP_" + key);
-	cmpo.parentNode.appendChild(wmpo);
-	//隐藏wmp控制面板等，仅显示视频窗
-	wmpo.uiMode = "None";
-	wmpo.fullScreen = false;
-	wmpo.stretchToFit = true;
-	wmpo.enableContextMenu = false;
-	wmpo.style.position = "absolute";
-	showWmp(false);
-}
-function showWmp(display) {
-	if (wmpo) {
-		wmpo.style.visibility = display ? "visible" : "hidden";
-		//移动到视频窗口的位置
-		var top = 0;
-		var left = 0;
-		if (!cmpo.config().video_max) {
-			top = parseInt(cmpo.skin("media", "y")) + parseInt(cmpo.skin("media.video", "y"));
-			left = parseInt(cmpo.skin("media", "x")) + parseInt(cmpo.skin("media.video", "x"));
-		}
-		wmpo.style.top = top + "px";
-		wmpo.style.left = left + "px";
-		//设置wmp的宽高和cmp里的视频宽高一样
-		wmpo.width = cmpo.config().video_width;
-		wmpo.height = cmpo.config().video_height;
-		//锁定窗口，防止拖动时，wmp的视频会错位
-		cmpo.skin("console", "lock", 1);
-	}
-}
-function startHandler(data) {
-	var item = cmpo.item();
-	var iswmp = false;
-	//当前项是否为wmp类型
-	if (item.type == "wmp") {
-		iswmp = true;
-	}
-	showWmp(iswmp);
-	cmpo.allowFullScreen = !iswmp;
-	cmpo.config("fullscreen", iswmp);
-}
-function stateHandler(data) {
-	//播放状态为完成或停止时，隐藏wmp
-	if (data == "completed" || data == "stopped") {
-		showWmp(false);
-	}
-}
-function fsHandler(data) {
-	//设置wmp全屏
-	var item = cmpo.item();
-	if (item.type == "wmp") {
-		wmpo.fullScreen = true;
-	}
-}
-
-function $(id) { return document.getElementById(id); }
-function addToList() {
-	var label = $("music_label").value;
-	var type = $("music_type").value;
-	var src = $("music_src").value;
-	var xml = '<list><m type="'+type+'" label="'+label+'" src="'+src+'" /></list>';
-	if (cmpo) {
-		cmpo.list_xml(xml);
-		//发送播放事件
-		cmpo.sendEvent("view_play", cmpo.list().length);
-	}
-}
-</script>
 </body>
 </html>
