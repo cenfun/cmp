@@ -1,0 +1,23 @@
+﻿<!--
+
+ads参数为广告列表设置，格式同cmp的插件设置格式
+
+每个广告用{}包括起来，并用英文逗号隔开
+
+广告的属性有：
+
+src 加载广告的路径，比如：http://cmp.cenfun.com/ad.jpg 如果路径有特殊字符请转义
+
+duration 广告持续总时间，单位为秒，比如：5秒，则广告将倒计时5秒后自动关闭；如果没有设置此参数，则显示关闭按钮，手动关闭广告
+
+onstate 表示在什么状态加载并显示此广告，支持的有：playing(第一次播放时) connecting(连接时) buffering(缓冲时) paused(暂停时) stopped(停止时)
+
+target 表示广告覆盖到那个目标区域，默认是整个CMP区域，支持的还有：video(覆盖到视频区域) lrc(覆盖到歌词区域)  注意此时视频或歌词窗口必须显示
+
+-->
+<cmp 
+	
+	ads = "{src:http://cmp.cenfun.com/ad.jpg,duration:5,onstate:playing,target:video},{src:http://cmp.cenfun.com/ad.jpg,duration:8,onstate:stopped},{src:http://cmp.cenfun.com/ad.jpg,onstate:paused,target:video}"
+	plugins = "plugins/ads.swf"
+
+/>
