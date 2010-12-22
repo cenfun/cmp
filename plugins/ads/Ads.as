@@ -233,11 +233,8 @@
 			var s:String = api.config.state;
 			switch (s) {
 				case "playing" :
-				case "connecting" :
-				case "buffering" :
 				case "paused" :
 				case "stopped" :
-				case "completed" :
 					showAd(s);
 					break;
 				default :
