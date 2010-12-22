@@ -83,6 +83,7 @@
 		
 		private function showAd(state:String):void {
 			clearAd();
+			
 			//取得新状态下的广告
 			var arr:Array = [];
 			for each (var obj:Object in ads) {
@@ -91,6 +92,16 @@
 				}
 			}
 			if (arr.length) {
+				if (state == "playing") {
+					if (firstPlaying) {
+						firstPlaying = false;
+						autoResume = true;
+						//自动恢复暂停
+						pauseVideo();
+					} else {
+						return;
+					}
+				}
 				nowAd = arr[Math.floor(arr.length * Math.random())];
 				if (nowAd.loader) {
 					ad.addChild(nowAd.loader);
@@ -222,18 +233,6 @@
 			var s:String = api.config.state;
 			switch (s) {
 				case "playing" :
-					if (firstPlaying) {
-						firstPlaying = false;
-						//自动恢复暂停
-						pauseVideo();
-						autoResume = true;
-						//
-						showAd(s);
-					} else {
-						clearAd();
-					}
-					break;
-				case "undefined" :
 				case "connecting" :
 				case "buffering" :
 				case "paused" :
