@@ -18,6 +18,8 @@ link 表示广告点击后要打开的链接，如果路径有特殊字符请转
 
 link_target 表示链接打开的目标，如_blank(新窗口) 否则使用cmp全局设置
 
+width/height 设置广告宽高，默认不设置则显示为原始宽高
+
 
 更多详情见本插件专贴：http://bbs.cenfun.com/thread-13359-1-1.html
 
