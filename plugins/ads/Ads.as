@@ -163,7 +163,7 @@
 				
 				if (!isNaN(duration) && duration > 0) {
 					tt.visible = true;
-					tt.time.text = "剩余" + duration;
+					tt.time.text = "剩余" + duration + "秒";
 					tt.time.autoSize = "left";
 					tt.time.selectable = false;
 					with (tt.graphics) {
@@ -182,13 +182,28 @@
 					bt.x = ax + aw - bt.width;
 					bt.y = ay;
 				}
+				
+				if (nowAd.link) {
+					ad.buttonMode = true;
+					ad.addEventListener(MouseEvent.CLICK, linkHandler);
+				} else {
+					ad.buttonMode = false;
+					ad.removeEventListener(MouseEvent.CLICK, linkHandler);
+				}
+				
+			}
+		}
+		
+		private function linkHandler(e:MouseEvent):void {
+			if (nowAd.link) {
+				api.tools.strings.open(nowAd.link, nowAd.link_target || api.config.link_target);
 			}
 		}
 		
 		private function timeHandler():void {
 			duration --;
 			if (duration > 0) {
-				tt.time.text = "剩余" + duration;
+				tt.time.text = "剩余" + duration + "秒";
 			} else {
 				clearInterval(timeid);
 				finish();
