@@ -24,7 +24,7 @@ link_target 表示链接打开的目标，如_blank(新窗口) 否则使用cmp�
 -->
 <cmp 
 	
-	ads = "{src:http://cmp.cenfun.com/ad.jpg,link:http://bbs.cenfun.com,link_target:_blank,duration:5,onstate:playing,target:video},{src:http://cmp.cenfun.com/ad.jpg,link:http://bbs.cenfun.com,duration:8,onstate:stopped},{src:http://cmp.cenfun.com/ad.jpg,onstate:paused,target:video}"
+	ads = "{src:http://cmp.cenfun.com/ad.jpg,link:http://bbs.cenfun.com,link_target:_blank,width:320,height:240,duration:5,onstate:playing,target:video},{src:http://cmp.cenfun.com/ad.jpg,link:http://bbs.cenfun.com,duration:8,onstate:stopped},{src:http://cmp.cenfun.com/ad.jpg,onstate:paused,target:video}"
 	plugins = "plugins/ads.swf"
 
 />

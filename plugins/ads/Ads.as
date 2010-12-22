@@ -35,6 +35,7 @@
 			bt.visible = false;
 			bt.addEventListener(MouseEvent.CLICK, clickHandler);
 			tt.visible = false;
+			ld.visible = false;
 		}
 		
 		override public function set width(v:Number):void {
@@ -71,6 +72,7 @@
 			clearInterval(timeid);
 			bt.visible = false;
 			tt.visible = false;
+			ld.visible = false;
 			//清除之前广告
 			ad.graphics.clear();
 			while (ad.numChildren) {
@@ -102,26 +104,16 @@
 		private function loadAd():void {
 			if (nowAd.src) {
 				var src:String = api.cmp.constructor.fU(nowAd.src);
-				var loader:Loader = new Loader();
-				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler);
-				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-				//api.tools.output(src);
-				var req:URLRequest = new URLRequest(src);
-            	loader.load(req);
+				var loader:L = new L(src, nowAd, completeHandler);
 				nowAd.loader = loader;
 				ad.addChild(loader);
+				ld.visible = true;
 			}
 		}
 		
-		private function completeHandler(e:Event):void {
-			var loader:Loader = e.target.loader;
-			loader.x = - loader.width * 0.5;
-			loader.y = - loader.height * 0.5;
+		private function completeHandler(info:LoaderInfo):void {
+			ld.visible = false;
 			layout();
-        }
-
-		private function ioErrorHandler(e:IOErrorEvent):void {
-            //trace("ioErrorHandler: " + e);
         }
 		
 		
@@ -137,17 +129,21 @@
 				var ay:Number = 0;
 				var aw:Number = tw;
 				var ah:Number = th;
-				if (nowAd.target == "video") {
+				if (nowAd.target == "video" && api.win_list.media.display) {
 					ax = api.win_list.media.x + api.win_list.media.video.x;
 					ay = api.win_list.media.y + api.win_list.media.video.y;
 					aw = api.config.video_width;
 					ah = api.config.video_height;
-				} else if (nowAd.target == "lrc") {
+				} else if (nowAd.target == "lrc" && api.win_list.lrc.display) {
 					ax = api.win_list.lrc.x + api.win_list.lrc.text.x;
 					ay = api.win_list.lrc.y + api.win_list.lrc.text.y;
 					aw = api.config.lrc_width;
 					ah = api.config.lrc_height;
 				} 
+				
+				ld.x = ax + aw * 0.5;
+				ld.y = ay + ah * 0.5;
+				
 				
 				ad.x = ax + aw * 0.5;
 				ad.y = ay + ah * 0.5;
@@ -262,4 +258,52 @@
 
 
 	}
+	
 }
+import flash.display.*;
+import flash.events.*;
+import flash.net.*;
+class L extends Loader {
+	
+	private var src:String;
+	private var obj:Object;
+	private var onComplete:Function;
+	
+	public function L(_src:String, _obj:Object, _onComplete:Function):void {
+		src = _src;
+		obj = _obj;
+		onComplete = _onComplete;
+		
+		if (!src) {
+			error();
+			return;
+		}
+			
+		contentLoaderInfo.addEventListener(Event.COMPLETE, loaded, false, 0, true);
+		contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, error, false, 0, true);
+		try {
+			load(new URLRequest(src));
+		} catch (e:Error) {
+			error();
+		}
+	}
+	private function error(e:Event = null):void {
+		onComplete.call(null, null);
+	}
+	private function loaded(e:Event):void {
+		if (obj.width) {
+			width = parseInt(obj.width);
+		}
+		if (obj.height) {
+			height = parseInt(obj.height);
+		}
+		
+		x = - width * 0.5;
+		y = - height * 0.5;
+		
+		var info:LoaderInfo = e.target as LoaderInfo;
+		onComplete.call(null, info);
+	}
+		
+}
+
