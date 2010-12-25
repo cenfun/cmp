@@ -12,9 +12,9 @@
 		public var th:Number;
 		
 		//每100px面积雪花的数量
-		public var num_100px:Number = 1;
+		public var num:Number = 1;
 		//当前面积的雪花总数
-		public var num_total:Number = 100;
+		public var total:Number = 100;
 		//左右风速
 		public var speed_x:Number = 0;
 		//飘落速度
@@ -45,6 +45,16 @@
 			}
 			api = apikey.api;
 			api.addEventListener(apikey.key, "resize", resizeHandler);
+			//
+			if (api.config.snow_num) {
+				var snow_num:Number = parseFloat(api.config.snow_num);
+				if (!isNaN(snow_num)) {
+					if (snow_num > 1 && snow_num < 30) {
+						num = snow_num;
+					}
+				}
+			}
+			//初始化总数
 			resizeHandler();
 			//
 			timer = new Timer(200);
@@ -55,21 +65,21 @@
 			tw = api.config.width;
 			th = api.config.height;
 			
-			num_total = Math.round(tw * th * num_100px * 0.0001);
+			total = Math.round(tw * th * num * 0.0001);
 			
-			//api.tools.output(num_total);
+			//api.tools.output(total);
 			
 		}
 		
 		public function update(e:TimerEvent):void {
-			if (num_total <= 0) {
+			if (total <= 0) {
 				return;
 			}
 			
-			//api.tools.output(numChildren, num_total, timer.currentCount);
+			//api.tools.output(numChildren, total, timer.currentCount);
 			
 			//
-			if (numChildren < num_total) {
+			if (numChildren < total) {
 				addChild(new Flake(this));
 			} else {
 				

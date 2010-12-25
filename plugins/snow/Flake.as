@@ -38,8 +38,8 @@
 			ty +=  ts * snow.speed_y + ts * Math.abs(snow.speed_x);
 			if (ty > snow.th) {
 				remove();
-				if (snow.timer.delay != 50) {
-					snow.timer.delay = 50;
+				if (snow.timer.delay != 30) {
+					snow.timer.delay = 30;
 				}
 			}
 			//
