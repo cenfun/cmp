@@ -85,7 +85,7 @@
 				
 				//改变风吹速度和方向
 				var rd:Number = Math.random();
-				if (rd < 0.1 && timer.currentCount - index > 100) {
+				if (rd < 0.1 && timer.currentCount - index > 300) {
 					speed_x = 5 * Math.random();
 					
 					//api.tools.output(speed_x, rd);
