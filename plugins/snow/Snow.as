@@ -12,11 +12,13 @@
 		public var th:Number;
 		
 		//每100px面积雪花的数量
-		public var num:Number = 1;
+		public var num:Number = 2;
 		//当前面积的雪花总数
 		public var total:Number = 100;
-		//左右风速
+		//实时风速
 		public var speed_x:Number = 0;
+		//目标风速
+		public var speed_e:Number = 0;
 		//飘落速度
 		public var speed_y:Number = 5;
 		
@@ -77,24 +79,35 @@
 			}
 			
 			//api.tools.output(numChildren, total, timer.currentCount);
+			if (Math.abs(speed_e - speed_x) > 0.2) {
+				if (speed_e > speed_x) {
+					speed_x += 0.1;
+				} else if (speed_e < speed_x) {
+					speed_x -= 0.1;
+				}
+			} else if (speed_x != speed_e) {
+				speed_x = speed_e;
+			}
+			
 			
 			//
 			if (numChildren < total) {
 				addChild(new Flake(this));
+				
+				if (timer.delay > 30) {
+					timer.delay -= 1;
+				}
+				
 			} else {
 				
 				//改变风吹速度和方向
 				var rd:Number = Math.random();
-				if (rd < 0.1 && timer.currentCount - index > 300) {
-					speed_x = 5 * Math.random();
-					
-					//api.tools.output(speed_x, rd);
-					
-					if (rd < 0.03) {
-						speed_x = - speed_x;
-					}
-					
+				if (rd < 0.2 && timer.currentCount - index > 300) {
 					index = timer.currentCount;
+					speed_e = 8 * Math.random();
+					if (rd < 0.1) {
+						speed_e = - speed_e;
+					}
 				}
 				
 			}
