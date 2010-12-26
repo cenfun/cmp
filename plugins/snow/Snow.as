@@ -15,6 +15,10 @@
 		public var num:Number = 2;
 		//当前面积的雪花总数
 		public var total:Number = 100;
+		
+		//停留的数量
+		public var num_stopped:Number = 0;
+		
 		//实时风速
 		public var speed_x:Number = 0;
 		//目标风速
@@ -91,7 +95,7 @@
 			
 			
 			//
-			if (numChildren < total) {
+			if ((numChildren - num_stopped) < total) {
 				addChild(new Flake(this));
 				
 				if (timer.delay > 30) {

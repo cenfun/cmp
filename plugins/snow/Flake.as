@@ -52,6 +52,7 @@
 						alpha = a;
 					} else {
 						remove();
+						return;
 					}
 				}
 			}
@@ -65,12 +66,13 @@
 						}
 						return;
 					}
-					//是否跳过
-					if (Math.random() < 0.5) {
+					//三成概率跳过
+					if (Math.random() < 0.3) {
 						skipped = true;
 					} else {
 						//停留
 						stopped = true;
+						snow.num_stopped ++;
 						//记录停留的位置，克隆最后的测试点
 						point_stop = point_test.clone();
 						//10秒后开始融化
@@ -123,7 +125,13 @@
 		public function remove():void {
 			clearTimeout(timeid);
 			removeEventListener(Event.ENTER_FRAME, update);
-			snow.removeChild(this);
+			if (snow.contains(this)) {
+				snow.removeChild(this);
+			}
+			if (snow.num_stopped > 0 && stopped) {
+				snow.num_stopped --;
+			}
+			
 		}
 		//画一个雪花
 		public function draw():void {
