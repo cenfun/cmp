@@ -168,6 +168,9 @@
 				
 				duration = parseInt(nowAd.duration);
 				
+				tt.visible = false;
+				bt.visible = false;
+				
 				if (!isNaN(duration) && duration > 0) {
 					tt.visible = true;
 					tt.time.text = "剩余" + duration + "秒";
