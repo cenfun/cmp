@@ -57,7 +57,7 @@
 				}
 			}
 			//停留判断
-			if (!skipped) {
+			if (!skipped && snow.rest) {
 				var test:Boolean = isOnCMP();
 				if (test) {
 					if (stopped) {
@@ -75,6 +75,7 @@
 						snow.num_stopped ++;
 						//记录停留的位置，克隆最后的测试点
 						point_stop = point_test.clone();
+						addEventListener(MouseEvent.MOUSE_OVER, over);
 						//10秒后开始融化
 						timeid = setTimeout(thaw, 10000);
 						return;
@@ -104,6 +105,11 @@
 			}
 		}
 		
+		public function over(e:MouseEvent):void {
+			removeEventListener(MouseEvent.MOUSE_OVER, over);
+			skipped = true;
+		}
+		
 		public function isOnCMP():Boolean {
 			for each (var w:Object in api.win_list) {
 				if (w.visible) {
@@ -124,6 +130,7 @@
 		
 		public function remove():void {
 			clearTimeout(timeid);
+			removeEventListener(MouseEvent.MOUSE_OVER, over);
 			removeEventListener(Event.ENTER_FRAME, update);
 			if (snow.contains(this)) {
 				snow.removeChild(this);

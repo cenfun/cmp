@@ -11,6 +11,10 @@
 		public var tw:Number;
 		public var th:Number;
 		
+		
+		//是否支持停留
+		public var rest:Boolean = false;
+		
 		//每100px面积雪花的数量
 		public var num:Number = 2;
 		//当前面积的雪花总数
@@ -51,7 +55,7 @@
 			}
 			api = apikey.api;
 			api.addEventListener(apikey.key, "resize", resizeHandler);
-			//
+			//数量
 			if (api.config.snow_num) {
 				var snow_num:Number = parseFloat(api.config.snow_num);
 				if (!isNaN(snow_num)) {
@@ -60,6 +64,9 @@
 					}
 				}
 			}
+			//停留
+			rest = api.tools.strings.tof(api.config.snow_rest);
+			
 			//初始化总数
 			resizeHandler();
 			//
