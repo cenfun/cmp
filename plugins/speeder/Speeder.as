@@ -159,7 +159,7 @@
 		public function up_test():void {
 			var t:Number = getNow();
 			now = t;
-			var up_url:String = "http://tool.115.com/live/speed_api/?_=" + t;
+			var up_url:String = "http://tool.115.com/live/speed_api/";
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, up_done);
             loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, up_done);
