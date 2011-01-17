@@ -236,6 +236,7 @@
 			//api.tools.output(lists);
 			if (lists != api.config.lists) {
 				api.config.lists = lists;
+				api.list_xml = <list />;
 				api.sendEvent("list_load");
 			}
 			//新的皮肤id
