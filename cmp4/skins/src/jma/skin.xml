@@ -1,0 +1,17 @@
+﻿<skin name="JMA" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="MP3单曲专用皮肤" show_tips="0" context_menu="2">
+  <lrc xywh="0C, 0C, 200, 22" src="" mask="" lock="1" display="1" group="A" mouseEnabled="false">
+    <text xywh="0, 0, 100P, 100P" align="center" size="14" color="#ffffff, #ffffff" bold="1, 1" horizontal="1" shadow="1,90,#000000,0.5,2,2,1,1">
+      <kmc color="#003300, #ffffff" />
+    </text>
+  </lrc>
+  <console xywh="0C, 0C, 360, 66" src="console.png" mask="" lock="1" display="1" group="A" snap="true">
+    <bt_play xywh="12, 0C, 50, 50" src="bt_play.png" useHandCursor="true" />
+    <progress xywh="0C, 0C, 225, 38" track_src="progress.png" />
+    <time_position xywh="15R, 15, 48, 17" src="time_position.png" align="center" size="9" color="#ffffff" />
+    <time_duration xywh="15R, 15R, 48, 17" src="time_duration.png" align="center" size="9" color="#ffffff" />
+    <!--
+	无需歌词可以将lrc歌词窗口的display设置为0隐藏，然后显示下面的标题
+	<title xywh="0C, 0C, 80B, 22" align="left" size="14" color="#ffffff" bold="1" borderColor="" shadow="1,90,#000000,0.5,2,2,1,1" />
+	-->
+  </console>
+</skin>

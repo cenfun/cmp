@@ -1,0 +1,7 @@
+﻿<cmp 
+	
+	plugins = "privacy.swf"
+	privacy_url = "privacy_list.xml"
+	privacy_readme = "请输入列表密码"
+
+/>

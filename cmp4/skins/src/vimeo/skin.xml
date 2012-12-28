@@ -1,0 +1,17 @@
+﻿<skin name="Vimeo" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" show_tips="0.5" context_menu="2">
+  <console xywh="10, 10R, 10B, 40" src="console.png" mask="" lock="1" display="0" group="A">
+    <image xywh="0, 50R, 64, 48" />
+    <bt_play xywh="0, 0, 65, 40" src="bt_play.png" useHandCursor="true" tips="播放,暂停" />
+    <progress xywh="85, 10R, 110B, 12" track_src="progress_track.png" />
+    <indicator xywh="0,-10,52,18" src="indicator.png" color="#333333" size="11" align="center" />
+    <bt_mute xywh="110R, 7R, 17, 18" src="bt_mute.png" useHandCursor="true" tips="静音,打开声音" />
+    <volume xywh="38R, 10R, 68, 12" track_src="volume_track.png" />
+    <bt_fullscreen xywh="10R, 6R, 20, 20" src="bt_fullscreen.png" useHandCursor="true" fullscreen_max="video" tips="全屏,退出全屏" />
+    <event type="over" target="console" property="display" value="1" />
+  </console>
+  <media xywh="0, 0, 100P, 100P" src="media.swf" mask="" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P"/>
+    <event type="over" target="console" property="display" value="1" />
+    <event type="out" target="console" property="display" value="0" />
+  </media>
+</skin>

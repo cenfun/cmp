@@ -1,0 +1,28 @@
+﻿<skin name="Youtube" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" show_tips="0.5" context_menu="">
+  <console xywh="0, 0R, 100P, 35" src="console.png" mask="" lock="1" display="1" group="A">
+    <bt_play xywh="20, 2R, 20, 20" src="bt_play.png" tips="播放,暂停" />
+    <bt_stop xywh="66, 2R, 20, 20" src="bt_stop.png" tips="停止" />
+    <time xywh="100, 6R, 120, 16" size="11" bold="1" color="#ffffff" shadow="1,90,#000000,0.5,4,4,1,3,true" />
+    <volume xywh="-27R, 24R, 80, 8" thumb_src="volume_thumb.png" track_src="volume_track.png" src="volume.png" rotation="-90"/>
+    <bt_list xywh="70R, 2R, 20, 20" src="bt_list.png" tips="列表" />
+    <bt_mute xywh="38R, 2R, 20, 20" src="bt_mute.png" hover_volume="1" />
+    <bt_fullscreen xywh="5R, 2R, 20, 20" src="bt_fullscreen.png" tips="全屏" />
+    <progress xywh="0, 0, 100P, 8" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="1" />
+  </console>
+  <option xywh="20R, 35R, 322, 210" src="win.png" lock="0" display="0" group="" fade="0">
+    <pane xywh="5, 30, 5B, 25B" align="left" font="Arial" size="12" color="#666666, #ffffff" />
+    <bt_close xywh="5R, 5, 19, 19" src="bt_close.png"/>
+    <event type="open" target="list" property="display" value="0" />
+  </option>
+  <list xywh="0R, 35R, 322, 210" src="win.png" mask="" lock="0" display="0" group="">
+    <tree xywh="5, 30, 5B, 25B" align="left" font="Arial" size="12" color="#666666, #ffffff"/>
+    <bt_close xywh="5R, 5, 19, 19" src="bt_close.png"/>
+    <event type="open" target="option" property="display" value="0" />
+  </list>
+  <lrc xywh="0, 35R, 100%, 18" lock="1" display="1" group="A" alpha="0.8">
+    <text xywh="0, 0, 100P, 100P" align="center" size="12" color="#7F8FA5, #ffffff" horizontal="1" max_scale="3" shadow="1,90,#000000,0.5,4,4,1,3" />
+  </lrc>
+  <media xywh="0, 35R, 100P, 100P" src="media.swf" mask="" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P"/>
+  </media>
+</skin>

@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CMP4 Player</title>
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; overflow:hidden; text-align:center; background:#181818; }
+</style>
+</head>
+<body>
+<center>
+  <div id="player"></div>
+</center>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script> 
+<script type="text/javascript" src="cmp.cookies.js"></script>
+<script type="text/javascript">
+(function(window, undefined) {
+	window.CMP = window.CMP || {};
+	// 标记窗口已经打开
+	CMP.cookie.set("cmp_window_opened", true);
+	// 关闭窗口时清除打开状态，以便可以重新打开窗口
+	window.onbeforeunload = window.onunload = function() {
+		CMP.cookie.del("cmp_window_opened");
+	}
+	// =======================================================
+	// 载入一个cmp，相关设置详情见cmp交流论坛相关专贴
+	// http://bbs.cenfun.com
+	var flashvars = {
+		api : "CMP.cmp_loaded",
+		skin_id : 0,
+		auto_play : 0,
+		list_delete : 1,
+		config : "",
+		lists : "",
+		context_menu : 2
+	};
+	var htm = CMP.create("cmp", "600", "400", "http://cmp.cenfun.com/cmp4/cmp.swf", flashvars);
+	document.getElementById("player").innerHTML = htm;
+	// cmp加载完成回调函数
+	var cmpo;
+	CMP.cmp_loaded = function(key) {
+		cmpo = CMP.get("cmp");
+		if (cmpo) {
+			// 每隔1秒(1000毫秒)检查是否有cookie数据传入
+			// 可以更小时间间隔检测，提高实时性，但推荐不要小于500毫秒，以免耗费浏览器性能
+			CMP.cookie_handler();
+			setInterval(CMP.cookie_handler, 1000);
+		} else {
+			alert("CMP无法初始化");
+		}
+	};
+	// 读取操作类型和列表数据
+	CMP.cookie_handler = function() {
+		// 保持打开状态，以便窗口无响应死机时，不会导致永远无法打开
+		if (!CMP.cookie.get("cmp_window_opened")) {
+			CMP.cookie.set("cmp_window_opened", true);
+		}
+		// 读取数据
+		var type = CMP.cookie.get("cmp_player_type");
+		var data = CMP.cookie.get("cmp_player_data");
+		// 读取完成后，立即清除数据
+		CMP.cookie.del("cmp_player_type");
+		CMP.cookie.del("cmp_player_data");
+		// 是否读取到数据
+		if (!type || !data) {
+			return;
+		}
+		window.focus();
+		// 切割成数组
+		var arr = data.split("{|}");
+		// 生成列表 =================================================
+		// 请自行根据传入的数据，进行拼接，最后得到CMP的列表xml即可
+		// 比如，传入的是id，则可根据id用ajax去服务端读取数据，比如根据id参数用jQuery.get()从服务端读取列表
+		// 这里仅是一个简单的例子，仅用传入的地址进行拼接
+		var xml = "<list>";
+		for ( var i = 0; i < arr.length; i++) {
+			var m = arr[i];
+			xml += '<m label="' + m + '" src="music/' + m + '" />';
+		}
+		xml += "</list>";
+		// ========================================================
+		// 取得播放状态
+		var state = cmpo.config("state");
+		// 如果状态为正在播放，则先停止播放
+		if (type == "play" && state == "playing") {
+			cmpo.sendEvent("view_stop");
+		}
+		var play_id = cmpo.list().length + 1;
+		// 添加到CMP列表中
+		cmpo.list_xml(xml);
+		// 如果是播放操作，则开始播放
+		if (type == "play") {
+			cmpo.sendEvent("view_play", play_id);
+		}
+	};
+})(window);
+</script>
+</body>
+</html>

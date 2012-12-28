@@ -1,0 +1,13 @@
+﻿<skin name="VPlayer" version="1.5" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" show_tips="0" context_menu="2">
+  <console xywh="0, 0, 100P, 100P" src="vplayer.swf" lock="1" display="1" group="A">
+    <bt_play xywh="10, 10R, 40, 30" src="bt_play.png" />
+    <bt_mute xywh="50R, 10R, 30, 30" src="bt_mute.png" hover_volume="1" />
+    <volume xywh="-23R, 30R, 100, 24" track_src="track_volume.png" src="volume.png" rotation="-90" />
+    <progress xywh="63, 13R, 110B, 24" track_src="track_progress.png" />
+    <bt_fullscreen xywh="10R, 10R, 30, 30" src="bt_fullscreen.png" fullscreen_max="video" fullscreen_scale="1" tips="全屏" />
+    <time xywh="90R, 18R, 67, 16" align="center" font="Arial Narrow" size="11" color="#cccccc" borderColor=""  />
+  </console>
+  <media xywh="0, 0, 100P, 100P" src="bg.swf" lock="1" display="1" mask="" group="A">
+    <video xywh="0, 0, 100%, 100%" show_icon="1" show_buttons="1" />
+  </media>
+</skin>

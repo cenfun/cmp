@@ -1,0 +1,17 @@
+﻿<!--
+
+weather_handler  服务端数据处理和代理程序
+
+weather_xywh  位置宽高设置
+
+
+下面是插件的配置例子
+
+-->
+<cmp 
+	
+	plugins = "plugins/weather.swf"
+	weather_handler = "weather.php"
+	weather_xywh = "0C,10,48,48"
+
+/>

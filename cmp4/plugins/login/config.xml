@@ -1,0 +1,7 @@
+﻿<cmp 
+	
+	plugins = "login.swf"
+	login_handler = "login.php"
+	login_readme = "请先输入帐号和密码进行登录"
+
+/>

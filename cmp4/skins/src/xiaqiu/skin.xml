@@ -1,0 +1,33 @@
+﻿<skin name="夏秋" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" show_tips="0.5">
+  <option xywh="70C, -220C, 322, 242" src="win.png" lock="0" display="0" group="A" shadow="3,45,#000000,0.3,4,4,1,3" fade="1" snap="0">
+    <pane xywh="1, 1, 1B, 1B" align="left" font="" size="12" color="#eeeeee, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" />
+  </option>
+  <media xywh="70C, -220C, 322, 242" src="win.png" lock="0" display="1" group="D" fade="1" snap="0">
+    <video xywh="1, 1, 1B, 1B" />
+  </media>
+  <list xywh="-100C, 155C, 262, 202" src="win.png" lock="0" display="1" group="B" shadow="3,45,#000000,0.5,4,4,1,3" fade="1" snap="0">
+    <tree xywh="1, 1, 1B, 1B" align="left" font="" size="12" color="#cccccc, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" />
+  </list>
+  <lrc xywh="0C, 300C, 460, 80" src="" lock="0" display="1" group="C" shadow="3,45,#000000,0.3,4,4,1,3" fade="1" snap="0">
+    <text xywh="1, 21, 1B, 11B" align="center" font="Arial" color="#dddddd, #ffffff">
+      <kmc show_info="1" size="16" bold="1" align="center, center" />
+    </text>
+  </lrc>
+  <console xywh="0C, 0C, 480, 700" src="console.jpg" lock="1" display="1" group="E" fade="1" snap="0">
+    <bt_play xywh="75C, -40C, 45, 45" src="bt_play.png" />
+    <bt_stop xywh="120C, -40C, 45, 45" src="bt_stop.png" />
+
+    <volume xywh="10R, -42C, 80, 27" track_src="volume_track.png" />
+    
+	<progress xywh="149, -90C, 322, 11" thumb_src="" track_src="progress_track.png" thumb_autohide="1" />
+
+    <title xywh="6, 42C, 190, 22" size="14" color="#ffffff" borderColor="" bold="1" shadow="2,45,#000000,0.5,4,4,1,3" />
+    <status xywh="6, 22C, 150, 18" color="#ffffff" borderColor="" shadow="1,45,#000000,0.5,4,4,1,3" />
+
+    <time_position xywh="150, -75C, 160, 16" align="left" size="11" color="#ffffff" borderColor="" bold="1" />
+    <time_duration xywh="10R, -75C, 160, 16" align="right" size="11" color="#ffffff" borderColor="" bold="1" />
+
+  </console>
+</skin>

@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CMP4单曲播放系统</title>
+<style type="text/css">
+body, a, td, th, span, div { font-family:Verdana; font-size:14px; }
+input, textarea { font-family:Verdana; font-size:12px; vertical-align:middle; }
+textarea { font-size:11px; }
+body { background-color:#F5FAFE; padding:0px 0px; margin:0px 0px; text-align:center; }
+a:link, a:visited { color:#000000; text-decoration:none; }
+a:hover { color:#428EFF; text-decoration:underline; }
+.red { color:#ff0000; }
+.header { margin:10px 10px; color:#428EFF; font-size:20px; font-weight:bold; text-align:left; }
+.bodyer { margin:10px 10px; border:1px solid #CAD9EA; background-color:#FFFFFF; text-align:left; }
+.mbox { padding:10px 10px; border-bottom:1px dashed #CCCCCC; }
+.footer { margin:10px 10px; text-align:center; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; font-size:11px; }
+.footer span { display:none; }
+.footer a:link, .footer a:visited { color:#666666; font-size:12px; }
+</style>
+</head>
+<body>
+<script type="text/javascript">
+//Mini皮肤列表=================================================================
+var skins = new Array();
+skins.push({
+	name:"【Mini横条皮肤】宽度可自适应",
+	src:"skins/mini/mini.zip",
+	width:200,
+	height:16
+});
+skins.push({
+	name:"【SC MP3 Player】按钮滑动效果皮肤",
+	src:"skins/mini/scplayer.zip",
+	width:290,
+	height:24
+});
+skins.push({
+	name:"【MOKO】美空女性风格皮肤",
+	src:"skins/mini/moko.zip",
+	width:550,
+	height:40
+});
+skins.push({
+	name:"【MOKO】带卡拉OK歌词显示皮肤",
+	src:"skins/mini/moko.zip",
+	width:550,
+	height:150
+});
+skins.push({
+	name:"【Ocean Blue海蓝】宽度可自适应",
+	src:"skins/mini/ocean.zip",
+	width:73,
+	height:24
+});
+skins.push({
+	name:"【Ocean Blue海蓝】带时间和进度条，宽度可自适应",
+	src:"skins/mini/ocean.zip",
+	width:280,
+	height:24
+});	
+skins.push({
+	name:"【TV Live】电视直播专用皮肤，宽高可自适应",
+	src:"skins/mini/tvlive.zip",
+	width:400,
+	height:300
+});
+skins.push({
+	name:"【视频播放专用皮肤】[4:3]宽度和高度都可以自定义",
+	src:"skins/mini/vplayer.zip",
+	width:400,
+	height:300
+});
+skins.push({
+	name:"【视频播放专用皮肤】[16:9]宽度和高度都可以自定义",
+	src:"skins/mini/vplayer.zip",
+	width:500,
+	height:282
+});
+skins.push({
+	name:"【JW音乐播放皮肤】宽度和高度都可以自定义",
+	src:"skins/mini/jwplayer.zip",
+	width:320,
+	height:20
+});
+skins.push({
+	name:"【JW视频播放皮肤】[4:3]宽度和高度都可以自定义",
+	src:"skins/mini/jwplayer.zip",
+	width:320,
+	height:260
+});
+skins.push({
+	name:"【JW视频播放皮肤】[16:9]宽度和高度都可以自定义",
+	src:"skins/mini/jwplayer.zip",
+	width:400,
+	height:245
+});
+skins.push({
+	name:"【简蓝视频皮肤】[4:3]宽度和高度都可以自定义",
+	src:"skins/mini/blueplayer.zip",
+	width:320,
+	height:290
+});
+skins.push({
+	name:"【简蓝视频皮肤】[16:9]宽度和高度都可以自定义",
+	src:"skins/mini/blueplayer.zip",
+	width:400,
+	height:275
+});
+
+//如有更多Mini皮肤样式，请安装以上格式在此添加即可
+
+//============================================================================
+function $(s) {
+	return document.getElementById(s);
+}
+function getUrl(url) {
+	var path = window.location.href.split("?")[0];
+	if (path.lastIndexOf("\\") != -1) {
+		path = path.slice(0,path.lastIndexOf("\\") + 1);
+	} else {
+		path = path.slice(0,path.lastIndexOf("/") + 1);
+	}	
+	return path + url;
+}
+//============================================================================
+//保存音乐地址
+var musicUrl;
+function checkUrl(o) {
+	if (musicUrl != o.value) {
+		musicUrl = o.value;
+		update();
+	}
+}
+function addSkinList() {
+	var ss = $("skinSelect");
+	for (var i = 0; i < skins.length; i ++) {
+		ss.options.add(new Option(skins[i].name, i));
+	}
+}
+function checkSkin(o) {
+	if (o.value) {
+		var skin = skins[o.value];
+		$("cmp_width").value = skin.width;
+		$("cmp_height").value = skin.height;
+	} else {
+		$("cmp_width").value = "";
+		$("cmp_height").value = "";
+	}
+	update();
+}
+function update() {
+	var vars = ["url=","lists=","context_menu=2"];
+	//取得设置
+	if ($("cmp_auto_play").checked) {
+		vars.push("auto_play=1");
+	}
+	if ($("cmp_play_mode").checked) {
+		vars.push("play_mode=1");
+	}
+	var bgcolor = $("cmp_bgcolor").value;
+	if (bgcolor) {
+		vars.push("bgcolor=" + encodeURIComponent(bgcolor));
+	}
+	var cmp_type = $("cmp_type").value;
+	if (cmp_type) {
+		vars.push("type=" + cmp_type);
+	}
+	//取得音乐地址
+	musicUrl = $("musicUrl").value;
+	if (musicUrl) {
+		$("musicErr").innerHTML = "";
+		vars.push("src=" + encodeURIComponent(musicUrl));
+	} else {
+		$("musicErr").innerHTML = "请输入一个有效的音乐地址";
+		errorHandler();
+		return;
+	}
+	//取得歌词地址
+	var lrc = $("musicLrc").value;
+	if (lrc) {
+		vars.push("lrc=" + encodeURIComponent(lrc));
+	}
+	//取得皮肤
+	var index = $("skinSelect").value;
+	if (index) {
+		$("skinErr").innerHTML = "";
+		vars.push("skin=" + encodeURIComponent(skins[index].src));
+	} else {
+		$("skinErr").innerHTML = "请选择一个皮肤";
+		errorHandler();
+		return;
+	}
+	//生成代码
+	//宽高
+	var cmpw = parseInt($("cmp_width").value);
+	var cmph = parseInt($("cmp_height").value);
+	//参数
+	var flashvars = vars.join("&");
+	//生成html地址
+	//取得MP主程序地址，也可以自定义为绝对路径，默认使用同级目录下的cmp.swf
+	var cmpUrl = getUrl("cmp.swf");
+	var cmpId = "cmp" + Math.random().toString().substring(2, 10);
+	
+	var paramsStr = '{}';
+	var paramsObj = {};
+	if ($("cmp_wmode").checked) {
+		paramsStr = '{wmode:"transparent"}';
+		paramsObj = {wmode:"transparent"};
+	}
+	var htm = getcmp(cmpId, cmpw, cmph, cmpUrl, flashvars, paramsObj);
+	
+	var js = '<script type="text/javascript" src="http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js"><'+'/script>\n';
+	js += '<script type="text/javascript">\n';
+	js += 'CMP.write("'+cmpId+'", "'+cmpw+'", "'+cmph+'", "'+cmpUrl+'", "'+flashvars+'", '+paramsStr+');\n';
+	js += '<'+'/script>';
+	
+	var url = cmpUrl+"?"+flashvars;
+	
+	$("htmlcode").value = htm;
+	$("jscode").value = js;
+	$("ubbcode").value = "[flash="+cmpw+","+cmph+"]"+url+"[/flash]";
+	$("flashcode").value = url + "&.swf";
+	showPreview();
+}
+function errorHandler() {
+	$("flashcode").value = "";
+	$("ubbcode").value = "";
+	$("htmlcode").value = "";
+	showPreview();
+}
+
+function showPreview() {
+	if ($("checkPreview").checked) {
+		$("preview").innerHTML = $("htmlcode").value;
+	} else {
+		$("preview").innerHTML = "";	
+	}
+}
+function getcmp(id, w, h, url, flashvars, params) {
+	var _params = { allowfullscreen : "true", allowscriptaccess : "always", flashvars : flashvars};
+	if (params && typeof params === "object") {
+		for (var k in params) {
+			_params[k] = params[k];	
+		}
+	}
+	var htm = '<object type="application/x-shockwave-flash" data="'+url+'" width="'+w+'" height="'+h+'" id="'+id+'">\n';
+	htm += '<param name="movie" value="'+url+'" />\n';
+	for (var p in _params) {
+		htm += '<param name="'+p+'" value="'+_params[p]+'" />\n';
+	}
+	htm += '</object>';
+	return htm;
+}
+
+</script>
+<div class="header">CMP4单曲播放系统</div>
+<div class="bodyer">
+  <div class="mbox">当你在发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供各种单曲播放器调用，无需注册，仅仅填写你要播放的音乐或视频地址，然后进行一些简单配置即可。</div>
+  <div class="mbox"><b>音乐地址：</b><span>(具体媒体类型以CMP4所支持的格式为准，如：music/test.mp3)</span>
+    <div style="margin:5px 0px;">
+      <input type="text" id="musicUrl" value="" onfocus="this.select();" onchange="checkUrl(this);" onkeyup="checkUrl(this);" onclick="checkUrl(this);" style=" width:99%;" />
+    </div>
+    <div class="red" id="musicErr"></div>
+  </div>
+  <div class="mbox"><b>歌词地址：</b><span>(可选，支持lrc和kmc)</span>
+    <div style="margin:5px 0px;">
+      <input type="text" id="musicLrc" value="" onfocus="this.select();" onchange="update();" style=" width:99%;" />
+    </div>
+    <div class="red" id="musicErr"></div>
+  </div>
+  <div class="mbox"><b>选择皮肤：</b>
+    <div>
+      <select id="skinSelect" onchange="checkSkin(this);">
+        <option value=""></option>
+      </select>
+    </div>
+    <div class="red" id="skinErr"></div>
+  </div>
+  <div class="mbox"><b>播放设置：</b>
+    <table border="0" cellspacing="0" cellpadding="3">
+      <tr>
+        <td>自动播放:</td>
+        <td><input type="checkbox" value="1" id="cmp_auto_play" onclick="update();" /></td>
+        <td>&nbsp;</td>
+        <td>循环播放:</td>
+        <td><input type="checkbox" value="1" id="cmp_play_mode" onclick="update();" /></td>
+        <td>&nbsp;</td>
+        <td>宽度:</td>
+        <td><input type="text" size="4" id="cmp_width" onchange="update();" /></td>
+        <td>&nbsp;</td>
+        <td>高度:</td>
+        <td><input type="text" size="4" id="cmp_height" onchange="update();" /></td>
+        <td>&nbsp;</td>
+        <td>类型:</td>
+        <td><select id="cmp_type" onchange="update();">
+            <option value="">自动识别</option>
+            <option value="1">MP3音频</option>
+            <option value="2">FLV视频</option>
+            <option value="3">WMP类型</option>
+            <option value="4">动画图片</option>
+          </select></td>
+        <td>&nbsp;</td>
+        <td>背景色:</td>
+        <td><input type="text" size="10" maxlength="7" id="cmp_bgcolor" onchange="update();" /></td>
+        <td>&nbsp;</td>
+        <td>背景透明</td>
+        <td><input type="checkbox" value="1" id="cmp_wmode" onclick="update();" /></td>
+      </tr>
+    </table>
+  </div>
+  <div class="mbox"><b>调用代码：</b>
+    <div style="margin:5px 0px;">播放器flash调用地址：（通用地址，一般可以插入一个flash的都支持此方式）</div>
+    <div>
+      <input id="flashcode" style="width:99%;" onfocus="this.select();" />
+    </div>
+    <div style="margin:5px 0px;">常用UBB插入代码：（一般论坛博客等都支持此方式）</div>
+    <div>
+      <input id="ubbcode" style="width:99%;" onfocus="this.select();" />
+    </div>
+    <div style="margin:5px 0px;">播放器html插入代码：（如果如支持html插入则可以使用此方式）</div>
+    <div>纯标签代码：<br />
+      <textarea rows="7" id="htmlcode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
+      <br />
+      JS优化载入代码（推荐使用）：<br />
+      <textarea rows="5" id="jscode" style="width:99%;" onfocus="this.select();" wrap="virtual"></textarea>
+    </div>
+  </div>
+  <div class="mbox" style="border:none;">
+    <table border="0" cellspacing="0" cellpadding="3">
+      <tr>
+        <td><input type="checkbox" id="checkPreview" onclick="showPreview();" /></td>
+        <td>效果预览</td>
+      </tr>
+    </table>
+    <div id="preview" style="margin:10px auto;"></div>
+  </div>
+</div>
+<script type="text/javascript">
+addSkinList();
+</script>
+<div class="footer">Copyright &copy; <a href="http://bbs.cenfun.com" target="_blank">CMP4单曲播放系统</a>. All Rights Reserved. Powered by <a href="mailto:cenfun@gmail.com" target="_blank">CenFun</a><span> 
+  <!--站点统计，请更换成您自己的：--> 
+  <script src="http://js.users.51.la/2050763.js" type="text/javascript"></script> 
+  </span></div>
+</body>
+</html>

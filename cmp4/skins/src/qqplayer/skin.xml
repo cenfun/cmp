@@ -1,0 +1,38 @@
+﻿<skin version="2.0" name="QQ影音" url="http://bbs.cenfun.com/" author="CenFun" email="cenfun@gmail.com" readme="CMP4皮肤" mask_color="" preview="preview.jpg">
+	<option xywh="0C, -5C, 594, 345" src="black.png" mask="" lock="1" display="0" group="A">
+		<pane xywh="0, 0, 100P, 100P" align="left" font="宋体" size="12" color="#7F8FA5, #ffffff" />
+		<scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+	</option>
+	<lrc xywh="-100C, 148C, 393, 18" src="" mask="" lock="1" display="1" group="A">
+		<text xywh="0, 0, 100P, 100P" align="center" font="宋体" size="12" color="#7F8FA5, #ffffff" horizontal="1" max_scale="3" />
+	</lrc>
+	<list xywh="198C, -5C, 200, 345" src="list.png" mask="" lock="1" display="1" group="A">
+		<tree xywh="7, 0, 100P, 100P" align="left" font="宋体" size="12" color="#7F8FA5, #ffffff" />
+		<scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+		<bt_close xywh="0, 0C, 7, 48" src="bt_close.png" tips="关闭列表" />
+		<event type="open" target="console.progress" property="xywh" value="-100C, 32R, 105B, 13" />
+		<event type="close" target="console.progress" property="xywh" value="-3C, 32R, 8B, 13" />
+		<event type="open" target="media" property="xywh" value="-100C, -20C, 393, 312" />
+		<event type="close" target="media" property="xywh" value="-3C, -20C, 586, 312" />
+		<event type="open" target="lrc" property="xywh" value="-100C, 148C, 393, 18" />
+		<event type="close" target="lrc" property="xywh" value="-3C, 148C, 586, 18" />
+	</list>
+	<media xywh="-100C, -20C, 393, 312" src="" mask="" lock="1" display="1" group="A">
+		<video xywh="0, 0, 100P, 100P" />
+	</media>
+	<console xywh="0C, 0C, 600, 400" src="console.png" mask="" lock="1" display="1" group="A">
+		<bt_play xywh="0C, 1R, 51, 31" src="bt_play.png" />
+		<bt_stop xywh="-60C, 7R, 18, 18" src="bt_stop.png" />
+		<bt_prev xywh="-40C, 7R, 18, 18" src="bt_prev.png" />
+		<bt_next xywh="40C, 7R, 18, 18" src="bt_next.png" />
+		<bt_mute xywh="62C, 7R, 18, 18" src="bt_mute.png" />
+		<volume xywh="105C, 10R, 60, 13" thumb_src="volume_thumb.png" track_src="volume_track.png" />
+		<progress xywh="-100C, 32R, 105B, 13" thumb_src="progress_thumb.png" track_src="progress_track.png" />	
+		<bt_list xywh="2R, -4C, 7, 48" src="bt_list.png" tips="打开列表" />
+		<bt_option xywh="33R, 7R, 18, 18" src="bt_option.png" tips="关闭设置,打开设置" />
+		<bt_fullscreen xywh="12R, 7R, 18, 18" src="bt_fullscreen.png" tips="打开全屏,退出全屏" />
+		<title xywh="25, 4, 450, 18" align="left" font="宋体" size="12" color="#CEEDF8" bold="1" />
+		<status xywh="8, 6R, 210, 18" align="left" font="宋体" size="12" color="#A5D1FF" />
+		<time xywh="5R, 4, 100, 18" align="right" font="宋体" size="12" color="#A5D1FF" />
+	</console>
+</skin>

@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - JavaScript接口</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP4 JavaScript API接口说明</h3>
+<div class="submsg">
+  <div>下列函数的调用，需要先获取CMP所在flash的对象，也就是例子中的cmpo，获取方法见<a href="example.htm#cmpo">使用范例</a></div>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tr>
+      <th>方法名</th>
+      <th>说明</th>
+      <th>示例</th>
+    </tr>
+    <tr>
+      <th>cmp_api();</th>
+      <td>只读，返回CMP所有支持的API信息，包括CMP支持的所有API</td>
+      <td>var str = cmpo.cmp_api();</td>
+    </tr>
+    <tr>
+      <th rowspan="3">config();</th>
+      <td>1，读取CMP当前所有的全局配置，返回一个Object对象，包含所有可读写的<a href="config.htm" target="_blank">全局配置</a>属性设置，以及其他一些只读属性</td>
+      <td>var config = cmpo.config();</td>
+    </tr>
+    <tr>
+      <td>2，读取配置的某个属性值，具体支持哪些属性，可用for in语句查询</td>
+      <td><p>var name = cmpo.config("name"); </p>
+        <p>var name = cmpo.config().name;</p></td>
+    </tr>
+    <tr>
+      <td><p>3，修改某个属性的值，需传入属性名称和值</p>
+        <p>注意：修改属性仅是将值写入配置中，需要下次有相关的刷新（如发送事件）才应用新的值</p></td>
+      <td>cmpo.config("skin_id", "1");</td>
+    </tr>
+    <tr>
+      <th rowspan="3">item();</th>
+      <td>1，返回当前播放项的一个Object对象，如果没有开始任何播放，将返回null，其包含当<a href="list.htm" target="_blank">前项的所有属性</a></td>
+      <td>var item = cmpo.item();</td>
+    </tr>
+    <tr>
+      <td>2，返回当前播放项的某个属性值，具体支持哪些属性，可用for in语句查询</td>
+      <td><p>var src = cmpo.item(&quot;src&quot;);</p>
+        <p>var src = cmpo.item().src;</p></td>
+    </tr>
+    <tr>
+      <td>3，修改某个属性的值(一般不用)</td>
+      <td>cmpo.item(&quot;src&quot;, &quot;test.mp3&quot;);</td>
+    </tr>
+    <tr>
+      <th rowspan="3">list_xml();</th>
+      <td>1，读取CMP当前列表内容，返回一个xml的字符串</td>
+      <td>var xml = cmpo.list_xml();</td>
+    </tr>
+    <tr>
+      <td>2，修改列表内容，需传入一个xml列表格式的字符串</td>
+      <td><p>var xml = '&lt;list&gt;&lt;m label=&quot;test&quot; src=&quot;test.mp3&quot; /&gt;&lt;/list&gt;';</p>
+        <p>cmpo.list_xml(xml);<br />
+        </p></td>
+    </tr>
+    <tr>
+      <td>如果需要覆盖原有的音乐可以设置第2个参数，表示是否附加到原有列表后面，默认为true表示附加，传入false表示不附加，将重建列表并写入新的列表内容</td>
+      <td>cmpo.list_xml(xml, false);</td>
+    </tr>
+    <tr>
+      <th rowspan="7">list();</th>
+      <td><p>1，返回CMP列表数的所有信息，包括未打开的列表</p>
+        <p>将返回一个数组，数组每项都是一个音乐项对象，类型为Object</p></td>
+      <td>var arr = cmpo.list();</td>
+    </tr>
+    <tr>
+      <td>读取一级列表的个数</td>
+      <td>var num = cmpo.list().length;</td>
+    </tr>
+    <tr>
+      <td>返回第二个项，数组是从0开始的，第二个项索引就是1</td>
+      <td>var m2 = cmpo.list()[1];</td>
+    </tr>
+    <tr>
+      <td><p>如果这个音乐项是个目录，则会有children属性，表示它下面的子列表，也是一个数组</p>
+        <p>以此类推，这样我们可以逐个循环得到整个列表<br />
+          当然音乐项也有parent属性，表示其父目录对象</p></td>
+      <td>var m2_arr = m2.children;</td>
+    </tr>
+    <tr>
+      <td><p>2，返回某个指定的项对象</p>
+        <p>参数可以是包含唯一key值Object型的项对象，也可以直接传入字符型key值</p>
+        <p>key值可以从上面1中的列表项对象中读取 </p></td>
+      <td><p>var item = cmpo.list(m2);</p>
+        <p>var item = cmpo.list(&quot;ITEM_1&quot;);</p></td>
+    </tr>
+    <tr>
+      <td>3，读取项的某个属性</td>
+      <td>var src = cmpo.list(&quot;ITEM_1&quot;, &quot;src&quot;);</td>
+    </tr>
+    <tr>
+      <td><p>如果传入的参数是项支持的一个方法名，则执行此项的某个方法</p>
+        <p>目前支持：play播放此项, open打开此目录, close关闭此目录, toggle开关切换, remove移除此项</p></td>
+      <td>cmpo.list(&quot;ITEM_1&quot;, &quot;play&quot;);</td>
+    </tr>
+    <tr>
+      <th>skin_xml();</th>
+      <td>只读，返回当前皮肤配置文件内容的xml字符形式</td>
+      <td>var xml = cmpo.skin_xml();</td>
+    </tr>
+    <tr>
+      <th rowspan="2">skin();</th>
+      <td>1，读取皮肤元件的某个属性值，第1个参数表示皮肤元件位置，第2个是元件属性名</td>
+      <td><p>var width = cmpo.skin(&quot;console&quot;, &quot;width&quot;);</p>
+        <p>var xywh = cmpo.skin(&quot;console.bt_play&quot;, &quot;xywh&quot;);</p></td>
+    </tr>
+    <tr>
+      <td>2，修改元件的某个属性，如果修改成功将返回true</td>
+      <td>cmpo.skin(&quot;console.bt_play&quot;, &quot;xywh&quot;, &quot;0, 0, 100, 20&quot;);</td>
+    </tr>
+    <tr>
+      <th>sendEvent();</th>
+      <td><p>往CMP发送事件</p>
+        <p>第1个参数是事件类型，所有支持类型见<a href="api_as3.htm#events">AS3中的所有事件类型列表</a></p>
+        <p>第2个参数是需要传入的数据（可选）</p></td>
+      <td><p>cmpo.sendEvent(&quot;view_play&quot;);</p>
+        <p>cmpo.sendEvent(&quot;view_play&quot;, 2);</p></td>
+    </tr>
+    <tr>
+      <th>addEventListener();</th>
+      <td><p>添加一个js侦听方法</p>
+        <p>第1个参数是事件类型，同上<a href="#events"></a></p>
+        <p>第2个参数是回调函数名，字符串格式</p></td>
+      <td><p>cmpo.addEventListener(&quot;item_deleted&quot;, &quot;del&quot;);</p>
+        <p>function del(data) { }</p></td>
+    </tr>
+    <tr>
+      <th>removeEventListener();</th>
+      <td>移除一个已经注册的js侦听方法</td>
+      <td>cmpo.removeEventListener(&quot;item_deleted&quot;, &quot;del&quot;);</td>
+    </tr>
+    <tr>
+      <th>cookie();</th>
+      <td>CMP的通用存储接口，可以在本地电脑存储并读取已经存储的数据，flash需启用本地存储(默认是10K容量)，这些数据是永久储存的，而且跨浏览器</td>
+      <td><p>cmpo.cookie(&quot;name&quot;, &quot;CMP4&quot;);</p>
+        <p>var name = cmpo.cookie(&quot;name&quot;); </p></td>
+    </tr>
+    <tr>
+      <th>query();</th>
+      <td>CMP的查询接口，用于特殊查询和执行服务，暂为高阶用户补用</td>
+      <td><p>cmpo.query(&quot;ws.wins.list.visible&quot;, &quot;false&quot;);</p>
+        <p>var display = cmpo.query(&quot;ws.wins.list.visible&quot;); </p></td>
+    </tr>
+  </table>
+  <div>关于CMP外接播放WMP的接口和应用见：<a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/developer/wmp/" target="_blank">http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/developer/wmp/</a></div>
+</div>
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4 - lrc_rowchange demo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; text-align:center; }
+</style>
+</head>
+<body>
+<div style="margin:0px auto; text-align:left; width:600px;">
+  <div id="player" style="width:600px;height:400px;"></div>
+  <h3>歌词信息输出：</h3>
+  <div id="lrc_content"></div>
+</div>
+<script type="text/javascript" src="http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js"></script> 
+<script type="text/javascript">
+var cmpo;
+function cmp_loaded(key) {
+	//cmp loaded
+	cmpo = CMP.get("cmp");
+	if (cmpo) {
+		//cmp callback		
+		showInfo(cmpo.config("name"));
+		//开始播放时
+		cmpo.addEventListener("model_start", "cmp_model_start");
+		//侦听歌词行改变事件
+		cmpo.addEventListener("lrc_rowchange", "cmp_lrc_rowchange");
+	}
+}
+//开始播放时清除信息，并显示描述
+function cmp_model_start(data) {
+	showInfo(cmpo.config("description"));
+}
+//歌词行改变时显示当前行信息
+function cmp_lrc_rowchange(data) {
+	showInfo(data);
+}
+
+function showInfo(str) {
+	//显示到浏览器窗口标题
+	document.title = str;
+	//输出到页面
+	document.getElementById("lrc_content").innerHTML = str;
+}
+
+//cmp主程序地址，替换成你自己的
+var cmp_url = "http://cmp.cenfun.com/cmp4/cmp.swf";
+//cmp的参数
+var flashvars = {
+	name : "CMP4 - lrc_rowchange demo",
+	//cmp初始化完成时的脚本接口回调函数名
+	api:"cmp_loaded"
+};
+//id, width, height, swf_url, flashvars, params, attrs
+var htm = CMP.create("cmp", "100%", "100%", cmp_url, flashvars);
+document.getElementById("player").innerHTML = htm;
+</script>
+</body>
+</html>

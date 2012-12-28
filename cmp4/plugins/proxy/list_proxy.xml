@@ -1,0 +1,23 @@
+<list>
+  <m src="proxy:xiami,384553" label="xiami MP3"/>
+  <m label="proxy:youku">
+    <m type="2" src="proxy:youku,XMjM2MDYxMzY0" label="youku - 单段"/>
+    <m opened="1" label="youku - 多段">
+      <m type="2" src="proxy:youku,XMjM2OTE0NTIw,0" label="youku - 多段 - 0"/>
+      <m type="2" src="proxy:youku,XMjM2OTE0NTIw,1" label="youku - 多段 - 1"/>
+      <m type="2" src="proxy:youku,XMjM2OTE0NTIw,3" label="youku - 多段 - 3"/>
+      <m type="2" src="proxy:youku,XMjM2OTE0NTIw,8" label="youku - 多段 - 8"/>
+      <m type="2" src="proxy:youku,XMjM2OTE0NTIw,10" label="youku - 多段 - 10"/>
+    </m>
+  </m>
+  <m label="proxy:sina">
+    <m type="2" src="proxy:sina,31274526" label="sina - 单段"/>
+    <m opened="1" label="sina - 多段">
+      <m type="2" src="proxy:sina,45261856,1" label="sina - 多段 - 1"/>
+      <m type="2" src="proxy:sina,45261856,4" label="sina - 多段 - 4"/>
+      <m type="2" src="proxy:sina,45261856,7" label="sina - 多段 - 7"/>
+      <m type="2" src="proxy:sina,45261856,8" label="sina - 多段 - 8"/>
+      <m type="2" src="proxy:sina,45261856,10" label="sina - 多段 - 10"/>
+    </m>
+  </m>
+</list>

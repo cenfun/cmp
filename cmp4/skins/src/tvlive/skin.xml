@@ -1,0 +1,19 @@
+﻿<skin name="TV Live" version="1.2" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" show_tips="0" context_menu="2">
+  <list xywh="0C, -10C, 30B, 40B" src="list.png" lock="1" display="0" group="A" shadow="3,45,#000000,0.5,4,4,1,3">
+    <tree xywh="5, 5, 5B, 17B" align="left" font="Arial" size="12" color="#666666, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" />
+    <search xywh="5, 6R, 150, 18" align="left" font="Arial" size="12" color="#555555, #999999" borderColor="#444444" backgroundColor="#282828" value="输入关键字搜索" />
+    <bt_close xywh="5R, 5R, 60, 18" src="bt_close.png" />
+  </list>
+  <console xywh="0, 0, 100P, 100P" src="tvlive.swf" lock="1" display="1" group="A">
+    <bt_list xywh="-85C, 10R, 40, 30" src="bt_list.png" />
+    <bt_play xywh="-35C, 10R, 40, 30" src="bt_play.png" />
+    <bt_stop xywh="10C, 10R, 30, 30" src="bt_stop.png" />
+    <bt_mute xywh="50C, 10R, 30, 30" src="bt_mute.png" hover_volume="1" />
+    <bt_fullscreen xywh="90C, 10R, 30, 30" src="bt_fullscreen.png" />
+    <volume xywh="88C, 28R, 100, 24" track_src="track_volume.png" src="volume.png" rotation="-90" />
+  </console>
+  <media xywh="0, 0, 100P, 100P" src="media.swf" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P" />
+  </media>
+</skin>

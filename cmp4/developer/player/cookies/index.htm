@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Cross Window Connect</title>
+<style type="text/css">
+body { color:#000000; text-align:center; margin:0px auto; background-color:#F5FAFE; font-family:Arial; font-size:12px; }
+input, textarea { font-family:Arial; font-size:12px; vertical-align:middle; }
+a:link, a:visited { text-decoration:none; color:#428EFF; }
+a:hover { text-decoration:underline; }
+.header { margin:10px 10px; color:#428EFF; font-size:20px; font-weight:bold; text-align:left; }
+.bodyer { margin:10px 10px; border:1px solid #CAD9EA; background-color:#FFFFFF; text-align:left; }
+.footer { margin:10px 10px; text-align:left; margin-top:10px; border-top:1px dashed #CAD9EA; padding-top:5px; color:#666666; font-size:11px; }
+.mbox { padding:10px 10px; line-height:150%; }
+.tablehead { padding:8px 8px; font-size:14px; color:333; font-weight:bold; background:#E5ECF9; border-bottom:1px solid #C0D0F0; }
+.tablehead span { font-size:12px; font-weight:normal; }
+.tablelist td { padding:8px 10px; border-bottom:1px solid #E5ECF9; }
+.tablelist td a { margin:0px 30px; }
+.tablefoot td { padding:8px 10px; }
+</style>
+</head>
+<body>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script> 
+<script type="text/javascript" src="cmp.cookies.js"></script> 
+<script type="text/javascript">
+(function(window, undefined) {
+	window.CMP = window.CMP || {};
+	// 重置打开状态，以便窗口无响应死机时，不会导致永远无法打开
+	CMP.cookie.del("cmp_window_opened");
+	CMP.add = function(data) {
+		if (typeof (data) === "string") {
+			data = [data];
+		}
+		CMP.sendData("add", data);
+	};
+	CMP.play = function(data) {
+		if (typeof (data) === "string") {
+			data = [data];
+		}
+		CMP.sendData("play", data)
+	};
+	CMP.selectedAdd = function() {
+		var data = CMP.getSelected();
+		if (data.length) {
+			CMP.add(data);
+			CMP.checkAll({
+				checked : false
+			});
+		} else {
+			alert("请至少选择一个");
+		}
+	};
+	CMP.selectedPlay = function() {
+		var data = CMP.getSelected();
+		if (data.length) {
+			CMP.play(data);
+			CMP.checkAll({
+				checked : false
+			});
+		} else {
+			alert("请至少选择一个");
+		}
+	};
+	CMP.playerOpen = function() {
+		var params = 'width=600,height=400,menubar=0,resizable=0,status=0,titlebar=0,toolbar=0,location=0';
+		window.open('player.htm', 'cmp_window', params);
+	};
+	CMP.sendData = function(type, data) {
+		CMP.cookie.set("cmp_player_type", type);
+		CMP.cookie.set("cmp_player_data", data.join("{|}"));
+		if (!CMP.cookie.get("cmp_window_opened")) {
+			CMP.playerOpen();
+		}
+	}
+	CMP.highlight = function(o, c) {
+		o.style.backgroundColor = c;
+		o.onmouseout = function() {
+			o.style.backgroundColor = "";
+		}
+	};
+	CMP.checkAll = function(o) {
+		var cbs = document.getElementsByTagName("input");
+		for ( var i = 0; i < cbs.length; i++) {
+			var cb = cbs[i];
+			if (cb.type == "checkbox" && cb.name == "cmp_item" && cb.value) {
+				cb.checked = o.checked;
+			}
+		}
+	};
+	CMP.getSelected = function() {
+		var data = [];
+		var cbs = document.getElementsByTagName("input");
+		for ( var i = 0; i < cbs.length; i++) {
+			var cb = cbs[i];
+			if (cb.type == "checkbox" && cb.name == "cmp_item" && cb.value) {
+				if (cb.checked) {
+					data.push(cb.value);
+				}
+			}
+		}
+		return data;
+	};
+})(window);
+</script>
+<div class="header">Cross Window Connect with cookie</div>
+<div class="bodyer">
+  <div class="mbox">
+    <div class="tablehead">专辑列表播放：</div>
+    <table cellpadding="0" cellspacing="0" class="tablelist">
+      <tr onmouseover="CMP.highlight(this, '#f5f5f5');">
+        <td ><input type="checkbox" name="cmp_item" value="test.mp3" /></td>
+        <td>test.mp3</td>
+        <td><a href="javascript:void(0)" onclick="CMP.play('test.mp3');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="CMP.add('test.mp3');">加入播放列表</a></td>
+      </tr>
+      <tr onmouseover="CMP.highlight(this, '#f5f5f5');">
+        <td ><input type="checkbox" name="cmp_item" value="test.flv" /></td>
+        <td>test.flv</td>
+        <td><a href="javascript:void(0)" onclick="CMP.play('test.flv');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="CMP.add('test.flv');">加入播放列表</a></td>
+      </tr>
+      <tr onmouseover="CMP.highlight(this, '#f5f5f5');">
+        <td ><input type="checkbox" name="cmp_item" value="secret_garden.mid" /></td>
+        <td>secret_garden.mid</td>
+        <td><a href="javascript:void(0)" onclick="CMP.play('secret_garden.mid');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="CMP.add('secret_garden.mid');">加入播放列表</a></td>
+      </tr>
+      <tr onmouseover="CMP.highlight(this, '#f5f5f5');">
+        <td ><input type="checkbox" name="cmp_item" value="castle_in_the_sky.mid" /></td>
+        <td>castle_in_the_sky.mid</td>
+        <td><a href="javascript:void(0)" onclick="CMP.play('castle_in_the_sky.mid');">试听</a></td>
+        <td><a href="javascript:void(0)" onclick="CMP.add('castle_in_the_sky.mid');">加入播放列表</a></td>
+      </tr>
+    </table>
+    <table cellspacing="0" cellpadding="0" class="tablefoot">
+      <tr>
+        <td><input type="checkbox" onclick="CMP.checkAll(this);" value=""/></td>
+        <td>全选</td>
+        <td><button onclick="CMP.selectedPlay();">试听选中的音乐</button></td>
+        <td><button onclick="CMP.selectedAdd();">加入播放列表</button></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

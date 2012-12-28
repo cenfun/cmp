@@ -1,0 +1,78 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMP4记忆播放demo</title>
+<style type="text/css">
+html, body { text-align:center; font-size:12px; padding:0; margin:0; font-family:Verdana; }
+a, a:visited { color:#000; text-decoration:none; }
+.head { height:30px; background:#f5f5f5; }
+.head_inner { width:800px; margin:0px auto; text-align:left; line-height:30px; font-weight:bold; font-size:14px; }
+.cmp { background:#000000; }
+.cmp_inner { width:800px; height:500px; margin:0px auto; background:#181818; }
+.main { }
+.main_inner { width:800px; margin:0px auto; text-align:left; }
+.info { padding:10px 0px; line-height:20px; }
+.foot { border-top:1px dashed #eee; margin-top:10px; }
+.foot_inner { width:800px; margin:0px auto; text-align:left; color:#999; font-size:11px; padding:5px 0px; }
+.foot_inner a { color:#999; }
+</style>
+<script src="http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js"></script>
+</head>
+<body>
+<div class="head">
+  <div class="head_inner">CMP4记忆播放demo</div>
+</div>
+<div class="cmp">
+  <div class="cmp_inner" id="player">loading ...</div>
+</div>
+<div class="main">
+  <div class="main_inner">
+    <div class="info">
+      <p>CMP是一款免费的在线Flash音乐播放器，致力于提供最佳在线音乐播放解决方案。支持的音频视频格式主要有MP3,FLV,MP4,并可以通过网页JS接口实现WMP(Windows Media Player)所支持的格式播放，如wma等。主要功能特色有列表式播放(自定义音乐专辑和列表)，MP3可视化效果(声音频谱)，同步歌词（默认支持lrc歌词以及kmc卡拉ok歌词），高清视频和在线直播(h264/rtmp)，自定义皮肤，加载各种插件等等，CMP4支持api的调用，可让用户实现更多自定义功能。</p>
+      <p>交流论坛：<a href="http://bbs.cenfun.com/" target="_blank">http://bbs.cenfun.com/</a></p>
+    </div>
+  </div>
+</div>
+<script>
+function cmp_loaded(key) {
+	//cmp loaded
+	var cmpo = window.cmpo = CMP.get("cmp");
+	if (cmpo) {
+		//cmp callback
+		var config = cmpo.config();
+		document.title = config.name;
+		cmpo.addEventListener("model_time", "timeHandler");
+	}
+}
+
+//时间变更时调用
+function timeHandler() {
+	//读取cmp的当前视频字节位置，如果是时间秒则用start_seconds
+	var start_bytes = window.cmpo.item("start_bytes");
+	//实时保存当前位置到cookies，这里直接调用CMP的flash cookies接口保存，CMP开始时将自动读取)
+	window.cmpo.cookie("start_bytes", start_bytes);
+}
+
+var flashvars = {
+	url : "",
+	lists : "",
+	
+	label : "stream伪流视频",
+	src : "http://hmdn.tv189.cn/2011/11/16/fb/691ca3ecff4e78a6dfe13c4d3de6dd720p-0000.flv?start={start_bytes}",
+	//start_bytes : (由于使用了CMP的cookies保存接口，这里CMP会自动读出来，所以无需再写程序读取，而且支持跨浏览器，更简单实用),
+	
+	auto_play : 1,
+	
+	api : "cmp_loaded"
+};
+
+//id, width, height, swf_url, flashvars, params, attrs
+var htm = CMP.create("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", flashvars);
+document.getElementById("player").innerHTML = htm;
+</script>
+<div class="foot">
+  <div class="foot_inner">© 2012 <a href="http://www.cenfun.com/" target="_blank">CenFun.com</a> All Rights Reserved</div>
+</div>
+</body>
+</html>

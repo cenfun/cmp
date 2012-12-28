@@ -1,0 +1,39 @@
+﻿<!--
+CMP4皮肤参数文档说明：
+【skin.xml】CMP4皮肤配置文件详解
+http://bbs.cenfun.com/thread-11028-1-1.html
+-->
+<skin name="KBSPlayer" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" preview="" mask_color="" show_tips="0.5" context_menu="1">
+  <option xywh="166C, -10C, 224, 245" src="" mask="" lock="1" display="0" group="A" fade="0">
+    <pane xywh="0, 0, 100P, 100P" align="left" font="" size="12" color="#666666, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </option>
+  <list xywh="166C, -10C, 224, 245" src="" mask="" lock="1" display="1" group="A" fade="0">
+    <tree xywh="0, 0, 100P, 100P" align="left" font="Arial" size="12" color="#666666, #ffffff" bold="0" show_delete="0" show_icon="1" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <event type="open" target="option" property="display" value="0" />
+    <event type="close" target="option" property="display" value="1" />
+  </list>
+  <lrc xywh="-116C, 80C, 320, 60" src="" mask="" lock="1" display="0" group="A">
+    <text xywh="0, 0, 100P, 100P" align="center" font="Arial" size="12" leading="0" color="#666666, #ffffff" horizontal="0" max_scale="2" max_button="0" />
+  </lrc>
+  <media xywh="-116C, -10C, 320, 240" src="" mask="" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P" show_icon="1" show_buttons="1"/>
+  </media>
+  <console xywh="0C, 0C, 600, 350" src="console.png" mask="" lock="1" display="1" group="A" snap="true" shadow="1,90,#000000,0.3,4,4,1,3">
+    <bt_play xywh="0C, 12R, 40, 40" src="bt_play.png" useHandCursor="1" tips="播放,暂停" />
+    <bt_stop xywh="96C, 20R, 25, 25" src="bt_stop.png" tips="停止" />
+    <bt_prev xywh="-58C, 20R, 25, 25" src="bt_prev.png" tips="上一个" />
+    <bt_next xywh="58C, 20R, 25, 25" src="bt_next.png" tips="下一个" />
+    <bt_mute xywh="132C, 20R, 25, 25" src="bt_mute.png" tips="静音,打开声音" hover_volume="" />
+    <volume xywh="90R, 25R, 62, 14" thumb_src="thumb.png" track_src="track.png" src="" tips="音量" />
+    <indicator xywh="0,-12,52,18" src="indicator.png" color="#cccccc" size="11" align="center" />
+    <progress xywh="25, 25R, 186, 14" thumb_src="thumb.png" track_src="track.png" thumb_autohide="0" tips="定位" />
+    <bt_option xywh="47R, 20R, 25, 25" src="bt_option.png" tips="关闭设置,打开设置" />
+    <bt_fullscreen xywh="22R, 20R, 25, 25" src="bt_fullscreen.png" fullscreen_scale="1" fullscreen_max="video" tips="打开全屏,退出全屏" />
+    <time xywh="10R, 7, 180, 20" align="right" font="Arial" size="14" color="#cccccc" borderColor="" backgroundColor="" bold="1" shadow="1,90,#000000,0.5,1,1,1,1"/>
+    <title xywh="36, 6, 320, 20" align="left" font="Verdana" size="14" color="#cccccc" bold="1" borderColor="" shadow="1,90,#000000,1,2,2,1,1" />
+  </console>
+</skin>

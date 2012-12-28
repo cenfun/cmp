@@ -1,0 +1,829 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>sogou for cmp</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+<script type="text/javascript" src="cmp.js"></script>
+<style type="text/css">
+body { text-align:center; padding:0; margin:0; font-size:12px; font-family:"宋体"; background:#333 url(http://www.twitrbackgrounds.com/_twitterbackgrounds/temp/nvthewild.br.jpg) repeat-x center top fixed; }
+table { border-collapse: collapse; border-spacing: 0; }
+a img { border:none; }
+a:visited, a:link { color:#000; text-decoration:none; }
+:focus { outline: 0; }
+/* layout */
+.lt { float:left; display:block; }
+.rt { float:right; display:block; }
+.clearfix:after { content: ' '; clear: both; display: block; font-size: 0; line-height: 0; width: 0; height: 0; visibility: hidden; }
+.clearfix { display: inline-block; }
+* html .clearfix { zoom: 1; }
+.clearfix { display: block; }
+/* auto complete */
+.ui-widget { text-align:left; }
+.ui-widget-content { border: 1px solid #dddddd; background: #eeeeee 50% top repeat-x; color: #333333; }
+.ui-autocomplete { position: absolute; cursor: default; }
+* html .ui-autocomplete { width:1px; }
+.ui-menu { list-style:none; padding: 2px; margin: 0; display:block; float: left; }
+.ui-menu .ui-menu { margin-top: -3px; }
+.ui-menu .ui-menu-item { margin:0; padding: 0; zoom: 1; float: left; clear: left; width: 100%; }
+.ui-menu .ui-menu-item a { text-decoration:none; display:block; padding:.2em .4em; line-height:1.5; zoom:1; }
+.ui-menu .ui-menu-item a.ui-state-hover, .ui-menu .ui-menu-item a.ui-state-active { font-weight: normal; background:#666; color:#FFF; }
+/* page */
+.keywords { width:280px; }
+.message { color:#666; padding-right:5px; }
+.red { color:#ff0000; }
+.header { text-align:center; margin:0px auto; background:#f5f5f5; height:30px; line-height:30px; padding:0px 10px; color:#333; }
+.header_main { width:900px; margin:0px auto; }
+.footer { text-align:left; width:900px; margin:10px auto; background:#f5f5f5; padding:5px 0px; color:#999; }
+.footer_main { padding:0px 5px; }
+.bodyer { text-align:left; width:900px; margin:10px auto; overflow:hidden; }
+.player { height:420px; width:335px; }
+.mainer { margin-top:10px; width:560px; }
+.menu { width:190px; margin-right:10px; }
+.menu_item { font-weight:bold; color:#333; cursor:pointer; padding:0px 8px; font-size:14px; height:30px; line-height:30px; overflow:hidden; background:#eee; }
+.menu_item_hover { color:#3C8E1C; background:#ccc; }
+.menu_item_selected { color:#ffffff; background:#3C8E1C; }
+.menu_child { height:220px; overflow:auto; border-top:1px solid #999; border-bottom:1px solid #999; background:#fff; }
+.menu_child .menu_item { background:#f8f8f8; font-size:12px; font-weight:normal; padding:0px 5px 0px 15px; height:22px; line-height:22px; overflow:hidden; border-bottom:1px dotted #ccc; }
+.menu_child .menu_item_hover { background:#ccc; }
+.menu_child .menu_item_selected { background:#3C8E1C; }
+.main { width:350px; background:#fff; padding:5px 5px; }
+.music_head { height:30px; }
+.music_list { height:300px; overflow:auto; border:1px solid #999; background:#fff; }
+.music_tips { padding:10px 10px; line-height:150%; }
+.music_main { margin:0; padding:0; }
+.music_item { padding:3px 5px; cursor:pointer; -moz-user-select:none; overflow:hidden; }
+.music_item_hover { background:#dddddd; }
+.music_item_selected { background:#666666; color:#ffffff; }
+.music_foot { margin-top:5px; }
+.music_foot td { padding:0px 2px; }
+.button { padding-top:5px; margin-top:5px; border-top:1px solid #cccccc; }
+.button_item { height:20px; line-height:20px; text-align:center; font-weight:bold; cursor:pointer; background:#fff; }
+.button_item_hover { color:#fff; background:#666; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header_main clearfix">
+    <div class="lt">欢迎来到CMP在线听歌房！</div>
+    <div class="rt"><span class="message"></span></div>
+  </div>
+</div>
+<div class="bodyer clearfix">
+  <div class="lt mainer clearfix">
+    <div class="lt menu">
+      <div class="menu_item" onclick="addHistory(this)">【收听历史】</div>
+    </div>
+    <div class="lt main">
+      <div class="music_head">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <form onsubmit="return searchMusic(this)">
+            <tr>
+              <td><input class="keywords" type="text" value="" onfocus="this.select();" /></td>
+              <td align="right"><input type="submit" value="搜索" style="width:50px;"/></td>
+            </tr>
+          </form>
+        </table>
+      </div>
+      <div class="music_list clearfix">
+        <div class="music_tips">等待加载收听历史 ...</div>
+      </div>
+      <div class="music_foot clearfix">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="1"><input type="button" value="全选" onclick="checkAll()" /></td>
+            <td width="1"><input type="button" value="添加" onclick="addMusic()" /></td>
+            <td>单击选中/双击添加</td>
+            <td align="right"><input id="auto_play" type="checkbox" value="1" checked="checked" /></td>
+            <td>自动播放</td>
+          </tr>
+        </table>
+        <div class="button">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><div class="button_item" onclick="clearHistory()">清空历史</div></td>
+              <td><div class="button_item" onclick="clearMusic()">清空列表</div></td>
+              <td><div class="button_item" onclick="showLrc()">查看歌词</div></td>
+              <td><div class="button_item" onclick="showUrl()">查看地址</div></td>
+              <td><div class="button_item" onclick="nextUrl()">更换地址</div></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rt">
+    <div class="player"></div>
+  </div>
+</div>
+<script type="text/javascript">
+$.ajaxSetup({scriptCharset:"gbk"});
+function hash() {
+	if (arguments.length) {
+		if (arguments[0] != decodeURIComponent(window.location.hash.substr(1))) {
+			window.location.hash = encodeURIComponent(arguments[0]);
+		}
+		document.title = arguments[0];
+	} else {
+		return decodeURIComponent(window.location.hash.substr(1));
+	}
+}
+
+var cmpo;
+function cmploaded(key) {
+	cmpo = CMP.get("cmp");
+	if (!cmpo) {
+		showMsg("未能找到CMP");
+		return;	
+	}
+	showMsg("CMP初始化完成");
+	//cmp事件
+	cmpo.addEventListener("model_start", "startHandler");
+	cmpo.addEventListener("model_state", "stateHandler");
+	cmpo.addEventListener("model_error", "errorHandler");
+	cmpo.addEventListener("lrc_complete", "lrcHandler");
+	
+	//自动添加和播放指定歌曲
+	var songname = hash();
+	if (songname) {
+		var xml = '<list><m type="1" label="'+songname+'" src="javascript:getMusic(\''+songname+'\')" /></list>';
+		cmpo.list_xml(xml);
+		cmpo.sendEvent("view_play");
+		
+		$(".keywords").val(songname);
+		searchMusic();
+	}
+	//
+	addHistory();
+	$(".keywords").autocomplete({
+		select: function(event, ui) {
+			searchMusic();
+		},
+		source: autoKeywords
+	});
+}
+
+//local fixed
+$.extend( $.ui.autocomplete, {
+	filter: function(array, term) {
+		return array;
+	}
+});
+
+window.sogou = new function() {
+	this.id = 0;
+	this.sendRequest = function(key) {
+	if (key.length <= 0) return;
+	$.getJSON('http://sugg.sogou.com/sugg/ajaj_json.jsp?' + $.param({
+		key: key,
+		type: "music",
+		pr: "music",
+		s: ++this.id
+		}) + '&jsoncallback=?');
+	}
+	this.sug = function(content, id) {
+		if (id != this.id) return;
+		if (content.length != 2) return;
+		var arr = content[1];
+		$(".keywords").autocomplete("option", {source: arr}).autocomplete("search").autocomplete("option", {source: autoKeywords});
+	}
+}
+function autoKeywords() {
+	var q = $(".keywords").val();
+	if (!q) {
+		return;
+	}
+	window.sogou.sendRequest(q);
+}
+
+function startHandler(data) {
+	var label = cmpo.item("label");
+	hash(label);
+	loadLrc(label);
+	//保存历史
+	setHistory(label);
+}
+function stateHandler(data) {
+	//showMsg(data);
+}
+//播放错误时
+function errorHandler(msg) {
+	showMsg(msg, true);
+}
+function lrcHandler(data) {
+	showMsg("成功找到歌词，自动显示到歌词窗口");
+	showWin("lrc");
+}
+
+function showCmp() {
+	var vars = {
+		api : "cmploaded",
+		url : "",
+		lists : "",
+		sound_sample : "1",
+		mixer_id : "-1",
+		mixer_displace : "1",
+		default_type : "sound",
+		name : "欢迎使用CMP",
+		list_delete:"1",
+		skin : "skins/mp3player.zip"
+	};
+	var htm = CMP.create("cmp", "100%", "100%", "cmp.swf", vars, {wmode:"transparent"});
+	$(".player").html(htm);
+}
+$(document).ready(function(){
+	showCmp();
+	showMenu();
+	$(".button div").hover(function(){
+		$(this).addClass("button_item_hover");
+	}, function(){
+		$(this).removeClass("button_item_hover");
+	});
+});
+
+//sogou ================================================================================
+
+var GET_URL = "http://mp3.sogou.com/api/links2";
+var LRC_URL = "http://mp3.sogou.com/api/lrc";
+var HOBBY_URL = "http://mp3.sogou.com/api/hobby";
+var DOWN_URL = "http://mp3.sogou.com/down.so";
+var SEARCH_URL = "http://mp3.sogou.com/music.so";
+var SONGLIST_URL = "http://mp3.sogou.com/api/songlist2";
+var DOWN_LRC_URL = "http://mp3.sogou.com/downlrc.so";
+var CATE_URL = "http://music.sogou.com/sogou_phb/coo/music/getCampMeta2.jsp";
+
+var last_opened;
+var RandomPlayMenu = {
+    name: "随机选取",
+    link: CATE_URL + "?cate=randomsong&count=100"
+};
+var MenuMap = [{
+    name: "最新排行",
+	fn : "addTop",
+	vn : "name",
+    link: "http://player.mbox.sogou.com/data/menu.jsp?id=0",
+    child: [],
+    moreURL: "http://mp3.sogou.com/tag.html?w=02010203"
+},
+{
+    name: "热门歌手",
+	fn : "addSinger",
+	vn : "name",
+    link: CATE_URL + "?cate=topsinger&count=100",
+    child: [],
+    songlistUrl: SONGLIST_URL + "?type=singer",
+    moreURL: "http://music.sogou.com/song/topsinger.html?w=02010300"
+},
+{
+    name: "热门专辑",
+	fn : "addAlbum",
+	vn : "album",
+    link: CATE_URL + "?cate=topalbum&count=100",
+    child: [],
+    songlistUrl: CATE_URL + "?cate=albumsongs",
+    moreURL: "http://music.sogou.com/song/topsinger.html?w=02010300"
+},
+{
+    name: "歌曲分类",
+	fn : "addCat",
+	vn : "name",
+    link: "http://player.mbox.sogou.com/data/menu.jsp?id=2",
+    child: [],
+    songlistUrl: SONGLIST_URL + "?type=tag",
+    moreURL: "http://mp3.sogou.com/tag.html?w=02010203"
+}];
+
+function menuOn(o) {
+	$(".menu_item").removeClass("menu_item_selected");
+	if (o) {
+		$(o).addClass("menu_item_selected");
+	}
+}
+function addTop(o, id) {
+	menuOn(o);
+	var url = MenuMap[1].child[id].link;
+	getList(url);
+}
+function addSinger(o, id) {
+	menuOn(o);
+	var name = MenuMap[2].child[id].name;
+	var url = MenuMap[2].songlistUrl + "&" + $.param({ query: name, ie: "utf-8"});
+	getList(url);
+}
+function addAlbum(o, id) {
+	menuOn(o);
+	var id = MenuMap[3].child[id].id;
+	var url = MenuMap[3].songlistUrl + "&" + $.param({ extra: id, ie: "utf-8"});
+	getList(url);
+}
+function addCat(o, id) {
+	menuOn(o);
+	var name = MenuMap[4].child[id].name;
+	var url = MenuMap[4].songlistUrl + "&" + $.param({ query: name, ie: "utf-8"});
+	getList(url);
+}
+
+function getList(url) {
+	showMsg("加载列表...");
+	$.getJSON(url + "&jsoncallback=?", function(json) {
+		var arr = [];
+		$.each(json.list, function(i, o) {
+			arr.push({title:o.title, singer:o.singer});
+		});
+		listMusic(arr);
+	});
+}
+function clickMenu(o, id) {
+	menuOn(o);
+	
+	var menu = MenuMap[id];
+	if (menu.child) {
+		if (menu.child.length) {
+			$(".menu_child_" + id).slideToggle(function(){
+				$(this).css("overflow", "auto");	
+			});
+		} else {
+			var url = menu.link;
+			$.getJSON(url + "&jsoncallback=?", function(json) {
+				var str = '<div class="menu_child menu_child_'+id+'">';
+				var arr = menu.child = json.list;
+				$.each(arr, function(i, o) {
+					var label = o[menu.vn];
+					str += '<div class="menu_item" onclick="'+menu.fn+'(this, '+i+')" title="'+label+'">'+label+'</div>';
+				});
+				str += '</div>';
+				$(str).hide().insertAfter(".menu_item_" + id).slideDown(function(){
+					//ie6 srollbar fixed
+					$(this).css("overflow", "auto");	
+				});
+				hoverMenu();
+			});
+		}
+		//slideUp
+		$(".menu_child").each(function(i) {
+			if (!$(this).hasClass("menu_child_" + id)) {
+				$(this).slideUp();
+			}
+		});
+	} else {
+		getList(menu.link);
+	}
+}
+
+function showMenu() {
+	
+	MenuMap.unshift(RandomPlayMenu);
+	
+	var str = "";
+	for (var i = 0; i < MenuMap.length; i ++) {
+		var obj = MenuMap[i];
+		str += '<div class="menu_item menu_item_'+i+'" onclick="clickMenu(this, '+i+')">【'+obj.name+'】</div>';
+	}
+	
+	$(".menu").append(str);
+	hoverMenu();
+	
+	//
+	clickMenu(null, 1);
+}
+function hoverMenu() {
+	$(".menu_item").hover(function(){
+		$(this).addClass("menu_item_hover");
+	}, function(){
+		$(this).removeClass("menu_item_hover");
+	});
+}
+
+
+function searchMusic() {
+	
+	$(".keywords").autocomplete("close");
+	
+	var q = $(".keywords").val();
+	if (q) {
+		showMsg("正在搜索音乐");
+		$(".music_list").html("loading ...");
+		var param = $.param({ 
+			query: q, 
+			ie: "utf-8",
+			type : "search"
+		});
+		var url = SONGLIST_URL + "?" + param + "&jsoncallback=?";
+		getList(url);
+	}
+	return false;
+}
+function musicSelect(i) {
+	var item = $(".music_item_" + i);	
+	if (item.hasClass("music_item_selected")) {
+		item.removeClass("music_item_selected");
+	} else {
+		item.addClass("music_item_selected");
+	}
+}
+var allchecked = false;
+function checkAll() {
+	allchecked = !allchecked;
+	$(".music_item").each(function(){
+		if (allchecked) {
+			$(this).addClass("music_item_selected");
+		} else {
+			$(this).removeClass("music_item_selected");
+		}
+	});
+}
+
+function listMusic(arr) {
+	allchecked = false;
+	var len = arr.length;
+	
+	showMsg("找到"+len+"条相关数据");
+	
+	if (!len) {
+		$(".music_list").html('<div class="music_tips">没有找到任何信息</div>');
+		return;
+	}
+	var htm = '<div class="music_main">';
+	for (var i = 0; i < len; i ++) {
+		var m = arr[i];
+		var t = m.title;
+		var s = m.singer;
+		htm += '<div class="clearfix music_item music_item_'+i+'" index="'+i+'" unselectable="on" onselectstart="return false;">';
+		htm += '' + s + " - " + t + '';
+		htm += '</div>';
+	}
+	htm += '</div>';
+	$(".music_list").html(htm);
+	$(".music_item").hover(
+		function(){
+			$(this).addClass("music_item_hover");
+		},function(){
+			$(this).removeClass("music_item_hover");	
+		}
+	).click(function(e){
+		musicSelect($(this).attr("index"));
+	}).dblclick(function(){
+		addMusic($(this));
+	});
+}
+
+function xmlEncode(text){
+	text = text + "";
+	text = text.replace(/&/g, "&amp;");
+	text = text.replace(/"/g, "&quot;");
+	text = text.replace(/</g, "&lt;");
+	text = text.replace(/>/g, "&gt;");
+	return text ;
+}
+
+
+function addMusic(o) {
+	var music_list = [];
+	//双击添加单个
+	if (o) {
+		music_list.push(o.text());
+		o.remove();
+	} else {
+		//否则添加选择的
+		var selected = $(".music_item_selected");
+		if (selected.length) {
+			selected.each(function() {
+				music_list.push($(this).text());
+				$(this).remove();
+			});
+		} else {
+			showMsg("请至少选择一个要添加的项", true);
+			return;
+		}
+	}
+	//发送至CMP
+	var xml = '<list>';
+	for (var i = 0; i < music_list.length; i ++) {
+		var label = music_list[i];
+		//转义xml
+		label= xmlEncode(label);
+		//必须去掉单双引号
+		var keyword = label.replace(/'|"/g, "");
+		xml += '<m type="1" label="'+label+'" src="javascript:getMusic(\''+keyword+'\')" />';
+	}
+	xml += '</list>';
+	
+	//先读取上一次列表的长度
+	var len = cmpo.list().length;
+	//添加到cmp列表
+	cmpo.list_xml(xml);
+		
+	showMsg("成功添加到列表");
+	
+	//显示列表窗口
+	showWin("list");
+	//是否添加完自动播放
+	if ($("#auto_play").attr("checked")) {
+		cmpo.sendEvent("view_play", len + 1);
+	}
+	
+}
+
+var linkCache = {};
+var linksJsonInvokeGlobalID = 0;
+function getMusic(label) {
+	if (!label) {
+		showMsg("音乐查询参数错误");
+		return;
+	}
+	
+	//缓存机制
+	var k = escape(label);
+	if (linkCache[k]) {
+		setMusic(k);	
+		return;
+	}
+	
+	//搜寻新地址
+	linksJsonInvokeGlobalID ++;
+	if (linksJsonInvokeGlobalID >= 100000000) {
+		linksJsonInvokeGlobalID = 0;
+	}
+	showMsg("正在读取音乐数据:" + label);
+	
+	var query = label.replace(" - ", " ");
+	var param = $.param({ 
+		query: query, 
+		id: linksJsonInvokeGlobalID
+	});
+	//pf : "mp3"
+	
+	var url = GET_URL + "?" + param + "&jsoncallback=?";
+	$.getJSON(url, function(json) {
+		if (json.id != linksJsonInvokeGlobalID || typeof(json.list) == 'undefined') {
+			showMsg("读取音乐数据错误", true);
+			return;
+		}
+		var arr = [];
+		$.each(json.list, function(i, o) {
+			var data = {type:"", url:""};
+			try {
+				data.url = o.url;
+				data.type = o.postfix;
+			} catch(e) {
+			}
+			arr.push(data);
+		});
+		//存在数据才保存到缓存
+		if (arr.length) {
+			linkCache[k] = arr;
+		}
+		setMusic(k);
+	});
+}
+
+function setMusic(k) {
+	if (cmpo) {
+		var arr = linkCache[k];
+		if (!arr || !arr.length) {
+			showMsg("未找到播放地址，请重试", true);
+			return;	
+		}
+		//是否有新的类型
+		var type;
+		//是否已经重加载
+		var reload = cmpo.item("reload");
+		//读取之前的url
+		var url = cmpo.item("url");
+		//重载时选取一个不一样的，减少错误链接
+		for (var i = 0; i < arr.length; i ++) {
+			var o = arr[i];
+			var u = o.url;
+			if (u) {
+				if (reload && u == url) {
+					arr[i].url = "";
+				} else {
+					url = u
+					type = o.type;
+					break;	
+				}
+			}
+		}
+		//保存到新的缓存中
+		linkCache[k] = arr;
+		
+		//开始通知到CMP去播放
+		if (type) {
+			//用新的url并且用新的模块去播放
+			cmpo.item("url", url);
+			cmpo.sendEvent("model_change", type);
+		} else {
+			//用新的url去播放，不改变模块
+			cmpo.sendEvent("model_load", url);
+		}
+		
+	} else {
+		showMsg("CMP还未初始化", true);
+	}
+}
+
+function addHistory(o) {
+	
+	menuOn(o);
+	
+	if (cmpo) {
+		showMsg("读取收听历史");
+		var history = cmpo.cookie("history");
+		if (history && history != "null") {
+			var out = [];
+			var arr = history.split(",");
+			for (var i = 0; i < arr.length; i ++) {
+				var o = arr[i];
+				var a = o.split("{|}");
+				out.push({title:a[1], singer:a[0]});
+			}
+			listMusic(out);
+		} else {
+			showMsg("你还没有任何收听历史");
+			$(".music_list").html('<div class="music_tips">你还没有任何收听历史</div>');
+		}
+	} else {
+		showMsg("CMP还未初始化", true);
+	}
+}
+
+function setHistory(label) {
+	if (cmpo) {
+		
+		label = label.replace(" - ", "{|}");
+		
+		var arr;
+		var history = cmpo.cookie("history");
+		if (history && history != "null") {
+			arr = history.split(",");
+			//删除之前存在重复的
+			for (var i = 0; i < arr.length; i ++) {
+				if (arr[i] == label || !arr[i]) {
+					arr.splice(i, 1);
+					i --;
+				}
+			}
+			//添加到首位置
+			arr.unshift(label);
+			//仅保存最后指定个数
+			if (arr.length > 30) {
+				arr.length = 30;
+			}
+		} else {
+			arr = [label];
+		}
+		cmpo.cookie("history", arr.join(","));
+	} else {
+		showMsg("CMP还未初始化", true);
+	}
+}
+
+//歌词========================================================================
+var lrcCache = {};
+function loadLrc(label) {
+	
+	//缓存机制
+	var k = escape(label);
+	if (lrcCache[k]) {
+		cmpo.sendEvent("lrc_loaded", lrcCache[k]);
+		return;
+	}
+	
+	showMsg("正在搜索歌词");
+	
+	label = label.replace(" - ", " ");
+	
+	var param = $.param({ 
+		query: label
+	});
+	
+	var url = LRC_URL + "?" + param + "&jsoncallback=?";
+	$.getJSON(url, function(json) {
+		if (json && json.lrc) {
+			var str = String(json.lrc);
+			cmpo.sendEvent("lrc_loaded", str);
+			lrcCache[k] = str;
+		} else {
+			showMsg("未能找到该歌曲的歌词");
+		}
+	});
+}
+
+function clearMusic() {
+	if (cmpo) {
+		showMsg("已经清除列表内容");
+		//覆盖一个空列表
+		cmpo.list_xml('<list></list>', false);
+		showWin("list");
+	} else {
+		showMsg("CMP还未初始化", true);
+	}
+}
+
+function clearHistory() {
+	if (cmpo) {
+		showMsg("已经清除播放历史");
+		cmpo.cookie("history", "");
+		addHistory();
+	} else {
+		showMsg("CMP还未初始化", true);
+	}
+}
+
+function showUrl() {
+	if (cmpo) {
+		var url = cmpo.item("url");
+		if (url) {
+			url = '<a href="'+url+'">'+url+'</a>';
+			openWin(url);
+			return;
+		}
+	}
+	showMsg("没有找到可下载的地址", true);
+}
+
+function nextUrl() {
+	if (cmpo) {
+		var label = cmpo.item("label");
+		if (label) {
+			var k = escape(label);
+			var a = linkCache[k];
+			if (a) {
+				if (a.length) {
+					a.shift();
+					//alert(linkCache[k])
+					setMusic(k);
+					return;
+				}
+			}
+		}
+		showMsg("没有找到其他的地址供选择", true);
+	}	
+}
+
+function showLrc() {
+	if (cmpo) {
+		var label = cmpo.item("label");
+		if (label) {
+			var k = escape(label);
+			var str = lrcCache[k];
+			if (str) {
+				openWin(str);
+				return;
+			}
+		}
+	} 
+	showMsg("没有找到任何歌词内容", true);
+}
+
+function openWin(str) {
+	var win = window.open("", "", "width=600,height=400,scrollbars=1");
+	if (win) {
+		var doc = win.document;
+		if (doc) {
+			doc.open();
+			doc.write('<body>');
+			doc.write(str);
+			doc.write('</body>');
+			doc.close();
+			win.focus();
+		}
+	}
+}
+
+function showWin(n) {
+	if (cmpo) {
+		var is_show = cmpo.skin(n, "display");
+		if (is_show == "false") {
+			cmpo.sendEvent("view_" + n);
+		}
+	}
+}
+
+var tid;
+function showMsg(str, red) {
+	if (str) {
+		$(".message").html(str);
+		if (red) {
+			$(".message").addClass("red");
+		} else {
+			$(".message").removeClass("red");
+		}
+		clearTimeout(tid);
+		tid = setTimeout(hideMsg, 15000);
+	}
+}
+function hideMsg() {
+	$(".message").html("");	
+}
+
+</script>
+<div class="footer">
+  <div class="clearfix footer_main">
+    <div class="rt"></div>
+    <div class="lt">from sogou</div>
+  </div>
+</div>
+</body>
+</html>

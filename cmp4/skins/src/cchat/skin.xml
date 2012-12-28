@@ -1,0 +1,38 @@
+﻿<skin name="CChat" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" show_tips="0.5">
+  <console xywh="-125C, 25, 242, 98" src="win.png" lock="0" display="1" group="E" shadow="3,45,#000000,0.3,4,4,1,3" fade="1" snap="0">
+    <bt_play xywh="6, 26, 25, 25" src="bt_play.png" />
+    <bt_stop xywh="36, 26, 25, 25" src="bt_stop.png" />
+    <bt_mute xywh="70R, 34, 12, 10" src="bt_mute.png" />
+    <volume xywh="6R, 36, 60, 6" thumb_src="volume_thumb.png" track_src="volume_track.png" />
+    <progress xywh="0C, 55, 230, 18" thumb_src="" track_src="progress_track.png" thumb_autohide="1" />
+    <title xywh="4, 1, 15B, 18" color="#666666" borderColor="" bold="1" />
+    <status xywh="65, 29, 75B, 18" color="#666666" borderColor="" />
+    <time_position xywh="12, 55, 45P, 16" align="left" size="11" color="#666666" borderColor="" bold="1" />
+    <time_duration xywh="12R, 55, 45P, 16" align="right" size="11" color="#666666" borderColor="" bold="1" />
+    <bt_close xywh="4R, 4, 13, 13" src="bt_close.png" />
+    <bt_list xywh="6, 5R, 35, 15" src="bt_list.png" />
+    <bt_video xywh="45, 5R, 35, 15" src="bt_video.png" />
+    <bt_lrc xywh="85, 5R, 35, 15" src="bt_lrc.png" />
+    <bt_fullscreen xywh="6R, 5R, 35, 15" src="bt_fullscreen.png" />
+  </console>
+  <media xywh="-125C, 128, 242, 202" src="media.png" lock="0" display="1" group="D" shadow="3,45,#000000,0.3,4,4,1,3" fade="1" snap="0">
+    <video xywh="1, 21, 1B, 11B" />
+    <bt_close xywh="4R, 4, 13, 13" src="bt_close.png" />
+  </media>
+  <list xywh="123C, 25, 242, 305" src="list.swf" lock="0" display="1" group="B" shadow="3,45,#000000,0.3,4,4,1,3" fade="1" snap="0">
+    <tree xywh="1, 21, 1B, 26B" align="left" font="" size="12" color="#666666, #000000" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <bt_close xywh="4R, 4, 13, 13" src="bt_close.png" />
+  </list>
+  <lrc xywh="-125C, 335, 242, 120" src="win.png" lock="0" display="0" group="C" shadow="3,45,#000000,0.3,4,4,1,3" fade="1" snap="0">
+    <text xywh="1, 21, 1B, 11B" align="center" font="Arial" color="#777777, #000000">
+      <kmc time_preview="5000" time_sec3="8000" show_info="1" color="#888888, #000000" size="14" bold="1" align="center, center" />
+    </text>
+    <bt_close xywh="4R, 4, 13, 13" src="bt_close.png" />
+  </lrc>
+  <option xywh="123C, 335, 242, 120" src="win.png" lock="0" display="0" group="A" shadow="3,45,#000000,0.3,4,4,1,3" fade="1" snap="0">
+    <pane xywh="1, 21, 1B, 11B" align="left" font="" size="12" color="#666666, #000000" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <bt_close xywh="4R, 4, 13, 13" src="bt_close.png" />
+  </option>
+</skin>

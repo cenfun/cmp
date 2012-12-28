@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>Wmp for CMP</title>
+<style type="text/css">
+*{margin:0px 0px;padding:0px 0px;}
+</style>
+</head>
+<body>
+<div id="wmpforcmp" align="center">
+  <object classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6" type="application/x-oleobject" id="wmp" width="0" height="0" style="width:0px;height:0px;">
+  </object>
+  <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="100%" height="100%" id="cmp">
+    <param name="movie" value="cmp.swf" />
+    <param name="quality" value="high" />
+    <param name="allowScriptAccess" value="always" />
+    <param name="allowFullScreen" value="true" />
+    <embed src="cmp.swf" width="100%" height="100%" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" name="cmp" allowscriptaccess="always" allowfullscreen="true"></embed>
+  </object>
+</div>
+<script language="JavaScript" type="text/javascript">
+/*//////////////////////////////////////////////////////////
+CMP v2.1 WMP接口 
+制作:CenFun 2007.1.1
+功能:播放wma等非Mp3/flv格式媒体文件，外部JS控制皮肤显示标题
+更多使用说明及相关问题请进CMP论坛：http://bbs.cenfun.com/
+*///////////////////////////////////////////////////////////
+
+//获取对象
+var wmp=document.getElementById("wmp");
+var cmp=document.getElementById("cmp");
+//初始化定义
+if(wmp){
+wmp.uiMode="None";//播放器界面模式，隐藏 
+wmp.enableContextMenu=true; //启用/禁用右键菜单
+wmp.settings.autoStart=true;//是否自动播放
+wmp.settings.balance=0;//全声道
+wmp.controls.currentPosition=0; //当前进度 
+wmp.settings.playCount=1; //播放次数
+wmp.settings.volume=80; //音量，0-100 
+wmp.settings.mute=false;//是否静音
+wmp.fullScreen=false; //是否全屏显示
+//可扩展为播放wmp视频
+}
+var wmpInterval=null;
+var wmpTimeout=null;
+var wmpUrl;//保存播放地址，用于重试连接
+var wmpRetryNum=0;//重试次数
+//控制函数
+function wmpPlay(){wmpTimeout=setTimeout("wmpCheck()",1000);wmp.controls.play();}//播放
+function wmpLoad(url){wmpUrl=url;wmp.URL=url;wmpPlay();}//加载并播放
+function wmpPause(){wmp.controls.pause();}//暂停 
+function wmpStop(){clearTimeout(wmpTimeout);clearInterval(wmpInterval);wmp.controls.stop();}//停止 
+function wmpGo(p){wmp.controls.currentPosition=p;}//快进快退跳转
+function wmpSound(v){wmp.settings.volume=v;}//调整音量
+function wmpError(){wmp.Error.clearErrorQueue();clearInterval(wmpInterval);clearTimeout(wmpTimeout);wmpRetry();}//错误处理
+function wmpCheck(){clearTimeout(wmpTimeout);wmpInterval=setInterval("getState()",500);}//检测
+function wmpReload(){wmpLoad(wmpUrl);}//重新加载
+function wmpRetry(){
+	wmpRetryNum++;
+	if(wmpRetryNum>3){
+		wmpRetryNum=0;
+		cmp.wmpEnd();		
+		clearTimeout(wmpTimeout);
+	}else{
+		wmpTimeout=setTimeout("wmpReload()",1000);
+		showTitle("尝试第"+wmpRetryNum+"次连接");
+	}
+}//重试
+//返回状态
+function getState(){
+	var ts=wmp.playState;//播放状态
+	var t1=wmp.controls.currentPosition;//播放秒
+	var t2=wmp.currentMedia.duration;//总长度
+	var bp=wmp.network.bufferingProgress;//缓冲百分比
+	var dp=wmp.network.downloadProgress;//下载百分比
+	cmp.wmpState(ts,t1,t2,bp,dp);//发送状态
+	showMsg(ts);//显示状态
+	window.status="CMP:"+ts+"|"+t1+"|"+t2+"|"+bp+"|"+dp;
+	//结束判断
+	if(t2>0&&dp==100&&t1>t2-1){
+		clearInterval(wmpInterval);
+		cmp.wmpEnd();
+	}
+}
+// 0(未定义) 1(已停止播放) 2(已暂停播放) 3(正在播放中) 4(向前搜索) 5(向后搜索)
+// 6(缓冲处理中) 7(等待中) 8(已播放完毕) 9(转换曲目中) 10(就绪状态)
+function showMsg(s){
+	switch(s){
+	case 10:
+		showTitle("就绪状态");
+		break;
+	case 9:
+		showTitle("转换曲目中");
+		break;
+	case 8:
+		break;
+	}
+}
+//////////////////////////////////////////////////////////////////////
+//CMP其他接口函数
+//更改皮肤(可扩展为随机更换皮肤)
+//id表示配置文件中的第几个皮肤，从0开始，超出则会全透明,例如：changeSkin(2);
+function changeSkin(id){cmp.cmpSkins(id);}
+//及时显示标题文字(可扩展为在标题栏及时显示其他信息文字)
+//s为文字内容，例如：showTitle("这里输入文字");
+function showTitle(s){cmp.cmpTitle(s);}
+/////////////////////////////////////////////////////////////////////
+//插入flash
+</script>
+<script language="JavaScript" type="text/javascript" for="wmp" event="error()">wmpError();//捕获错误</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+﻿<skin name="PSP" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" mask_color="" show_tips="0.5">
+  <option xywh="0C, -8C, 472, 240" src="" lock="1" display="0" group="A">
+    <pane xywh="0, 0, 100P, 100P" align="left" font="Arial" size="12" color="#666666, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <event type="open" target="media" property="display" value="0" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="close" target="media" property="display" value="1" />
+  </option>
+  <list xywh="0C, -8C, 472, 240" src="" mask="" lock="1" display="0" group="A">
+    <tree xywh="0, 0, 100P, 100P" align="left" font="Arial" size="12" color="#666666, #ffffff"/>
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <event type="open" target="media" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="close" target="media" property="display" value="1" />
+  </list>
+  <lrc xywh="0C, -8C, 472, 240" src="" lock="1" display="0" group="A">
+    <text xywh="0, 0, 100P, 100P" align="center" font="Arial" size="12" color="#999999, #ffffff" horizontal="1" max_scale="3" />
+    <event type="open" target="media" property="display" value="0" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="close" target="media" property="display" value="1" />
+  </lrc>
+  <media xywh="0C, -8C, 472, 240" src="" mask="" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P"/>
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </media>
+  <console xywh="0C, 0C, 820, 342" src="console.swf" mask="" lock="1" display="1" group="A">
+    <title xywh="174, 20, 260, 18" align="left" font="Verdana" size="12" color="#a8a8a8" bold="1" borderColor="" shadow="1,-90,#000000,0.3,1,1,1,3" />
+    <status xywh="174R, 20, 210, 18" align="right" font="Verdana" size="12" color="#a8a8a8" borderColor="" shadow="1,-90,#000000,0.3,1,1,1,3" />
+    <number xywh="65R, 41, 78, 18" src="number.png" alpha="0.6" rotation="0" tips="播放时间,播放倒计时" />
+    <time_position xywh="50, 41R, 120, 16" align="right" font="Verdana" size="10" color="#a8a8a8" borderColor="" shadow="1,-90,#000000,0.5,1,1,1,3" />
+    <time_duration xywh="50R, 41R, 120, 16" align="left" font="Verdana" size="10" color="#a8a8a8" borderColor="" shadow="1,-90,#000000,0.5,1,1,1,3" />
+    <progress xywh="0C, 43R, 472, 10" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="0" />
+    <bt_mute xywh="155, 10R, 50, 24" src="bt_mute.png" tips="静音,打开声音" />
+    <volume xywh="216, 17R, 100, 10" thumb_src="volume_thumb.png" track_src="volume_track.png" tips="音量" />
+    <bt_link xywh="0C, 12R, 105, 20" src="bt_link.png" link="http://bbs.cenfun.com/" target="_blank" tips="" />
+    <bt_random xywh="275R, 10R, 50, 24" src="bt_random.png" tips="打开无序播放,关闭无序播放" />
+    <bt_repeat xywh="215R, 10R, 50, 24" src="bt_repeat.png" tips="打开重复播放,关闭重复播放" />
+    <bt_fullscreen xywh="155R, 10R, 50, 24" src="bt_fullscreen.png" tips="全屏" />
+    <bt_play xywh="710, 79, 45, 45" src="bt_play.png" tips="播放,暂停" />
+    <bt_stop xywh="710, 174, 45, 45" src="bt_stop.png" tips="停止"/>
+    <bt_prev xywh="663, 127, 45, 45" src="bt_prev.png" tips="上一个" />
+    <bt_next xywh="758, 127, 45, 45" src="bt_next.png" tips="下一个" />
+    <bt_option xywh="72, 86, 42, 52" src="bt_option.png" tips="设置窗口" />
+    <bt_lrc xywh="72, 157, 42, 52" src="bt_lrc.png" tips="歌词窗口" />
+    <bt_video xywh="30, 126, 52, 42" src="bt_video.png" tips="视频窗口切换" />
+    <bt_list xywh="104, 126, 52, 42" src="bt_list.png" tips="列表窗口" />
+  </console>
+</skin>

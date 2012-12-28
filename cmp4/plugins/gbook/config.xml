@@ -1,0 +1,33 @@
+﻿<!--
+gbook_topic  留言主题，发表留言时，自动围绕此话题进行讨论，留言列表也自动显示此话题相关内容，所以请一定设置一个自己有特色的主题，以免和别的话题重复和冲突
+
+gbook_xywh  打开按钮的位置宽高
+
+tqq_callback  授权验证的回调程序地址，必须填写在互联网能成功访问到的绝对地址，也就是以http://开头的地址
+
+tqq_app_key = ""
+tqq_app_secret = ""
+tqq_token = ""
+tqq_token_secret = ""
+这4个参数为自己的app和token，如果没有则采用CMP申请的通用版本
+
+tqq_jscallback   javascript回调函数名，在完成授权后将自动调用此函数，用于通知页面更新，参数对象将传递access token
+
+
+下面是插件所需CMP配置的例子
+
+-->
+<cmp 
+	
+	plugins = "plugins/gbook.swf"
+	gbook_topic = "CMP4"
+	gbook_xywh = "20,20,32,32"
+
+	tqq_callback = "http://cmp.cenfun.com/cmp4/plugins/tqqcallback.htm"
+	
+	tqq_app_key = ""
+	tqq_app_secret = ""
+	tqq_token = ""
+	tqq_token_secret = ""
+	tqq_jscallback = ""
+/>

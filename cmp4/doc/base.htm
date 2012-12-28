@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - 基础文档</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP4基本运行流程：</h3>
+<div class="mainmsg">
+  <div>1，下载主程序cmp.swf，也就是自身的加载，此时会有一个中间的loading加载进度显示，直到100%加载完成</div>
+  <div>2，加载<a href="config.htm">全局配置</a>，如果要加载配置文件如config.xml会有一个进度显示</div>
+  <div>3，解析所有渠道加载的全局配置，并按优先级进行覆盖(有的进行合并)，完成后尝试初始化JS通讯环境</div>
+  <div>4，加载皮肤文件，如果不是默认集成皮肤会有一个进度显示，加载失败将直接采用集成默认皮肤</div>
+  <div>5，对皮肤包进行解压和<a href="skin.htm">皮肤配置文件</a>解析，并按照皮肤设置对每一个元件进行皮肤渲染和布局</div>
+  <div>6，加载所有插件，并列加载，直到所有插件完成，同时完成对插件的通讯初始化，将按插件个数比计算进度显示</div>
+  <div>7，如果允许JS通讯，而且全局配置设置了api参数的回调函数名如cmp_loaded，则调用此函数以通知页面更新</div>
+  <div>8，加载所有<a href="list.htm">列表</a>，队列加载，完成一个列表就会更新到列表窗口的树中</div>
+  <div>9，如果设置了auto_play自动播放，则在上面第一个列表完成加载后就会开始自动播放</div>
+  <div>(所以一般用户只需修改全局配置和列表即可，修改皮肤话就需要学习皮肤配置文件说明)</div>
+</div>
+<div class="line"></div>
+<h3><a href="config.htm">全局配置【config.xml】</a></h3>
+<div class="mainmsg">CMP初始化完成的第一件事就是读取配置，可以从flashvars或URL参数读取，也可以从指定配置文件读取，默认为config.xml</div>
+<h3><a href="list.htm">媒体列表【list.xml】</a></h3>
+<div class="mainmsg">CMP支持播放一个媒体列表，可以传入一个指定格式的列表文件路径来读取，默认为list.xml</div>
+<h3><a href="skin.htm">皮肤配置【skin.xml】</a></h3>
+<div class="mainmsg">皮肤包加载完成，将读取其中的skin.xml文件为皮肤配置，然后进行皮肤初始化设置。皮肤配置中需要设置整个皮肤的结构，以及每个皮肤元件对应的属性，比如位置宽高，背景图等等</div>
+<div class="line"></div>
+<h3><a href="crossdomain.htm">跨域策略【crossdomain.xml】</a></h3>
+<div class="mainmsg">用来设置flash跨域加载数据，一般不用</div>
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

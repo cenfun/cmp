@@ -1,0 +1,6 @@
+﻿<cmp 
+	
+	plugins = "plugins/quickkeys.swf"
+	quickkeys_config = "view_play:p,view_stop:ctrl+shift+space,view_next:ctrl+n,view_fullscreen:ctrl+f"
+
+/>

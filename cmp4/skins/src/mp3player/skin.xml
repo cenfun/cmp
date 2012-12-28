@@ -1,0 +1,50 @@
+﻿<skin version="1.0" name="MP3Player" url="http://bbs.cenfun.com/" author="CenFun" email="cenfun@gmail.com" readme="MP3播放专用皮肤" mask_color="" show_tips="0.5" context_menu="" >
+  <option xywh="0C, 41C, 320, 256" src="" mask="" lock="1" display="0" group="A">
+    <pane xywh="0, 0, 100P, 100P" align="left" font="宋体" size="12" color="#333333, #000000" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </option>
+  <list xywh="0C, 41C, 320, 256" src="" mask="" lock="1" display="1" group="A">
+    <tree xywh="0, 0, 100P, 100P" align="left" font="Arial" size="12" bold="" color="#333333, #000000" row_src="row.png" row_height="24" show_delete="1" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png" thumb_icon="scrollbar_icon.png" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+    <event type="close" target="lrc" property="display" value="1" />
+  </list>
+  <lrc xywh="0C, 41C, 320, 256" src="" mask="" lock="1" display="0" group="A">
+    <text xywh="5, 5, 5B, 5B" align="center" font="Arial" bold="1" size="12" color="#333333, #1e90ff" shadow="1,90,#000000,0.2,2,2,1,1">
+      <kmc time_preview="5000" time_sec3="8000" show_info="1" margin="" size="16" bold="1" align="center, center" shadow="1,90,#000000,0.2,2,2,1,1" />
+    </text>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </lrc>
+  <media xywh="0C, 41C, 320, 256" src="media.swf" mask="" lock="1" display="0" group="A">
+    <video xywh="0, 0, 100P, 100P" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="close" target="list" property="display" value="1" />
+  </media>
+  <console xywh="0C, 0C, 320, 400" src="console.swf" mask="" lock="1" display="1" group="A" >
+    <bt_play xywh="8, 12, 34, 34" src="bt_play.png" tips="播放,暂停" />
+    <bt_stop xywh="45, 16, 26, 26" src="bt_stop.png" tips="停止" />
+    <bt_repeat xywh="29R, 18, 25, 23" src="bt_repeat.png" tips="重复播放" />
+    <bt_random xywh="5R, 18, 25, 23" src="bt_random.png" tips="无序播放" />
+    <bt_mute xywh="128R, 23, 15, 13" src="bt_mute.png" tips="静音,打开声音" />
+    <volume xywh="59R, 26, 65, 7" thumb_src="volume_thumb.png" track_src="volume_track.png" />
+    <progress xywh="0C, 56, 310, 18" thumb_src="" track_src="progress_track.png" />
+    <status xywh="0C, 55, 10B, 17" align="center" font="Arial" size="12" color="#000000" borderColor="" shadow="1,90,#ffffff,0.2,1,1,1,1" />
+    <time xywh="78, 20, 95, 17" align="left" font="Arial" size="12" color="#000000" borderColor="" bold="1" shadow="1,90,#ffffff,0.2,1,1,1,1" />
+    <title xywh="5, 91, 5B, 20" align="center" font="Arial" size="12" color="#333333" bold="1" borderColor="" shadow="1,90,#ffffff,0.2,1,1,1,3" />
+    <bt_list xywh="5, 2R, 60, 25" src="bt_list.png" />
+    <bt_lrc xywh="65, 2R, 60, 25" src="bt_lrc.png" />
+    <bt_video xywh="125, 2R, 60, 25" src="bt_video.png" />
+    <bt_link xywh="5R, 1R, 50, 25" src="bt_link.png" link="http://bbs.cenfun.com/" target="_blank" tips="欢迎使用CMP" />
+  </console>
+</skin>

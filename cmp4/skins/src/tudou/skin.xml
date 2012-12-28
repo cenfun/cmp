@@ -1,0 +1,31 @@
+﻿<skin name="Tudou土豆" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" mask_color="" show_tips="0.5" context_menu="">
+  <lrc xywh="0, 44R, 100%, 18" lock="1" display="0" group="A" alpha="0.8">
+    <text xywh="0, 0, 100P, 100P" align="center" font="宋体" size="12" color="#cccccc, #ffffff" horizontal="1" max_scale="3" shadow="1,90,#000000,0.5,4,4,1,3" />
+  </lrc>
+  <console xywh="0, 0R, 100P, 44" src="console.swf" mask="" lock="1" display="1" group="A">
+    <bt_play xywh="1, 1R, 50, 25" src="bt_play.png"/>
+    <bt_stop xywh="55, 1R, 30, 25" src="bt_stop.png"/>
+    <time xywh="90, 6R, 90, 16" align="center" font="Verdana" size="9" color="#cccccc" borderColor="" />
+    <status xywh="185, 5R, 195B, 18" align="left" font="Verdana" size="12" color="#ffffff" borderColor="" />
+    <bt_mute xywh="69R, 1R, 30, 25" src="bt_mute.png" hover_volume="1" />
+    <volume xywh="37R, 20R, 54, 14" thumb_src="" track_src="volume_track.png" src="volume.png" rotation="-90" shadow="1,45,#000000,0.5,4,4,1,3" />
+    <bt_list xywh="35R, 1R, 30, 25" src="bt_list.png" tips="关闭列表,打开列表"/>
+    <bt_fullscreen xywh="1R, 1R, 30, 25" src="bt_fullscreen.png" tips="全屏" />
+    <progress xywh="18, 33R, 18B, 5" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="0" />
+  </console>
+  <option xywh="18R, 44R, 320, 240" src="win.png" lock="1" display="0" group="A" shadow="1,90,#000000,0.5,4,4,1,3">
+    <pane xywh="5, 25, 5B, 15B" align="left" font="Arial" size="12" color="#666666, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <bt_close xywh="5R, 3, 15, 14" src="bt_close.png"/>
+    <event type="open" target="list" property="display" value="0" />
+  </option>
+  <list xywh="18R, 44R, 320, 240" src="win.png" mask="" lock="1" display="0" group="A" shadow="1,90,#000000,0.5,4,4,1,3">
+    <tree xywh="5, 25, 5B, 15B" align="left" font="Arial" size="12" color="#666666, #ffffff"/>
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <bt_close xywh="5R, 3, 15, 14" src="bt_close.png"/>
+    <event type="open" target="option" property="display" value="0" />
+  </list>
+  <media xywh="0, 44R, 100P, 100P" src="media.swf" mask="" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100P, 100P"/>
+  </media>
+</skin>

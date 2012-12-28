@@ -1,0 +1,7 @@
+<list>
+
+<m type="video" src="proxy:cdn,cdn.php,video_xml_url" label="cdn proxy" />
+
+<m type="merge" src="proxy:cdn,cdn.php,video_xml_url,merge" label="cdn + merge proxy model" />
+
+</list>

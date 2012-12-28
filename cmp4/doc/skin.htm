@@ -1,0 +1,820 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - 皮肤配置【skin.xml】</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP4皮肤配置说明</h3>
+<div class="submsg">
+  <div>
+    <p>CMP4加载完成皮肤包后，首先需要读取皮肤包中的配置文件，也就是skin.xml，指定名称，不能使用其他的</p>
+    <p>皮肤配置文件包含了所以皮肤元件的设置信息，如果未设置则使用默认值或者不显示该元件</p>
+  </div>
+  <h5>皮肤元件架构<span>请点击节点名称查看其支持的所有属性，点击属性可以查看属性使用说明</span></h5>
+  <div class="tree" id="tree">
+    <center>
+      loading ...
+    </center>
+  </div>
+  <div></div>
+</div>
+<div class="line"></div>
+<h3>所有皮肤参数说明</h3>
+<div class="submsg">
+  <h5>按字母顺序排列<span>也可以点击上面树节点查看对应属性</span></h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tr>
+      <th>align</th>
+      <td id="cmpskin_align">文本对齐，支持left/center/right，默认为left居左</td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td id="cmpskin_alpha">透明度，支持0-1范围之间的数字，默认为1</td>
+    </tr>
+    <tr>
+      <th>author</th>
+      <td id="cmpskin_author">当前皮肤作者</td>
+    </tr>
+    <tr>
+      <th>backgroundColor</th>
+      <td id="cmpskin_backgroundColor">文本框背景色，默认无</td>
+    </tr>
+    <tr>
+      <th>bold</th>
+      <td id="cmpskin_bold">文本是否为粗体，默认不加粗</td>
+    </tr>
+    <tr>
+      <th>borderColor</th>
+      <td id="cmpskin_borderColor">文本边框颜色，默认无</td>
+    </tr>
+    <tr>
+      <th>bullet</th>
+      <td id="cmpskin_bullet">列表音乐项前面的默认图标</td>
+    </tr>
+    <tr>
+      <th>button_src</th>
+      <td id="cmpskin_button_src">滚动条上下按钮皮肤源地址，6个状态(3x2)</td>
+    </tr>
+    <tr>
+      <th>closed</th>
+      <td id="cmpskin_closed">列表项包含子列表时，在关闭时要显示的图标</td>
+    </tr>
+    <tr>
+      <th>color</th>
+      <td id="cmpskin_color">文本颜色，默认为黑色#000000</td>
+    </tr>
+    <tr>
+      <th>context_menu</th>
+      <td id="cmpskin_context_menu">右键菜单设置：0不显示，1默认显示，2不显示窗口列表，优先级高于全局配置</td>
+    </tr>
+    <tr>
+      <th>display</th>
+      <td id="cmpskin_display">是否显示该元件</td>
+    </tr>
+    <tr>
+      <th>email</th>
+      <td id="cmpskin_email">当前皮肤的联系邮箱</td>
+    </tr>
+    <tr>
+      <th>fade</th>
+      <td id="cmpskin_fade">关闭时是否有渐隐效果</td>
+    </tr>
+    <tr>
+      <th>font</th>
+      <td id="cmpskin_font">文本字体，默认为Verdana</td>
+    </tr>
+    <tr>
+      <th>fullscreen_max</th>
+      <td id="cmpskin_fullscreen_max">见全局配置中的fullscreen_max参数，这里优先级高</td>
+    </tr>
+    <tr>
+      <th>fullscreen_scale</th>
+      <td id="cmpskin_fullscreen_scale">见全局配置中的fullscreen_scale参数，这里优先级高</td>
+    </tr>
+    <tr>
+      <th>glow</th>
+      <td id="cmpskin_glow">发光滤镜，如：glow="#F0E68C,1,2,2,1,5,1"<br />
+        最多8个参数："color, alpha, blurX, blurY, strength, quality, inner, knockout"<br />
+        详情见CMP4滤镜参数详解：<a href="http://bbs.cenfun.com/thread-11031-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11031-1-1.html</a></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td id="cmpskin_group">对象分组，如果两个窗口的分组值相同，则拖动其中一个，另一个也会发生联动；默认窗口之间不会相互影响，即在不同组</td>
+    </tr>
+    <tr>
+      <th>horizontal</th>
+      <td id="cmpskin_horizontal">歌词是否横向滚动，默认为0，即竖向往上滚动，否则为横向滚动，且设置值为1为隐藏上下句，设置为2将显示上下句</td>
+    </tr>
+    <tr>
+      <th>hover_volume</th>
+      <td id="cmpskin_hover_volume">表示鼠标移入或移出时，是否自动显隐音量条，默认值为0，即不自动显隐音量条<br />
+        注意，启用此功能时，请将静音按钮和音量条的位置连接起来，这样才不会移出时出现消失情况<br />
+        而且推荐将音量条volume竖起来，也就是设置其旋转参数rotation为-90</td>
+    </tr>
+    <tr>
+      <th>image</th>
+      <td id="cmpskin_image">列表项的缩略图，如果有，将启用缩略图功能，默认不启用<br />
+        详情见CMP4缩略图皮肤：<a href="http://bbs.cenfun.com/thread-12281-1-1.html" target="_blank">http://bbs.cenfun.com/thread-12281-1-1.html</a></td>
+    </tr>
+    <tr>
+      <th>image_height</th>
+      <td id="cmpskin_image_height">如果启用了image参数的缩略图功能，将设置其高，默认30</td>
+    </tr>
+    <tr>
+      <th>image_width</th>
+      <td id="cmpskin_image_width">如果启用了image参数的缩略图功能，将设置其宽，默认40</td>
+    </tr>
+    <tr>
+      <th>italic</th>
+      <td id="cmpskin_italic">文本是否显示斜体，默认不启用</td>
+    </tr>
+    <tr>
+      <th>leading</th>
+      <td id="cmpskin_leading">文本行距，默认0</td>
+    </tr>
+    <tr>
+      <th>leftMargin</th>
+      <td id="cmpskin_leftMargin">文本左边距，默认0，一般不用</td>
+    </tr>
+    <tr>
+      <th>letterSpacing</th>
+      <td id="cmpskin_letterSpacing">一个数字，表示在所有字符之间均匀分配的空间量，默认0，一般不用</td>
+    </tr>
+    <tr>
+      <th>line_mode</th>
+      <td id="cmpskin_line_mode">kmc行显示模式，共3种：<br />
+        "0"表示多行模式，显示方式同lrc，也可拖动，无倒数3秒提示<br />
+        "1"表示单行模式，只显示一行歌词，如果lrc是横向模式，则kmc自动变为单行模式<br />
+        "2"表示双行模式，这是kmc的默认模式</td>
+    </tr>
+    <tr>
+      <th>link</th>
+      <td id="cmpskin_link">表示点击链接按钮后要打开的http链接地址(一般支持CMP4特有的自动替换)</td>
+    </tr>
+    <tr>
+      <th>lock</th>
+      <td id="cmpskin_lock">是否锁定，默认锁定不能拖动：lock="1"</td>
+    </tr>
+    <tr>
+      <th>margin</th>
+      <td id="cmpskin_margin">kmc歌词左右边距，默认0，一般不用</td>
+    </tr>
+    <tr>
+      <th>mask</th>
+      <td id="cmpskin_mask">窗口装饰，与窗口的最底层背景相对应，其位于窗口的最顶层，一般不用，装饰层不支持鼠标事件</td>
+    </tr>
+    <tr>
+      <th>mask_color</th>
+      <td id="cmpskin_mask_color">透明色(镂空色)，如: mask_color="#FF00FF" 则所有皮肤中的紫红色#FF00FF将透明显示<br />
+        默认透明色为空，推荐留空以提高性能，因为png本身支持alpha通道透明度，如果不方便制作透明格式时再采用</td>
+    </tr>
+    <tr>
+      <th>max_button</th>
+      <td id="cmpskin_max_button">是否在非全屏状态显示最大化歌词按钮，默认为0不显示</td>
+    </tr>
+    <tr>
+      <th>max_scale</th>
+      <td id="cmpskin_max_scale">在歌词窗口最大化时，歌词可放大的最大缩放倍数，默认为2，移动到右上角的S缩放按钮，在弹出的滑动条进行缩放</td>
+    </tr>
+    <tr>
+      <th>mouseEnabled</th>
+      <td id="cmpskin_mouseEnabled">窗口是否具有鼠标交互能力，默认为true，否则为false时将禁止鼠标交互</td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td id="cmpskin_name">当前皮肤名称，显示到设置面板里皮肤列表中</td>
+    </tr>
+    <tr>
+      <th>opened</th>
+      <td id="cmpskin_opened">列表项包含子列表时，在打开时要显示的图标</td>
+    </tr>
+    <tr>
+      <th>playing</th>
+      <td id="cmpskin_playing">列表项正在播放时要显示的图标，支持flash动画格式</td>
+    </tr>
+    <tr>
+      <th>preview</th>
+      <td id="cmpskin_preview">皮肤预览图，将显示在cmp设置面板中，推荐不宜过大，且使用jpg格式</td>
+    </tr>
+    <tr>
+      <th>property</th>
+      <td id="cmpskin_property">事件发生时，要处理对象的属性，如xywh/display等<br />
+        详情见CMP4窗口事件详解：<a href="http://bbs.cenfun.com/thread-11034-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11034-1-1.html</a></td>
+    </tr>
+    <tr>
+      <th>readme</th>
+      <td id="cmpskin_readme">当前皮肤相关说明</td>
+    </tr>
+    <tr>
+      <th>rightMargin</th>
+      <td id="cmpskin_rightMargin">文本右边距，默认0，一般不用</td>
+    </tr>
+    <tr>
+      <th>rotation</th>
+      <td id="cmpskin_rotation">旋转角度，0表示不旋转，一般还支持90/-90/180，注意：旋转是在xywh定位后，以其左上顶点为圆点进行旋转，此时xywh需自己调整和计算</td>
+    </tr>
+    <tr>
+      <th>row_height</th>
+      <td id="cmpskin_row_height">自定义行高，默认为20，有image缩略图时，可自定义加高行的高度</td>
+    </tr>
+    <tr>
+      <th>row_mask</th>
+      <td id="cmpskin_row_mask">行装饰，加载在每行最上层，一般不用</td>
+    </tr>
+    <tr>
+      <th>row_src</th>
+      <td id="cmpskin_row_src">行样式支持，分6个状态：横3个，表示up，over，down；竖2个，表示未选择行和选择行</td>
+    </tr>
+    <tr>
+      <th>shadow</th>
+      <td id="cmpskin_shadow">阴影滤镜，如：shadow="1,45,#FF0000,0.4,2,2,1,1"<br />
+        最多11个参数："distance, angle, color, alpha, blurX, blurY, strength, quality, inner, knockout, hideObject"<br />
+        详情见CMP4滤镜参数详解：<a href="http://bbs.cenfun.com/thread-11031-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11031-1-1.html</a></td>
+    </tr>
+    <tr>
+      <th>show_buttons</th>
+      <td id="cmpskin_show_buttons">是否显示视频右上角的按钮组（包括最大化时的进度条），默认显示</td>
+    </tr>
+    <tr>
+      <th>show_delete</th>
+      <td id="cmpskin_show_delete">是否显示列表行的删除图标，与全局配置中的list_delete参数作用相同，默认不显示</td>
+    </tr>
+    <tr>
+      <th>show_icon</th>
+      <td id="cmpskin_show_icon">是否显示列表行最前面的图标，默认显示</td>
+    </tr>
+    <tr>
+      <th>show_info</th>
+      <td id="cmpskin_show_info">是否在kmc存在这些并显示这些信息：歌名，原唱，专辑，制作者</td>
+    </tr>
+    <tr>
+      <th>show_tips</th>
+      <td id="cmpskin_show_tips">鼠标移入时，延时多久显示提示文本，单位为秒，不填则不显示提示</td>
+    </tr>
+    <tr>
+      <th>size</th>
+      <td id="cmpskin_size">文本字体大小，默认为12</td>
+    </tr>
+    <tr>
+      <th>snap</th>
+      <td id="cmpskin_snap">在拖动时是否自动吸附到邻近边界</td>
+    </tr>
+    <tr>
+      <th>src</th>
+      <td id="cmpskin_src">皮肤源地址(皮肤包中的文件全名，支持路径)<br />
+        支持格式有Flash动画文件(SWF仅窗口支持)或图像文件(JPG、PNG、GIF)<br />
+        背景为1个状态，按钮为4个状态(4x1,切割方式,即横向切成4份,竖排切成1份)<br />
+        需要切割的仅支持图像文件，flash类型支持CMP4的API通讯</td>
+    </tr>
+    <tr>
+      <th rowspan="2">target</th>
+      <td id="cmpskin_target_event">事件发生时，要处理的目标，支持所有窗口以及里面的元件<br />
+        详情见CMP4窗口事件详解：<a href="http://bbs.cenfun.com/thread-11034-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11034-1-1.html</a></td>
+    </tr>
+    <tr>
+      <td id="cmpskin_target">表示链接打开窗口的目标，如果没有则采用全局配置link_target的值</td>
+    </tr>
+    <tr>
+      <th>thumb_autohide</th>
+      <td id="cmpskin_thumb_autohide">进度条特殊属性，设置是否自动隐藏拖动滑块，默认进度条progress自动隐藏，音量调节条volume不隐藏</td>
+    </tr>
+    <tr>
+      <th>thumb_icon</th>
+      <td id="cmpskin_thumb_icon">滚动条特殊属性，设置滑块图标皮肤，将显示在滑块中间，默认为4条横杆的标识</td>
+    </tr>
+    <tr>
+      <th rowspan="2">thumb_src</th>
+      <td id="cmpskin_thumb_src">滑动条滑块按钮的皮肤源地址，和其他按钮一样，分4个状态(4x1)</td>
+    </tr>
+    <tr>
+      <td id="cmpskin_thumb_src_scrollbar">滚动条滑块皮肤源地址，分3个状态(3x1)</td>
+    </tr>
+    <tr>
+      <th>time_preview</th>
+      <td id="cmpskin_time_preview">表示最多提前多少毫秒准备歌词行，默认5000</td>
+    </tr>
+    <tr>
+      <th>time_sec3</th>
+      <td id="cmpskin_time_sec3">超过多少毫秒自动显示3秒倒计时（最开始除外），默认8000</td>
+    </tr>
+    <tr>
+      <th>tips</th>
+      <td id="cmpskin_tips">提示，在鼠标经过时显示，开关按钮可以有2个提示，用英文逗号(,)隔开<br />
+        需要皮肤全局的show_tips不为0才能显示，如果采用其它语言，这里也需进行语言翻译</td>
+    </tr>
+    <tr>
+      <th rowspan="2">track_src</th>
+      <td id="cmpskin_track_src">滑块轨道的皮肤源地址，分2个状态(1x2)，表示背景和当前进度</td>
+    </tr>
+    <tr>
+      <td id="cmpskin_track_src_scrollbar">滚动条滑块轨道皮肤源地址，仅1个状态</td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td id="cmpskin_type">事件类型，支持4种类型：open窗口打开/close窗口关闭/over鼠标移入窗口/out鼠标移出窗口<br />
+        详情见CMP4窗口事件详解：<a href="http://bbs.cenfun.com/thread-11034-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11034-1-1.html</a></td>
+    </tr>
+    <tr>
+      <th>underline</th>
+      <td id="cmpskin_underline">文本是否显示下划线，默认不显示</td>
+    </tr>
+    <tr>
+      <th>url</th>
+      <td id="cmpskin_url">当前皮肤相关链接</td>
+    </tr>
+    <tr>
+      <th>useHandCursor</th>
+      <td id="cmpskin_useHandCursor">按钮的鼠标指针样式是否显示为手型，除了bt_link和bt_more，默认都不显示为手型</td>
+    </tr>
+    <tr>
+      <th rowspan="2">value</th>
+      <td id="cmpskin_value_event">事件发生时，需要对指定对象设置的值<br />
+        详情见CMP4窗口事件详解：<a href="" target="_blank">http://bbs.cenfun.com/thread-11034-1-1.html</a></td>
+    </tr>
+    <tr>
+      <td id="cmpskin_value_search">搜索框默认提示值，如：请输入关键字</td>
+    </tr>
+    <tr>
+      <th>version</th>
+      <td id="cmpskin_version">当前皮肤版本号</td>
+    </tr>
+    <tr>
+      <th>xywh</th>
+      <td id="cmpskin_xywh">位置宽高参数，用于对显示元件进行定位和宽高设置<br />
+        分4个数值，用英文逗号(,)隔开，如：xywh="0C, 0C, 580, 380"<br />
+        分别表示对象的x横坐标、y纵坐标、w宽、h高 <br />
+        还能通过辅助参数实现特殊定位和宽高：C居中，R反向，P或%百分比，B边距<br />
+        详情见CMP核心参数xywh图文详解：<a href="http://bbs.cenfun.com/thread-11026-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11026-1-1.html</a></td>
+    </tr>
+    <tr>
+      <th>languages节点</th>
+      <td id="cmpskin_languages"><p>直接按照以下格式替换到对应语言即可，以下是简体中文，也是默认值，如果不设置也将采用此默认值<br />
+          &lt;msg id=&quot;state_undefined&quot;&gt;未定义&lt;/msg&gt;<br />
+          &lt;msg id=&quot;state_connecting&quot;&gt;连接中&lt;/msg&gt;<br />
+          &lt;msg id=&quot;state_buffering&quot;&gt;缓冲&lt;/msg&gt;<br />
+          &lt;msg id=&quot;state_playing&quot;&gt;正在播放&lt;/msg&gt;<br />
+          &lt;msg id=&quot;state_paused&quot;&gt;已暂停&lt;/msg&gt;<br />
+          &lt;msg id=&quot;state_stopped&quot;&gt;已停止&lt;/msg&gt;<br />
+          &lt;msg id=&quot;state_completed&quot;&gt;播放完成&lt;/msg&gt;<br />
+          &lt;msg id=&quot;state_reconnecting&quot;&gt;重试连接&lt;/msg&gt;<br />
+          &lt;msg id=&quot;menu_fullscreen&quot;&gt;全屏切换&lt;/msg&gt;<br />
+          &lt;msg id=&quot;menu_list&quot;&gt;列表&lt;/msg&gt;<br />
+          &lt;msg id=&quot;menu_lrc&quot;&gt;歌词&lt;/msg&gt;<br />
+          &lt;msg id=&quot;menu_video&quot;&gt;视频&lt;/msg&gt;<br />
+          &lt;msg id=&quot;menu_option&quot;&gt;选项&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_title_skins&quot;&gt;设置皮肤&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_title_about&quot;&gt;关于程序&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_waiting&quot;&gt;等待加载&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_loading&quot;&gt;加载中&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_error&quot;&gt;皮肤错误&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_version&quot;&gt;版本&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_author&quot;&gt;作者&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_email&quot;&gt;邮箱&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_url&quot;&gt;网址&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_readme&quot;&gt;说明&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_skin_save&quot;&gt;保存&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_copy_url&quot;&gt;复制分享地址&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_copy_embed&quot;&gt;复制插入代码&lt;/msg&gt;<br />
+          &lt;msg id=&quot;option_copied&quot;&gt;已复制&lt;/msg&gt;<br />
+          &lt;msg id=&quot;view_listing&quot;&gt;加载列表&lt;/msg&gt;<br />
+          &lt;msg id=&quot;view_nothing&quot;&gt;没有找到任何信息&lt;/msg&gt;<br />
+          &lt;msg id=&quot;view_error&quot;&gt;错误&lt;/msg&gt;<br />
+          附英文和繁体中文的例子：<a href="http://bbs.cenfun.com/thread-11033-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11033-1-1.html</a></p></td>
+    </tr>
+  </table>
+  <h6><a href="javascript:void(0)" class="spread" onclick="collapse(this, 'skin_example')">一个CMP4皮肤配置格式的例子</a></h6>
+  <div id="skin_example" style="display:none;" class="code">&lt;skin name=&quot;Default&quot; version=&quot;2.0&quot; author=&quot;CenFun&quot; email=&quot;cenfun@gmail.com&quot; url=&quot;http://bbs.cenfun.com/&quot; readme=&quot;CMP4&quot;&gt;<br />
+    <div>&lt;option xywh=&quot;164C, -12C, 240, 306&quot; src=&quot;&quot; lock=&quot;1&quot; display=&quot;0&quot; group=&quot;A&quot; fade=&quot;0&quot;&gt;
+      <div> &lt;pane xywh=&quot;0, 0, 100P, 100P&quot; color=&quot;#666666, #ffffff&quot; /&gt;<br />
+        &lt;scrollbar thumb_src=&quot;scrollbar_thumb.png&quot; button_src=&quot;scrollbar_button.png&quot; track_src=&quot;scrollbar_track.png&quot;/&gt;<br />
+        &lt;bt_close xywh=&quot;-8, 0C, 8, 70&quot; src=&quot;bt_close.png&quot; tips=&quot;&quot; /&gt;</div>
+      &lt;/option&gt;<br />
+      &lt;list xywh=&quot;164C, -12C, 240, 306&quot; src=&quot;list.png&quot; lock=&quot;1&quot; display=&quot;1&quot; group=&quot;A&quot; fade=&quot;0&quot;&gt;
+      <div> &lt;tree xywh=&quot;0, 18R, 100P, 100P&quot; color=&quot;#666666, #ffffff&quot; bold=&quot;0&quot; show_delete=&quot;0&quot; show_icon=&quot;1&quot; /&gt;<br />
+        &lt;scrollbar thumb_src=&quot;scrollbar_thumb.png&quot; button_src=&quot;scrollbar_button.png&quot; track_src=&quot;scrollbar_track.png&quot;/&gt;<br />
+        &lt;bt_close xywh=&quot;-8, 0C, 8, 70&quot; src=&quot;bt_close.png&quot; tips=&quot;&quot; /&gt;</div>
+      &lt;/list&gt;<br />
+      &lt;lrc xywh=&quot;-124C, 111C, 322, 60&quot; src=&quot;&quot; lock=&quot;1&quot; display=&quot;1&quot; group=&quot;A&quot; shadow=&quot;1,90,#000000,1,2,2,1,1&quot;&gt;
+      <div> &lt;text xywh=&quot;2, 2, 2B, 2B&quot; align=&quot;center&quot; color=&quot;#666666, #ffffff&quot; horizontal=&quot;0&quot; max_scale=&quot;2&quot; max_button=&quot;0&quot; &gt;
+        <div> &lt;kmc line_mode=&quot;0&quot; time_preview=&quot;5000&quot; time_sec3=&quot;8000&quot; show_info=&quot;1&quot; margin=&quot;0&quot; /&gt;</div>
+        &lt;/text&gt;<br />
+        &lt;bt_close xywh=&quot;&quot; src=&quot;&quot; tips=&quot;&quot; /&gt;</div>
+      &lt;/lrc&gt;<br />
+      &lt;media xywh=&quot;-124C, -45C, 322, 242&quot; src=&quot;media.png&quot; lock=&quot;1&quot; display=&quot;1&quot; group=&quot;A&quot;&gt;
+      <div> &lt;video xywh=&quot;1, 1, 1B, 1B&quot; show_icon=&quot;1&quot; show_buttons=&quot;1&quot;/&gt;<br />
+        &lt;bt_close xywh=&quot;&quot; src=&quot;&quot; tips=&quot;&quot; /&gt;</div>
+      &lt;/media&gt;<br />
+      &lt;console xywh=&quot;0C, 0C, 580, 380&quot; src=&quot;console.png&quot; lock=&quot;1&quot; display=&quot;1&quot; group=&quot;A&quot; snap=&quot;true&quot;&gt;
+      <div> &lt;bt_play xywh=&quot;5, 4R, 40, 40&quot; src=&quot;bt_play.png&quot; tips=&quot;播放,暂停&quot; /&gt;<br />
+        &lt;bt_stop xywh=&quot;50, 3R, 25, 25&quot; src=&quot;bt_stop.png&quot; tips=&quot;停止&quot; /&gt;<br />
+        &lt;bt_prev xywh=&quot;75, 3R, 25, 25&quot; src=&quot;bt_prev.png&quot; tips=&quot;上一个&quot; /&gt;<br />
+        &lt;bt_next xywh=&quot;100, 3R, 25, 25&quot; src=&quot;bt_next.png&quot; tips=&quot;下一个&quot; /&gt;<br />
+        &lt;bt_mute xywh=&quot;107R, 26R, 21, 21&quot; src=&quot;bt_mute.png&quot; tips=&quot;静音,打开声音&quot; hover_volume=&quot;&quot; /&gt;<br />
+        &lt;volume xywh=&quot;10R, 31R, 89, 11&quot; thumb_src=&quot;volume_thumb.png&quot; track_src=&quot;volume_track.png&quot; src=&quot;&quot; tips=&quot;音量&quot; /&gt;<br />
+        &lt;progress xywh=&quot;54, 32R, 390, 9&quot; thumb_src=&quot;progress_thumb.png&quot; track_src=&quot;progress_track.png&quot; tips=&quot;定位&quot; /&gt;<br />
+        &lt;bt_fullscreen xywh=&quot;105R, 3R, 25, 25&quot; src=&quot;bt_fullscreen.png&quot; tips=&quot;打开全屏,退出全屏&quot; /&gt;<br />
+        &lt;status xywh=&quot;130, 7R, 185, 18&quot; font=&quot;Arial&quot; color=&quot;#cccccc&quot;/&gt;<br />
+        &lt;time xywh=&quot;133R, 7R, 130, 18&quot; align=&quot;right&quot; font=&quot;Arial&quot; color=&quot;#cccccc&quot;/&gt;<br />
+        &lt;title xywh=&quot;26, 3, 450, 18&quot; color=&quot;#cccccc&quot; bold=&quot;1&quot; shadow=&quot;1,90,#000000,1,2,2,1,1&quot; /&gt;</div>
+      &lt;/console&gt;<br />
+      &lt;languages&gt;
+      <div> &lt;msg id=&quot;state_connecting&quot;&gt;连接中&lt;/msg&gt;<br />
+        &lt;msg id=&quot;state_buffering&quot;&gt;缓冲&lt;/msg&gt;<br />
+        &lt;msg id=&quot;state_playing&quot;&gt;正在播放&lt;/msg&gt;<br />
+        &lt;msg id=&quot;state_paused&quot;&gt;已暂停&lt;/msg&gt;<br />
+        &lt;msg id=&quot;state_stopped&quot;&gt;已停止&lt;/msg&gt;<br />
+        &lt;msg id=&quot;state_completed&quot;&gt;播放完成&lt;/msg&gt;</div>
+      &lt;/languages&gt;</div>
+    &lt;/skin&gt; </div>
+</div>
+<script type="text/javascript">
+//===============================================================
+//皮肤
+var cmp_skn = ["name", "version", "author", "email", "url", "readme", "preview", "mask_color", "show_tips", "context_menu"].sort();
+//对象通用
+var cmp_bas = ["xywh", "src"].sort();
+//滤镜
+var cmp_fts = ["shadow", "glow"].sort();
+//文本格式
+var cmp_txf = ["align", "font", "leading", "leftMargin", "letterSpacing", "rightMargin", "size", "bold", "italic", "underline", "color"].sort();
+//窗口============================================================
+var cmp_win = ["display", "rotation", "alpha", "lock", "group", "mask", "snap", "fade", "mouseEnabled"].concat(cmp_fts).concat(cmp_bas).sort();
+//设置面板
+var cmp_wpa = cmp_fts.concat(cmp_txf).concat(cmp_bas).sort();
+//列表树
+var cmp_wtr = ["show_delete", "show_icon", "image", "image_width", "image_height", "row_height", "row_src", "row_mask"].sort();
+	cmp_wtr = cmp_wtr.concat(cmp_fts).concat(cmp_txf).concat(cmp_bas).sort();
+//歌词面板
+var cmp_lrc = ["horizontal", "max_button", "max_scale"].sort();
+	cmp_lrc = cmp_lrc.concat(cmp_fts).concat(cmp_txf).concat(cmp_bas).sort();
+//卡拉ok歌词设置
+var cmp_kmc = ["line_mode", "time_preview", "time_sec3", "show_info", "margin"].concat(cmp_fts).concat(cmp_txf).sort();
+//视频面板
+var cmp_vid = ["show_icon", "show_buttons"].concat(cmp_fts).concat(cmp_bas).sort();
+//数字图片时间
+var cmp_num = ["rotation", "alpha", "tips"].concat(cmp_fts).concat(cmp_bas).sort();
+var cmp_img = ["rotation", "alpha"].concat(cmp_fts).concat(cmp_bas).sort();
+//窗口事件
+var cmp_evt = ["type", "target", "property", "value"].sort();
+//================================================================
+//文本元件
+var cmp_txt = ["borderColor", "backgroundColor", "alpha"].concat(cmp_fts).concat(cmp_txf).concat(cmp_bas).sort();
+//列表搜索
+var cmp_sch = ["value"].concat(cmp_txt).sort();
+//列表图标
+var cmp_icn = ["bullet", "opened", "closed", "playing"].sort();
+//按钮
+var cmp_btn = ["rotation", "alpha", "tips", "useHandCursor"].concat(cmp_fts).concat(cmp_bas).sort();
+//链接按钮
+var cmp_btl = ["link", "target"].concat(cmp_btn).sort();
+//全屏按钮
+var cmp_btf = ["fullscreen_scale", "fullscreen_max"].concat(cmp_btn).sort();
+//静音按钮
+var cmp_btm = ["hover_volume"].concat(cmp_btn).sort();
+//进度条
+var cmp_sld = ["rotation", "alpha", "tips", "thumb_autohide", "thumb_src", "track_src"].concat(cmp_fts).concat(cmp_bas).sort();
+//滚动条
+var cmp_sbr = ["thumb_src", "button_src", "track_src", "thumb_icon"].sort();
+//===============================================================
+
+var data = [
+	{
+		n : "skin",
+		t : "根节点",
+		p : cmp_skn,
+		l : [
+			{
+				n : "option",
+				t : "设置窗口",
+				p : cmp_win,	
+				l : [
+					{
+						n : "pane", 
+						t : "设置面板区域",
+						p : cmp_wpa
+					},
+					{
+						n : "scrollbar", 
+						t : "设置面板的滚动条",
+						p : cmp_sbr
+					},
+					{
+						n : "bt_close", 
+						t : "设置窗口的关闭按钮",
+						p : cmp_btn
+					},
+					{
+						n : "event", 
+						t : "窗口事件，可以多个",
+						p : cmp_evt
+					}	
+				]
+			},
+			{
+				n : "list",
+				t : "列表窗口",
+				p : cmp_win,	
+				l : [
+					{
+						n : "tree", 
+						t : "列表树区域",
+						p : cmp_wtr
+					},
+					{
+						n : "search", 
+						t : "列表搜索框",
+						p : cmp_sch
+					},
+					{
+						n : "scrollbar", 
+						t : "列表树的滚动条",
+						p : cmp_sbr
+					},
+					{
+						n : "icons", 
+						t : "列表树的图标",
+						p : cmp_icn
+					},
+					{
+						n : "bt_close", 
+						t : "列表窗口关闭按钮",
+						p : cmp_btn
+					},
+					{
+						n : "event", 
+						t : "窗口事件，可以多个",
+						p : cmp_evt
+					}
+				]
+			},
+			{
+				n : "lrc",
+				t : "歌词窗口",
+				p : cmp_win,	
+				l : [
+					{
+						n : "text", 
+						t : "歌词文本区域",
+						p : cmp_lrc,
+						l : [
+							{
+								n : "kmc", 
+								t : "卡拉ok歌词设置，如果没有则使用父节点text中的文本设置和kmc默认设置",
+								p : cmp_kmc
+							}
+						]
+					},
+					{
+						n : "bt_close", 
+						t : "歌词窗口关闭按钮",
+						p : cmp_btn
+					},
+					{
+						n : "event", 
+						t : "窗口事件，可以多个",
+						p : cmp_evt
+					}
+				]
+			},
+			{
+				n : "media",
+				t : "媒体窗口",
+				p : cmp_win,	
+				l : [
+					{
+						n : "video", 
+						t : "视频和频谱效果区域",
+						p : cmp_vid
+					},
+					{
+						n : "bt_close", 
+						t : "媒体窗口关闭按钮",
+						p : cmp_btn
+					},
+					{
+						n : "event", 
+						t : "窗口事件，可以多个",
+						p : cmp_evt
+					}
+				]
+			},
+			{
+				n : "console",
+				t : "控制窗口",
+				p : cmp_win,	
+				l : [
+					{
+						n : "bt_play", 
+						t : "播放和暂停按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_stop", 
+						t : "停止按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_prev", 
+						t : "上一个按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_forward", 
+						t : "快进按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_rewind", 
+						t : "快退按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_next", 
+						t : "下一个按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_random", 
+						t : "随机播放按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_repeat", 
+						t : "重复播放按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_single", 
+						t : "单遍播放按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_mute", 
+						t : "静音按钮",
+						p : cmp_btm
+					},
+					{
+						n : "volume", 
+						t : "音量控制条",
+						p : cmp_sld
+					},
+					{
+						n : "progress", 
+						t : "播放进度条",
+						p : cmp_sld
+					},
+					{
+						n : "bt_list", 
+						t : "列表窗口开关按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_video", 
+						t : "媒体窗口开关按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_lrc", 
+						t : "歌词窗口开关按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_option", 
+						t : "设置窗口开关按钮",
+						p : cmp_btn
+					},
+					{
+						n : "bt_fullscreen", 
+						t : "全屏切换按钮",
+						p : cmp_btf
+					},
+					{
+						n : "bt_link", 
+						t : "链接按钮",
+						p : cmp_btl
+					},
+					{
+						n : "bt_more", 
+						t : "更多按钮",
+						p : cmp_btl
+					},
+					{
+						n : "title", 
+						t : "当前播放标题",
+						p : cmp_txt
+					},
+					{
+						n : "status", 
+						t : "当前播放状态",
+						p : cmp_txt
+					},
+					{
+						n : "indicator", 
+						t : "进度条的指示器",
+						p : cmp_txt
+					},
+					{
+						n : "time", 
+						t : "当前播放时间，包括总时间",
+						p : cmp_txt
+					},
+					{
+						n : "time_position", 
+						t : "当前时间",
+						p : cmp_txt
+					},
+					{
+						n : "time_duration", 
+						t : "总时间",
+						p : cmp_txt
+					},
+					{
+						n : "image", 
+						t : "当前播放项的缩略图片",
+						p : cmp_img
+					},
+					{
+						n : "number", 
+						t : "当前播放的数字时间，可显示倒计时",
+						p : cmp_num
+					}
+				]
+			},
+			{
+				n : "languages",
+				t : "语言设置",
+				p : "cmpskin_languages"
+			}
+		]
+	}
+];
+
+function showParam(node_name, para_name, id) {
+	var tb = '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
+	tb += '<th width="10%">' + para_name + '</th><td>';
+	var info = $("cmpskin_" + para_name + "_" + node_name);
+	if (!info) {
+		info = $("cmpskin_" + para_name);
+	}
+	if (info) {
+		tb += info.innerHTML;
+	} else {
+		tb += "未找到参数说明，可提交报告到QQ：44023478";
+	}
+	tb += '</td></tr></table>';
+	$(id).innerHTML = tb;
+}
+
+var params = {};
+
+function getTree(arr) {
+	var s = '<div>';
+	var rnd = rd();
+	var len = arr.length;
+	for (var i = 0; i < len; i ++) {
+		var node = arr[i];
+		var name = node.n;
+		var para = node.p;
+		s += '<div><a href="javascript:void(0)" class="spread" ';
+		s += 'onclick="collapse(this, \'' + name + rnd + '\')">' + name + '</a> ' + node.t + '</div>'
+		if (para) {
+			s += '<div class="param" id="' + name + rnd + '" style="display:none;">';
+			if (typeof(para) == "string") {
+				var obj = $(para);
+				if (obj) {
+					s += obj.innerHTML;
+				}
+			} else {
+				var idn = rd();
+				var num = para.length;
+				s += '<p class="clearfix">';
+				for (var j = 0; j < num; j ++) {
+					var pnam = para[j];
+					s += '<a href="javascript:void(0)" class="flt" ';
+					s += 'onclick="showParam(\'' + name + '\', \'' + pnam + '\', \'param' + idn + '\')">' + pnam + '</a>';
+					params[pnam] = true;
+				}
+				s += '</p>';
+				s += '<p id="param' + idn + '"></p>';
+			}
+			s += '</div>';
+		}
+		//子列表
+		if (node.l) {
+			s += getTree(node.l);
+		}
+	}
+	s += '</div>';
+	return s;
+}
+
+$("tree").innerHTML = getTree(data);
+
+</script> 
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CMP4网页列表交互播放例子</title>
+<style type="text/css">
+body { color:#444; text-align:center; margin:0px auto; }
+body, a, td, th, span, div { font-family:Arial; font-size:12px; }
+input, textarea { font-family:Arial; font-size:12px; vertical-align:middle; }
+a:link, a:visited { text-decoration:none; color:#444; }
+a:hover { text-decoration:underline; color:#000; }
+a img { border:none; }
+.main { margin:20px auto; width:600px; padding:10px 20px; border:1px solid #E5ECF9; }
+.header { font-size:14px; font-weight:bold; }
+.player { margin-top:10px; }
+.tablelist { width:100%; margin-top:10px; text-align:left; }
+.tablelist th { padding:3px 10px; border-bottom:1px solid #E5ECF9; color:#428EFF; }
+.tablelist td { padding:3px 10px; border-bottom:1px solid #E5ECF9; font-family:Verdana; }
+</style>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
+<script type="text/javascript">
+var list = [
+	{ type:"1", label:"mp3 test", src:"http://cmp.cenfun.com/cmp4/music/test.mp3" },
+	{ type:"3", label:"mid test", src:"http://cmp.cenfun.com/cmp4/music/secret_garden.mid" },
+	{ type:"2", label:"CCTV5", src:"http://biz.vsdn.tv380.com/playlive.php?5B63686E5D445830303030303034387C313337307C317C313030307C474754567C687474705B2F63686E5D5B74735D307C687474705B2F74735DVSDNSOOONERCOM00" },
+	{ type:"2", label:"CCTV5-HD", src:"http://biz.vsdn.tv380.com/playlive.php?5B63686E5D445830303030303034387C313337307C317C313030307C434354562D357C687474705B2F63686E5D5B74735D307C687474705B2F74735DVSDNSOOONERCOM00" },
+	{ type:"2", label:"游戏风云", src:"http://biz.vsdn.tv380.com/playlive.php?5B63686E5D445830303030303035307C313532377C317C323030307CE74754567C687474705B2F63686E5D5B74735D307C687474705B2F74735DVSDNSOOONERCOM00" }
+];
+</script>
+</head>
+<body>
+<div class="main">
+  <div class="header">CMP4网页列表交互播放例子</div>
+  <div class="player" id="player"></div>
+  <div class="bodyer">
+    <form onsubmit="return false">
+      <table border="0" cellspacing="0" cellpadding="0" class="tablelist">
+        <tr>
+          <th colspan="2" align="left">多选播放列表，点击名称也可直接播放</th>
+        </tr>
+        <script type="text/javascript">
+		for (var i = 0; i < list.length; i ++) {
+			var str = '<tr onmouseover="highlight(this, \'#f5f5f5\');">';
+        	str += '<td><input type="checkbox" value="'+i+'" /></td>';
+        	str += '<td><a href="javascript:void(0)" onclick="add2cmp('+i+', true)" title="点击播放">'+(i + 1)+', '+list[i].label+'</a></td>';
+        	str += '</tr>';	
+			document.write(str);
+		}
+		</script>
+        <tr>
+          <td width="20"><input type="checkbox" onclick="selectAll(this)" /></td>
+          <td><input type="submit" value="添加到CMP" onclick="add2cmp(this)" />
+            <input type="submit" value="添加到CMP并播放" onclick="add2cmp(this, true)" /></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+<script type="text/javascript">
+var cmpo;
+function $(id) { return document.getElementById(id); }
+function highlight(o, c){
+	o.style.backgroundColor = c;
+	o.onmouseout = function(){ o.style.backgroundColor = ""; }
+}
+function selectAll(obj) {
+	var form = obj.form;
+	var eles = form.elements;
+	for (var k in eles) {
+		var item = eles[k];
+		if (item && item.type == "checkbox" && item != obj) {
+			item.checked = obj.checked;
+		}
+	}
+}
+
+function add2cmp(obj, autoplay) {
+	var ids = [];
+	if (typeof obj === "number") {
+		ids.push(obj);
+	} else {
+		var form = obj.form;
+		var eles = form.elements;
+		for (var k in eles) {
+			var item = form[k];
+			if (item && item.type == "checkbox") {
+				if (item.checked) {
+					ids.push(item.value);
+				}
+			}
+		}
+	}
+	if (ids.length) {
+		if (cmpo) {
+			//先读取之前列表长度备用
+			var len = cmpo.list().length;
+			//生成列表xml字符串
+			var xml = '';
+			for (var i = 0; i < ids.length; i ++) {
+				var item = list[ids[i]];
+				if (item) {
+					if (item.added) {
+						if (!confirm("【"+item.label+"】已经被添加到CMP列表中，是否继续添加？")) {
+							break;
+						}
+					}
+					xml += '<m ';
+					for (var k in item) {
+						if (k != "added") {
+							xml += k + '="'+item[k]+'" ';
+						}
+					}
+					xml += ' />';
+					item.added = true;
+				}
+			}
+			if (xml) {
+				//发送到cmp
+				var str = '<list>' + xml + '</list>';
+				
+				//alert(str)
+				cmpo.list_xml(str);
+				//是否自动播放刚刚添加的
+				if (autoplay) {
+					//取得最后一个id
+					cmpo.sendEvent("view_play", len + 1);
+				}
+			}
+			
+		} else {
+			alert("cmp还未初始化");
+		}
+	} else {
+		alert("至少选择一个");	
+	}
+}
+
+function cmploaded(key) {
+	cmpo = CMP.get("cmp");
+	//alert(cmpo.config("version"));
+}
+function showCmp() {
+	var vars = {
+		api : "cmploaded",
+		url : "",
+		lists : "",
+		list_delete:"1",
+		skin : ""
+	};
+
+	var htm = CMP.create("cmp", "600", "400", "http://cmp.cenfun.com/cmp4/cmp.swf", vars);
+	$("player").innerHTML = htm;
+}
+showCmp();
+
+
+</script>
+</body>
+</html>

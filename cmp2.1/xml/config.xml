@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="gb2312"?>
+<config>
+<name>CenFun -『生活需要音乐』</name>
+<page>http://bbs.cenfun.com/</page>
+<content><![CDATA[<a href="http://bbs.cenfun.com/" target="_blank"><font color="#ffffff">欢迎大家使用CenFun Music Player</font></a>
+CMP v2.1主要更新：
+皮肤支持
+wma文件播放
+三种语言简体繁体英文版
+播放MP3显示ID3信息
+菜单滚动条优化
+XML文件加密
+配置文件重新架构
+歌词解析代码优化
+加载流程优化<img src="bg/logo.gif" align="right" />
+滚动公告和内容介绍支持部分Html
+列表缓存
+歌词对齐方式，左中右
+标题自定义颜色
+背景可全透明
+视频文件总时间传入(地址标记中加入t属性时间值即可)
+等等
+更多请进交流论坛：<a href="http://bbs.cenfun.com/" target="_blank"><font color="#ff0000">http://bbs.cenfun.com/</font></a>
+]]></content>
+<class>
+	<l name="最近更新">xml/list0.xml</l>
+	<l name="华语流行">xml/list1.xml</l>
+	<l name="欧美经典">xml/list2.xml</l>
+	<l name="MTV音乐">xml/list3.xml</l>
+	<l name="在线电影">xml/list4.xml</l>
+	<l name="动画短片">xml/list5.xml</l>
+	<l name="WMA音乐">xml/list6.xml</l>
+	<l name="日韩歌曲">xml/list7.xml</l>
+	<l name="个人收藏">xml/list8.xml</l>
+</class>
+<bg>
+	<l>bg/p1.jpg</l>
+	<l>bg/p2.jpg</l>
+	<l>bg/p3.jpg</l>
+	<l>bg/p4.jpg</l>
+	<l>bg/p5.jpg</l>
+	<l>bg/p6.jpg</l>
+	<l>bg/p7.jpg</l>
+	<l>bg/p8.jpg</l>
+</bg>
+<scene>
+	<l>scene/fly1.swf</l>
+	<l>scene/fly2.swf</l>
+	<l>scene/fly3.swf</l>
+	<l>scene/fly4.swf</l>
+	<l>scene/fly5.swf</l>
+	<l fg="1">scene/foreground1.swf</l>
+	<l>scene/scene1.swf</l>
+	<l>scene/scene2.swf</l>
+	<l>scene/scene3.swf</l>
+	<l>scene/scene4.swf</l>
+	<l>scene/scene5.swf</l>
+	<l>scene/snow1.swf</l>
+	<l>scene/snow2.swf</l>
+	<l>scene/star1.swf</l>
+	<l>scene/star2.swf</l>
+	<l>scene/star3.swf</l>
+	<l>scene/star4.swf</l>
+</scene>
+<skins>
+	<l name="WMP11" bg="bg/vista.jpg">skins/wmp11.jpg</l>
+	<l name="金属板" bg="bg/vista.jpg" mode="1|#FF6600">skins/plate.jpg</l>
+	<l name="魔兽" bg="bg/warcraft.jpg">skins/warcraft.png</l>
+	<l name="半透明" bg="bg/ff7.jpg">skins/cmp_translucence.png</l>
+	<l name="简单黑色" bg="bg/vista.jpg">skins/cmp_black.jpg</l>
+	<l name="简单蓝色" bg="bg/vista.jpg">skins/cmp_blue.png</l>
+	<l name="绿色透明" bg="bg/vista.jpg">skins/cmp_greenbg.png</l>
+	<l name="MSN蓝色" bg="bg/vista.jpg">skins/msn_blue.png</l>
+	<l name="QQ2006" bg="bg/vista.jpg">skins/qq.png</l>
+</skins>
+<ads>
+	<l><![CDATA[<a href="http://bbs.cenfun.com/"><font color="#ff0000">欢迎大家使用CenFun Music Player</font></a>]]></l>
+	<l><![CDATA[<a href="http://bbs.cenfun.com/"><font color="#00ff00">点击进入CMP论坛交流</font></a>]]></l>
+	<l>在标题上点击右键可以更换皮肤</l>
+	<l>+/-号音量调节，上/下/左/右键是上首/下首/快退/快进</l>
+	<l>双击播放器/F键/点击右上角方框是切换播放视频时窗口</l>
+</ads>
+<set>
+	<l>lang=zh-CN</l>
+	<l>scaleMode=0</l>
+	<l>autoPlay=0</l>
+	<l>titleColor=#00ff00</l>
+	<l>lrcAlign=center</l>
+	<l>lrcColor1=#00bd00</l>
+	<l>lrcColor2=#00ff00</l>
+	<l>listColor1=#00bd00</l>
+	<l>listColor2=#ffffff</l>
+	<l>classColor1=#00bd00</l>
+	<l>classColor2=#ffffff</l>
+	<l>bgColor=#000000</l>
+</set>
+</config>

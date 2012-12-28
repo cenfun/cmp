@@ -1,0 +1,55 @@
+﻿<skin name="CMP-XDJ" version="1.1" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" mask_color="" show_tips="0.5" context_menu="">
+  <option xywh="177C, 19C, 240, 200" src="win.png" lock="0" display="0" group="" >
+    <pane xywh="10, 29, 220, 150" align="left" font="Arial" size="12" color="#666666, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <bt_close xywh="10R, 6, 15, 14" src="bt_close.png"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+  </option>
+  <list xywh="177C, 19C, 240, 200" src="win.png" mask="" lock="0" display="0" group="" >
+    <tree xywh="10, 29, 220, 150" align="left" font="Arial" size="12" color="#666666, #ffffff"/>
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <bt_close xywh="10R, 6, 15, 14" src="bt_close.png"/>
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+  </list>
+  <lrc xywh="177C, 19C, 240, 200" src="win.png" lock="0" display="0" group="" >
+    <text xywh="10, 29, 220, 150" align="center" font="宋体" size="12" color="#666666, #ffffff" horizontal="0" max_scale="3" />
+    <bt_close xywh="10R, 6, 15, 14" src="bt_close.png"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+  </lrc>
+  <media xywh="177C, 19C, 240, 200" src="win.png" mask="" lock="0" display="0" group="">
+    <video xywh="10, 29, 220, 150"/>
+    <bt_close xywh="10R, 6, 15, 14" src="bt_close.png"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+  </media>
+  <console xywh="0C, 0C, 600, 240" src="console.swf" mask="" lock="1" display="1" group="A">
+    <bt_next xywh="23, 74, 15, 16" src="bt_next.png" tips="下一首"/>
+    <bt_prev xywh="23, 93, 15, 16" src="bt_prev.png" tips="上一首"/>
+    <bt_play xywh="19, 191, 22, 22" src="bt_play.png" tips="播放,暂停"/>
+    <bt_stop xywh="18, 170, 16, 17" src="bt_stop.png" tips="停止"/>
+    <status xywh="54, 50, 68, 17" align="left" font="Verdana" size="12" color="#636363" borderColor="" />
+    <title xywh="182, 50, 126, 17" align="left" font="Verdana" size="12" color="#636363" borderColor="" />
+    <time_position xywh="190, 75, 55, 16" align="right" font="Verdana" size="9" color="#636363" borderColor="" shadow="1,-90,#000000,0.5,1,1,1,3" />
+    <time_duration xywh="190, 88, 55, 16" align="right" font="Verdana" size="9" color="#636363" borderColor="" shadow="1,-90,#000000,0.5,1,1,1,3" />
+    <number xywh="182, 112, 60, 11" src="number.png" tips="播放时间,播放倒计时" />
+    <bt_mute xywh="327, 184, 11, 12" src="bt_mute.png" hover_volume="0" tips="静音,打开声音" />
+    <volume xywh="324, 182, 45, 17" thumb_src="volume_thumb.png" track_src="volume_track.png" src="" rotation="-90" />
+    <progress xywh="210, 201, 110, 16" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="0" />
+    <bt_list xywh="188, 135, 19, 16" src="bt_list.png" tips="关闭列表,打开列表"/>
+    <bt_video xywh="188, 155, 19, 16" src="bt_video.png" tips="关闭频谱,打开频谱"/>
+    <bt_option xywh="188, 175, 19, 16" src="bt_option.png" tips="关闭设置,打开设置"/>
+    <bt_single xywh="215, 135, 30, 16" src="bt_single.png" tips="单曲播放" />
+    <bt_random xywh="215, 155, 30, 16" src="bt_random.png" tips="无序播放" />
+    <bt_repeat xywh="215, 175, 30, 16" src="bt_repeat.png" tips="重复播放" />
+  </console>
+  <languages>
+    <msg id="state_buffering">缓冲</msg>
+  </languages>
+</skin>

@@ -1,0 +1,18 @@
+﻿<!--
+
+announce_content = "生活需要音乐，欢迎使用<a href='http://bbs.cenfun.com/'><font color='#ff0000'><b>CMP</b></font></a> Life needs music, Welcome to CMP"
+
+当内容需要包含html时，需要(到这里http://tools.cenfun.com/)进行转义，否则将导致配置文件xml格式错误
+使用api直接传值无需转义，下面是已经转义过的值：
+
+-->
+<cmp 
+
+	announce_content = "%E7%94%9F%E6%B4%BB%E9%9C%80%E8%A6%81%E9%9F%B3%E4%B9%90%EF%BC%8C%E6%AC%A2%E8%BF%8E%E4%BD%BF%E7%94%A8%3Ca%20href%3D'http%3A%2F%2Fbbs.cenfun.com%2F'%3E%3Cfont%20color%3D'%23ff0000'%3E%3Cb%3ECMP%3C%2Fb%3E%3C%2Ffont%3E%3C%2Fa%3E%20Life%20needs%20music%2C%20Welcome%20to%20CMP"
+
+	announce_xywh = "0,0,100P,20"
+	announce_speed = "1"
+
+	plugins = "plugins/announce.swf"
+
+/>

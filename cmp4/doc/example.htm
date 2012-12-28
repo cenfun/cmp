@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - 使用范例</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP4插入到页面</h3>
+<div class="submsg">
+  <div>CMP就是个flash，可以使用插入flash的通用方式嵌入到网页中。比如：直接使用html的object标签，或者使用流行的<a href="http://code.google.com/p/swfobject/" target="_blank">swfobject</a></div>
+  <div>但是CMP4还有一些特殊功能和应用，为此提供了CMP专用嵌入脚本：<a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js" target="_blank">cmp.js</a>，以下就是一些CMP嵌入的例子</div>
+  <h5>直接在当前位置写入，最简方式：</h5>
+  <div class="code">&lt;script type=&quot;text/javascript&quot; src=&quot;http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js&quot;&gt;&lt;/script&gt;<br />
+    &lt;script type=&quot;text/javascript&quot;&gt;<br />
+    CMP.<strong>write</strong>(&quot;cmp&quot;, &quot;600&quot;, &quot;400&quot;, &quot;cmp.swf&quot;);<br />
+    &lt;/script&gt;</div>
+  <h5>在指定容器中插入，易于扩展：</h5>
+  <div class="code">&lt;div id=&quot;<strong>player</strong>&quot; style=&quot;width:600px;height:400px;&quot;&gt;&lt;/div&gt;<br />
+    &lt;script type=&quot;text/javascript&quot; src=&quot;http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js&quot;&gt;&lt;/script&gt;<br />
+    &lt;script type=&quot;text/javascript&quot;&gt;<br />
+    var htm = CMP.<strong>create</strong>(&quot;cmp&quot;, &quot;100%&quot;, &quot;100%&quot;, &quot;cmp.swf&quot;);<br />
+    document.getElementById(&quot;<strong>player</strong>&quot;).innerHTML = htm;<br />
+    &lt;/script&gt; </div>
+  <h5>插入的同时传递一些参数：</h5>
+  <div class="code">&lt;div id=&quot;player&quot; style=&quot;width:600px;height:400px;&quot;&gt;&lt;/div&gt;<br />
+    &lt;script type=&quot;text/javascript&quot; src=&quot;http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js&quot;&gt;&lt;/script&gt; <br />
+    &lt;script type=&quot;text/javascript&quot;&gt;<br />
+    var <strong>flashvars</strong> = {
+    <div>name : &quot;CMP4&quot;,<br />
+      skin : &quot;skins/vplayer.zip&quot;,<br />
+      lists : &quot;mylist.xml&quot;</div>
+    };<br />
+    var htm = CMP.create(&quot;cmp&quot;, &quot;100%&quot;, &quot;100%&quot;, &quot;cmp.swf&quot;, <strong>flashvars</strong>);<br />
+    document.getElementById(&quot;player&quot;).innerHTML = htm;<br />
+    &lt;/script&gt;</div>
+  <div>其中flashvars参数也支持字符串的形式(注意值需要URL转义)，如：<br />
+    var flashvars = "name=CMP4&amp;skin=skins/vplayer.zip&amp;lists=mylist.xml";</div>
+  <h5>支持页面JS脚本回调的更全面方式：<a name="cmpo"></a></h5>
+  <div class="code"> &lt;div id=&quot;player&quot; style=&quot;width:600px;height:400px;&quot;&gt;&lt;/div&gt;<br />
+    &lt;script type=&quot;text/javascript&quot; src=&quot;http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js&quot;&gt;&lt;/script&gt; <br />
+    &lt;script type=&quot;text/javascript&quot;&gt;<br />
+    var cmpo;<br />
+    function <strong>cmp_loaded</strong>(key) {
+    <div> cmpo = CMP.<strong>get</strong>(&quot;<strong>cmp</strong>&quot;);<br />
+      if (cmpo) {
+      <div> document.title = cmpo.config(&quot;name&quot;);<br />
+        cmpo.addEventListener(&quot;model_load&quot;, &quot;cmp_model_load&quot;);</div>
+      }</div>
+    }<br />
+    function cmp_model_load(data) {
+    <div> document.title = cmpo.item(&quot;label&quot;);</div>
+    }<br />
+    var flashvars = {
+    <div> name : &quot;CMP4&quot;,<br />
+      skin : &quot;skins/vplayer.zip&quot;,<br />
+      lists : &quot;mylist.xml&quot;,<br />
+      <strong>api</strong> : &quot;<strong>cmp_loaded</strong>&quot;</div>
+    };<br />
+    var htm = CMP.create(&quot;<strong>cmp</strong>&quot;, &quot;100%&quot;, &quot;100%&quot;, &quot;cmp.swf&quot;, flashvars);<br />
+    document.getElementById(&quot;player&quot;).innerHTML = htm;<br />
+    &lt;/script&gt;</div>
+  <div>只有回调<strong>cmp_loaded</strong>函数然后获取CMP所在flash的<strong>cmpo</strong>对象后，才可以进行<a href="api_js.htm">JavaScript API</a>通讯</div>
+  <div>更多高级开发的例子见：<a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/developer/" target="_blank">http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/developer/</a></div>
+</div>
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+﻿<skin name="TouchCMP" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" show_tips="0">
+  <console xywh="0, 0R, 100%, 80" src="console.png" mask="" lock="1" display="1" group="A" snap="" shadow="">
+    <bt_play xywh="10, 0C, 70, 70" src="bt_play.png" useHandCursor="true" />
+    <bt_stop xywh="90, 0C, 70, 70" src="bt_stop.png" useHandCursor="true" />
+    <bt_fullscreen xywh="10R, 0C, 70, 70" src="bt_fullscreen.png" useHandCursor="true" />
+    <progress xywh="40C, 10, 130B, 30" thumb_src="" track_src="progress_track.png" />
+    <title xywh="40C, 10R, 130B, 20" align="center" size="14" color="#cccccc" bold="1" borderColor="" />
+    <time xywh="40C, 15, 130B, 20" align="center" size="14" color="#cccccc" bold="1" borderColor="" />
+  </console>
+  <list xywh="0R, 80R, 50%, 100%" src="" mask="" lock="1" display="1" group="A" fade="0">
+    <tree xywh="0, 0, 100%, 100%" row_height="50" size="30" color="#666666, #ffffff" bold="1" />
+    <scrollbar thumb_src="scrollbar_thumb.png" track_src="scrollbar_track.png" />
+  </list>
+  <media xywh="0, 80R, 50%, 100%" src="media.swf" mask="" lock="1" display="1" group="A">
+    <video xywh="0, 0, 100%, 100%" show_buttons="0" />
+  </media>
+</skin>

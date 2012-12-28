@@ -1,0 +1,18 @@
+﻿<!--
+
+xiu56插件的cmp配置例子
+
+-->
+<cmp 
+
+	plugins = "plugins/xiu56.swf"
+
+	xiu56_label = "秀56美女直播"
+	xiu56_opened = "0"
+	xiu56_istop = "1"
+	xiu56_refresh = "1"
+	xiu56_refresh_time = "60"
+	xiu56_livelist = "http://xiu.56.com/api/liveListv3.php?page=1&rows=100"
+	xiu56_userapi = "http://xiu.56.com/api/userFlvApi.php?room_user_id="
+
+/>

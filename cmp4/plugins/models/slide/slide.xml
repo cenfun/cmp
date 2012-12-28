@@ -1,0 +1,13 @@
+﻿<list loop="1" delay="3" transition="0.5" bgcolor="#000000" xywh="10, 10, 0, 0" alpha="0.5" size="12" bold="1" color="#ffffff">
+  <m label="图片标题" src="logo.png" />
+  <m label="error图片测试" src="error.jpg" />	
+  <m label="cool" src="http://farm7.static.flickr.com/6149/5950414550_cc2b3b0079_b.jpg" />
+  <m label="可以为空" src="http://farm5.static.flickr.com/4084/5167982485_2116779883_b.jpg" />
+  <m label="可以设置字体" src="http://farm2.static.flickr.com/1338/5156216037_b19de33c16_b.jpg" />
+  <m label="可以设置滤镜" src="http://farm7.static.flickr.com/6134/5949869009_5ea0434a61.jpg" />
+  <m label="lanbo" src="http://farm7.static.flickr.com/6004/5950427218_83927aa6e2_b.jpg" />
+  <m label="" src="http://farm7.static.flickr.com/6018/5950459710_eb80926996_b.jpg" />
+  <m label="" src="http://farm7.static.flickr.com/6134/5950474912_23aacbedde_b.jpg" />
+  <m label="" src="images/1.jpg" />
+  <m label="" src="images/2.jpg" />
+</list>

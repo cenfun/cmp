@@ -1,0 +1,7 @@
+[ti:歌名]
+[ar:演唱]
+[al:专辑]
+[by:制作：CenFun]
+[offset:500]
+[00:02.50]Mp3音乐歌词测试
+[03:30.24]CenFun Music Player

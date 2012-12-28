@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>xywh test</title>
+<style type="text/css">
+html, body { padding:0; margin:0; text-align:center; background:#f5f5f5; font-size:12px; }
+#cmp { background:#181818; width:600px; height:400px; margin:10px auto; position:relative; }
+#win { background:#999999; width:320px; height:240px; position:absolute; top:10px; left:10px; }
+#pan { width:400px; margin:0px auto; text-align:left; border:1px solid #999; padding:5px 5px; }
+#cmp table { height:100%; border-collapse:collapse; position:relative; }
+#cmp table td { border:1px dotted #333333; }
+#win table td { border:1px dashed #666666; }
+table { margin-bottom:20px; }
+table td { padding:3px 3px; }
+#win_xywh { border:1px solid #666; padding:3px 3px; }
+</style>
+</head>
+<body>
+<div id="cmp">
+  <div id="win">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</div>
+<div id="pan">
+  <table border="0">
+    <tr>
+      <th>父容器宽：</th>
+      <td><input name="" type="text" id="cmp_width" size="8" /></td>
+      <th>高：</th>
+      <td><input name="" type="text" id="cmp_height" size="8" /></td>
+      <td><button id="cmp_resize"> 修 改 </button></td>
+    </tr>
+  </table>
+  <table border="0">
+    <tr>
+      <th>当前xywh值:</th>
+      <td colspan="2"><div id="win_xywh">10, 10, 320, 240</div></td>
+    </tr>
+    <tr>
+      <th>x横向:</th>
+      <td><input type="text" id="win_x" value="10" /></td>
+      <td><select id="win_x_ext">
+          <option value="">居左</option>
+          <option value="C">居中 C</option>
+          <option value="R">居右 R</option>
+          <option value="P">居左百分比 P</option>
+        </select></td>
+    </tr>
+    <tr>
+      <th>y纵向:</th>
+      <td><input type="text" id="win_y" value="10" /></td>
+      <td><select id="win_y_ext">
+          <option value="">居上</option>
+          <option value="C">居中 C</option>
+          <option value="R">居下 R</option>
+          <option value="P">居上百分比 P</option>
+        </select></td>
+    </tr>
+    <tr>
+      <th>w宽度:</th>
+      <td><input type="text" id="win_w" value="320" /></td>
+      <td><select id="win_w_ext">
+          <option value="">固定</option>
+          <option value="P">百分比 P</option>
+          <option value="B">边距 B</option>
+        </select></td>
+    </tr>
+    <tr>
+      <th>h高度:</th>
+      <td><input type="text" id="win_h" value="240" /></td>
+      <td><select id="win_h_ext">
+          <option value="">固定</option>
+          <option value="P">百分比 P</option>
+          <option value="B">边距 B</option>
+        </select></td>
+    </tr>
+    <tr>
+      <th>&nbsp;</th>
+      <td colspan="2"><button id="win_change"> 测 试 </button></td>
+    </tr>
+  </table>
+  <div> xywh图文详解见：<a href="http://bbs.cenfun.com/thread-11026-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11026-1-1.html</a> </div>
+</div>
+<script type="text/javascript">
+var cmp = $("cmp");
+var win = $("win");
+window.onload = function() {
+	$("cmp_width").value = cmp.offsetWidth;
+	$("cmp_height").value = cmp.offsetHeight;
+	$("cmp_resize").onclick = function(e) {
+		cmp.style.width = parseInt($("cmp_width").value) + "px";
+		cmp.style.height = parseInt($("cmp_height").value) + "px";
+		update();
+	};
+	$("win_change").onclick = function(e) {
+		update();
+	};
+};
+
+
+function update() {
+	var list  = [];
+	list.push($("win_x").value + $("win_x_ext").value);
+	list.push($("win_y").value + $("win_y_ext").value);
+	list.push($("win_w").value + $("win_w_ext").value);
+	list.push($("win_h").value + $("win_h_ext").value);
+	var win_xywh = list.join(", ");
+	$("win_xywh").innerHTML = win_xywh;
+	var arr = xywh(win_xywh, cmp.offsetWidth, cmp.offsetHeight);
+	win.style.left = arr[0] + "px";
+	win.style.top = arr[1] + "px";
+	win.style.width = arr[2] + "px";
+	win.style.height = arr[3] + "px";
+}
+
+function $(o) {
+	return document.getElementById(o);
+}
+
+// xywh ====================================================================
+function array(input) {
+	input = input.toString();
+	var arr = input.split(/\s*\,\s*/);
+	var out = [];
+	for ( var i = 0; i < arr.length; i++) {
+		if (arr[i]) {
+			out.push(arr[i]);
+		}
+	}
+	return out;
+}
+
+// 统一成大写,替换%为P
+function ns(str) {
+	if (!str) {
+		return [ 0, "" ];
+	}
+	var n = parseFloat(str);
+	if (isNaN(n)) {
+		n = 0;
+	}
+	var s = str.replace(n, "");
+	if (s == "%") {
+		s = "P";
+	}
+	return [ Math.round(n), s.toUpperCase() ];
+}
+//计算wh宽高， n为数值， s为P/B字符， v为xy位置修正值，t是否百分比修正 p为父长度
+function woh(n, s, v, t, p) {
+	var r;
+	if (s == "P") {
+		//仅百分比时候修正，位置长度
+		if (t == "P") {
+			v = Math.round(p * v * 0.01);
+		}
+		r = (p - v) * n * 0.01;
+	} else if (s == "B") {
+		r = p - 2 * n;
+	} else {
+		r = n;
+	}
+	if (r < 0) {
+		r = 0;
+	}
+	return Math.round(r);
+}
+// 计算xy位置， n为数值， s为C/R/P字符， v为wh宽高修正值， p为父长度
+function xoy(n, s, v, p) {
+	var r;
+	if (s == "C") {
+		r = (p - v) * 0.5 + n;
+	} else if (s == "R") {
+		r = p - v - n;
+	} else if (s == "P") {
+		r = p * n * 0.01;
+	} else {
+		r = n;
+	}
+	return Math.round(r);
+}
+// xywh字符，pw/ph父宽高
+function xywh(_xywh, pw, ph) {
+	if (!_xywh) {
+		return [ 0, 0, 0, 0 ];
+	}
+	var a = array(_xywh);
+	var tx = ns(a[0]);
+	var ty = ns(a[1]);
+	var tw = ns(a[2]);
+	var th = ns(a[3]);
+	//宽度高度
+	var rw = woh(tw[0], tw[1], tx[0], tx[1], pw);
+	var rh = woh(th[0], th[1], ty[0], ty[1], ph);
+	//横坐标纵坐标
+	var rx = xoy(tx[0], tx[1], rw, pw);
+	var ry = xoy(ty[0], ty[1], rh, ph);
+	return [ rx, ry, rw, rh ];
+}
+</script>
+</body>
+</html>

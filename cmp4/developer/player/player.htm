@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CMP4 Player</title>
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; overflow:hidden; text-align:center; }
+</style>
+</head>
+<body>
+<div id="listener_div" style="position:absolute;"></div>
+<center>
+  <div id="player"></div>
+</center>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
+<script type="text/javascript">
+function $(id) { return document.getElementById(id); }
+
+function sendData(data) {
+	var listener = CMP.get("listener");
+	if (listener) {
+		listener.sendData(data);
+	}	
+}
+
+function ondata(data) {
+	if (data != "test") {
+		cmp_init(data);
+	}
+}
+
+function onstate(data) {
+	//status, error, warning
+}
+
+function onloaded(data) {
+	output(data);
+}
+
+//收听者
+var htm = CMP.create("listener", "1", "1", "listener.swf", {lc:"connect_name", ondata:"ondata", onstate:"onstate", onloaded:"onloaded"}, {wmode:"window"} );
+$("listener_div").innerHTML = htm;
+
+window.onbeforeunload = window.onunload = function() {
+	if (window.opener && !window.opener.closed) {
+		window.opener.connected = false;
+	} else {
+		sendData("closed");	
+	}
+}
+
+//载入一个cmp，相关设置详情见cmp交流论坛相关专贴
+var flashvars = {
+	api:"cmp_loaded",
+	skin_id:0,
+	auto_play:0,
+	list_delete:1,
+	config:"",
+	lists:"",
+	context_menu:2
+};
+var htm = CMP.create("cmp", "600", "400", "http://cmp.cenfun.com/cmp4/cmp.swf", flashvars, {wmode:"window"} );
+$("player").innerHTML = htm;
+//加载完成
+var cmpo;
+function cmp_loaded(key) {
+	cmpo = CMP.get("cmp");
+	if (cmpo) {
+		cmp_init(window.opener.win_data);
+	}
+}
+
+function cmp_init(data) {
+	if (!data || typeof data === "string" || data.length != 2) {
+		return;	
+	}
+	var cmd = data[0];
+	var ids = data[1];
+	//
+	var xml = makeListXml(ids);
+	//取得配置
+	var state = cmpo.config("state");
+	//如果状态为正在播放，则先停止播放
+	if (cmd == "play" && state == "playing") {
+		cmpo.sendEvent("view_stop");
+	}
+	var play_id = cmpo.list().length + 1;
+	//写入新的列表
+	cmpo.list_xml(xml);
+	//开始播放
+	if (cmd == "play") {
+		cmpo.sendEvent("view_play", play_id);
+	}
+	window.focus();
+}
+
+function makeListXml(ids) {
+	var xml = "<list>";
+	for (var i = 0; i < ids.length; i ++) {
+		var o = ids[i];
+		xml += '<m label="'+o+'" src="music/'+o+'" />';
+	}
+	xml += "</list>";
+	return xml;
+}
+</script>
+</body>
+</html>

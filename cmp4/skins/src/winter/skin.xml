@@ -1,0 +1,44 @@
+﻿<skin name="Winter冬季恋歌" version="1.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" show_tips="0.5">
+  <option xywh="0C, -10C, 340, 400" src="win.png" lock="1" display="0" group="A" fade="1" snap="0">
+    <pane xywh="1, 1, 1B, 1B" align="left" font="" size="12" color="#eeeeee, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="" track_src=""/>
+    <bt_close xywh="0R, -20, 62, 20" src="bt_close.png" useHandCursor="true"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+  </option>
+  <media xywh="0C, -10C, 340, 400" src="win.png" lock="1" display="0" group="A" fade="1" snap="0">
+    <video xywh="1, 1, 1B, 1B" />
+    <bt_close xywh="0R, -20, 62, 20" src="bt_close.png" useHandCursor="true"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+  </media>
+  <list xywh="0C, -10C, 340, 400" src="win.png" lock="1" display="0" group="A" fade="1" snap="0">
+    <tree xywh="1, 1, 1B, 1B" align="left" font="" size="12" color="#dddddd, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="" track_src=""/>
+    <bt_close xywh="0R, -20, 62, 20" src="bt_close.png" useHandCursor="true"/>
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+  </list>
+  <lrc xywh="0C, -10C, 340, 400" src="win.png" lock="1" display="0" group="A" fade="1" snap="0">
+    <text xywh="1, 21, 1B, 11B" align="center" font="Arial" color="#dddddd, #ffffff">
+      <kmc show_info="1" size="16" bold="1" align="center, center" />
+    </text>
+    <bt_close xywh="0R, -20, 62, 20" src="bt_close.png" useHandCursor="true"/>
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="media" property="display" value="0" />
+  </lrc>
+  <console xywh="0C, 0C, 350, 520" src="snow.swf" lock="1" display="1" group="A" fade="1" snap="0">
+    <bt_play xywh="0C, 10R, 45, 45" src="bt_play.png" useHandCursor="true" />
+    <bt_mute xywh="-48C, 10R, 35, 35" src="bt_mute.png" useHandCursor="true" />
+    <bt_stop xywh="48C, 10R, 35, 35" src="bt_stop.png" useHandCursor="true" />
+    <volume xywh="10, 20R, 90, 10" track_src="volume_track.png" />
+    <progress xywh="10R, 20R, 90, 10" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="0" />
+    <title xywh="5, 5, 200, 22" size="14" color="#ffffff" borderColor="" bold="1" shadow="2,45,#000000,0.5,4,4,1,3" />
+    <status xywh="6, 28, 265, 18" size="12" color="#ffffff" borderColor="" shadow="1,45,#000000,0.5,4,4,1,3" />
+    <time xywh="5R, 7, 140, 18" align="right" color="#ffffff" borderColor="" shadow="1,45,#000000,0.5,4,4,1,3" />
+  </console>
+</skin>

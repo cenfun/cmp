@@ -1,0 +1,95 @@
+﻿<!--
+CMP4默认皮肤
+
+皮肤参数文档说明：
+【skin.xml】CMP4皮肤配置文件详解
+http://bbs.cenfun.com/thread-11028-1-1.html
+
+-->
+<skin name="Default" version="2.0" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="CMP4默认皮肤新版" preview="" mask_color="" show_tips="0.5" context_menu="1">
+  <option xywh="164C, -12C, 240, 306" src="" mask="" lock="1" display="0" group="A" fade="0">
+    <pane xywh="0, 0, 100P, 100P" align="left" font="" size="12" color="#666666, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <bt_close xywh="-8, 0C, 8, 70" src="bt_close.png" tips="关闭设置" />
+    <event type="open" target="list" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="1" />
+    <event type="open" target="media" property="xywh" value="-124C, -45C, 322, 242" />
+    <event type="close" target="lrc" property="display" value="0" />
+    <event type="close" target="media" property="xywh" value="0C, -12C, 570, 308" />
+  </option>
+  <list xywh="164C, -12C, 240, 306" src="list.png" mask="" lock="1" display="1" group="A" fade="0">
+    <tree xywh="0, 18R, 100P, 100P" align="left" font="Arial" size="12" color="#666666, #ffffff" bold="0" show_delete="0" show_icon="1" />
+    <search xywh="1, 0R, 235, 18" align="left" font="Arial" size="12" color="#555555, #999999" borderColor="" backgroundColor="" bold="" value="请输入关键字" />
+    <scrollbar thumb_src="scrollbar_thumb.png" button_src="scrollbar_button.png" track_src="scrollbar_track.png"/>
+    <icons bullet="" opened="" closed="" />
+    <bt_close xywh="-8, 0C, 8, 70" src="bt_close.png" tips="关闭列表" />
+    <event type="open" target="option" property="display" value="0" />
+    <event type="open" target="lrc" property="display" value="1" />
+    <event type="open" target="media" property="xywh" value="-124C, -45C, 322, 242" />
+    <event type="close" target="lrc" property="display" value="0" />
+    <event type="close" target="media" property="xywh" value="0C, -12C, 570, 308" />
+  </list>
+  <lrc xywh="-124C, 111C, 322, 60" src="" mask="" lock="1" display="1" group="A" shadow="1,90,#000000,1,2,2,1,1">
+    <text xywh="2, 2, 2B, 2B" align="center" font="Arial" size="12" leading="0" color="#666666, #ffffff" horizontal="0" max_scale="2" max_button="0" >
+      <kmc line_mode="0" time_preview="5000" time_sec3="8000" show_info="1" margin="0" size="12" bold="0" align="center, center" color="#999999, #ffffff" />
+    </text>
+    <bt_close xywh="" src="" tips="" />
+  </lrc>
+  <media xywh="-124C, -45C, 322, 242" src="media.png" mask="" lock="1" display="1" group="A">
+    <video xywh="1, 1, 1B, 1B" show_icon="1" show_buttons="1"/>
+    <bt_close xywh="" src="" tips="" />
+  </media>
+  <console xywh="0C, 0C, 580, 380" src="console.png" mask="" lock="1" display="1" group="A" snap="true" shadow="1,90,#000000,0.3,4,4,1,3">
+    <bt_play xywh="5, 4R, 40, 40" src="bt_play.png" tips="播放,暂停" />
+    <bt_stop xywh="50, 3R, 25, 25" src="bt_stop.png" tips="停止" />
+    <bt_prev xywh="75, 3R, 25, 25" src="bt_prev.png" tips="上一个" />
+    <bt_next xywh="100, 3R, 25, 25" src="bt_next.png" tips="下一个" />
+    <bt_rewind xywh="" src="" tips="快退" />
+    <bt_forward xywh="" src="" tips="快进" />
+    <bt_random xywh="80R, 3R, 25, 25" src="bt_random.png" tips="打开无序,关闭无序" />
+    <bt_repeat xywh="55R, 3R, 25, 25" src="bt_repeat.png" tips="打开重复,关闭重复" />
+    <bt_mute xywh="107R, 26R, 21, 21" src="bt_mute.png" tips="静音,打开声音" hover_volume="" />
+    <volume xywh="10R, 31R, 89, 11" thumb_src="volume_thumb.png" track_src="volume_track.png" src="" tips="音量" />
+    <progress xywh="54, 32R, 390, 9" thumb_src="progress_thumb.png" track_src="progress_track.png" tips="定位" />
+    <bt_video xywh="" src="" tips="关闭视频,打开视频" />
+    <bt_lrc xywh="" src="" tips="关闭歌词,打开歌词" />
+    <bt_fullscreen xywh="105R, 3R, 25, 25" src="bt_fullscreen.png" fullscreen_scale="1" fullscreen_max="video" tips="打开全屏,退出全屏" />
+    <bt_option xywh="30R, 3R, 25, 25" src="bt_option.png" tips="关闭设置,打开设置" />
+    <bt_list xywh="5R, 3R, 25, 25" src="bt_list.png" tips="关闭列表,打开列表" />
+    <status xywh="130, 7R, 185, 18" align="left" font="Arial" size="12" color="#cccccc" borderColor="" backgroundColor="" bold="" shadow="1,90,#000000,0.5,1,1,1,1"/>
+    <time xywh="133R, 7R, 130, 18" align="right" font="Arial" size="12" color="#cccccc" borderColor="" backgroundColor="" bold="" shadow="1,90,#000000,0.5,1,1,1,1"/>
+    <title xywh="26, 3, 450, 18" align="left" font="Verdana" size="12" color="#cccccc" bold="1" borderColor="" shadow="1,90,#000000,1,2,2,1,1" />
+    <number xywh="5R, 4, 78, 18" src="number.png" alpha="1" rotation="0" tips="播放时间,播放倒计时" />
+  </console>
+  <languages>
+    <msg id="state_undefined">未定义</msg>
+    <msg id="state_connecting">连接中</msg>
+    <msg id="state_buffering">缓冲</msg>
+    <msg id="state_playing">正在播放</msg>
+    <msg id="state_paused">已暂停</msg>
+    <msg id="state_stopped">已停止</msg>
+    <msg id="state_completed">播放完成</msg>
+    <msg id="state_reconnecting">重试连接</msg>
+    <msg id="menu_fullscreen">全屏切换</msg>
+    <msg id="menu_list">列表</msg>
+    <msg id="menu_lrc">歌词</msg>
+    <msg id="menu_video">视频</msg>
+    <msg id="menu_option">选项</msg>
+    <msg id="option_title_skins">设置皮肤</msg>
+    <msg id="option_title_about">关于程序</msg>
+    <msg id="option_skin_waiting">等待加载</msg>
+    <msg id="option_skin_loading">加载中</msg>
+    <msg id="option_skin_error">皮肤错误</msg>
+    <msg id="option_skin_version">版本</msg>
+    <msg id="option_skin_author">作者</msg>
+    <msg id="option_skin_email">邮箱</msg>
+    <msg id="option_skin_url">网址</msg>
+    <msg id="option_skin_readme">说明</msg>
+    <msg id="option_copy_url">复制分享地址</msg>
+    <msg id="option_copy_embed">复制插入代码</msg>
+    <msg id="option_copied">已复制</msg>
+    <msg id="view_listing">加载列表</msg>
+    <msg id="view_nothing">没有找到任何信息</msg>
+    <msg id="view_error">错误</msg>
+  </languages>
+</skin>

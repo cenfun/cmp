@@ -1,0 +1,612 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - 全局配置【config.xml】</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP4获取配置的各种方法</h3>
+<div class="submsg">
+  <h4>CMP基于flash开发，同所有flash一样，参数有以下两个来源：</h4>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="200">URL中的查询字符串</th>
+        <td>cmp.swf?<strong>parameter_name=parameter_value</strong></td>
+      </tr>
+      <tr>
+        <th>HTML的FlashVars参数值</th>
+        <td>&lt;param name=&quot;<strong>flashvars</strong>&quot; value=&quot;<strong>parameter_name=parameter_value</strong>&quot; /&gt;</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>CMP所有参数都可以从以上2种方式传入，<strong>URL</strong>传参可以很方便用于<strong><a href="http://bbs.cenfun.com/thread-11766-1-1.html" target="_blank">单曲播放</a></strong>，而用<strong><a href="http://bbs.cenfun.com/thread-11970-1-1.html" target="_blank">flashvars</a></strong>可以结合浏览器缓存最大化的<strong>优化网络</strong>。<br />
+    尽管以上方式可以传入所有参数，但如果太多的话就会很杂，不宜管理，还有<a href="http://bbs.cenfun.com/thread-11065-1-1.html" target="_blank">转义问题</a>，URL长度限制问题(IE限2083长度)等<br />
+    所以，CMP还支持通过<strong>加载一个XML配置文件</strong>来读取参数的方式，实际上就是将需要的参数打包到这个配置文件中，然后进行加载解析</div>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="200">加载一个XML配置文件</th>
+        <td>默认配置文件为<strong>config.xml</strong>，也可以用url参数自定义：cmp.swf?url=myconfig.xml</td>
+      </tr>
+    </tbody>
+  </table>
+  <h6><a href="javascript:void(0)" class="spread" onclick="collapse(this, 'config_load_ways')">所有CMP4支持的配置加载方式</a></h6>
+  <div id="config_load_ways" style="display:none;">
+    <h5>下面就按优先级从高到低，列出CMP4所有支持的配置传入方法：</h5>
+    <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+      <tbody>
+        <tr>
+          <th>1</th>
+          <td>通过URL参数方式传入所有CMP支持的参数，优先级最高，也就是将覆盖所有其他方式传入的同样名称的参数</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>通过URL参数方式传入配置内容，也就是将配置的xml内容以一个字符串传入(此时下面的方式都失效)</td>
+        </tr>
+        <tr>
+          <th>&nbsp;</th>
+          <td>(以下都是传入配置文件路径，也就是通过加载配置文件来传入参数)</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>自适应文件名路径方式，如：主程序名为ABCDEF.swf，也就是6个大写字母或数字的组合，将自动加载ABCDEF.xml为配置<br />
+            (注意，此方式不能用方式6的自定义url，否则不会生效，也就是优先级低于6，但高于4) </td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>id路径方式，如cmp.swf?id=1，则自动加载1.xml的文件作为配置</td>
+        </tr>
+        <tr>
+          <th>5</th>
+          <td>服务端程序路径方式，如cmp.swf?asp=1，将加载cmp.asp?id=1为配置，同样还支持aspx/php/jsp/cgi</td>
+        </tr>
+        <tr>
+          <th>6</th>
+          <td>完全指定配置路径方式，也就是指定url参数，如cmp.swf?url=myconfig.xml，这是以上路径方式的通用方式</td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td>如果没有以上任何指定，则加载默认配置config.xml，优先级最低(可以设置url为空来不加载任何配置文件：cmp.swf?url=)</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>同时存在2种传入方式时，则优先级高的方式定义的参数，将覆盖优先级低定义的参数</h4>
+    <div>一般用户采用默认方式<strong>7</strong>就可以了，编辑config.xml即可<br />
+      要自定义路径，则一般采用方式<strong>6</strong>，url的方式，传入内容可以用方式<strong>2</strong><br />
+      而多用户程序的话，一般采用方式<strong>5</strong>，也可以<strong>6</strong>全路径，但地址较长<br />
+      如果服务器支持rewrite，推荐用方式<strong>3</strong>或方式<strong>4</strong>，最好当然是<strong>3</strong><br />
+      如果是页面调用，牵扯api等等，就采用方式<strong>1</strong><br />
+    </div>
+  </div>
+  <div>注：最新版本的CMP4，如果主程序文件名中含有local字符串（如：cmp_local.swf），则不支持跨域加载配置列表等数据<br />
+    也就是加载的数据不能使用绝对地址，只能用相对地址从本域加载，此方法可以减少CMP主程序被第三方恶意调用</div>
+</div>
+<div class="line"></div>
+<h3>CMP4支持的所有全局配置参数</h3>
+<div class="submsg">
+  <h6><a href="javascript:void(0)" class="spread" onclick="collapse(this, 'config_params_list')">全局配置参数快捷查询(按开头字母分组)</a></h6>
+  <div id="config_params_list" style="display:none;" class="plist">loading ...</div>
+  <h5>自定义配置路径相关参数</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">config</th>
+        <td id="config_config">配置内容参数，cmp.swf?config=配置内容，也就是将配置的xml内容以一个字符串传入</td>
+      </tr>
+      <tr>
+        <th>url</th>
+        <td id="config_url">自定义完整配置路径，默认值为config.xml，如cmp.swf?url=config.asp</td>
+      </tr>
+      <tr>
+        <th>id</th>
+        <td id="config_id">id标识的快捷配置路径方式，如cmp.swf?id=1，则自动加载1.xml的文件作为配置</td>
+      </tr>
+      <tr>
+        <th>asp</th>
+        <td id="config_asp">服务端为asp程序的快捷配置路径方式，如cmp.swf?asp=1，将加载cmp.asp?id=1为配置</td>
+      </tr>
+      <tr>
+        <th>aspx</th>
+        <td id="config_aspx">服务端为aspx程序的快捷配置路径方式，如cmp.swf?aspx=1，将加载cmp.aspx?id=1为配置</td>
+      </tr>
+      <tr>
+        <th>php</th>
+        <td id="config_php">服务端为php程序的快捷配置路径方式，如cmp.swf?php=1，将加载cmp.php?id=1为配置</td>
+      </tr>
+      <tr>
+        <th>jsp</th>
+        <td id="config_jsp">服务端为jsp程序的快捷配置路径方式，如cmp.swf?jsp=1，将加载cmp.jsp?id=1为配置</td>
+      </tr>
+      <tr>
+        <th>cgi</th>
+        <td id="config_cgi">服务端为cgi程序的快捷配置路径方式，如cmp.swf?cgi=1，将加载cmp.cgi?id=1为配置</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>各种方式优先级和使用范围，见上文的CMP4获取配置的各种方法，跨域加载配置文件时，需跨域策略文件<a href="crossdomain.htm">crossdomain.xml</a>支持</div>
+  <h5>基本信息</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">name</th>
+        <td id="config_name">自定义播放器的名称，默认为当前CMP版本值</td>
+      </tr>
+      <tr>
+        <th>link</th>
+        <td id="config_link">右键中点击名称打开的链接，默认为CMP论坛地址</td>
+      </tr>
+      <tr>
+        <th>link_target</th>
+        <td id="config_link_target">链接是在当前窗口(默认_self)还是新窗口(_blank)打开</td>
+      </tr>
+      <tr>
+        <th>description</th>
+        <td id="config_description">描述，无歌词时显示，默认为空</td>
+      </tr>
+      <tr>
+        <th>logo</th>
+        <td id="config_logo">加载logo图标的地址，默认为空，支持AS3 API<br />
+          支持多个和多属性定义，如居右下角显示：logo="{src:logo.png,xywh:[10R,10R,0,0]}"</td>
+      </tr>
+      <tr>
+        <th>logo_alpha</th>
+        <td id="config_logo_alpha">logo全局透明度，默认0.2</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>如果在受限页面中，将无法打开链接，或者被浏览器拦截</div>
+  <h5>皮肤相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">skins</th>
+        <td id="config_skins">预加载皮肤的地址列表，可设置多个，逗号隔开，如skins="default.zip,wmp11.zip"<br />
+          提示：如果皮肤路径格式都正确，但加载错误，可能是因为空间对zip文件的限制访问导致，可尝试将后缀改为swf等</td>
+      </tr>
+      <tr>
+        <th>skin_id</th>
+        <td id="config_skin_id">当前需要使用皮肤的id序号，默认值为1，如果没有设置以上skins皮肤列表，则加载默认皮肤，此时skin_id为0</td>
+      </tr>
+      <tr>
+        <th>skin</th>
+        <td id="config_skin">单个皮肤地址快捷设置，它将自动附加到上面skins设置的前面，并强制skin_id为1</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>很多空间存在.zip后缀文件无权读取的问题，可尝试修改皮肤后缀为swf或jpg解决，如skin="default.swf"</div>
+  <h5>插件和背景</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th>plugins</th>
+        <td id="config_plugins">插件地址列表，支持多个，支持多属性自定义（最新版本CMP支持将多个插件打包成zip文件一起加载）</td>
+      </tr>
+      <tr>
+        <th>plugin</th>
+        <td id="config_plugin">附加插件地址，将自动附加到plugins参数前面</td>
+      </tr>
+      <tr>
+        <th>models</th>
+        <td id="config_models">自定义模块地址，将自动附加到plugins参数前面(优先级低于plugin参数)</td>
+      </tr>
+      <tr>
+        <th>backgrounds</th>
+        <td id="config_backgrounds">背景地址列表，支持多个，支持多属性自定义</td>
+      </tr>
+      <tr>
+        <th>background</th>
+        <td id="config_background">附加背景地址，将自动添加到backgrounds参数前面</td>
+      </tr>
+      <tr>
+        <th>bgcolor</th>
+        <td id="config_bgcolor">播放器所在flash背景颜色，默认为空</td>
+      </tr>
+      <tr>
+        <th width="150">plugins_disabled</th>
+        <td id="config_plugins_disabled">是否禁用加载所有插件，默认为0不禁用</td>
+      </tr>
+    </tbody>
+  </table>
+  <h6><a href="javascript:void(0)" class="spread" onclick="collapse(this, 'plugins')">插件相关格式说明</a></h6>
+  <ul id="plugins" style="display:none;">
+    <li>插件其实就是相对于背景的前景，在最上层，背景也是插件只是在最底层</li>
+    <li>都支持多个，用英文逗号隔开，在前的先加载放在下面，后面的后加载放在前面的上面</li>
+    <li>可直接填写地址，如：plugins="plugins/bigbg.swf,plugins/mm.jpg"</li>
+    <li>如果要为某个插件传入一些设置，则可采用括号的方式： backgrounds="{src:plugins/bigbg.swf,xywh:[0C,0C,0,0]}"</li>
+    <li>各个属性用逗号隔开，属性名称和值用冒号隔开，如{lock:1,display:0}</li>
+    <li>repeat表示是否支持平铺，仅用于加载图片类型，取值0或1，默认为0不平铺</li>
+    <li>传入xywh时，需要将其值用中括号括起来</li>
+    <li>支持lock锁定，默认为锁定不能拖动，可以设置lock:0来支持拖动</li>
+    <li>支持display:0或1来显示和隐藏插件或背景，默认显示</li>
+    <li>除了以上还支持部分flash里显示对象的其他属性传入，如旋转rotation，透明度alpha等</li>
+  </ul>
+  <h5>播放列表相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">lists</th>
+        <td id="config_lists">列表文件地址，默认为list.xml，可设置多个，如"list1.xml,list2.xml,list3.xml"<br />
+          跨域加载列表文件时，需跨域策略文件<a href="crossdomain.htm">crossdomain.xml</a>支持<br />
+          （最新版本CMP支持将多个列表打包成zip文件一起加载）</td>
+      </tr>
+      <tr>
+        <th>list</th>
+        <td id="config_list">将一个列表xml的内容以一个字符串的方式传入</td>
+      </tr>
+      <tr>
+        <th>play_mode</th>
+        <td id="config_play_mode">播放模式(控制窗口目前仅提供3个控制按钮，也就是重复按钮，随机按钮，单曲按钮)<br />
+          "0"或"normal" 正常顺序播放模式，默认模式，即按列表顺序逐个播放<br />
+          "1"或"repeat" 重复播放模式，即播放完成后再反复播放<br />
+          "2"或"random" 随机播放模式，即从列表随机选择一个播放<br />
+          "3"或"upward" 按列表向上播放模式，和正常顺序播放方向相反<br />
+          "4"或"single" 单个播放模式，即单个播放完成后停止</td>
+      </tr>
+      <tr>
+        <th>play_id</th>
+        <td id="config_play_id"><p>指定当前播放的列表id序号，默认为1，最后一个播放的id将被自动保留</p>
+          <p>如果开启自动播放，而且有src单曲设置，则此参数无效</p></td>
+      </tr>
+      <tr>
+        <th>auto_play</th>
+        <td id="config_auto_play">是否开启自动播放，0：不开启（默认）， 1：开启</td>
+      </tr>
+      <tr>
+        <th>auto_open</th>
+        <td id="config_auto_open">当下一个要播放的项是一个目录时，是否自动打开后进行播放，0：不进行自动打开（默认），1：开启自动打开</td>
+      </tr>
+      <tr>
+        <th>click_play</th>
+        <td id="config_click_play">是否单击列表开始播放，默认为0，即需要双击才播放</td>
+      </tr>
+      <tr>
+        <th>click_next</th>
+        <td id="config_click_next">双击播放模式下，点击了播放项以外的另一项后，是否将此项作为下一个要播放的项，无视播放模式选择，默认为1，开启选择</td>
+      </tr>
+      <tr>
+        <th>default_type</th>
+        <td id="config_default_type">默认媒体的类型，默认为video，即无法识别媒体类型时，将使用视频模块去处理，如改为sound则默认为声音类型</td>
+      </tr>
+      <tr>
+        <th>list_delete</th>
+        <td id="config_list_delete">是否在列表显示列表删除按钮(内存中删除)，默认0不显示，为1则可在列表每一行后显示一个删除按钮</td>
+      </tr>
+      <tr>
+        <th>list_error</th>
+        <td id="config_list_error">是否在播放错误时显示错误次数，默认为1显示，为0则不显示</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>全局代理程序</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">src_handler</th>
+        <td id="config_src_handler">全局音乐地址代理，如：src_handler.php?vid={vid}</td>
+      </tr>
+      <tr>
+        <th>lrc_handler</th>
+        <td id="config_lrc_handler">全局歌词地址代理，如：lrc_handler.php?title={label}&amp;rd={rd}</td>
+      </tr>
+      <tr>
+        <th>bg_video</th>
+        <td id="config_bg_video">全局视频背景设置</td>
+      </tr>
+      <tr>
+        <th>bg_lrc</th>
+        <td id="config_bg_lrc">全局歌词背景设置</td>
+      </tr>
+      <tr>
+        <th>image_handler</th>
+        <td id="config_image_handler">缩略图全局代理，需缩略图皮肤方可显示</td>
+      </tr>
+      <tr>
+        <th>text_handler</th>
+        <td id="config_text_handler">描述全局代理，需缩略图皮肤方可显示</td>
+      </tr>
+      <tr>
+        <th>error_handler</th>
+        <td id="config_error_handler">错误处理接口，用于播放错误时提交xml数据到服务端，默认为空，不启用</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>关于自动处理代理和随机参数的自动替换请见：<a href="http://bbs.cenfun.com/thread-11098-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11098-1-1.html</a><br />
+    跨域加载歌词或描述时，需跨域策略文件<a href="crossdomain.htm">crossdomain.xml</a>支持</div>
+  <h5>声音相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">volume</th>
+        <td id="config_volume">当前音量，范围从 0（静音）至 1（最大音量） 默认0.8</td>
+      </tr>
+      <tr>
+        <th>panning</th>
+        <td id="config_panning">声音平移参数，表示声道从左到右的平移，范围从 -1（左侧最大平移）至 1（右侧最大平移），默认值0表示没有平移（居中）</td>
+      </tr>
+      <tr>
+        <th>mute</th>
+        <td id="config_mute">是否静音，默认为0不静音</td>
+      </tr>
+      <tr>
+        <th>sound_sample</th>
+        <td id="config_sound_sample">是否启用声音样本处理，默认不开启，开启后将耗费更多系统资源<br />
+          开启取样处理，能实现在跨域播放mp3时显示频谱效果，同时支持均衡器参数设置</td>
+      </tr>
+      <tr>
+        <th>sound_eq</th>
+        <td id="config_sound_eq">声音样本均衡参数(必须启用sound_sample声音样本处理才有效)，默认为空，即不进行均衡过滤处理<br />
+          长度为10个值，用逗号隔开，每个值为-12到12之间的数字，全部为0则也表示不启用</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>取样和均衡器设置专贴：<a href="http://bbs.cenfun.com/thread-13199-1-1.html" target="_blank">http://bbs.cenfun.com/thread-13199-1-1.html</a></div>
+  <h5>设置窗口相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">share_cmp</th>
+        <td id="config_share_cmp">设置中是否显示复制分享地址按钮</td>
+      </tr>
+      <tr>
+        <th>default_skin</th>
+        <td id="config_default_skin">设置中是否显示默认皮肤项</td>
+      </tr>
+      <tr>
+        <th>skin_info</th>
+        <td id="config_skin_info">设置中是否打开皮肤详细信息</td>
+      </tr>
+      <tr>
+        <th>share_url</th>
+        <td id="config_share_url">CMP分享地址，默认按当前CMP主程序所在位置自动生成</td>
+      </tr>
+      <tr>
+        <th>share_html</th>
+        <td id="config_share_html">CMP分享代码，默认按share_url参数自动生成</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>设置相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">context_menu</th>
+        <td id="config_context_menu">右键菜单选项，0为不显示，1为全部，其他为仅名称<br />
+          context_menu还可以在皮肤配置中设置，优先级高</td>
+      </tr>
+      <tr>
+        <th>shortcuts</th>
+        <td id="config_shortcuts">是否启用默认快捷键，默认启用</td>
+      </tr>
+      <tr>
+        <th>show_meta</th>
+        <td id="config_show_meta">如果有读取权限，是否显示媒体的meta信息，默认显示</td>
+      </tr>
+      <tr>
+        <th>counter</th>
+        <td id="config_counter">图片形式的计数器地址，如counter="http://img.users.51.la/3389672.asp"</td>
+      </tr>
+      <tr>
+        <th>javascript</th>
+        <td id="config_javascript">网页环境运行的简单脚本，支持自动替换，如：javascript="alert('{key}');"</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5>时间相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">timeout</th>
+        <td id="config_timeout">音乐连接超时的时间，默认15秒</td>
+      </tr>
+      <tr>
+        <th>buffer_time</th>
+        <td id="config_buffer_time">音乐需要缓冲的时间，默认5秒</td>
+      </tr>
+      <tr>
+        <th>forward_time</th>
+        <td id="config_forward_time">每次快进快退时长，默认3秒，需快进快退按钮支持</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>最新版本已经不再支持buffer_next参数</div>
+  <h5>全屏相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">fullscreen_max</th>
+        <td id="config_fullscreen_max">用来设置全屏后是否最大化视频或歌词，默认最大化视频，即fullscreen_max="video"<br />
+          或者设置fullscreen_max="lrc" 设置其他值将不会执行任何最大化操作，仅进行全屏 </td>
+      </tr>
+      <tr>
+        <th>fullscreen_scale</th>
+        <td id="config_fullscreen_scale">用来设置全屏时进行硬件缩放的比例，值小于等于1，不能过小，将根据客户端显示器分辨率进行比例缩放<br />
+          默认值为1，即不进行缩放，如设置为0.5，则会以全屏一半大小放大到全屏区域</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>以上两个参数都可以在皮肤中的bt_fullscreen按钮属性中进行设置，且优先级高</div>
+  <h5>歌词相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">lrc_max</th>
+        <td id="config_lrc_max">是否最大化歌词区，默认不最大化</td>
+      </tr>
+      <tr>
+        <th>lrc_scale</th>
+        <td id="config_lrc_scale">最大化时当前歌词的缩放倍数，默认为1</td>
+      </tr>
+      <tr>
+        <th>lrc_scalemode</th>
+        <td id="config_lrc_scalemode">歌词区缩放模式，默认为1，详情见下面的视频缩放模式说明</td>
+      </tr>
+      <tr>
+        <th>lrc_idtags</th>
+        <td id="config_lrc_idtags">是否在lrc歌词最前面显示标识标签的内容，即时间标记以外al,ar,ti,by这些标记的内容<br />
+          默认为true显示，设置为false则可以不显示这些内容，同时也支持对应到kmc歌词</td>
+      </tr>
+      <tr>
+        <th>lrc_image</th>
+        <td id="config_lrc_image">歌词区图片路径，预览图，一直显示，不同于歌词背景bg_lrc每次都更换</td>
+      </tr>
+    </tbody>
+  </table>
+  <div></div>
+  <h5>视频相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">video_max</th>
+        <td id="config_video_max">是否最大化视频区，默认不最大化</td>
+      </tr>
+      <tr>
+        <th>video_smoothing</th>
+        <td id="config_video_smoothing">是否开启视频平滑处理，默认开启</td>
+      </tr>
+      <tr>
+        <th>video_blackwhite</th>
+        <td id="config_video_blackwhite">是否开启视频黑白处理，默认关闭</td>
+      </tr>
+      <tr>
+        <th>video_highlight</th>
+        <td id="config_video_highlight">是否开启视频高亮处理，默认关闭</td>
+      </tr>
+      <tr>
+        <th>video_scalemode</th>
+        <td id="config_video_scalemode">视频缩放模式<br />
+          1 在指定区域中可见，且不会发生扭曲，同时保持应用程序的原始高宽比，默认值<br />
+          2 在指定区域中可见，但不尝试保持原始高宽比。可能会发生扭曲，应用程序可能会拉伸或压缩显示<br />
+          3 指定整个应用程序填满指定区域，不会发生扭曲，但有可能会进行一些裁切，同时保持应用程序的原始高宽比<br />
+          0 不进行缩放，即使在更改播放器窗口大小时，它仍然保持不变 </td>
+      </tr>
+      <tr>
+        <th>video_image</th>
+        <td id="config_video_image">视频区图片路径，预览图，一直显示，不同于视频背景bg_video每次都更换</td>
+      </tr>
+    </tbody>
+  </table>
+  <div></div>
+  <h5>频谱相关</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">mixer_src</th>
+        <td id="config_mixer_src">用来加载外部声音频谱器插件，默认不加载，即使用系统自带10种声音频谱效果</td>
+      </tr>
+      <tr>
+        <th>mixer_id</th>
+        <td id="config_mixer_id">系统声音频谱器当前效果的id，默认为1，范围0-10，分别表示CMP4默认支持的<a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/cmp4_10mixer.jpg" target="_blank">10种效果</a>和无效果</td>
+      </tr>
+      <tr>
+        <th>mixer_color</th>
+        <td id="config_mixer_color">设置声音频谱器颜色，默认为a4eb0c</td>
+      </tr>
+      <tr>
+        <th>mixer_displace</th>
+        <td id="config_mixer_displace">是否开启图形置换效果，默认不开启</td>
+      </tr>
+      <tr>
+        <th>mixer_filter</th>
+        <td id="config_mixer_filter">是否开启图形滤镜效果，默认不开启</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>仅MP3播放时显示频谱，且必须是安全沙盒内，最新CMP4还可以通过设置sound_sample开启取样来实现跨域显示频谱</div>
+  <h5>单个音乐加载</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">src</th>
+        <td id="config_src">单曲地址，判断存在单曲必须的参数</td>
+      </tr>
+      <tr>
+        <th>label</th>
+        <td id="config_label">单曲名称</td>
+      </tr>
+      <tr>
+        <th>type</th>
+        <td id="config_type">单曲类型</td>
+      </tr>
+      <tr>
+        <th>lrc</th>
+        <td id="config_lrc">单曲歌词</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>更多单曲参数见<a href="list.htm">列表</a>中音乐项支持的参数</div>
+  <h5>JS脚本API接口参数</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th width="150">api</th>
+        <td id="config_api">JavaScript回调函数名，如：api=cmp_loaded，当CMP准备完成，将调用一次所在页面的cmp_loaded函数<br />
+          具体使用例子见<a href="example.htm#cmpo">使用范例</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <div>注意：以上某些参数可能需要最新版本的CMP4方能支持，除了以上参数，某些插件或皮肤等也可能有其一些特定的参数</div>
+  <h6><a href="javascript:void(0)" class="spread" onclick="collapse(this, 'config_example')">一个CMP4配置文件的例子</a></h6>
+  <div id="config_example" style="display:none;" class="code"> &lt;cmp <br />
+    <div>name = &quot;CMP4 -『生活需要音乐』&quot; <br />
+      link = &quot;http://bbs.cenfun.com/&quot; <br />
+      description = &quot;CMP v4.0&quot;<br />
+      logo = &quot;{src:logo.png,xywh:[10R,10R,0,0]}&quot;<br />
+      skins = &quot;skins/default.zip,skins/xdj.zip,skins/qqplayer.zip,skins/wmp11.zip&quot;<br />
+      plugins = &quot;plugins/sharing.swf&quot;<br />
+      auto_play = &quot;1&quot;<br />
+      list_delete = &quot;1&quot;<br />
+      counter = &quot;http://img.users.51.la/3389672.asp&quot;<br />
+    </div>
+    /&gt; </div>
+</div>
+<script type="text/javascript">
+function showConfig(p, id) {
+	var tb = '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
+	tb += '<th width="10%">' + p + '</th><td>';
+	var info = $("config_" + p);
+	if (info) {
+		tb += info.innerHTML;
+	} else {
+		tb += "未找到参数说明，可提交报告到QQ：44023478";
+	}
+	tb += '</td></tr></table>';
+	$(id).innerHTML = tb;
+}
+function getConfigList() {
+	var params = ["api","asp","aspx","auto_open","auto_play","background","backgrounds","bg_lrc","bg_video","bgcolor","buffer_time","cgi","click_next","click_play","config","context_menu","counter","default_skin","default_type","description","error_handler","forward_time","fullscreen_max","fullscreen_scale","id","image_handler","javascript","jsp","label","link","link_target","list","list_delete","list_error","lists","logo","logo_alpha","lrc_handler","lrc_idtags","lrc_image","lrc_max","lrc_scale","lrc_scalemode","mixer_color","mixer_displace","mixer_filter","mixer_id","mixer_src","models","mute","name","panning","php","play_id","play_mode","plugin","plugins","plugins_disabled","share_cmp","share_html","share_url","shortcuts","show_meta","skin","skin_id","skin_info","skins","sound_eq","sound_sample","src","src_handler","text_handler","timeout","url","video_blackwhite","video_highlight","video_image","video_max","video_scalemode","video_smoothing","volume"];
+	
+	params.sort();
+	
+	var s = '';
+	var idn = rd();
+	var num = params.length;
+	s += '<div class="clearfix">';
+	s += '<p class="clearfix">';
+	var group = "a";
+	for (var i = 0; i < num; i ++) {
+		var p = params[i];
+		var n = p;
+		var f = n.substr(0, 1);
+		if (f != group) {
+			s += '</p><div id="config_params_show_'+group+'"></div><p class="clearfix">';
+			group = f;
+		}
+		var info = $("config_" + p);
+		if (!info) {
+			n = "<b>" + n + "</b>";
+		}
+		s += '<a href="javascript:void(0)" class="flt" onclick="showConfig(\'' + p + '\', \'config_params_show_' + group + '\')">' + n + '</a>';
+	}
+	s += '</p><div id="config_params_show_'+group+'"></div></div>';
+	return s;
+}
+
+$("config_params_list").innerHTML = getConfigList();
+</script> 
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

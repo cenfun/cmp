@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4 WMP视频播放</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; text-align:center; }
+</style>
+</head>
+<body>
+<script type="text/javascript" src="http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js"></script> 
+<script type="text/javascript" src="wmp.js"></script>
+<div id="cmp_area" style="position:relative;width:80%;height:600px;margin:0px auto;"></div>
+<script type="text/javascript">
+//cmp回调函数，即cmp第一次加载完成时调用，将对wmp进行初始化操作
+function cmp_loaded(key) {
+	var cmpo = CMP.get("cmp");
+	if (!cmpo) {
+		alert("CMP初始化错误");
+		return;	
+	}
+	
+	//加载一个测试列表
+	var list = '<list>';
+	list += '<m type="wmp" label="wmp - 青檬电台" src="mms://pub1.qmoon.net/911pop" />';
+	list += '<m type="wmp" label="qvod - Kung.Fu.Panda.2" src="qvod://549077791|EA6FCC3CAF063CAA82E9713049A5477CBFBB8D99|功夫熊猫2.国语_Kung.Fu.Panda.2_2011_BD.rmvb|" />';
+	list += '</list>';
+	cmpo.list_xml(list);
+	
+	//初始化扩展接口
+	if (CMPEI) {
+		CMPEI.init(key, cmpo);
+	} else {
+		alert("CMP扩展接口初始化错误");	
+	}
+}
+//cmp的参数，必须设置api=cmp_loaded回调函数
+var flashvars = {
+	//设置默认配置和列表为空
+	url : "",
+	lists : "",
+	//皮肤
+	//skin:"skins/tudou.zip",
+	//脚本api回调函数
+	api : "cmp_loaded"
+};
+
+//将cmp放在一个固定容器cmp_area里，便于后面设置位置，宽高都设置成100%，也就是随容器宽高进行改变
+//必须把cmp垫底，即设置wmode="opaque"，这样wmp窗口才能覆盖显示在cmp上面
+var htm = CMP.create("cmp", "100%", "100%", "http://getcmp.sinaapp.com/cmp.swf", flashvars, {wmode:"opaque"});
+document.getElementById("cmp_area").innerHTML = htm;
+</script>
+</body>
+</html>

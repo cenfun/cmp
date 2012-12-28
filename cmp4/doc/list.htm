@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - 媒体列表【list.xml】</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP4列表格式说明</h3>
+<div class="submsg">
+  <div>
+    <p>CMP4的列表文件是一个XML格式的树结构文件，用来设置所有要播放的音乐信息</p>
+    <p>列表文件路径由配置文件的lists参数来指定，如果不指定，则默认为：lists="list.xml"</p>
+  </div>
+  <h5>列表项属性：</h5>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th>label</th>
+        <td>当前项的名称，目录名或音乐名，如果未指定则采用下面的src作为名称</td>
+      </tr>
+      <tr>
+        <th>src</th>
+        <td>音乐地址源，必填项(目录可除外)，除了填写普通URL地址，还支持以下特殊协议：<br />
+          1，<a href="http://bbs.cenfun.com/thread-13007-1-1.html" target="_blank">javascript:协议</a>，用于直接调用页面js，传递参数，如：javascript:alert(1)<br />
+          2，<a href="http://bbs.cenfun.com/thread-13590-1-1.html" target="_blank">proxy:协议</a>，用于api接口加入的代理函数处理，格式如：proxy:代理函数名,代理函数参数 </td>
+      </tr>
+      <tr>
+        <th>bak</th>
+        <td>src的备用地址，默认为空，一般不用，当第一次连接错误时，重试连接时将采用此设置</td>
+      </tr>
+      <tr>
+        <th><a href="http://bbs.cenfun.com/thread-11741-1-1.html">type</a></th>
+        <td>音乐类型，默认为空，将根据src中最后的文件后缀自动识别，支持：<br />
+          1,MP3音频 <br />
+          2,FLV/MP4视频 <br />
+          3,WMP类型 需要浏览器结合WMP环境支持<br />
+          4,flash 简单MovieClip播放支持，也包括图片jpg/png/gif<br />
+          如果未指定，同时也无法用后缀识别，则采用全局配置中default_type参数指定的默认类型进行播放<br />
+          详情见：<a href="http://bbs.cenfun.com/thread-11741-1-1.html" target="_blank">http://bbs.cenfun.com/thread-11741-1-1.html</a></td>
+      </tr>
+      <tr>
+        <th>lrc</th>
+        <td>歌词地址，默认为空，支持lrc格式歌词和<a href="http://bbs.cenfun.com/thread-12140-1-1.html" target="_blank">kmc</a>格式的卡拉OK歌词，如果这两种格式都不能识别，则当作文本显示，并支持简单html</td>
+      </tr>
+      <tr>
+        <th>duration</th>
+        <td>总时间，如果无法获取音乐总时间，可在此指定，如某些视频，flash，图片等</td>
+      </tr>
+      <tr>
+        <th>bytes</th>
+        <td>文件总字节数，专用于无keyframes关键信息时的stream模拟搜索</td>
+      </tr>
+      <tr>
+        <th>rotation</th>
+        <td>设置视频旋转角度，默认0，用于某些倒立视频或者横向视频调整方向(如某些手机拍摄)，当然也可通过视频区右上角的旋转按钮来调整</td>
+      </tr>
+      <tr>
+        <th>opened</th>
+        <td>设置目录项是否为打开状态，默认为空表示关闭状态，要设置打开则opened="1"</td>
+      </tr>
+      <tr>
+        <th>bg_video</th>
+        <td>播放当前项时，视频区背景的设置，默认为空，和插件一样支持多属性传入<br />
+          如：bg_video="{src:plugins/bigbg.swf,xywh:[0,0,100%,100%]}" </td>
+      </tr>
+      <tr>
+        <th>bg_lrc</th>
+        <td>播放当前项时，歌词区背景的设置，默认为空，设置方法同上 </td>
+      </tr>
+      <tr>
+        <th><a href="http://bbs.cenfun.com/thread-11026-1-1.html" target="_blank">xywh</a></th>
+        <td>位置宽高参数，一般用于对背景的定义，一般不用</td>
+      </tr>
+      <tr>
+        <th>seekable</th>
+        <td>表示播放时是否可以拖动进度条以尝试搜寻播放，默认true可以</td>
+      </tr>
+      <tr>
+        <th>scalemode</th>
+        <td>当前项的缩放模式，默认为空，可用参数值同全局配置中的video_scalemode，但此处优先级高</td>
+      </tr>
+      <tr>
+        <th><a href="http://bbs.cenfun.com/thread-11037-1-1.html" target="_blank">stream</a></th>
+        <td><p>是否为stream类视频，默认为空，可通过自动替换开始位置，播放非逐渐式下载视频，视频源需<a href="http://bbs.cenfun.com/thread-17246-1-3.html" target="_blank">服务端</a>支持 </p>
+          <p>最新版CMP4已经支持根据src里是否含有{start_seconds}或{start_bytes}自动设置此参数</p></td>
+      </tr>
+      <tr>
+        <th>rtmp</th>
+        <td>rtmp服务器地址，用于播放实时流，配置此参数还需在src配置需播放的文件名</td>
+      </tr>
+      <tr>
+        <th>list_src</th>
+        <td>子列表地址，用于当前目录的子级列表加载，不能含有子内容，如：&lt;m label=&quot;子级列表&quot; list_src=&quot;list.xml&quot; /&gt;</td>
+      </tr>
+      <tr>
+        <th>image</th>
+        <td>列表项缩略图地址，默认为空，需支持列表缩略图的皮肤方能加载显示</td>
+      </tr>
+      <tr>
+        <th>text</th>
+        <td>当前项的文本描述，默认为空，需支持列表缩略图的皮肤方能加载显示，同时如果没有歌词加载，则显示到歌词窗口</td>
+      </tr>
+      <tr>
+        <th>文本样式属性</th>
+        <td>用于自定义当前项样式，实现多彩列表，支持文本样式的所有属性，如：color,size,bold,font等等<br />
+          同皮肤中文本样式设置一样，填写1-2个值表示2种状态，如：color="#ff0000,#00ff00"</td>
+      </tr>
+      <tr>
+        <th>自定义属性</th>
+        <td>比如需要进行一些自动替换时，可以自定义一些属性，比如id,link等等</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>如果label或src存在于<a href="config.htm">全局配置</a>中，则将根据以上属性自动生成一个单曲项</div>
+  <h6><a href="javascript:void(0)" class="spread" onclick="collapse(this, 'list_example')">一个CMP4列表文件的例子</a></h6>
+  <div id="list_example" style="display:none;" class="code">&lt;list&gt;<br />
+    <div>&lt;m type=&quot;&quot; src=&quot;music/test.mp3&quot; lrc=&quot;&quot; label=&quot;1,MP3音乐测试&quot; /&gt;<br />
+      &lt;m type=&quot;&quot; src=&quot;music/test.flv&quot; lrc=&quot;&quot; label=&quot;2,FLV视频测试&quot; /&gt;<br />
+      &lt;m type=&quot;3&quot; src=&quot;music/test.mp3&quot; lrc=&quot;&quot; label=&quot;3,WMP类型测试&quot; /&gt;<br />
+      &lt;m type=&quot;&quot; src=&quot;plugins/bigbg.swf&quot; lrc=&quot;&quot; scalemode=&quot;1&quot; duration=&quot;10&quot; label=&quot;4,Flash播放测试&quot; /&gt;<br />
+      &lt;m type=&quot;&quot; src=&quot;logo.png&quot; lrc=&quot;&quot; scalemode=&quot;1&quot; duration=&quot;5&quot; label=&quot;4,图片播放测试&quot; /&gt;<br />
+      &lt;m list_src=&quot;list.xml&quot; label=&quot;子列表&quot; /&gt;<br />
+      &lt;m label=&quot;目录&quot;&gt;<br />
+      <div>&lt;m label=&quot;二级目录&quot;&gt;<br />
+        <div> &lt;m label=&quot;三级目录&quot;&gt;<br />
+          <div>&lt;m type=&quot;&quot; src=&quot;music/test.mp3&quot; lrc=&quot;&quot; label=&quot;test&quot; /&gt;</div>
+          &lt;/m&gt;<br />
+        </div>
+        &lt;/m&gt;<br />
+        &lt;m type=&quot;&quot; src=&quot;music/test.mp3&quot; lrc=&quot;&quot; label=&quot;test&quot; /&gt;<br />
+      </div>
+      &lt;/m&gt;<br />
+      &lt;m label=&quot;打开的目录&quot; opened=&quot;1&quot;&gt;<br />
+      <div>&lt;m type=&quot;&quot; src=&quot;music/test.mp3&quot; lrc=&quot;&quot; label=&quot;test&quot; /&gt;</div>
+      &lt;/m&gt;<br />
+    </div>
+    &lt;/list&gt;</div>
+</div>
+<div class="line"></div>
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

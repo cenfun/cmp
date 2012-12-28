@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; text-align:center; font-size:12px; }
+</style>
+</head>
+<body>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script> 
+<script type="text/javascript">
+//cmp加载完成再加载框架页面
+function cmp_loaded(key) {
+	var page = document.getElementById("page");
+	page.innerHTML = '<iframe src="app_iframe2.htm" width="800" height="200" ></iframe>';
+}
+</script>
+<div id="cmp_area" style="position:relative;width:800px;height:500px;margin:0px auto;"> 
+  <script type="text/javascript">
+	//将cmp放在一个固定容器里，便于后面设置位置
+	CMP.write("cmp", "100%", "100%", "http://cmp.cenfun.com/cmp4/cmp.swf", "skin_id=0&list_delete=1&api=cmp_loaded&lists=");
+  </script> 
+</div>
+<div style="width:800px;margin:0px auto;text-align:left;margin-top:10px;">下面是外载框架页面：<a href="app_iframe2.htm" target="_blank">app_iframe2.htm</a></div>
+<div id="page"></div>
+</body>
+</html>

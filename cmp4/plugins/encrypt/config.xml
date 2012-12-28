@@ -1,0 +1,6 @@
+﻿<cmp 
+	
+	encrypt_lists = "encrypt_list.xml"
+	plugins = "encrypt/encrypt.swf"
+
+/>

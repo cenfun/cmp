@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="gb2312"?>
+<cfplay>
+	<list firstRun="1">
+		<music>
+			<name>Kelly Clarkson - Because of you</name>
+			<url>http://www.scsg.edu.hk/~sc997595/Kelly%20Clarkson%20-%20Because%20Of%20You.mp3</url>
+			<content>American Idol - 凯丽·克莱克森 - 因为你 - Breakaway</content>
+			<pic s="70" a="40" y="-50" c="Kelly">http://image2.sina.com.cn/ent/y/d/2005-01-26/U102P28T3D641149F329DT20050126135715.JPG</pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Kelly Clarkson - Because Of You.lrc</lrc>
+		</music>
+		<music>
+			<name>Kelly Clarkson - Behind These Hazel Eyes</name>
+			<url>http://www.shng.cn/hearson/cafeinew/music2/6.mp3</url>
+			<content>American Idol - Kelly Clarkson - Breakaway</content>
+			<pic s="70" a="40" y="-50" c="Kelly">http://image2.sina.com.cn/ent/y/d/2005-01-26/U102P28T3D641149F329DT20050126135715.JPG</pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Kelly Clarkson - Behind These Hazel Eyes.lrc</lrc>
+		</music>
+		<music>
+			<name>Toy Box - Best Friend</name>
+			<url>http://www.szxinhai.com/images/Toy Box - Best Friend.mp3</url>
+			<content>Dance - Toy Box - Best Friend</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Toy Box - Best Friend.lrc</lrc>
+		</music>
+		<music>
+			<name>Toy Box - Tarzan and Jane</name>
+			<url>http://www.szxinhai.com/images/Toy Box - Tarzan and Jane.mp3</url>
+			<content>丹麦国宝 - Toy Box - 泰山与珍妮 - Oh!Oh!Oh!Oh!</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Toy Box - Tarzan Jane.lrc</lrc>
+		</music>
+		<music>
+			<name>林志炫 - 单身情歌 - 光棍节特送</name>
+			<url>http://www.phzyzz.net/song/music/dsqg.mp3</url>
+			<content>11.11光棍节特送 - 单身情歌 - 单身的兄弟姐妹们节日好！</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/林志炫 - 单身情歌.lrc</lrc>
+		</music>
+		<music>
+			<name>Vengaboys - Kiss When The Sun Don't Shine</name>
+			<url>http://www.toppros.com.hk/Manage/images/Vengaboys - Kiss.mp3</url>
+			<content>Dance - 反骨搭档组 - 日落后亲吻 - Best'2000</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Vengaboys - Kiss.lrc</lrc>
+		</music>
+		<music>
+			<name>潘玮柏 - 不得不爱</name>
+			<url>http://www.jhsq.com/mp3/bdba.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>梁咏琪 - 天使与海豚</name>
+			<url>http://www.lwedu.cn/public/gardenplot/shangzhuang/1/music/MP3/5.mp3</url>
+			<content>[应求]GIGI - 天使与海豚 - To老姐</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Jay - 夜曲</name>
+			<url>http://www.ksharp.net/mp3/xiaobang/夜曲.mp3</url>
+			<content>周杰伦 - 夜曲 - 十一月的萧邦</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>孙楠 韩红 - 忘不了你 - 美丽的神话</name>
+			<url>http://song.luzhou.net/music8/7071sn/10.mp3</url>
+			<content>The Myth 神话 - 主题曲</content>
+			<pic s="40" c="The Myth">http://image2.sina.com.cn/ent/m/2005-09-04/U1223P28T3D830342F326DT20050904123911.jpg</pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>成龙 金喜善 - 无尽的爱 - The Myth神话</name>
+			<url>http://www.vsay.com/vsay/d/file/tingge/chaqu/2005-09-07/477f0334db734198647305011aa940e2.mp3</url>
+			<content></content>
+			<pic s="50" y="-80" c="玛利卡">http://image2.sina.com.cn/ent/d/2005-08-31/U105P28T3D826723F326DT20050831190409.JPG</pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Avril Lavigne - My Happy Ending</name>
+			<url>http://mp3.v023.com/欧美歌手/艾微儿/Under_My_Skin/6.mp3</url>
+			<content>最爱 - 艾薇尔-拉维妮 - 酷到骨子里 - 我的完美结局</content>
+			<pic s="20" a="50" c="Avril" u="">http://pic.ssnu.com/mxpic/autopostimg/2004622165336.jpg</pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Avril Lavigne - My Happy Ending.lrc</lrc>
+		</music>
+		<music>
+			<name>Avril Lavigne - Nobody's Home(Live)</name>
+			<url>http://www.wlszoutlet.com/images/img/NobodysHome.mp3</url>
+			<content>艾薇尔-拉维妮 - 酷到骨子里 - NBC LIVE版，歌词可能对不上</content>
+			<pic s="35" a="50" c="Avril" u="">http://218.21.45.20/guanli/UploadFiles/20054301601734.jpg</pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Avril Lavigne - Nobody's Home.lrc</lrc>
+		</music>
+		<music>
+			<name>WestLife - My love</name>
+			<url>http://www.szxinhai.com/images/mylove.mp3</url>
+			<content>西城 - 亲亲吾爱</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/westlife - my love.lrc</lrc>
+		</music>
+		<music>
+			<name>Whitney Houston - I will always love you</name>
+			<url>http://www.szxinhai.com/images/loveyou.mp3</url>
+			<content>《保镖》主题曲 - 惠特尼-休斯顿 - 我将永远爱你</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/whitney houston - i will always love you.lrc</lrc>
+		</music>
+		<music>
+			<name>黑豹 - 无地自容</name>
+			<url>http://cqhxxx.8866.org/MIDI/wudizirong.mp3</url>
+			<content>连摇?- 我无地自容</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/黑豹 - 无地自容.lrc</lrc>
+		</music>
+		<music>
+			<name>王心凌 - 第一次爱的人</name>
+			<url>http://yzkj.blueyl.com/music/%e7%ac%ac%e4%b8%80%e6%ac%a1%e7%88%b1%e7%9a%84%e4%ba%ba.mp3</url>
+			<content>第一次爱的人</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/王心凌 - 第一次爱的人.lrc</lrc>
+		</music>
+		<music>
+			<name>M2M - The Day You Went Away</name>
+			<url>http://pd.qzgis.net/news/20050719165012.mp3</url>
+			<content>还是E文原版好听</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/the day you went away.lrc</lrc>
+		</music>
+		<music>
+			<name>王蓉 - 哎呀</name>
+			<url>http://www.cs.hku.hk/~tyku/aiya.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/王蓉 - 哎呀.lrc</lrc>
+		</music>
+		<music>
+			<name>GIGI - 向左走向右走(更新)</name>
+			<url>http://sillyduck.luohuedu.net/music/电影原声/《向左走.向右走电影原声大碟》/21.mp3</url>
+			<content>特找两首太平公主的歌给莫丹兄！</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/向左走向右走.lrc</lrc>
+		</music>
+		<music>
+			<name>GIGI - 中意她</name>
+			<url>http://smez.net/2003bzy/k105/music/liuxing/%C1%BA%D3%BD%E7%F7-%D6%D0%D2%E2%CB%FB.mp3</url>
+			<content>特找两首太平公主的歌给莫丹兄！</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/中意他.lrc</lrc>
+		</music>
+		<music>
+			<name>AQUA - Barbie Girl</name>
+			<url>http://bilingual.hhsz.cn/SOUND/BarbieGirl.mp3</url>
+			<content>我的最喜欢的水叮当来了- 芭比娃娃</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/aqua - barbie girl.lrc</lrc>
+		</music>
+		<music>
+			<name>AQUA - My Oh My</name>
+			<url>http://learning.sohu.com/zt/freshenglish/sep9/myohmy.mp3</url>
+			<content>顺便抗议大学时谁借了我《水叮当》的磁带现在还没还给我！</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/aqua - my oh my.lrc</lrc>
+		</music>
+		<music>
+			<name>AQUA - Around The World</name>
+			<url>http://site.dqedu.tv/zx16/ZX1600/SONG/125.mp3</url>
+			<content>水叮当 - 环游世界</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/aqua - around the world.lrc</lrc>
+		</music>
+		<music>
+			<name>BackStreet Boys - I Want It That Way</name>
+			<url>http://61.187.92.233/music/music/今日推荐/流行音乐/B%20字母歌手/BackStreetBoys/BackStreetBoys%20-%20I%20Want%20I%20That%20Way%20(Millennium).mp3</url>
+			<content>后街男孩 - BackStreet Boys - I Want It That Way</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/backstreet boys - i want it that way.lrc</lrc>
+		</music>
+		<music>
+			<name>BackStreet Boys - As long as you love me</name>
+			<url>http://www.szxinhai.com/images/Aslongasyouloveme.mp3</url>
+			<content>后街男孩 - BackStreet Boys - As long as you love me</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/backstreet boys - as long as you love me.lrc</lrc>
+		</music>
+		<music>
+			<name>Britney Spears - Boys</name>
+			<url>http://61.187.92.233/music/music/今日推荐/流行音乐/B%20字母歌手/Britney%20Spears/Britney%20Spears%20-%20Boys.mp3</url>
+			<content>小甜甜布兰妮 - Boys</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/britney spears - boys.lrc</lrc>
+		</music>
+		<music>
+			<name>梁静茹 - 勇气</name>
+			<url>http://www.loverstory.com/music/liangjingru1.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/勇气.lrc</lrc>
+		</music>
+		<music>
+			<name>汪峰 - 飞得更高</name>
+			<url>http://digieye.w9.dvbbs.net/3/flyhigher.mp3</url>
+			<content>生命就像一条大河,时而宁静时而疯狂</content>
+			<pic c="Fly...">http://www.cenfun.com/flash/cenfun_index_jcs.swf</pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/飞得更高.lrc</lrc>
+		</music>
+		<music>
+			<name>刘嘉亮 - 你到底爱谁</name>
+			<url>http://www.szxinhai.com/images/nidaodiaishui.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Britney Spears - Lucky</name>
+			<url>http://61.187.92.233/music/music/今日推荐/流行音乐/B%20字母歌手/Britney%20Spears/Britney%20Spears%20-%20Lucky.mp3</url>
+			<content>小甜甜布兰妮 - Lucky</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/britney spears - lucky.lrc</lrc>
+		</music>
+		<music>
+			<name>DHT - Listen To Your Heart(MIX)</name>
+			<url>http://www.wlszoutlet.com/images/img/ListenToYourHeartmix.mp3</url>
+			<content></content>
+			<pic c="Ferrari">http://www.cenfun.com/cfplay/bg/car1.jpg</pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>DHT - Listen To Your Heart</name>
+			<url>http://siwei.nowseo.com/mp3/Listen_To_Your_Heart.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Against All Odds</name>
+			<url>http://www.toppros.com.hk/Manage/images/againstallodds.mp3</url>
+			<content>Mariah Carey Westlife 重温经典 - Against All Odds</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Mariah Carey - Against All Odds.lrc</lrc>
+		</music>
+		<music>
+			<name>Avril Lavigne - Complicated</name>
+			<url>http://www.toppros.com.hk/Manage/images/Complicated.mp3</url>
+			<content>艾薇儿 - Complicated</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Avril Lavigne - Complicated.lrc</lrc>
+		</music>
+		<music>
+			<name>Shakira - Whenever,wherever</name>
+			<url>http://www.toppros.com.hk/Manage/images/Wheneverwherever.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/shakira - whenever wherever.lrc</lrc>
+		</music>
+		<music>
+			<name>Groove Coverage - God is a girl</name>
+			<url>http://4yecao.nease.net/clover music/god%20is%20a%20girl.MP3</url>
+			<content>舞动的精灵 -  God is a girl</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Groove Coverage - God is a girl.lrc</lrc>
+		</music>
+		<music>
+			<name>Alizee - La isla bonita</name>
+			<url>http://www.toppros.com.hk/Manage/images/LaIslaBonita.mp3</url>
+			<content>艾丽兹  - La isla bonita</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Lene Marlin - Unforgivable Sinner</name>
+			<url>http://www.cw98.com/mp3/lene.mp3</url>
+			<content>Lene Marlin - 不可饶恕的罪人 - 琳恩 玛莲</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/CFPlay/lrc/Lene Marlin - Unforgivable Sinner.lrc</lrc>
+		</music>
+		<music>
+			<name>Lene Marlin - I'm sitting down here</name>
+			<url>http://www.szxinhai.com/images/SittingDownHere.mp3</url>
+			<content>坐在这儿 - 琳恩 玛莲</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/CFPlay/lrc/Lene Marlin - Sitting down here.lrc</lrc>
+		</music>
+		<music>
+			<name>许巍 - 曾经的你</name>
+			<url>http://fc.521000.net/%E6%9B%BE%E7%BB%8F%E7%9A%84%E4%BD%A0_%E8%AE%B8%E5%B7%8D.mp3</url>
+			<content>许巍 - 曾经的你 - 每一刻都是崭新的</content>
+			<pic x="260" y="-20" w="" h="" s="" a="60" c="DiLiLi" u="">http://photo.sohu.com/20041111/Img222947117.jpg</pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/许巍 - 曾经的你.lrc</lrc>
+		</music>
+		<music>
+			<name>范玮琪 - 那些花儿</name>
+			<url>http://mugou.com/user1/19/upload/20058222821.mp3</url>
+			<content>范玮琪 - 那些花儿 - 静静的开着</content>
+			<pic a="60" c="那些花儿">http://www.cenfun.com/cfplay/bg/bg7.jpg</pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/范玮琪 - 那些花儿.lrc</lrc>
+		</music>
+		<music>
+			<name>许巍 - 完美生活</name>
+			<url>http://www.youleba.com/bbs/UploadFile/2005-8/200585134949917.mp3</url>
+			<content>许巍 - 完美生活 - 时光漫步</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/许巍 - 完美生活.lrc</lrc>
+		</music>
+		<music>
+			<name>Michael Jackson - BillieJean</name>
+			<url>http://www.ckc.com.cn/up/SONG/JACKSON_001.Billie_Jean.MP3</url>
+			<content></content>
+			<pic s="100" c="MJ">http://www.cenfun.com/cfplay/bg/BillieJean.swf</pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Mariah Carey - Without you</name>
+			<url>http://www.flashk.org/2004/music99/workgroups/Mariah Carey -  Without you.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/Mariah Carey - Without You.lrc</lrc>
+		</music>
+		<music>
+			<name>Boulevard of Broken Dreams</name>
+			<url>http://music.bokee.com/listen/xianting/broken.mp3</url>
+			<content>Green Day - Boulevard of Broken Dreams</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Savage Garden - Truly Madly Deeply</name>
+			<url>http://www.86114.com/kroei/music/Truly%20madly%20deeply.mp3</url>
+			<content>真诚地 疯狂地 更深地 - 野人花园 - 澳洲冠军曲 (冠军天团)</content>
+			<pic></pic>
+			<lrc>http://www.cenfun.com/cfplay/lrc/savage garden - truly madly deeply.lrc</lrc>
+		</music>
+		<music>
+			<name>张栋梁 - 当你孤单你会想起谁</name>
+			<url>http://jnzx.ggjy.net/loveu365/myweb/music/4.mp3</url>
+			<content></content>
+			<pic x="240" y="-30" w="" h="" s="" a="60" c="Everytime" u="">http://image2.sina.com.cn/ent/y/2005-05-11/U564P28T3D720917F326DT20050511180432.jpg</pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Hope - Kelly Chen</name>
+			<url>http://www.dearfish.com/bbs/mp3/hope.mp3</url>
+			<content>韩剧大长今主题曲 - 陈慧琳 - 希望 - (粤语)</content>
+			<pic x="" y="" w="" h="" s="40" a="60" c="李英爱" u="">http://image2.sina.com.cn/ent/d/2005-09-09/U92P28T3D835821F326DT20050909110852.jpg</pic>
+			<lrc>http://www.lrcsky.com/downlrc.php?id=1113141996</lrc>
+		</music>
+		<music>
+			<name>Eagels - Hotel California</name>
+			<url>http://www.toppros.com.hk/Manage/images/HotelCalifornia.mp3</url>
+			<content>老鹰加州超重低音摇摆版</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Helene Rolles - Je M'appelle Helene</name>
+			<url>http://www.toppros.com.hk/Manage/images/helene.mp3</url>
+			<content>我的名字是伊莲</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Alon</name>
+			<url>http://www.toppros.com.hk/Manage/images/Alon.mp3</url>
+			<content>飘雪 - 陈慧娴</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Please Don't Leave Me</name>
+			<url>http://www.toppros.com.hk/Manage/images/Pleasedontleaveme.mp3</url>
+			<content>谢谢你的爱 - 刘德华</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Leep On Loving You</name>
+			<url>http://www.wlszoutlet.com/images/img/Leeponlovingyou.mp3</url>
+			<content>容易受伤的女人 - 王菲</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Mariah Carey - I Still Belive</name>
+			<url>http://www.wlszoutlet.com/images/img/IStillBelive.mp3</url>
+			<content>依然 - 林忆莲</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Love You With All My Heart</name>
+			<url>http://www.toppros.com.hk/Manage/images/Loveyouwithallmyheart.mp3</url>
+			<content>等你等到我心痛 - 张学友</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>No Way I Can Hide</name>
+			<url>http://www.toppros.com.hk/Manage/images/Nowayicanhide.mp3</url>
+			<content>一天一点爱恋 - 梁朝伟</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>If I Could</name>
+			<url>http://www.wlszoutlet.com/images/img/IfICould.mp3</url>
+			<content>祝福 - 张学友</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Stop! Stop! Stop!</name>
+			<url>http://www.toppros.com.hk/Manage/images/Stopstopstop.mp3</url>
+			<content>Love Love Love - 蔡依林</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>光良 - 童话</name>
+			<url>http://www.kaitian.cc/bbs/mxy/music/童话.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc>http://www.kaitian.cc/bbs/mxy/lrc/童话.txt</lrc>
+		</music>
+		<music>
+			<name>光良 - 第一次</name>
+			<url>http://www.abc555.com/resource/mp3/diyici.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>陈慧娴 - 千千阙歌</name>
+			<url>http://zjzx.zhedu.net.cn/jsfc/jszy/byw/music/mp3/qianqiange.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>陈琳 - 天使的选择</name>
+			<url>http://www.cccq.net/UpLoadFile/Music/2005/3/2005326152048253.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>陈琳 - 爱就爱了</name>
+			<url>http://www.18600.net/upload/forum/2005051319252830.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>光 - Kingdom Hearts</name>
+			<url>http://web.sias.net.cn/tuanwei/yydy/bgsound/guang.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Sarah Brightman - Scarborough fair</name>
+			<url>http://yanhu.nease.net/music/yanhu02.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>The Cranberries - Dying in the sun</name>
+			<url>http://www.szxinhai.com/images/Dyinginthesun.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Blue - All Rise</name>
+			<url>http://au.9you.com/download/song/sample/blue_all%20rise.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Micheal Learns To Rock - That's Why You Go Away</name>
+			<url>http://www.yj-zipper.com/03.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>罗大佑 - 童年</name>
+			<url>http://www.131477.com/yinhua/61/tn.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>All 4 One - I Swear</name>
+			<url>http://www.tjc.net/lightning/all_4_one_-_i_swear.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>张韶涵 - 欧若拉</name>
+			<url>http://www.flashk.org/2004/music99/top/张韶涵 - 欧若拉.mp3</url>
+			<content>神秘北极圈,阿拉斯加的山巅,谁的脸出现海角的天边</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>M2M - Pretty boy</name>
+			<url>http://www.ddzyxx.com/prettyboy.mp3</url>
+			<content>I lie awake at night,see things in black and white</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Pretty Young Thing - Lene Nystroms</name>
+			<url>http://61.152.95.52/song/30208/1117084080.mp3</url>
+			<content>酸酸甜甜就是我E文原版</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>朱铭捷 - 曾经最美</name>
+			<url>http://www.flashk.org/disk.sukii-o/hot/朱铭捷 - 曾经最美.mp3</url>
+			<content>水晶之恋主题</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>潘玮柏 - Wu Ha Wu Ha</name>
+			<url>http://flash.jw366.com/mp31/wuha.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>素敌だね - Final Fantasy X</name>
+			<url>http://www.96i.com.cn/yule/ffx-2/ffx.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Melodies of life - Final Fantasy 9</name>
+			<url>http://www.fengfanworld.com/music/ff9.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Eyes on me - Final Fantasy VIII</name>
+			<url>http://www.badmintonsky.com/mp3/200412/EyesonmeWF.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>F.I.R. - lydia</name>
+			<url>http://www.flashk.org/2004/music99/top/飞儿乐团 - Lydia.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Emilia - Big Big World</name>
+			<url>http://61.187.92.233/music/music/今日推荐/流行音乐/其他歌曲%20暂无歌词/Emilia%20-%20Big%20big%20world%20.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>westlife - Flying Without Wings</name>
+			<url>http://www.englishabc.com/mp3/song.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Eagles - Hotel California</name>
+			<url>http://www.chinawater.com.cn/grzl/px/1.mp3</url>
+			<content>老鹰加州</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Mariah Carey - Hero</name>
+			<url>http://www.nordicsky.com/club/UploadFile/2003111312265911822.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>A Berrer Day - JTL</name>
+			<url>http://61.187.92.233/music/music/今日推荐/流行音乐/其他歌曲%20暂无歌词/jtl%20-%20a%20berrer%20day.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Because I am a girl - KISS</name>
+			<url>http://www.skhsjs.edu.hk/teacher_web/persy_au/music/Kiss-Because%20I%20Am%20A%20Woman.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Take me to your heart</name>
+			<url>http://www.borou.com/gong/img/Take%20Me%20To%20Your%20Heart%20.mp3</url>
+			<content>Michael Learns To Rock - take me to your heart</content>
+			<pic></pic>
+			<lrc>http://www.kaitian.cc/bbs/mxy/lrc/Take_Me_To_Your_Heart.txt</lrc>
+		</music>
+		<music>
+			<name>Faith Hill - There You'll Be</name>
+			<url>http://www.buyionline.net/~omni/music/PearlHarbor_FaithHill.mp3</url>
+			<content>珍珠港主题</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>WestLife - Mandy</name>
+			<url>http://www.1696.com.cn/web1696/music/omeiyueduizuhe/w/Westlife/Turnaround/77314220169249.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>猪之歌</name>
+			<url>http://www.enboedu.com/club/UploadFile/pig.mp3</url>
+			<content>猪~你的鼻子有两个孔，感冒时的你还挂着鼻涕牛牛~</content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>张敬轩 - 断点</name>
+			<url>http://www.shedu.com.cn/wypb/a/eje/ky/duandian.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>零点 - 爱不爱我</name>
+			<url>http://www.fuxingcowboy.com/loveme.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>周华健 - 朋友</name>
+			<url>http://www.szxinhai.com/images/freind.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>F.I.R. - 我们的爱</name>
+			<url>http://www.flashk.org/2004/music99/tmpMusic/飞儿乐团 - 我们的爱.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>BEYOND - 真的爱你</name>
+			<url>http://www.szxinhai.com/images/realloveyou.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>罗大佑 - 恋曲1990</name>
+			<url>http://www.szxinhai.com/images/1990.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>Loving you</name>
+			<url>http://www.toppros.com.hk/Manage/images/Lovingyou.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>刘海砍樵 中国戏剧</name>
+			<url>http://www.dzzg.net/ylxw/mp3/liuhaikangjiao.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+		<music>
+			<name>叶丽仪 - 上海滩</name>
+			<url>http://digieye.w9.dvbbs.net/3/sh.mp3</url>
+			<content></content>
+			<pic></pic>
+			<lrc></lrc>
+		</music>
+	</list>
+	<config>
+		<bg>
+			<url a="50" c="PLMM1">http://www.cenfun.com/cfplay/bg/bg1.jpg</url>
+			<url a="50" c="PLMM2">http://www.cenfun.com/cfplay/bg/bg2.jpg</url>
+			<url a="50" c="PLMM3">http://www.cenfun.com/cfplay/bg/bg3.jpg</url>
+			<url a="50" c="PLMM4">http://www.cenfun.com/cfplay/bg/bg4.jpg</url>
+			<url a="50" c="PLMM5">http://www.cenfun.com/cfplay/bg/bg5.jpg</url>
+			<url a="50" c="PLMM6">http://www.cenfun.com/cfplay/bg/bg6.jpg</url>
+			<url a="50" c="PLMM7">http://www.cenfun.com/cfplay/bg/bg7.jpg</url>
+			<url a="50" c="PLMM8">http://www.cenfun.com/cfplay/bg/bg8.jpg</url>
+			<url a="50" c="P1">http://www.cenfun.com/cfplay/bg/p1.jpg</url>
+			<url a="50" c="P2">http://www.cenfun.com/cfplay/bg/p2.jpg</url>
+			<url a="50" c="P3">http://www.cenfun.com/cfplay/bg/p3.jpg</url>
+			<url a="50" c="蒂法">http://www.cenfun.com/cfplay/bg/ff7.jpg</url>
+			<url a="50" c="Ferrari">http://www.cenfun.com/cfplay/bg/car1.jpg</url>
+		</bg>
+		<ads>
+			<txt>播放器已经更新至Flash 8.0版本，歌曲不定期更新！</txt>	
+			<txt>祝大家工作愉快、事事顺心！</txt>		
+			<txt>让生活充满音乐，点歌请留言！</txt>
+		</ads>
+		<version>CenFun呕心沥血开发制作Flash Mp3播放器 CFplay V1.1</version>
+		<copyright>Copyright 2005 CenFun Design</copyright>
+	</config>
+</cfplay>

@@ -1,0 +1,33 @@
+﻿<skin name="Adult" version="1.2" author="CenFun" email="cenfun@gmail.com" url="http://bbs.cenfun.com/" readme="" mask_color="" show_tips="0.5">
+  <option xywh="8R, 48R, 320, 240" src="win.png" lock="1" display="0" group="A" fade="0">
+    <pane xywh="5, 20, 5B, 20B" align="left" font="Arial" size="12" color="#666666, #ffffff" />
+    <scrollbar thumb_src="scrollbar_thumb.png"/>
+    <bt_close xywh="10R, 3, 30, 12" src="bt_close.png"/>
+    <event type="open" target="list" property="display" value="0" />
+  </option>
+  <list xywh="30R, 48R, 320, 240" src="win.png" mask="" lock="1" display="0" group="">
+    <tree xywh="5, 20, 5B, 20B" align="left" font="Arial" size="12" color="#666666, #ffffff"/>
+    <scrollbar thumb_src="scrollbar_thumb.png"/>
+    <bt_close xywh="10R, 3, 30, 12" src="bt_close.png"/>
+    <event type="open" target="option" property="display" value="0" />
+  </list>
+  <lrc xywh="0C, 7R, 100B, 18" src="" lock="1" display="1" group="A">
+    <text xywh="0, 0, 100P, 100P" align="center" font="Arial" size="12" color="#999999, #ffffff" horizontal="1" max_scale="3" shadow="1,90,#000000,0.5,4,4,1,1" />
+  </lrc>
+  <console xywh="0, 0R, 100P, 60" src="console.png" mask="" lock="1" display="1" group="">
+    <bt_play xywh="1, 1R, 45, 48" src="bt_play.png"/>
+    <bt_stop xywh="48, 1R, 45, 48" src="bt_stop.png"/>
+    <progress xywh="1, 51R, 1B, 7" thumb_src="progress_thumb.png" track_src="progress_track.png" thumb_autohide="1" />
+    <time xywh="100, 30R, 92, 16" align="center" font="Verdana" size="9" color="#999999" borderColor="" backgroundColor="#222222" bold="" shadow="1,90,#000000,0.5,4,4,1,3,true" />
+    <status xywh="195, 30R, 230B, 18" align="left" font="Verdana" size="12" color="#666666" borderColor="" backgroundColor="" bold="" />
+    <title xywh="100R, 30R, 160, 18" align="right" font="Verdana" size="12" color="#999999" bold="" borderColor="" />
+    <bt_mute xywh="68R, 27R, 20, 19" src="bt_mute.png" tips="静音,打开声音" />
+    <bt_list xywh="47R, 27R, 20, 19" src="bt_list.png" tips="列表" />
+    <bt_option xywh="26R, 27R, 20, 19" src="bt_option.png" tips="设置" />
+    <bt_fullscreen xywh="5R, 27R, 20, 19" src="bt_fullscreen.png" tips="全屏" />
+    <volume xywh="7R, 5R, 80, 21" thumb_src="" track_src="volume_track.png" />
+  </console>
+  <media xywh="0, 60R, 100P, 100P" src="media.swf" mask="" lock="1" display="1" group="">
+    <video xywh="0, 0, 100P, 100P"/>
+  </media>
+</skin>

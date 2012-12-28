@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4最新版本在线检测</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script>
+<div style="position:absolute;left:-1000px;">
+  <div id="cenfun_cmp_area"></div>
+  <div id="client_cmp_area"></div>
+</div>
+<h3>CMP4最新版本在线检测</h3>
+<div>请输入要检测的CMP4地址：(如：http://cmp.cenfun.com/cmp4/cmp.swf)</div>
+<form onsubmit="return checkCMP(this)">
+  <div style="margin-top:10px;">
+    <input id="cmp_url" type="text" value="" style="width:450px;margin-right:5px;" onfocus="this.select()" />
+  </div>
+  <div style="margin-top:10px;">
+    <input type="submit" value="开始检测版本" />
+  </div>
+</form>
+<div id="msg" style="margin-top:10px;line-height:150%;"></div>
+<script type="text/javascript">
+function $(id) { return document.getElementById(id); }
+function checkCMP(form) {
+	var cmp_url = $("cmp_url").value;
+	if (cmp_url) {
+		
+		$("cenfun_cmp_area").innerHTML = CMP.create("cenfun_cmp", "600", "400", "http://cmp.cenfun.com/cmp4/cmp.swf", {url:"", lists:"", api:"cenfun_cmp_loaded"});
+		$("client_cmp_area").innerHTML = CMP.create("client_cmp", "600", "400", cmp_url, {url:"", lists:"", api:"client_cmp_loaded"});
+		$("msg").innerHTML = "正则检测... (如果长时间未检测完成，可能是地址不正确或版本太旧)";
+		
+	} else {
+		$("msg").innerHTML = '<font color="#ff0000">请输入要检测的CMP4地址</font>';
+	}
+	return false;
+}
+var cenfun_cmpo, client_cmpo;
+function cenfun_cmp_loaded(key) {
+	cenfun_cmpo = CMP.get("cenfun_cmp");
+	if (!cenfun_cmpo) {
+		return;	
+	}
+	check_version();
+}
+function client_cmp_loaded(key) {
+	client_cmpo = CMP.get("client_cmp");
+	if (!client_cmpo) {
+		return;	
+	}
+	check_version();
+}
+function check_version() {
+	if (cenfun_cmpo && client_cmpo)	 {
+		
+		var cenfun_version = cenfun_cmpo.cmp_version();
+		var client_version = client_cmpo.cmp_version();	
+		var str = "<div>检测完成</div><div>官方最新的版本： " + cenfun_version + "</div><div>当前使用的版本： " + client_version + "</div>";
+		
+		var cenfun_num = cenfun_version.substr(cenfun_version.length - 6);
+		var client_num = client_version.substr(client_version.length - 6);
+		
+		cenfun_num = cenfun_num * 1;
+		client_num = client_num * 1;
+		
+		if (cenfun_num > client_num) {
+			str += '<div style="color:#ff0000;">您使用的不是最新版本，需要进行升级</div>'
+			str += '<div style="margin-top:10px;"><a href="http://cmp.cenfun.com/download/cmp4"><img src="http://cmp.cenfun.com/download/cmp4/?img" border="0" alt=""/></a></div>';
+		} else {
+			str += '<div>您使用的已经最新版本</div>';	
+		}
+		
+		$("msg").innerHTML = str;
+	}
+}
+</script>
+</body>
+</html>

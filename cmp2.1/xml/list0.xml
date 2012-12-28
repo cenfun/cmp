@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="gb2312"?>
+<list>
+<m>
+	<n>Mp3音乐测试</n>
+	<u>http://www.cenfun.com/demo.mp3</u>
+	<c>Mp3音乐测试</c>
+	<p>bg/p3.jpg</p>
+	<l>lrc/Mp3音乐测试.txt</l>
+	<s></s>
+</m>
+<m>
+	<n>歌手 - 歌名</n>
+	<u>http://www.cenfun.com/demo.mp3</u>
+	<c>某某最新专辑</c>
+	<p>bg/p3.jpg</p>
+	<l>lrc/歌手 - 歌名.txt</l>
+	<s>scene/fly1.swf</s>
+</m>
+<m>
+	<n>flv视频测试</n>
+	<u>http://www.cenfun.com/demo.flv</u>
+	<c>某某最新大片</c>
+	<p></p>
+	<l></l>
+	<s></s>
+</m>
+</list>

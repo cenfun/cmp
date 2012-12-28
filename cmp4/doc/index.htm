@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP简介</h3>
+<div class="mainmsg">CMP是一款免费的在线Flash音乐播放器，致力于提供最佳在线音乐播放解决方案。支持的<a href="http://bbs.cenfun.com/thread-11741-1-1.html" target="_blank">音频视频格式</a>主要有<a href="http://bbs.cenfun.com/thread-12418-1-1.html" target="_blank">MP3</a>,FLV,MP4,并可以通过网页<a href="api_js.htm">JS接口</a>实现<a href="http://bbs.cenfun.com/thread-11791-1-1.html" target="_blank">WMP</a>(Windows Media Player)所支持的格式播放，如wma等。主要功能特色有列表式播放(自定义音乐专辑和列表)，MP3可视化效果(<a href="http://bbs.cenfun.com/thread-12016-1-1.html" target="_blank">声音频谱</a>)，同步歌词（默认支持lrc歌词以及<a href="http://bbs.cenfun.com/thread-12140-1-1.html" target="_blank">kmc卡拉ok歌词</a>），高清视频和在线直播(h264/rtmp)，自定义<a href="http://bbs.cenfun.com/thread-11155-1-1.html" target="_blank">皮肤</a>，加载各种<a href="http://bbs.cenfun.com/thread-10166-1-1.html" target="_blank">插件</a>等等，CMP4支持<a href="api.htm">API</a>的调用，可让用户实现更多自定义功能。<br />
+  <br />
+</div>
+<div class="mainmsg">为什么在web环境中采用基于flash的播放器优于wmp？</div>
+<div class="mainmsg">因为wmp是IE+Windows Only，很显然这已经不再符合现在的网络发展趋势。而flash具有很强的跨平台能力，基本支持所有PC操作系统(win/linux/mac)和浏览器(IE/FireFox/Chrome/Opera/Safari等)，这样才能使你网站的播放器具有更广泛的兼容性。当前，flash已经是使用最多的网络媒体播放软件，而且除了PC系统，flash已经开始全面支持android手机系统，所以web环境中(BS)采用基于flash的播放器无疑是最佳选择。 </div>
+<div class="mainmsg"><br />
+  <p>CMP为纯绿色软件，不含有任何广告，后门，弹出，限制等之类的东西 </p>
+  <p>CMP完全运行环境仅静态空间即可，完全运行于客户端，由flash/xml/html/js/文本和图片组成 </p>
+  <p>CMP有强大的自定义参数能力，可以很方便的实现完全动态数据支持，服务端不限(asp/php/.net/jsp等) </p>
+  <p>CMP为免费软件，无需任何使用费用</p>
+</div>
+<div class="mainmsg"><br />
+  <strong>CMP1.1</strong>(2005) -&gt; <strong>CMP2.0</strong>(2006) -&gt; <strong>CMP2.1</strong>(2007) -&gt; <strong>CMP3</strong>(2008) -&gt; <strong>CMP4</strong>(2009)</div>
+<div class="line"></div>
+<h3>CMP4文件组成</h3>
+<div class="mainmsg">CMP由纯静态文件组成，运行于客户端浏览器。下载安装包，上传目录cmp/中所有文件即可，部分目录和文件说明： </div>
+<div class="mainmsg">
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tbody>
+      <tr>
+        <th>cmp.swf</th>
+        <td>CMP主程序，集成默认皮肤(default.zip)</td>
+      </tr>
+      <tr>
+        <th>cmpn.swf</th>
+        <td>CMP裸版主程序，不集成默认皮肤</td>
+      </tr>
+      <tr>
+        <th><a href="example.htm">cmp.js</a></th>
+        <td>CMP专用插入脚本 <a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp.js" target="_blank">svn</a> <a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/js/cmp_src.js" target="_blank">src</a></td>
+      </tr>
+      <tr>
+        <th><a href="config.htm">config.xml</a></th>
+        <td>全局配置文件，如不配置url参数，将默认加载此文件为配置</td>
+      </tr>
+      <tr>
+        <th><a href="list.htm">list.xml</a></th>
+        <td>音乐列表文件，如果不配置lists参数，将默认加载此文件为列表</td>
+      </tr>
+      <tr>
+        <th><a href="crossdomain.htm">crossdomain.xml</a></th>
+        <td>flash的跨域策略文件，用来允许所在域的数据能被其他域的flash跨域调用</td>
+      </tr>
+      <tr>
+        <th><a href="example.htm">index.htm</a></th>
+        <td>CMP调用<a href="http://cmp.cenfun.com/cmp4/" target="_blank">Demo</a>页面</td>
+      </tr>
+      <tr>
+        <th>plugins/</th>
+        <td><a href="http://bbs.cenfun.com/thread-10166-1-1.html" target="_blank">插件</a>目录，其中的apiexample为示例插件和源文件</td>
+      </tr>
+      <tr>
+        <th>skins/</th>
+        <td><a href="http://bbs.cenfun.com/thread-11155-1-1.html" target="_blank">皮肤</a>目录，皮肤包必须为zip压缩格式，mini目录中还有迷你单曲皮肤<br />
+          通常，如果遇到皮肤包加载错误，可能是因为空间不支持zip后缀文件的访问导致，可尝试将后缀改为swf规避</td>
+      </tr>
+      <tr>
+        <th>lrc/</th>
+        <td>歌词目录<br />
+          通常，如果遇到歌词加载错误，可能是因为空间不支持lrc/kmc后缀文件的访问导致，可尝试将后缀改为txt规避</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="line"></div>
+<h3>CMP4框架示意图</h3>
+<div class="mainmsg">介绍CMP4运行的整体框架和流程，包括配置，列表，模块，视图，皮肤，插件，API等等</div>
+<div class="mainmsg"><a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/cmp4map.png" target="_blank">点击打开</a></div>
+<div class="line"></div>
+<div class="mainmsg">官方论坛： <a href="http://bbs.cenfun.com" target="_blank">http://bbs.cenfun.com</a> | <a href="http://bbs.cenfun.com/thread-9895-1-1.html" target="_blank">下载最新版</a></div>
+<div class="mainmsg">Email： <a href="mailto:cenfun@gmail.com" target="_blank">cenfun@gmail.com</a></div>
+<div class="mainmsg">技术支持QQ： 44023478</div>
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+﻿<!--
+
+chat_xywh  打开按钮的位置宽高
+
+chat_alone  是否在独立窗口打开聊天室，默认为0，直接在cmp中打开；有时用cmp看直播同时要聊天，可设置为1，在新窗口打开边看直播边聊天
+
+chat_cchaturl  CChat聊天室程序地址，默认为http://cchat.sinaapp.com/cchat.swf
+
+
+-->
+<cmp 
+	
+	plugins = "plugins/chat.swf"
+	
+	chat_xywh = "20,20,32,32"
+	chat_alone = ""
+	chat_cchaturl = ""
+
+/>

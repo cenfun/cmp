@@ -1,0 +1,505 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - ActionScript3接口</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>CMP4 ActionScript3 API接口说明</h3>
+<div class="submsg">
+  <div>通过AS3的API接口通讯，我们可以在插件或皮肤中，直接获取CMP数据并进行控制，下面是所以支持的属性，方法，事件</div>
+  <table border="0" cellspacing="0" cellpadding="0" class="msgtable">
+    <tr>
+      <th colspan="2" class="head"><a name="attributes"></a>属性attributes：</th>
+    </tr>
+    <tr>
+      <th>cmp:Object;</th>
+      <td>返回cmp对象</td>
+    </tr>
+    <tr>
+      <th>config:Object;</th>
+      <td>取得cmp全局配置，包含所有可读写的<a href="config.htm" target="_blank">全局配置</a>，以及其他一些配置的只读属性，比如当前播放状态state，具体有哪些可用for in语句查询</td>
+    </tr>
+    <tr>
+      <th>item:Object;</th>
+      <td>取得当前播放项，包含所有<a href="list.htm" target="_blank">列表项属性</a>，以及其他一些播放项的只读属性，具体有哪些可用for in语句查询</td>
+    </tr>
+    <tr>
+      <th>list_xml:XML;</th>
+      <td>取得列表xml的引用</td>
+    </tr>
+    <tr>
+      <th>models:Object;</th>
+      <td>返回CMP当前所有支持的模块集，可用for in查询</td>
+    </tr>
+    <tr>
+      <th>skin_xml:XMLList;</th>
+      <td>取得当前皮肤配置的引用</td>
+    </tr>
+    <tr>
+      <th>tools:Object;</th>
+      <td>返回cmp的工具箱，主要有：base64, effects, graphics, netclient, output, states, strings, types, zoom, zip<br />
+        具体每个工具的方法可以用for in查询，特别的output方法是输出调试信息，支持cmp跟踪器进行输出</td>
+    </tr>
+    <tr>
+      <th>win_list:Object;</th>
+      <td><p>取得5个窗口的引用，有如下5个属性: option/list/media/console/lrc</p>
+        <p>当然还可以访问下一级对象，如要访问播放按钮bt_play则可：</p>
+        <p>var bt_play = api.win_list.console.bt_play;</p>
+        <p>结构和名称同皮肤包里面的skin.xml皮肤配置的结构和名称</p></td>
+    </tr>
+    <tr>
+      <th colspan="2" class="head"><a name="methods"></a>方法methods：</th>
+    </tr>
+    <tr>
+      <th>addEventListener():void;</th>
+      <td><p>addEventListener(key:String, type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = true):void</p>
+        <p>添加一个事件侦听器，如侦听皮肤加载完成事件：</p>
+        <p>api.addEventListener(api.key, 'skin_loaded', skinHandler); </p>
+        <p>特别不同，这里第一个参数需传入api.key，它是一个唯一key值，用于第三方flash移除时，销毁其key所在所有注册的事件</p></td>
+    </tr>
+    <tr>
+      <th>addModel():String; </th>
+      <td><p>addModel(model:Object, type:String, exts:Array = null):String</p>
+        <p>添加一个自定义模块，CMP4默认有4个播放模块，这个方法用来支持自定义其他模块</p>
+        <p>其中model模块对象必须要有这些public方法：&quot;load&quot;, &quot;play&quot;, &quot;pause&quot;, &quot;seek&quot;, &quot;volume&quot;, &quot;stop&quot;, &quot;finish&quot;</p>
+        <p>type为模块的类型名称，exts为模块自动识别的后缀名数组列表</p>
+        <p>将返回一些成功或错误信息</p>
+        <p>一些添加自定义模块的例子：<a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/plugins/models/" target="_blank">打开</a></p></td>
+    </tr>
+    <tr>
+      <th>addProxy():void;</th>
+      <td><p>addProxy(n:String, f:Function):void</p>
+        <p>添加一个代理函数，用于src=&quot;proxy:函数名,函数参数&quot;这样的协议，如：</p>
+        <p>api.addProxy(&quot;youku&quot;, yk_callback);</p>
+        <p>这样就可以用自定义的yk_callback(函数参数)方法来解析协议：src=&quot;proxy:youku,函数参数&quot;</p>
+        <p>应用例子可见：<a href="http://bbs.cenfun.com/thread-13590-1-1.html" target="_blank">http://bbs.cenfun.com/thread-13590-1-1.html</a></p></td>
+    </tr>
+    <tr>
+      <th>cookie():String</th>
+      <td>读取(cookie(&quot;name&quot;))和写入(cookie(&quot;name&quot;, &quot;data&quot;))本地存储，类似于浏览器cookie，但无时间过期限制</td>
+    </tr>
+    <tr>
+      <th>removeEventListener():void;</th>
+      <td><p>removeEventListener(type:String, listener:Function, useCapture:Boolean = false):void</p>
+        <p> 移除一个事件侦听器，如：api.removeEventListener('skin_loaded', skinHandler); </p></td>
+    </tr>
+    <tr>
+      <th>sendEvent():void;</th>
+      <td><p>sendEvent(type:String, data:Object = null):void</p>
+        <p>发送一个事件，如：api.sendEvent(&quot;view_play&quot;);</p>
+        <p>如果有参数data要传递就是：api.sendEvent(&quot;view_play&quot;, data);</p></td>
+    </tr>
+    <tr>
+      <th>sendState():void;<br /></th>
+      <td><p>sendState(state:String):void</p>
+        <p>发送一个新的播放状态，如将播放状态改为正连接：</p>
+        <p>api.sendState(&quot;connecting&quot;);</p></td>
+    </tr>
+    <tr>
+      <th>setSoundFilter():void;</th>
+      <td><p>setSoundFilter(fn:Function):void</p>
+        <p>设置声音过滤函数，以实现声音变调等效果。必须启用声音取样sound_sample</p></td>
+    </tr>
+    <tr>
+      <th>showMedia():Sprite; </th>
+      <td><p>showMedia(clip:DisplayObject):Sprite</p>
+        <p>显示一个媒体到媒体窗口，clip可以是一个Video对象，或者一个其他显示对象</p>
+        <p>将返回添加媒体所在的容器对象</p></td>
+    </tr>
+    <tr>
+      <th>showMixer():Sprite; </th>
+      <td><p>showMixer(sound:Boolean = true):Sprite</p>
+        <p>是否显示频谱，sound表示如果是声音则显示，否则不显示</p>
+        <p>将返回mixer对象</p></td>
+    </tr>
+    <tr>
+      <th>toString():String;</th>
+      <td>打印api所有属性，方法，事件类型，方便查阅所有支持的api</td>
+    </tr>
+    <tr>
+      <th colspan="2" class="head"><a name="events"></a>事件类型events：<span>按字母顺序</span></th>
+    </tr>
+    <tr>
+      <th>api</th>
+      <td>发送api共享事件时调度</td>
+    </tr>
+    <tr>
+      <th>api_remove</th>
+      <td>api插件移除时调用</td>
+    </tr>
+    <tr>
+      <th>control_fullscreen</th>
+      <td>全屏状态改变时调度</td>
+    </tr>
+    <tr>
+      <th>control_load</th>
+      <td>音乐开始加载时调度</td>
+    </tr>
+    <tr>
+      <th>control_max</th>
+      <td>最大化改变时调度，事件的data将传递是lrc_max还是video_max</td>
+    </tr>
+    <tr>
+      <th>control_mute</th>
+      <td>静音状态改变时调度</td>
+    </tr>
+    <tr>
+      <th>control_next</th>
+      <td>播放下一个时调度</td>
+    </tr>
+    <tr>
+      <th>control_pause</th>
+      <td>暂停时调度</td>
+    </tr>
+    <tr>
+      <th>control_play</th>
+      <td>播放时调度</td>
+    </tr>
+    <tr>
+      <th>control_playmode</th>
+      <td>播放模式改变时调度</td>
+    </tr>
+    <tr>
+      <th>control_prev</th>
+      <td>播放上一个时调度</td>
+    </tr>
+    <tr>
+      <th>control_progress</th>
+      <td>进度改变时调度</td>
+    </tr>
+    <tr>
+      <th>control_stop</th>
+      <td>停止时调度</td>
+    </tr>
+    <tr>
+      <th>control_volume</th>
+      <td>音量改变时调度</td>
+    </tr>
+    <tr>
+      <th>control_win</th>
+      <td>窗口打开关闭时调度</td>
+    </tr>
+    <tr>
+      <th>control_winbt</th>
+      <td>窗口对应按钮状态改变时调度</td>
+    </tr>
+    <tr>
+      <th>item_closed</th>
+      <td><p>列表项关闭时调度</p>
+        <p>事件的data将返回关闭项对象</p></td>
+    </tr>
+    <tr>
+      <th>item_deleted</th>
+      <td><p>列表项删除时调度</p>
+        <p>事件的data将返回删除项对象</p></td>
+    </tr>
+    <tr>
+      <th>item_loaded</th>
+      <td><p>列表项是子列表时，加载完成时调度</p>
+        <p>事件的data将返回需要加载子列表的项</p></td>
+    </tr>
+    <tr>
+      <th>item_opened</th>
+      <td><p>列表项打开时调度</p>
+        <p>事件的data将返回打开项对象</p></td>
+    </tr>
+    <tr>
+      <th>list_change</th>
+      <td>列表已经改变时调度，表示新的列表已经刷新，可用于播放等操作</td>
+    </tr>
+    <tr>
+      <th>list_load</th>
+      <td><p>使列表开始加载时调度</p>
+        <p>事件的data可以传入新指定的配置lists进行加载</p></td>
+    </tr>
+    <tr>
+      <th>list_loaded</th>
+      <td><p>列表内容加载完时调度，多个列表会调度多个，每次会将加载的列表数据进行解析，然后附加到总列表，再刷新列表</p>
+        <p>事件的data可以传入新指定的xml列表内容字符进行解析，此功能便于外载调用，直接输入列表内容</p></td>
+    </tr>
+    <tr>
+      <th>lrc_complete</th>
+      <td><p>歌词成功加载完成时调度</p>
+        <p>事件data返回当前加载成功的歌词类型：lrc或kmc</p></td>
+    </tr>
+    <tr>
+      <th>lrc_error</th>
+      <td><p>歌词加载或解析错误时调度</p>
+        <p>事件data将返回错误信息</p></td>
+    </tr>
+    <tr>
+      <th>lrc_load</th>
+      <td><p>使当前音乐的歌词开始加载时调度</p>
+        <p>事件data可以传入指定当前音乐的歌词地址，支持lrc和kmc地址</p></td>
+    </tr>
+    <tr>
+      <th>lrc_loaded</th>
+      <td><p>歌词加载完成时调度</p>
+        <p>事件data可以传入指定的歌词内容，支持lrc和kmc格式内容</p></td>
+    </tr>
+    <tr>
+      <th>lrc_max</th>
+      <td>对歌词最大化状态进行切换</td>
+    </tr>
+    <tr>
+      <th>lrc_resize</th>
+      <td>歌词尺寸改变时调度，包括对歌词进行缩放调整</td>
+    </tr>
+    <tr>
+      <th>lrc_rowchange</th>
+      <td><p>当前歌词行内容改变时调度，仅支持lrc和kmc格式</p>
+        <p>事件data将传递返回当前行的歌词内容</p>
+        <p>有了这个事件可以很方便的调用js api在浏览器标题栏或状态栏打印当前位置的歌词</p></td>
+    </tr>
+    <tr>
+      <th>mixer_color</th>
+      <td><p>对混音器颜色进行变更时调度</p>
+        <p>事件data可以传入新的颜色值</p></td>
+    </tr>
+    <tr>
+      <th>mixer_displace</th>
+      <td><p>对混音器的置换效果状态进行切换时调度</p>
+        <p>事件data可传入true或false</p></td>
+    </tr>
+    <tr>
+      <th>mixer_filter</th>
+      <td><p>对混音器的滤镜效果状态进行切换时调度</p>
+        <p>事件data可传入true或false</p></td>
+    </tr>
+    <tr>
+      <th>mixer_next</th>
+      <td><p>使用下一个混音器效果时调度</p>
+        <p>事件data可以传入下一个频谱效果的id</p></td>
+    </tr>
+    <tr>
+      <th>mixer_prev</th>
+      <td><p>使用上一个混音器效果时调度</p>
+        <p>事件data可以传入下一个频谱效果的id</p></td>
+    </tr>
+    <tr>
+      <th>model_change</th>
+      <td><p>模块改变时调度</p>
+        <p>事件data可以传入要使用的新模块类型type</p></td>
+    </tr>
+    <tr>
+      <th>model_complete</th>
+      <td>模块播放完成时调度 </td>
+    </tr>
+    <tr>
+      <th>model_error</th>
+      <td><p>当前项发生错误时调度</p>
+        <p>事件data将返回错误信息</p></td>
+    </tr>
+    <tr>
+      <th>model_load</th>
+      <td><p>模块开始加载时调度</p>
+        <p>事件data可以传入即将要播放媒体url</p></td>
+    </tr>
+    <tr>
+      <th>model_loaded</th>
+      <td>当前项下载完成时调度</td>
+    </tr>
+    <tr>
+      <th>model_loading</th>
+      <td>当前项正在下载时调度</td>
+    </tr>
+    <tr>
+      <th>model_meta</th>
+      <td><p>当前项取得meta信息时调度</p>
+        <p>事件data将返回meta数据对象</p></td>
+    </tr>
+    <tr>
+      <th>model_start</th>
+      <td>当前项第一次开始播放时调度，一般此时才开始加载歌词或开始显示频谱</td>
+    </tr>
+    <tr>
+      <th>model_state</th>
+      <td><p>当前项状态改变时调度<br />
+          事件data将返回当前状态，所有支持状态码为：</p>
+        <p><strong>undefined</strong> 未定义<br />
+          <strong>connecting</strong> 连接中<br />
+          <strong>buffering</strong> 缓冲<br />
+          <strong>playing</strong> 正在播放<br />
+          <strong>paused</strong> 已暂停<br />
+          <strong>stopped</strong> 已停止<br />
+          <strong>completed</strong> 播放完成<br />
+          <strong>reconnecting</strong> 重试连接</p>
+        <p>状态改变时，将在皮肤的状态栏显示当前状态对应的说明，说明可以在<a href="skin.htm">皮肤配置</a>的languages多语言里自定义</p></td>
+    </tr>
+    <tr>
+      <th>model_time</th>
+      <td>当前项播放时间改变时调度</td>
+    </tr>
+    <tr>
+      <th>plugins_load</th>
+      <td><p>插件和背景开始加载时调度</p>
+        <p>事件data可传入新指定的配置plugins(不支持backgrounds)进行加载</p></td>
+    </tr>
+    <tr>
+      <th>plugins_loaded</th>
+      <td>plugins参数指定的插件全部加载完成时调度(此时将第一次加载列表lists指定的文件)</td>
+    </tr>
+    <tr>
+      <th>plugins_remove</th>
+      <td>插件和背景移除时调度</td>
+    </tr>
+    <tr>
+      <th>resize</th>
+      <td>播放器舞台改变尺寸时调度</td>
+    </tr>
+    <tr>
+      <th>skin_change</th>
+      <td><p>针对皮肤id对皮肤进行改变时调度</p>
+        <p>事件data可以直接传入新的皮肤id</p></td>
+    </tr>
+    <tr>
+      <th>skin_complete</th>
+      <td>皮肤显示完成时调度</td>
+    </tr>
+    <tr>
+      <th>skin_load</th>
+      <td><p>皮肤开始加载时调度</p>
+        <p>事件data可以传入新指定的配置skins参数进行加载</p></td>
+    </tr>
+    <tr>
+      <th>skin_loaded</th>
+      <td>皮肤加载完成时调度</td>
+    </tr>
+    <tr>
+      <th>video_blackwhite</th>
+      <td><p>对视频是否启用黑白效果滤镜</p>
+        <p>事件data可传入true或false</p></td>
+    </tr>
+    <tr>
+      <th>video_effect</th>
+      <td><p>对视频进行颜色滤镜(ColorMatrixFilter)改变时调度</p>
+        <p>事件data可以传入一个英文逗号隔开的数组值，用来新建颜色矩阵滤镜ColorMatrixFilter</p></td>
+    </tr>
+    <tr>
+      <th>video_highlight</th>
+      <td><p>对视频是否启用高亮效果滤镜</p>
+        <p>事件data可传入true或false</p></td>
+    </tr>
+    <tr>
+      <th>video_max</th>
+      <td>对视频最大化进行切换时调度</td>
+    </tr>
+    <tr>
+      <th>video_resize</th>
+      <td>视频尺寸改变时调度</td>
+    </tr>
+    <tr>
+      <th>video_rotation</th>
+      <td><p>对视频进行旋转时调度</p>
+        <p>事件data可以传入旋转的角度值，如90</p></td>
+    </tr>
+    <tr>
+      <th>video_scalemode</th>
+      <td><p>对视频进行缩放模式改变时调度</p>
+        <p>事件data可以传入支持缩放模式的id，支持0,1,2,3</p></td>
+    </tr>
+    <tr>
+      <th>video_smoothing</th>
+      <td><p>对视频是否启用平滑效果时调度</p>
+        <p>事件data可以传入true或false</p></td>
+    </tr>
+    <tr>
+      <th>view_console</th>
+      <td>对控制窗口状态进行改变时调度</td>
+    </tr>
+    <tr>
+      <th>view_forward</th>
+      <td>点击快进按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_fullscreen</th>
+      <td>对全屏状态进行改变时调度</td>
+    </tr>
+    <tr>
+      <th>view_item</th>
+      <td>对播放项进行改变时调度</td>
+    </tr>
+    <tr>
+      <th>view_link</th>
+      <td>点击链接按钮时调度<br />
+        事件data可以传入新指定的链接进行打开</td>
+    </tr>
+    <tr>
+      <th>view_list</th>
+      <td>对列表窗口进行改变时调度</td>
+    </tr>
+    <tr>
+      <th>view_lrc</th>
+      <td>对歌词窗口进行改变时调度</td>
+    </tr>
+    <tr>
+      <th>view_more</th>
+      <td>点击更多按钮时调度<br />
+        事件data可以传入新指定的链接进行打开</td>
+    </tr>
+    <tr>
+      <th>view_mute</th>
+      <td>点击静音按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_next</th>
+      <td>点击下一个按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_option</th>
+      <td>对设置窗口进行改变时调度</td>
+    </tr>
+    <tr>
+      <th>view_play</th>
+      <td><p>点击播放或暂停按钮时调度</p>
+        <p>事件的data可以传递列表id位置，表示播放第几个</p></td>
+    </tr>
+    <tr>
+      <th>view_prev</th>
+      <td>点击上一个按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_progress</th>
+      <td><p>拖动播放进度条时调度</p>
+        <p>事件data可以传入指定的进度百分值</p></td>
+    </tr>
+    <tr>
+      <th>view_random</th>
+      <td>点击随机播放模式按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_repeat</th>
+      <td>点击重复播放模式按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_rewind</th>
+      <td>点击快退按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_single</th>
+      <td>点击单遍播放模式按钮时播放</td>
+    </tr>
+    <tr>
+      <th>view_stop</th>
+      <td>点击停止按钮时调度</td>
+    </tr>
+    <tr>
+      <th>view_video</th>
+      <td>对视频窗口状态进行改变时调度</td>
+    </tr>
+    <tr>
+      <th>view_volume</th>
+      <td><p>拖动音量条时调度</p>
+        <p>事件data可以传入指定的volume音量值和panning平移值，用英文逗号隔开，如：1,0</p></td>
+    </tr>
+  </table>
+  <div>具体API接口应用的例子可以见安装包的示例：plugins/ApiExample.as 或者直接到官方插件库查看，全部附源文件：<br />
+    <a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/plugins/" target="_blank">http://cenfunmusicplayer.googlecode.com/svn/trunk/cmp4/plugins/</a></div>
+</div>
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

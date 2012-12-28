@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name=keywords content="晨风,Cenfun">
+<meta name="description" content="Design By www.Cenfun.com">
+<title>CenFun Music Player ASP在线音乐管理程序说明</title>
+<style type="text/css">
+body {
+	background:#CAD7F7; font-size: 12px; margin-top:0px;
+	SCROLLBAR-FACE-COLOR: #799AE1; SCROLLBAR-HIGHLIGHT-COLOR: #799AE1; 
+	SCROLLBAR-SHADOW-COLOR: #799AE1; SCROLLBAR-DARKSHADOW-COLOR: #799AE1; 
+	SCROLLBAR-3DLIGHT-COLOR: #799AE1; SCROLLBAR-ARROW-COLOR: #FFFFFF;
+	SCROLLBAR-TRACK-COLOR: #AABFEC;
+}
+TD,SPAN{
+	FONT-SIZE: 12px
+}
+A {
+	COLOR: #000000; TEXT-DECORATION: none;
+}
+A:hover { color:#428EFF;text-decoration:underline; }
+A.highlight {
+	COLOR: red; TEXT-DECORATION: none;
+}
+A.highlight:hover {
+	COLOR: red;
+}
+A.thisclass {
+	FONT-WEIGHT: bold; TEXT-DECORATION: none
+}
+A.thisclass:hover {
+	FONT-WEIGHT: bold;
+}
+A.navlink {
+	COLOR: #000000; TEXT-DECORATION: none;
+}
+A.navlink:hover {
+	COLOR: #003399; TEXT-DECORATION: none;
+}
+.twidth {
+	WIDTH: 760px;
+}
+.content {
+	FONT-SIZE: 14px; MARGIN: 5px 20px; LINE-HEIGHT: 140%; FONT-FAMILY: Tahoma,宋体
+}
+.aTitle {
+	FONT-WEIGHT: bold; FONT-SIZE: 15px
+}
+TD.cmsHeaderBackgroundAlternate {
+	BACKGROUND-IMAGE: url(admin/images/admin_top_bg.gif); COLOR: #000000; BACKGROUND-COLOR: #799ae1
+}
+.shadow {border: outset 2px;}
+#TableTitleLink{
+	font-weight:bold;
+	COLOR: #ffffff; 
+}
+#TableTitleLink A:link,#TableTitleLink A:visited,#TableTitleLink A:active{
+	COLOR: #ffffff; TEXT-DECORATION: none
+}
+#TableTitleLink A:hover {
+	COLOR: #ffffff; TEXT-DECORATION: underline
+}
+.cmsRow {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; BACKGROUND: #F1F3F5; PADDING-BOTTOM: 5px; PADDING-TOP: 5px
+}
+.cmsRow01 {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; BACKGROUND: #F1F1F1; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+.cmsRow02 {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; BACKGROUND: #FFFFFF; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+TH {
+	FONT-WEIGHT: bold; FONT-SIZE: 12px; BACKGROUND-IMAGE: url(admin/images/admin_bg_1.gif); COLOR: white; BACKGROUND-COLOR: #4455aa
+}
+TD.bodytitle {
+	BACKGROUND-IMAGE: url(admin/images/admin_bg_2.gif)
+}
+TD.bodytitle1 {
+	BACKGROUND-IMAGE: url(admin/images/admin_bg_3.gif)
+}
+TD.tablebody1 {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; BACKGROUND: #bebbdb; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+TD.cmsRowHighlight {
+	PADDING-RIGHT: 3px; PADDING-LEFT: 3px; BACKGROUND: #E4EDF9; PADDING-BOTTOM: 3px; PADDING-TOP: 3px
+}
+.tableBorder {
+	BORDER-RIGHT: #183789 1px solid; BORDER-TOP: #183789 1px solid; BORDER-LEFT: #183789 1px solid; WIDTH: 98%; BORDER-BOTTOM: #183789 1px solid; BACKGROUND-COLOR: #ffffff
+}
+.tableBorder1 {WIDTH: 98%; }
+.helplink {
+	FONT: 10px verdana,arial,helvetica,sans-serif; CURSOR: help; TEXT-DECORATION: none
+}
+.copyright {
+	PADDING-RIGHT: 1px; BORDER-TOP: #6595d6 1px dashed; PADDING-LEFT: 1px; PADDING-BOTTOM: 1px; FONT: 11px verdana,arial,helvetica,sans-serif; COLOR: #4455aa; PADDING-TOP: 1px; TEXT-DECORATION: none
+}
+.code {
+	BORDER: #6595d6 1px dashed;
+	line-height:150%;
+	PADDING-RIGHT: 10px; 
+	PADDING-LEFT: 10px; 
+	PADDING-BOTTOM: 10px; 
+	PADDING-TOP: 10px; 	
+	FONT: 12px verdana,arial,helvetica,sans-serif; 
+	COLOR: #4455aa; 
+	TEXT-DECORATION: none;
+	margin:10px 10px 10px 10px;
+	background-color:#FFFFFF;
+}
+p{
+	margin:0px 0px 0px 0px;
+}
+.menuskin {
+	BORDER: #666666 1px solid; VISIBILITY: hidden; FONT: 12px Verdana;
+	POSITION: absolute; 
+	BACKGROUND-COLOR:#EFEFEF;
+	background-repeat : repeat-y;
+	}
+.menuskin A {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 25px; COLOR: black; TEXT-DECORATION: none; behavior:url(inc/noline.htc);
+	}
+#mouseoverstyle {
+	BACKGROUND-COLOR: #C9D5E7; margin:2px; padding:0px; border:#597DB5 1px solid;
+	}
+#mouseoverstyle A {
+	COLOR: black
+}
+.menuitems{
+	margin:2px;padding:1px;word-break:keep-all;
+}
+.wordbreak {
+	table-layout: fixed;
+	word-wrap: break-word;
+    word-break:break-all;
+}
+.STYLE1 {color: #FF0000}
+.STYLE2 {color: #336600}
+.STYLE3 {color: #808080}
+</style>
+</head>
+<body leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
+<br />
+<table border="0" align="center" cellpadding="5" cellspacing="1" class="tableBorder">
+  <tr>
+    <th colspan="2">CenFun Music Player ASP在线音乐管理程序说明 </th>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap" class="cmsRow">显示效果：</td>
+    <td valign="top" class="cmsRow"><embed src="cfplay.swf" quality="high" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" width="450" height="320"></embed></td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap" class="cmsRow">名称：</td>
+    <td valign="top" class="cmsRow">CenFun Music Player v2.0 b060706 <strong>&gt;&gt;<a href="admin/login.asp">进入管理</a></strong></td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap" class="cmsRow">作者：</td>
+    <td valign="top" class="cmsRow">CenFun</td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap" class="cmsRow">网址：</td>
+    <td valign="top" class="cmsRow"><a href="http://www.cenfun.com/cfplay/" target="_blank">http://www.cenfun.com/cfplay/</a></td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap" class="cmsRow">使用说明：</td>
+    <td valign="top" class="cmsRow">升级说明：<br />
+      新增歌词/列表的自定义颜色配置，是否自动播放配置<br />
+      新增播放进度条点击跳转功能<br />
+      其他细节优化，等等<br />
+      升级方法：<br />
+      1，覆盖新版cfplay.swf<br />
+      2，覆盖amdin文件夹中的新版manage.asp (首次运行先进行一次播放器配置即可)
+      <br />
+      =========================================<br />
+      基本运行环境:<br />
+      Win2000或更高+IIS5.0或更高+IE5.0以上+Access数据库支持<br />
+      文件目录需要有写入权限,支持FSO<br />
+      (如果你的网站空间不支持这些，可先在本地运行服务，管理完，然后只需要上传xml文件夹中的文件即可)<br />
+      =========================================<br />
+      管理登录：<br />
+      默认管理登录入口：admin/login.asp<br />
+      默认管理员用户名密码都为：admin <br />
+      =========================================<br />
+      <span class="STYLE1">■安全设置■</span>(很重要,务必进行修改)：<br />
+      1,请在第一次登录后进行用户名和密码修改！<br />
+      2,对数据库进行更名，默认位置：admin/data/#cfplay_data_2006.mdb<br />
+      更名后请务必对数据库连接文件admin/conn.asp第15行进行对应修改：Db = &quot;data/#cfplay_data_2006.mdb&quot; <br />
+      推荐在数据库文件名中加#符号，防止恶意下载，并将后缀mdb改为asp、asa等等<br />
+      3,更改管理入口文件夹名，比如将admin文件夹改为admin2008或者manage等等<br />
+    此操作不影响文件生成，只要管理文件夹和cfplay.swf处于同级目录即可</td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap" class="cmsRow01">网页代码：</td>
+    <td valign="top" class="cmsRow01"><p>HTML代码：</p>
+      <div align="left" class="code">&lt;embed src=&quot;http://您的网址/cfplay/cfplay.swf&quot; quality=&quot;high&quot; pluginspage=&quot;http://www.macromedia.com/go/getflashplayer&quot; type=&quot;application/x-shockwave-flash&quot; width=&quot;450&quot; height=&quot;320&quot; id=&quot;cfplay&quot;&gt;&lt;/embed&gt;</div>
+      <p>使用框架：</p>
+      <div align="left" class="code">&lt;iframe src=&quot;http://您的网址/cfplay/cfplay.swf&quot; height=&quot;320&quot; width=&quot;450&quot; align=&quot;middle&quot; marginheight=&quot;0&quot; marginwidth=&quot;0&quot; scrolling=&quot;no&quot; name=&quot;cfplay&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</div>
+      <p>UBB代码：</p>
+      <div align="left" class="code">[flash=450,320]http://您的网址/cfplay/cfplay.swf[/flash]</div>
+      <p></p></td>
+  </tr>
+  <tr>
+    <td align="right" nowrap="nowrap" class="cmsRow">常见问题：</td>
+    <td valign="top" class="cmsRow">1，如果出现&quot;Flash Player已终止一项可能不安全的操作&quot;提示信息，这是由Flash 8安全性设置引起的，请点击&quot;设置&quot;按钮，进入网页，在出现的Flash中选择&quot;始终允许&quot;项，然后关闭浏览器重新打开播放器即可。<br />
+      2，如果播放器停止在正在连接，即不能加载xml文件，可能是xml配置文件路径问题，请务必将调用flash播放器的网页和swf文件置于同级目录<br />
+      3，无法显示视频请升级安装Macromedia Flash Player 8插件<br />
+    4，<a href="http://www.cenfun.com/cfplay/" target="_blank">更多&gt;&gt;</a></td>
+  </tr>
+</table>
+<table width="95%" align="center" >
+  <tr align="center">
+    <td width=""100%"" class=copyright><a href="http://www.cenfun.com/cfplay/" target="_blank" class="copyright">CenFun Music Player</a>,
+      Copyright (c) 2005 <a href="http://www.cenfun.com/" target="_blank"><font color="#708796"><b>CenFun</b></font></a>. All Rights Reserved . </td>
+  </tr>
+</table>
+</body>
+</html>

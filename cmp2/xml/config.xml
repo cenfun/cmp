@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="gb2312"?>
+<config>
+<cflist>
+<list name="最近更新">xml/list0.xml</list>
+<list name="欧美经典">xml/list1.xml</list>
+<list name="华语流行">xml/list2.xml</list>
+</cflist>
+<bg>
+<url a="70">bg/p1.jpg</url>
+<url a="70">bg/p2.jpg</url>
+<url a="70">bg/p3.jpg</url>
+<url a="70">bg/p4.jpg</url>
+</bg>
+<scene>
+<scene>scene/scene1.swf</scene>
+<scene>scene/scene2.swf</scene>
+<scene>scene/scene3.swf</scene>
+</scene>
+<ads>
+<txt>无法正常显示请升级为Flash player 8</txt>
+<txt>空格暂停/播放，S键停止/播放</txt>
+<txt>Home/End/PageUp/PageDown翻页</txt>
+<txt>+/-号调音，上下左右键是上首下首快退快进</txt>
+<txt>点右键添加音乐，C键打开自定义列表</txt>
+<txt>双击/F键/点击右上角方框切换视频窗口</txt>
+<txt>点击歌曲序号前的X可删除指定歌曲</txt>
+</ads>
+<readme><![CDATA[欢迎大家使用CenFun Music Player!
+http://www.cenfun.com/]]></readme>
+<other><![CDATA[autoplay=
+lrccolor1=#008000
+lrccolor2=#84FF84
+listcolor1=#cccccc
+listcolor2=#00ff00
+classcolor1=#cccccc
+classcolor2=#00BD00
+bgcolor=#000000]]></other>
+<cfversion>http://www.cenfun.com/cfplay/</cfversion>
+<copyright>CenFun -『生活需要音乐』</copyright>
+</config>

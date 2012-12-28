@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4使用手册 - 跨域策略【crossdomain.xml】</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="static/style.css" type="text/css" media="all" />
+<meta content="bbs.cenfun.com" name="Copyright" />
+</head>
+<body>
+<script type="text/javascript" src="static/header.js"></script>
+<h3>Flash的跨域策略</h3>
+<div class="submsg">
+  <div>
+    <p>使用Flash时，很多数据是不能直接跨域加载的，因为跨域不可信，为了安全考虑，Flash将抛出一个SecurityError错误并终止加载操作</p>
+    <p>需要安全考虑的数据一般是用户可操作性的(可读写)，如文本、XML等，对应于CMP4中的配置，列表，歌词，皮肤(需解压操作)等</p>
+    <p>而其他一些无需用户直接操作的数据(FP内核处理)，是可以直接跨域加载的，如http视频，MP3(不读ID3)，图片和flash(不通讯)等</p>
+    <p>问题：如果跨域的数据是安全可信的，比如是自己的分站，二级域名，合作伙伴等，此时需要Flash跨域直接加载数据，如何解决？</p>
+  </div>
+  <h5>使用跨域策略文件crossdomain.xml设置跨域访问权限</h5>
+  <div>策略文件一般放在域的根目录，如：<br />
+    <a href="http://cmp.cenfun.com/crossdomain.xml" target="_blank">http://cmp.cenfun.com/crossdomain.xml</a><br />
+    (Flash的安全策略已经进行多次修改和增强，这里仅讨论最简单的形式，其他详情请查阅相关说明)</div>
+  <div class="code">Flash跨域请求时，首先会下载此策略文件，并查看是否有权进行安全访问：<br />
+    如果下载失败或内容错误，也就是默认为没有策略，此时Flash将终止操作<br />
+    只有读取到策略中有允许进行操作权限，才能进行下一步访问，否则也将终止操作</div>
+  <h6><a href="javascript:void(0)" class="spread" onclick="collapse(this, 'list_example')">一个允许所有数据能被flash跨域访问的crossdomain.xml例子</a></h6>
+  <div id="list_example" style="display:none;" class="code">&lt;?xml version=&quot;1.0&quot;?&gt;<br />
+    &lt;cross-domain-policy&gt;
+    <div>&lt;site-control permitted-cross-domain-policies=&quot;all&quot;/&gt;<br />
+      &lt;allow-access-from domain=&quot;*&quot; /&gt;<br />
+      &lt;allow-http-request-headers-from domain=&quot;*&quot; headers=&quot;*&quot;/&gt;</div>
+    &lt;/cross-domain-policy&gt;<br />
+  </div>
+  <div>其中参数说明可下载官方dtd文件查看：<a href="http://www.adobe.com/xml/dtds/cross-domain-policy.dtd" target="_blank">http://www.adobe.com/xml/dtds/cross-domain-policy.dtd</a></div>
+  <h5>CMP4跨域访问示意图</h5>
+  <div class="clearfix flowbox">
+    <div class="flt">
+      <div class="box">http://<b>A</b>.com/cmp.swf</div>
+    </div>
+    <div class="flt">
+      <div class="gt">&nbsp;&nbsp;-&gt;&nbsp;&nbsp;</div>
+      <div class="gt">&nbsp;&nbsp;-&gt;&nbsp;&nbsp;</div>
+      <div class="gt">&nbsp;&nbsp;-&gt;&nbsp;&nbsp;</div>
+    </div>
+    <div class="flt">
+      <div class="box">http://<b>B</b>.com/crossdomain.xml &nbsp;&nbsp;-&gt;&nbsp;&nbsp; http://<b>B</b>.com/config.xml</div>
+      <div class="box">http://<b>C</b>.com/crossdomain.xml &nbsp;&nbsp;-&gt;&nbsp;&nbsp; http://<b>C</b>.com/list.xml</div>
+      <div class="box">http://<b>D</b>.com/crossdomain.xml &nbsp;&nbsp;-&gt;&nbsp;&nbsp; http://<b>D</b>.com/test.lrc</div>
+    </div>
+  </div>
+  <div><b>A</b>站的CMP分别跨域加载<b>B</b>/<b>C</b>/<b>D</b>站的资源时，都会先下载这些站的crossdomain.xml，然后判断是否有权进行下一步访问</div>
+  <div>如果跨域数据是永久不可信资源，也就是不能去设置crossdomain.xml，我们还可以通过<a href="http://bbs.cenfun.com/thread-8153-1-1.html" target="_blank">代理程序</a>去抓取数据</div>
+</div>
+<script type="text/javascript" src="static/footer.js"></script>
+</body>
+</html>

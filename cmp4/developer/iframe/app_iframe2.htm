@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>CMP4</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+html, body { height:100%; margin:0; padding:0; text-align:center; font-size:12px; }
+.tablehead { padding:8px 8px; font-size:14px; color:333; font-weight:bold; background:#E5ECF9; border-bottom:1px solid #C0D0F0; text-align:left }
+.tablehead span { font-size:12px; font-weight:normal; }
+.tablelist td { padding:8px 10px; border-bottom:1px solid #E5ECF9; text-align:left }
+.tablelist td a { margin:0px 30px; }
+.tablefoot td { padding:8px 10px; }
+</style>
+</head>
+<body>
+<script type="text/javascript" src="http://cmp.cenfun.com/cmp4/cmp.js"></script> 
+<script type="text/javascript">
+var cmpo = parent.CMP.get("cmp") || top.CMP.get("cmp");
+//alert(cmpo);
+function $(id) { return document.getElementById(id); }
+function highlight(o, c){
+	o.style.backgroundColor = c;
+	o.onmouseout = function(){ o.style.backgroundColor = ""; }
+}
+function checkAll(o){
+	var cbs = document.getElementsByTagName("input");
+	for (var i = 0; i < cbs.length; i ++) {
+		var cb = cbs[i];
+		if (cb.type == "checkbox" && cb.value) {
+			cb.checked = o.checked;
+		}
+	}
+}
+function cmp_play(ids) {
+	if (!cmpo) {
+		return;
+	}
+	var config = cmpo.config();
+	var play_id = cmpo.list().length + 1;
+	if (config["state"] == "playing") {
+		cmpo.sendEvent("view_stop");
+	}
+	var xml = makeListXml(ids);
+	cmpo.list_xml(xml);
+	cmpo.sendEvent("view_play", play_id);
+}
+function cmp_add(ids) {
+	if (!cmpo) {
+		return;
+	}
+	var xml = makeListXml(ids);
+	cmpo.list_xml(xml);
+}
+function makeListXml(ids) {
+	var xml = "<list>";
+	for (var i = 0; i < ids.length; i ++) {
+		xml += '<m label="'+ids[i]+'" src="'+ids[i]+'" />';
+	}
+	xml += "</list>";
+	return xml;
+}
+function play(id) {
+	cmp_play([id]);
+}
+function add(id) {
+	cmp_add([id]);
+}
+function playSelected() {
+	var ids = getSelected();
+	if (ids.length) {
+		cmp_play(ids);
+	} else {
+		alert("请至少选择一个");	
+	}
+}
+function addSelected() {
+	var ids = getSelected();
+	if (ids.length) {
+		cmp_add(ids);
+	} else {
+		alert("请至少选择一个");	
+	}
+}
+function getSelected() {
+	var ids = [];
+	var cbs = document.getElementsByTagName("input");
+	for (var i = 0; i < cbs.length; i ++) {
+		var cb = cbs[i];
+		if (cb.type == "checkbox") {
+			if (cb.checked && cb.value) {
+				ids.push(cb.value);	
+			}
+		}
+	}
+	return ids;
+}
+</script>
+<table cellpadding="0" cellspacing="0" class="tablelist">
+  <tr onmouseover="highlight(this, '#f5f5f5');">
+    <td ><input type="checkbox" value="music/test.mp3" /></td>
+    <td>music/test.mp3</td>
+    <td><a href="javascript:void(0)" onclick="play('music/test.mp3');">试听</a></td>
+    <td><a href="javascript:void(0)" onclick="add('music/test.mp3');">加入播放列表</a></td>
+  </tr>
+  <tr onmouseover="highlight(this, '#f5f5f5');">
+    <td ><input type="checkbox" value="music/secret_garden.mid" /></td>
+    <td>music/secret_garden.mid</td>
+    <td><a href="javascript:void(0)" onclick="play('music/secret_garden.mid');">试听</a></td>
+    <td><a href="javascript:void(0)" onclick="add('music/secret_garden.mid');">加入播放列表</a></td>
+  </tr>
+  <tr onmouseover="highlight(this, '#f5f5f5');">
+    <td ><input type="checkbox" value="music/castle_in_the_sky.mid" /></td>
+    <td>music/castle_in_the_sky.mid</td>
+    <td><a href="javascript:void(0)" onclick="play('music/castle_in_the_sky.mid');">试听</a></td>
+    <td><a href="javascript:void(0)" onclick="add('music/castle_in_the_sky.mid');">加入播放列表</a></td>
+  </tr>
+</table>
+<table cellspacing="0" cellpadding="0" class="tablefoot">
+  <tr>
+    <td><input type="checkbox" onclick="checkAll(this);" value=""/></td>
+    <td>全选</td>
+    <td><button onclick="playSelected();">试听选中的音乐</button></td>
+    <td><button onclick="addSelected();">加入播放列表</button></td>
+  </tr>
+</table>
+</body>
+</html>

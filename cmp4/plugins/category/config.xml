@@ -1,0 +1,25 @@
+﻿<!--
+
+以下是分类的配置，是一个xml格式的字符串，需要先进行转义http://tools.cenfun.com/，然后用category_config参数传入
+
+<category auto_hide="1" width="120" row_height="35" align="center" color="#ffffff,#ff0000" size="14" font="宋体" bold="1,1" leftMargin="3" rightMargin="3">
+  <item label="默认分类" lists="list.xml" skin_id="0" />
+  <item label="最新电影" lists="movie.xml" skin_id="1" />
+  <item label="流行音乐" lists="music.xml" skin_id="" />
+  <item label="电视直播" lists="tv.xml" skin_id="3" />
+  <item label="日韩流行" lists="rh.xml" skin_id="4" />
+  <item label="欧美经典" lists="om.xml" skin_id="" />
+  <item label="高清剧场" lists="hd.xml" skin_id="6" />
+  <item label="综艺娱乐" lists="zy.xml" skin_id="0" />
+</category>
+
+下面是使用分类插件的cmp配置config.xml例子，插件配置已经转义：
+
+-->
+<cmp 
+
+	category_config = "%3Ccategory%20auto_hide%3D%221%22%20width%3D%22120%22%20row_height%3D%2235%22%20align%3D%22center%22%20color%3D%22%23ffffff%2C%23ff0000%22%20size%3D%2214%22%20font%3D%22%E5%AE%8B%E4%BD%93%22%20bold%3D%221%2C1%22%20leftMargin%3D%223%22%20rightMargin%3D%223%22%3E%0D%0A%20%20%3Citem%20label%3D%22%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB%22%20lists%3D%22list.xml%22%20skin_id%3D%220%22%20%2F%3E%0D%0A%20%20%3Citem%20label%3D%22%E6%9C%80%E6%96%B0%E7%94%B5%E5%BD%B1%22%20lists%3D%22movie.xml%22%20skin_id%3D%221%22%20%2F%3E%0D%0A%20%20%3Citem%20label%3D%22%E6%B5%81%E8%A1%8C%E9%9F%B3%E4%B9%90%22%20lists%3D%22music.xml%22%20skin_id%3D%22%22%20%2F%3E%0D%0A%20%20%3Citem%20label%3D%22%E7%94%B5%E8%A7%86%E7%9B%B4%E6%92%AD%22%20lists%3D%22tv.xml%22%20skin_id%3D%223%22%20%2F%3E%0D%0A%20%20%3Citem%20label%3D%22%E6%97%A5%E9%9F%A9%E6%B5%81%E8%A1%8C%22%20lists%3D%22rh.xml%22%20skin_id%3D%224%22%20%2F%3E%0D%0A%20%20%3Citem%20label%3D%22%E6%AC%A7%E7%BE%8E%E7%BB%8F%E5%85%B8%22%20lists%3D%22om.xml%22%20skin_id%3D%22%22%20%2F%3E%0D%0A%20%20%3Citem%20label%3D%22%E9%AB%98%E6%B8%85%E5%89%A7%E5%9C%BA%22%20lists%3D%22hd.xml%22%20skin_id%3D%226%22%20%2F%3E%0D%0A%20%20%3Citem%20label%3D%22%E7%BB%BC%E8%89%BA%E5%A8%B1%E4%B9%90%22%20lists%3D%22zy.xml%22%20skin_id%3D%220%22%20%2F%3E%0D%0A%3C%2Fcategory%3E"
+
+	plugins = "plugins/category.swf"
+
+/>

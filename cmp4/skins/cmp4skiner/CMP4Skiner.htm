@@ -1,0 +1,631 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<style type="text/css">
+html, body { background:#D4D0C8; overflow:hidden; padding:0; margin:0; }
+div { padding:0; margin:0; font-family:Arial; font-size:12px; color:#333333; }
+#skin_main { background:#181818; display:block; overflow:hidden; padding:0px 0px; margin:0px 0px; }
+#skin_edit { background:#D4D0C8; width:300px; position:absolute; z-index:1000; right:0px; top:0px; padding-left:3px; padding-right:2px; }
+#skin_split { background-color:#D4D0C8; position:absolute; z-index:2000; top:0px; right:303px; width:5px; cursor:w-resize; filter:alpha(opacity=10); }
+#skin_menu { padding:5px 5px; text-align:center; }
+#skin_content { line-height:150%; color:#000000; width:99%; padding:0; margin:0; font-family:Arial; }
+.skin { position:absolute; overflow:hidden; }
+</style>
+</head>
+<body>
+<div id="skin_main"></div>
+<div id="skin_split"></div>
+<div id="skin_edit">
+  <div id="skin_menu">
+    <input type="button" id="bt_open" value="打开skin.xml" title="打开皮肤配置文件skin.xml" onclick="skin_open();" />
+    <input type="button" id="bt_save" value="保存" title="保存配置文件" onclick="skin_save();" />
+    <input type="button" id="bt_save_other" value="另存" title="另存配置文件" onclick="skin_save_other();" />
+    <input type="button" id="bt_test" value="检测" title="新打开窗口检测XML文件格式" onclick="skin_test();" />
+  </div>
+  <textarea id="skin_content" wrap="off"></textarea>
+</div>
+<script type="text/javascript">
+var cmp3skiner = "CMP4皮肤制作辅助工具 b100528";
+var skin_url;
+var one = true;
+var skin_main = $("skin_main");
+var skin_edit = $("skin_edit");
+var skin_menu = $("skin_menu");
+var skin_split = $("skin_split");
+var skin_content = $("skin_content");
+var skin_xml;
+var skin_file;
+var skin_info = false;
+var skin_doc = new ActiveXObject("Microsoft.XMLDOM");
+skin_doc.async = "false";
+var save_doc = new ActiveXObject("Microsoft.XMLDOM");
+skin_doc.async = "false";
+function output(str) {
+	alert(str);	
+}
+function createInput(){
+	if(skin_file){
+		skin_menu.removeChild(skin_file);
+	}
+	skin_file = document.createElement("input");
+	skin_file.style.display = "none";
+	skin_file.type = "file";
+	skin_menu.appendChild(skin_file);
+	skin_file.onchange = function(){
+		skin_load(skin_file.value);
+	};
+}
+function skin_open(){
+	createInput();
+	skin_file.click();
+}
+function skin_save_other() {
+	if (skin_info) {
+		var theResponse = window.prompt("请输入皮肤配置文件名：", "skin_bak.xml");
+		if (theResponse) {
+			skin_url = fU(theResponse);
+			skin_save();
+		}
+	}
+}
+function check_error(xmlDoc) {
+	if (xmlDoc) {
+		if (xmlDoc.parseError != 0) {
+			var errMsg = xmlDoc.parseError.reason + "\n";
+			errMsg += "行:" +xmlDoc.parseError.line + " 位置:" +xmlDoc.parseError.linepos + "\n";
+			errMsg += xmlDoc.parseError.srcText + "\n";
+			alert(errMsg);
+			return true;
+		}
+	}
+	return false;
+}
+function skin_save() {
+	if (skin_info) {
+		try {
+			save_doc.loadXML(skin_content.value);
+		} catch (e) {
+			output("保存皮肤配置XML时，发生错误:" + e);
+		}
+		if (check_error(save_doc)) {
+			return;	
+		}
+		var err = skin_check(save_doc);
+		if (err == "") {
+			try {
+				var stream = new ActiveXObject("ADODB.Stream");
+				stream.Type = 2;
+				stream.Charset = "UTF-8";
+				stream.Open();
+				stream.WriteText(skin_content.value);
+				stream.SaveToFile(skin_url, 2);
+				stream.Close();
+			} catch (e) {
+				output("没有保存文件权限：" + e);
+			}
+		} else {
+			output("皮肤配置文件格式错误：" + err);
+		}
+	}
+}
+function skin_init() {
+	one = true;
+	skin_content.value = "";
+	skin_content.onchange = skin_content.onkeyup = skin_content.onclick = null;
+}
+function skin_change() {
+	$("bt_save").disabled = "";
+	if (skin_xml != skin_content.value) {
+		skin_xml = skin_content.value;
+		skin_reload();
+	}
+}
+function skin_reload() {
+	if (skin_info) {
+		try {
+			skin_doc.loadXML(skin_content.value);
+		} catch (e) {
+			output("重新加载皮肤配置XML时，发生错误:" + e);
+		}
+		if (!check_error(skin_doc)) {
+			skin_parse();
+		}
+	}
+}
+function skin_refresh(){
+	if (skin_info) {
+		skin_show();
+	}
+}
+function skin_test() {
+	if (skin_info) {
+		try {
+        	var winname = window.open(skin_url, "_blank", '');
+			winname.opener = null;
+		} catch (e) {
+			output("没有打开窗口权限：" + e);
+		}
+	}
+}
+function skin_load(url) {
+	skin_init();
+	skin_url = url
+	document.title = cmp3skiner + " - " + url; 
+	if (url) {
+		try {
+			var result = skin_doc.load(url);
+		} catch (e) {
+			output("加载皮肤配置文件时，发生错误:" + e);
+		}
+		if (!check_error(skin_doc)) {
+			skin_parse();
+		}
+	}
+}
+function skin_check(doc) {
+	if (!doc.documentElement) {
+		return "无根节点";
+	}
+	if (!doc.documentElement.hasChildNodes()) {
+		return "没人任何子节点";
+	}
+	return "";
+}
+function skin_parse() {
+	var err = skin_check(skin_doc);
+	if (err != "") {
+		output("皮肤配置文件格式错误或不完整：" + err);
+	}
+	if (one) {
+		one = false;
+		skin_xml = skin_content.value = skin_doc.documentElement.xml;
+	}
+	skin_content.onchange = skin_content.onkeyup = skin_content.onclick = function() {
+		skin_change();
+	}
+	skin_info = true;
+	skin_show();
+}
+function skin_show() {
+	skin_clear();
+	var html = "";
+	var pw = skin_main.offsetWidth;
+	var ph = skin_main.offsetHeight;
+	var root = skin_doc.documentElement;
+	root = comment_clear(root);
+	var wins = root.childNodes;
+	var wl = wins.length;
+	for (var i = 0; i < wl; i++) {
+		var win = wins[i];
+		var name = win.nodeName;
+		if (name != "option" && name != "console" && name != "list" && name != "lrc" && name != "media") {
+			continue;
+		}
+		var xywh = win.getAttribute("xywh");
+		var src = fU(win.getAttribute("src"));
+		var mask = fU(win.getAttribute("mask"));
+		var display = parseInt(win.getAttribute("display"));
+		var p = getP(xywh, pw, ph);
+		var str = "";
+		str += '<div id="'+name+'" class="skin" style="z-index:'+(wl - i)+';left:'+p[0]+'px;top:'+p[1]+'px;width:'+p[2]+'px;height:'+p[3]+'px;">';
+		if (display) {
+			str += getBg(src, p[2], p[3]);
+			str += getWin(win, name, p[2], p[3]);
+			str += getBg(mask, p[2], p[3]);
+		} else {
+			str += '<div class="skin" style="left:0px;top:0px;width:'+(p[2]-1)+'px;height:'+(p[3]-1)+'px;filter:alpha(opacity=20);border:1px dotted #777777;"></div>';
+		}
+		str += '</div>';
+		html += str;
+	}
+	skin_main.innerHTML = html;
+}
+function getWin(win, name, pw, ph) {
+	win = comment_clear(win);
+	if (name == "option") {
+		return getOption(win, pw, ph);
+	} else if (name == "console") {
+		return getConsole(win, pw, ph);
+	} else if (name == "list") {
+		return getList(win, pw, ph);
+	} else if (name == "lrc") {
+		return getLrc(win, pw, ph);
+	} else if (name == "media") {
+		return getMedia(win, pw, ph);
+	}
+}
+function getOption(win, pw, ph) {
+	var str = "";
+	var pane = getTag(win, "pane");
+	str += getBorder(pane, pw, ph, "选项面板");
+	var scrollbar = getTag(win, "scrollbar");
+	str += getScrollbar(scrollbar, pane, pw, ph);
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	return str;
+}
+function getList(win, pw, ph) {
+	var str = "";
+	var tree = getTag(win, "tree");
+	str += getBorder(tree, pw, ph, "列表树");
+	var scrollbar = getTag(win, "scrollbar");
+	str += getScrollbar(scrollbar, tree, pw, ph);
+	var search = getTag(win, "search");
+	if (search) {
+		var txt = search.getAttribute("value") || "关键字";
+		str += getBorder(search, pw, ph, txt);
+	}
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	return str;
+}
+function getLrc(win, pw, ph) {
+	var str = "";
+	var text = getTag(win, "text");
+	str += getBorder(text, pw, ph, "歌词")
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	return str;
+}
+function getMedia(win, pw, ph) {
+	var str = "";
+	var video = getTag(win, "video");
+	str += getBorder(video, pw, ph, "视频区域")
+	var bt_close = getTag(win, "bt_close");
+	str += getBt(bt_close, pw, ph);
+	return str;
+}
+function getConsole(win, pw, ph) {
+	var str = "";
+	var volume = getTag(win, "volume");
+	str += getPer(volume, pw, ph);
+	var progress = getTag(win, "progress");
+	str += getPer(progress, pw, ph);
+	var title = getTag(win, "title");
+	str += getBorder(title, pw, ph, "标题");
+	var status = getTag(win, "status");
+	str += getBorder(status, pw, ph, "播放状态");
+	var time = getTag(win, "time");
+	str += getBorder(time, pw, ph, "00:00 / 00:00");
+	var number = getTag(win, "number");
+	str += getNumber(number, pw, ph);
+	var btList = ["bt_play", "bt_stop", "bt_close", "bt_prev", "bt_next", "bt_mute", "bt_random", "bt_repeat", "bt_list", "bt_video", "bt_lrc", "bt_option", "bt_fullscreen"];
+	for (var i = 0; i < btList.length; i++){
+		var bt = getTag(win, btList[i]);
+		str += getBt(bt, pw, ph);
+	}
+	return str;
+}
+function getEvt(arr, pos) {
+	var evt = 'onmouseover="this.style.backgroundPosition=\''+arr[0]+'px '+pos+'\';" ';
+	evt += 'onmouseout="this.style.backgroundPosition=\''+arr[1]+'px '+pos+'\';" ';
+	evt += 'onmousedown="this.style.backgroundPosition=\''+arr[2]+'px '+pos+'\';" ';
+	evt += 'onmouseup="this.style.backgroundPosition=\''+arr[3]+'px '+pos+'\';" ';
+	return evt;
+}
+function getBg(src, pw, ph) {
+	if (!src) {
+		return "";	
+	}
+	if (src.substring(src.length - 4).toLowerCase() == ".swf") {
+		return createFlash(src, pw, ph);
+	} else {
+		return '<div class="skin" style="left:0px;top:0px;width:'+pw+'px;height:'+ph+'px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\''+src+'\',sizingMethod=\'scale\');"></div>';
+	}
+}
+function getBt(bt, pw, ph) {
+	if (!bt) {
+		return "";
+	}
+	var src = fU(bt.getAttribute("src"));
+	var xywh = bt.getAttribute("xywh");
+	var tips = bt.getAttribute("tips") || "";
+	var p = getP(xywh, pw, ph);
+	var evt = getEvt([-p[2], 0, -p[2]*2, -p[2]], "top");
+	return '<div class="skin" title="'+tips+'" style="left:'+p[0]+'px;top:'+p[1]+'px;width:'+p[2]+'px;height:'+p[3]+'px;background:url('+src+');" '+evt+'></div>';
+}
+function getPer(per, pw, ph) {
+	if (!per) {
+		return ""	
+	}
+	var track_src = fU(per.getAttribute("track_src"));
+	var xywh = per.getAttribute("xywh");
+	var p = getP(xywh, pw, ph);
+	return '<div class="skin" style="left:'+p[0]+'px;top:'+p[1]+'px;width:'+p[2]+'px;height:'+p[3]+'px;background:url('+track_src+');"></div>';
+}
+function getScrollbar(scrollbar, obj, pw, ph) {
+	if (!scrollbar) {
+		return ""	
+	}
+	var xywh = obj.getAttribute("xywh");
+	var p = getP(xywh, pw, ph);
+	var tx = p[0] + p[2] - 15;
+	var ty = p[1];
+	var th = p[3];
+	var thumb_src = fU(scrollbar.getAttribute("thumb_src"));
+	var button_src = fU(scrollbar.getAttribute("button_src"));
+	var track_src = fU(scrollbar.getAttribute("track_src"));
+	var et = getEvt([-15, 0, -30, -15], "top");
+	var eb = getEvt([-15, 0, -30, -15], "bottom");
+	var str = "";
+	if (track_src) {
+		str += '<div class="skin" style="width:15px;height:'+th+'px;left:'+tx+'px;top:'+ty+'px;background:url('+track_src+');"></div>';
+	}
+	if (thumb_src) {
+		str += '<div class="skin" style="width:15px;height:'+(th-28)+'px;left:'+tx+'px;top:'+(ty+14)+'px;background:url('+thumb_src+') no-repeat;" '+et+'></div>';
+	}
+	if (button_src) {
+		str += '<div class="skin" style="width:15px;height:14px;left:'+tx+'px;top:'+ty+'px;background:url('+button_src+');" '+et+'></div>';
+		str += '<div class="skin" style="width:15px;height:14px;left:'+tx+'px;top:'+(ty+th-14)+'px;background:url('+button_src+') left bottom;" '+eb+'></div>';
+	}
+	return str;
+}
+function getNumber(number, pw, ph) {
+	if (!number) {
+		return "";
+	}
+	var str = "";
+	var tips = number.getAttribute("tips") || "";
+	var src = fU(number.getAttribute("src"));
+	var xywh = number.getAttribute("xywh");
+	var p = getP(xywh, pw, ph);
+	if (xywh && src) {
+		str += '<div class="skin" title="'+tips+'" style="left:'+p[0]+'px;top:'+p[1]+'px;width:'+p[2]+'px;height:'+p[3]+'px;">';
+		var tw = Math.round(p[2] / 6);
+		var th = p[3];
+		str += '<div class="skin" style="left:0px;top:0px;width:'+tw+'px;height:'+th+'px;background:url('+src+') right;"></div>';
+		str += '<div class="skin" style="left:'+tw+'px;top:0px;width:'+tw+'px;height:'+th+'px;background:url('+src+');"></div>';
+		str += '<div class="skin" style="left:'+(tw*2)+'px;top:0px;width:'+tw+'px;height:'+th+'px;background:url('+src+');"></div>';
+		str += '<div class="skin" style="left:'+(tw*3)+'px;top:0px;width:'+tw+'px;height:'+th+'px;background:url('+src+') -'+Math.round(tw*10)+'px;"></div>';
+		str += '<div class="skin" style="left:'+(tw*4)+'px;top:0px;width:'+tw+'px;height:'+th+'px;background:url('+src+');"></div>';
+		str += '<div class="skin" style="left:'+(tw*5)+'px;top:0px;width:'+tw+'px;height:'+th+'px;background:url('+src+');"></div>';
+		str += '</div>';
+	}
+	return str;
+}
+function getBorder(obj, pw, ph, text) {
+	if (!obj) {
+		return "";	
+	}
+	var xywh = obj.getAttribute("xywh");
+	var p = getP(xywh, pw, ph);
+	var str = '<div class="skin" style="left:'+p[0]+'px;top:'+p[1]+'px;width:'+p[2]+'px;height:'+p[3]+'px;border:1px dotted #777777;">';
+	if (text) {
+		var style = "";
+		var align = obj.getAttribute("align");
+		if (align) {
+			style += 'text-align:'+align+';';
+		}
+		var font = obj.getAttribute("font");
+		if (font) {
+			style += 'font-family:'+font+';';
+		}
+		var size = obj.getAttribute("size");
+		if (size) {
+			style += 'font-size:'+size+';';
+		}
+		var color = obj.getAttribute("color");
+		if (color) {
+			var cl = array(color);
+			style += 'color:'+cl[0]+';';
+		}
+		var bold = obj.getAttribute("bold");
+		if (bold) {
+			style += 'font-weight:bold;';
+		}
+		var borderColor = obj.getAttribute("borderColor");
+		if (borderColor) {
+			style += 'border:1px solid '+borderColor+';';
+		}
+		var backgroundColor = obj.getAttribute("backgroundColor");
+		if (backgroundColor) {
+			style += 'background-color:'+backgroundColor+';';
+		}
+		str += '<div style="'+style+'" onselectstart="return false;">'+text+'</div>';
+	}
+	str += '</div>';
+	return str;
+}
+function getTag(parent, name) {
+	return parent.getElementsByTagName(name).item(0);
+}
+function createFlash(url, pw, ph) {
+	var html = '';
+	html += '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" width="'+pw+'" height="'+ph+'">';
+	html += '<param name="movie" value="'+url+'" />';
+	html += '<param name="quality" value="high" />';
+	html += '<param name="wmode" value="Transparent"/>';
+	html += '<param name="scale" value="Exactfit"/>';
+	html += '<embed src="'+url+'" width="'+pw+'" height="'+ph+'" quality="high" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" wmode="Transparent" scale="Exactfit"></embed>';
+	html += '</object>';
+	return html;
+}
+function fU(src) {
+	if (!src) {
+		return "";	
+	}
+	var url = skin_url;
+	url = url.substring(0, url.lastIndexOf("\\") + 1);
+	url += src;
+	url = url.split("\\").join("/");
+	return url;
+}
+
+function array(input) {
+	input = input.toString();
+	var arr = input.split(/\s*\,\s*/);
+	var out = [];
+	for (var i = 0; i < arr.length; i ++) {
+		if (arr[i]) {
+			out.push(arr[i]);
+		}
+	}
+	return out;
+}
+function ns(str) {
+	if (!str) {
+		return [0, ""];
+	}
+	var n = parseFloat(str);
+	if (isNaN(n)) {
+		n = 0;
+	}
+	var s = str.replace(n, "");
+	if (s == "%") {
+		s = "P";
+	}
+	return [Math.round(n), s.toUpperCase()];
+}
+function woh(n, s, v, p) {
+	var r;
+	if (s == "P") {
+		r = (p - v) * n * 0.01;
+	} else if (s == "B") {
+		r = p - 2 * n;
+	} else {
+		r = n;
+	}
+	if (r < 0) {
+		r = 0;
+	}
+	return Math.round(r);
+}
+function xoy(n, s, v, p) {
+	var r;
+	if (s == "C") {
+		r = (p - v) * 0.5 + n;
+	} else if (s == "R") {
+		r = p - v - n;
+	} else if (s == "P") {
+		r = p * n * 0.01;
+	} else {
+		r = n;
+	}
+	return Math.round(r);
+}
+function getP(xywh, pw, ph) {
+	if (!xywh) {
+		return [0, 0, 0, 0];
+	}
+	var a = array(xywh);
+	var tx = ns(a[0]);
+	var ty = ns(a[1]);
+	var tw = ns(a[2]);
+	var th = ns(a[3]);
+	var rw = woh(tw[0], tw[1], tx[0], pw);
+	var rh = woh(th[0], th[1], ty[0], ph);
+	var rx = xoy(tx[0], tx[1], rw, pw);
+	var ry = xoy(ty[0], ty[1], rh, ph);
+	return [rx, ry, rw, rh];
+}
+function comment_clear(node) {
+	if (node.hasChildNodes()) {
+		var childNodes = node.childNodes;
+		for (var i = 0; i < childNodes.length; i++) {
+			if (childNodes[i].nodeType == 8) {
+				node.removeChild(childNodes[i]);
+				i--;
+			}
+		}
+	}
+	return node;
+}
+function skin_clear() {
+	skin_main.innerHTML = "";
+}
+window.onload = function(){
+	document.title = cmp3skiner;
+	setWH();
+	drag(skin_split);
+	skin_init();
+	window.focus();
+}
+window.onresize = function() {
+	setWH();
+	skin_refresh();
+}
+function $(o) {
+	return document.getElementById(o);
+}
+function setWH() {
+	var w = document.documentElement.clientWidth;
+	var h = document.documentElement.clientHeight;
+	skin_main.style.height = h + "px";
+	skin_main.style.width = Math.abs(w - skin_edit.offsetWidth) + "px";
+	skin_split.style.height = h + "px";
+	skin_split.style.left = (w - skin_edit.offsetWidth) + "px";
+	skin_content.style.height = Math.abs(h - skin_menu.offsetHeight - 3) + "px";
+	//window.status = w + "|" + h;
+	skin_refresh();
+}
+function drag(o){
+	o.onmousedown=function(){
+		noselect(true);
+		var e = window.event;
+		e.cancelBubble = true;
+		var x = e.layerX || e.offsetX;
+		document.onmousemove=function(){
+			o.style.left = (window.event.clientX-x-2)+"px";
+		};
+		document.onmouseup=function(){
+			document.onmousemove = null;
+			document.onmouseup = null;
+			noselect(false);
+			var fw = 7;
+			var mw = 300;
+			var w = document.documentElement.clientWidth;
+			var tr = parseInt(o.style.left) + fw;
+			var tw = w - tr;
+			if (tw > mw) {
+				skin_edit.style.width = tw + "px";
+				setWH();
+			} else {
+				skin_edit.style.width = mw + "px";
+				skin_split.style.left = (w - mw - fw) + "px";
+				setWH();
+			}
+		};
+	};
+}
+function noselect(flag) {
+	if (flag) {
+		document.onselectstart=function() {return(false)};
+	} else {
+		document.onselectstart=function() {return(true)};
+	}
+}
+
+function cookie_set(name, value, expires) {
+	var str = prefix + name + "=" + encodeURIComponent(value);
+	if (expires) {
+		var date = new Date();
+		date.setTime(date.getTime() + expires * 1000);
+		str += "; expires=" + date.toGMTString();
+	}
+	document.cookie = str;
+}
+function cookie_get(name) {
+	var str = document.cookie;
+	var cookieName = prefix + name + "=";
+	valueBegin = str.indexOf(cookieName);
+	if (valueBegin == -1) {
+		return "";
+	}
+	valueEnd = str.indexOf(";", valueBegin);
+	if (valueEnd == -1) {
+		valueEnd = str.length;
+	}
+	value = str.substring(valueBegin + cookieName.length, valueEnd);
+	if (value) {
+		value = decodeURIComponent(value);	
+	}
+	return value;
+}
+function cookie_del(name) {
+	cookie_set(name, "", -1);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+﻿<!--
+
+参数说明：
+
+snow_num = "2" 表示100px平面内雪花的数量，默认是2个，可以设置1-30之间的数字，不宜太大
+
+snow_rest = "false"  表示是否开启雪花碰到CMP窗口边缘自动停留，默认改为不停留，开启停留可设置snow_rest="true"
+
+更多详情见本插件专贴：http://bbs.cenfun.com/thread-13403-1-1.html
+
+-->
+<cmp 
+	
+	snow_num = "2"
+	snow_rest = "false"
+	plugins = "plugins/snow.swf"
+
+/>
