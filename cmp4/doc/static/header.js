@@ -68,7 +68,7 @@ function getMenu() {
 document.write('<div class="header clearfix">');
 document.write('<div class="flt"><a class="logo" href="index.htm" title="CMP4使用手册"></a></div>');
 
-document.write('<div class="flt">更新日期：<a href="http://cenfunmusicplayer.googlecode.com/svn/trunk/doc/" title="查看版本库最新版">2012.07.28</a></div>');
+document.write('<div class="flt">更新日期：<a href="https://github.com/cenfun/cmp/tree/master/cmp4/doc/" title="查看版本库最新版">2012.07.28</a></div>');
 document.write('<div class="frt">页内搜索请按【ctrl + F】</div>');
 
 document.write('</div>');
