@@ -1,0 +1,14 @@
+﻿<!--
+CMP4配置文件
+
+所有配置参数说明请见：http://bbs.cenfun.com/thread-10891-1-1.html
+
+更多详细参数说明，请参见CMP交流论坛http://bbs.cenfun.com/
+-->
+<cmp 
+
+	plugins = "plugins/loading.swf"
+	loading_url = "http://www.baidu.com/img/shouye_b5486898c692066bd2cbaeda86d74448.gif"
+	loading_per = "正在加载{buffer_percent}% please wait...{name}"
+	
+/>
