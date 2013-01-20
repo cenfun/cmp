@@ -16,7 +16,7 @@
 		public var loading_per:String = "";
 		public var loading_url:String = "";
 		
-		public var custom:Boolean = false;
+		public var loader:Loader = new Loader();
 		
 		
 		
@@ -84,7 +84,6 @@
 			if (loading_url) {
 				//加载文件信息
 				var req:URLRequest = new URLRequest(loading_url);
-				var loader:Loader = new Loader();
 				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onComplete, false, 0, true);
 				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError, false, 0, true);
 				try {
@@ -107,7 +106,7 @@
 		}
 		//信息加载完成
 		public function onComplete(e:Event):void {
-			main.addChild(e.target.content);
+			main.addChild(loader);
 		}
 		
 		private function startHandler(e:Event):void {
