@@ -63,7 +63,7 @@
 			
 			//api.tools.output(version);
 			
-			if (!api.hasOwnProperty("addModel") || version < 130000) {
+			if (!api.hasOwnProperty("addModel") || version < 120729) {
 				var tf:TextField = new TextField();
 				tf.autoSize = "left";
 				tf.defaultTextFormat = new TextFormat(null, 12, 0xff0000, true);
@@ -148,6 +148,7 @@
 		}
 		private function show():void {
 			if (main.numChildren) {
+				api.win_list.media.video.vi.visible = false;
 				main.visible = true;
 			}
 			
