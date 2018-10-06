@@ -1,0 +1,797 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>CMP播放生成器</title>
+	<style type="text/css">
+		* {
+			box-sizing: border-box;
+		}
+
+		body,
+		a,
+		td,
+		th,
+		span,
+		div {
+			font-family: Verdana;
+			font-size: 14px;
+		}
+
+		input,
+		textarea {
+			font-family: Verdana;
+			font-size: 12px;
+			vertical-align: middle;
+		}
+
+		textarea {
+			font-size: 11px;
+		}
+
+		body {
+			background-color: #F5FAFE;
+			padding: 0px 0px;
+			margin: 0px 0px;
+			text-align: center;
+		}
+
+		a:link,
+		a:visited {
+			color: #000000;
+			text-decoration: none;
+		}
+
+		a:hover {
+			color: #428EFF;
+			text-decoration: underline;
+		}
+
+		.red {
+			color: #ff0000;
+		}
+
+		.header {
+			margin: 10px 10px;
+			color: #428EFF;
+			font-size: 20px;
+			font-weight: bold;
+			text-align: left;
+		}
+
+		.bodyer {
+			margin: 10px 10px;
+			border: 1px solid #CAD9EA;
+			background-color: #FFFFFF;
+			text-align: left;
+		}
+
+		.mbox {
+			padding: 10px 10px;
+			border-bottom: 1px dashed #CCCCCC;
+		}
+
+		.mbox_item {
+			margin-top: 10px;
+			margin-left: 20px;
+		}
+
+		.footer {
+			margin: 10px 10px;
+			text-align: center;
+			margin-top: 10px;
+			border-top: 1px dashed #CAD9EA;
+			padding-top: 5px;
+			color: #666666;
+			font-size: 11px;
+		}
+
+		.footer span {
+			display: none;
+		}
+
+		.footer a:link,
+		.footer a:visited {
+			color: #666666;
+			font-size: 12px;
+		}
+
+		.preview {
+			margin-top: 10px;
+		}
+
+		.cmp_area {
+			width: 100%;
+		}
+
+		.cmp_list {
+			height: 80px;
+		}
+
+		.cmp_add {
+			margin-top: 10PX;
+		}
+
+		.cmp_add table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 3px 0px 5px 0px;
+		}
+
+		.cmp_add table th,
+		.cmp_add table td {
+			border: 1px solid #ccc;
+			padding: 3px 3px;
+		}
+
+		.cmp_add table th {
+			text-align: left;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="header">CMP播放生成器</div>
+	<div class="bodyer">
+		<div class="mbox">发表信息时，如果想要快捷的插入某个音乐或视频，这里免费提供CMP播放器调用。</div>
+		<div class="mbox">
+			<div><input type="checkbox" checked id="checkPreview" onclick="showPreview();" />效果预览</div>
+			<div id="preview" class="preview"></div>
+		</div>
+		<div class="mbox"><b>选择皮肤：</b>
+			<div>
+				<select id="skinSelect" onchange="updateSkin(this);">
+				</select>
+			</div>
+			<div class="red" id="skinErr"></div>
+		</div>
+		<div class="mbox"><b>播放列表生成：</b><span>(可直接粘贴xml列表内容, 编辑完可以保持到本地电脑，下次直接粘贴后继续编辑)</span>
+
+			<div>
+				<textarea class="cmp_area cmp_list" id="cmp_list" onfocus="this.select();" onchange="updateList();" wrap="virtual"><list>
+  <m label="My Music" src="music/test.mp3" type="" lrc="" />
+</list></textarea>
+				<div class="red" id="listErr"></div>
+			</div>
+
+			<div class="cmp_add">
+				<div><b>当前列表音乐管理</b></div>
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>名称</th>
+							<th>音乐地址（必填项，否则忽略）</th>
+							<th>音乐类型</th>
+							<th>歌词地址</th>
+						</tr>
+					</thead>
+					<tbody id="cmp_list_tbody">
+
+					</tbody>
+				</table>
+				<div><button id="cmp_bt_add">添加一个音乐</button></div>
+			</div>
+
+		</div>
+
+		<div class="mbox"><b>播放器设置：</b>(<a href="http://cmp.cenfun.com/cmp4/doc/config.htm" target="_blank">更多设置参数</a>)
+			<table cellspacing="0" cellpadding="3">
+				<tr>
+					<td>自动播放:</td>
+					<td><input type="checkbox" value="1" id="cmp_auto_play" onclick="update();" /></td>
+					<td>&nbsp;</td>
+					<td>循环播放:</td>
+					<td><input type="checkbox" value="1" id="cmp_play_mode" onclick="update();" /></td>
+					<td>&nbsp;</td>
+					<td>宽度:</td>
+					<td><input type="text" size="4" id="cmp_width" onchange="update();" /></td>
+					<td>&nbsp;</td>
+					<td>高度:</td>
+					<td><input type="text" size="4" id="cmp_height" onchange="update();" /></td>
+					<td>&nbsp;</td>
+					<td>背景色:</td>
+					<td><input type="text" size="10" maxlength="7" id="cmp_bgcolor" onchange="update();" /></td>
+					<td>&nbsp;</td>
+					<td>背景透明</td>
+					<td><input type="checkbox" checked value="1" id="cmp_wmode" onclick="update();" /></td>
+				</tr>
+			</table>
+		</div>
+
+		<div class="mbox"><b>调用代码：</b>
+			<div style="margin:5px 0px;">播放器flash调用地址：（通用地址，一般可以插入一个flash的都支持此方式）</div>
+			<div>
+				<input class="cmp_area" id="flashcode" onfocus="this.select();" />
+			</div>
+			<div style="margin:5px 0px;">常用UBB插入代码：（一般论坛博客等都支持此方式）</div>
+			<div>
+				<input class="cmp_area" id="ubbcode" onfocus="this.select();" />
+			</div>
+			<div style="margin:5px 0px;">播放器html插入代码：（如果如支持html插入则可以使用此方式）</div>
+			<div>纯标签代码：<br />
+				<textarea class="cmp_area" rows="7" id="htmlcode" onfocus="this.select();" wrap="virtual"></textarea>
+				<br />
+				JS优化载入代码（推荐使用）：<br />
+				<textarea class="cmp_area" rows="5" id="jscode" onfocus="this.select();" wrap="virtual"></textarea>
+			</div>
+		</div>
+
+	</div>
+	<div class="footer"><a href="http://cmp.cenfun.com/cmp4/doc/config.htm" target="_blank">CMP播放生成器</a></div>
+	<script type="text/javascript">
+		//Mini皮肤列表=================================================================
+		var skins = [{
+				name: "【Mini横条皮肤】宽度可自适应",
+				src: "skins/mini/mini.zip",
+				width: 200,
+				height: 16
+			},
+			{
+				name: "【SC MP3 Player】按钮滑动效果皮肤",
+				src: "skins/mini/scplayer.zip",
+				width: 290,
+				height: 24
+			},
+			{
+				name: "【MOKO】美空女性风格皮肤",
+				src: "skins/mini/moko.zip",
+				width: 550,
+				height: 40
+			},
+			{
+				name: "【MOKO】带卡拉OK歌词显示皮肤",
+				src: "skins/mini/moko.zip",
+				width: 550,
+				height: 150
+			},
+			{
+				name: "【Ocean Blue海蓝】宽度可自适应",
+				src: "skins/mini/ocean.zip",
+				width: 73,
+				height: 24
+			},
+			{
+				name: "【Ocean Blue海蓝】带时间和进度条，宽度可自适应",
+				src: "skins/mini/ocean.zip",
+				width: 280,
+				height: 24
+			},
+
+			{
+				name: "【XDJ】XDJ皮肤",
+				src: "skins/xdj.zip",
+				width: 600,
+				height: 240
+			},
+
+			{
+				name: "【XDJ】XDJ完全版皮肤",
+				src: "skins/xdjfull.zip",
+				width: 620,
+				height: 430
+			},
+
+
+			{
+				name: "【163musicbox】Mini 163音乐盒子皮肤",
+				src: "skins/163musicbox.zip",
+				width: 246,
+				height: 250
+			},
+
+			{
+				name: "【mp3player】MP3播放器皮肤",
+				src: "skins/mp3player.zip",
+				width: 320,
+				height: 400
+			},
+
+			{
+				name: "【qqmusic】QQ音乐圣诞节皮肤",
+				src: "skins/qqmusic.zip",
+				width: 300,
+				height: 400
+			},
+
+			{
+				name: "【beveled】beveled播放器皮肤",
+				src: "skins/beveled.zip",
+				width: 350,
+				height: 200
+			},
+
+			{
+				name: "【cchat】cchat直播皮肤，支持名称排序",
+				src: "skins/cchat.zip",
+				width: 516,
+				height: 330
+			},
+
+
+			{
+				name: "【1ting】1ting皮肤，支持列表歌曲搜索过滤",
+				src: "skins/1ting.zip",
+				width: 370,
+				height: 438
+			},
+
+
+			{
+				name: "【WMP11】Windows Media Player 11皮肤",
+				src: "skins/wmp11.zip",
+				width: 586,
+				height: 385
+			},
+
+			{
+				name: "【winter】winter冬季恋歌皮肤",
+				src: "skins/winter.zip",
+				width: 350,
+				height: 520
+			},
+
+
+			{
+				name: "【psp】PSP外观皮肤",
+				src: "skins/psp.zip",
+				width: 820,
+				height: 342
+			},
+
+
+			{
+				name: "【exobud_plastic】框架横条皮肤，高度可自适应显示列表歌词视频",
+				src: "skins/exobud_plastic.zip",
+				width: 800,
+				height: 24
+			},
+
+			{
+				name: "【TV Live】电视直播专用皮肤，宽高可自适应",
+				src: "skins/mini/tvlive.zip",
+				width: 400,
+				height: 300
+			},
+			{
+				name: "【视频播放专用皮肤】[4:3]宽度和高度都可以自定义",
+				src: "skins/mini/vplayer.zip",
+				width: 400,
+				height: 300
+			},
+			{
+				name: "【视频播放专用皮肤】[16:9]宽度和高度都可以自定义",
+				src: "skins/mini/vplayer.zip",
+				width: 500,
+				height: 282
+			},
+			{
+				name: "【JW音乐播放皮肤】宽度和高度都可以自定义",
+				src: "skins/mini/jwplayer.zip",
+				width: 320,
+				height: 20
+			},
+			{
+				name: "【JW视频播放皮肤】[4:3]宽度和高度都可以自定义",
+				src: "skins/mini/jwplayer.zip",
+				width: 320,
+				height: 260
+			},
+			{
+				name: "【JW视频播放皮肤】[16:9]宽度和高度都可以自定义",
+				src: "skins/mini/jwplayer.zip",
+				width: 400,
+				height: 245
+			},
+			{
+				name: "【简蓝视频皮肤】[4:3]宽度和高度都可以自定义",
+				src: "skins/mini/blueplayer.zip",
+				width: 320,
+				height: 290
+			},
+			{
+				name: "【简蓝视频皮肤】[16:9]宽度和高度都可以自定义",
+				src: "skins/mini/blueplayer.zip",
+				width: 400,
+				height: 275
+			}
+		];
+
+		function addSkinList() {
+			var ss = $("skinSelect");
+			for (var i = 0; i < skins.length; i++) {
+				ss.options.add(new Option(skins[i].name, i));
+			}
+		}
+		addSkinList();
+
+		function updateSkin(o) {
+			if (o.value) {
+				var skin = skins[o.value];
+				$("cmp_width").value = skin.width;
+				$("cmp_height").value = skin.height;
+			} else {
+				$("cmp_width").value = "";
+				$("cmp_height").value = "";
+			}
+			update();
+		}
+
+		//============================================================================
+
+		function addM(m) {
+			var tr = document.createElement("tr");
+
+			var indexTd = document.createElement("td");
+			tr.appendChild(indexTd);
+
+			indexTd.innerHTML = m.index + 1;
+
+			//label
+			var labelTd = document.createElement("td");
+			tr.appendChild(labelTd);
+
+			var labelInput = document.createElement("input");
+			labelInput.style.width = "100%";
+			labelInput.onfocus = function () {
+				this.select();
+			};
+			labelInput.onchange = function () {
+				updateXml();
+			};
+			labelInput.className = "m_label";
+			labelInput.value = m.label;
+			labelTd.appendChild(labelInput);
+
+			//src
+			var srcTd = document.createElement("td");
+			srcTd.style.width = "48%";
+			tr.appendChild(srcTd);
+
+			var srcInput = document.createElement("input");
+			srcInput.style.width = "100%";
+			srcInput.onfocus = function () {
+				this.select();
+			};
+			srcInput.onchange = function () {
+				updateXml();
+			};
+			srcInput.className = "m_src";
+			srcInput.value = m.src;
+			srcTd.appendChild(srcInput);
+
+			//type
+
+			var typeTd = document.createElement("td");
+			tr.appendChild(typeTd);
+
+			var typeSelect = document.createElement("select");
+			typeTd.appendChild(typeSelect);
+
+			typeSelect.className = "m_type";
+			typeSelect.onchange = function () {
+				updateXml();
+			};
+
+			var cmp_types = '';
+			cmp_types += '<option value="">根据后缀自动识别</option>';
+			cmp_types += '<option value="sound">MP3音频</option>';
+			cmp_types += '<option value="video">FLV视频</option>';
+			cmp_types += '<option value="wmp">WMP类型</option>';
+			cmp_types += '<option value="flash">动画图片</option>';
+			typeSelect.innerHTML = cmp_types;
+
+			var exts = {
+				//声音
+				"1": "sound",
+				"mp3": "sound",
+				"rbs": "sound",
+				"sound": "sound",
+				//普通视频
+				"2": "video",
+				"flv": "video",
+				"mp4": "video",
+				"m4a": "video",
+				"3g2": "video",
+				"3gp": "video",
+				"aac": "video",
+				"f4b": "video",
+				"f4p": "video",
+				"f4v": "video",
+				"m4v": "video",
+				"mov": "video",
+				"sdp": "video",
+				"vp6": "video",
+				"video": "video",
+				//wmp格式
+				"3": "wmp",
+				"wma": "wmp",
+				"wmv": "wmp",
+				"asf": "wmp",
+				"asx": "wmp",
+				"mid": "wmp",
+				"wav": "wmp",
+				"mpg": "wmp",
+				"avi": "wmp",
+				"dat": "wmp",
+				"wmp": "wmp",
+				//动画
+				"4": "flash",
+				"swf": "flash",
+				"jpg": "flash",
+				"gif": "flash",
+				"png": "flash",
+				"image": "flash",
+				"flash": "flash",
+				//其他
+				"other": "other"
+			};
+
+			var ext = m.type ? exts[m.type] : "";
+			typeSelect.value = ext;
+
+			//lrc
+			var lrcTd = document.createElement("td");
+			tr.appendChild(lrcTd);
+
+			var lrcInput = document.createElement("input");
+			lrcInput.style.width = "100%";
+			lrcInput.onfocus = function () {
+				this.select();
+			};
+			lrcInput.onchange = function () {
+				updateXml();
+			};
+			lrcInput.className = "m_lrc";
+			lrcInput.value = m.lrc;
+			lrcTd.appendChild(lrcInput);
+
+
+			$("cmp_list_tbody").appendChild(tr);
+		}
+
+		function updateList() {
+
+			var list = $("cmp_list").value;
+			if (list) {
+
+				var div = document.createElement("div");
+				div.innerHTML = list;
+
+				var ms = div.querySelectorAll("m");
+				if (ms && ms.length) {
+
+					$("cmp_list_tbody").innerHTML = "";
+
+					for (var i = 0, l = ms.length; i < l; i++) {
+						var m = ms[i];
+						addM({
+							index: i,
+							label: m.getAttribute("label") || "",
+							src: m.getAttribute("src") || "",
+							type: m.getAttribute("type") || "",
+							lrc: m.getAttribute("lrc") || ""
+						});
+
+					}
+				}
+
+			}
+
+			var trs = $("cmp_list_tbody").querySelectorAll("tr");
+			if (trs && trs.length < 5) {
+				for (var i = trs.length; i < 5; i++) {
+					addNew();
+				}
+			}
+
+			update();
+		}
+
+
+		function updateXml() {
+
+			var ms = [];
+
+			var trs = $("cmp_list_tbody").querySelectorAll("tr");
+			if (trs && trs.length) {
+				for (var i = 0, l = trs.length; i < l; i++) {
+					var tr = trs[i];
+					var src = tr.querySelector(".m_src");
+					if (src && src.value) {
+						ms.push({
+							label: tr.querySelector(".m_label").value,
+							src: src.value,
+							type: tr.querySelector(".m_type").value,
+							lrc: tr.querySelector(".m_lrc").value
+						});
+					}
+				}
+
+			}
+
+			var xml = '<list>\n';
+			ms.forEach(function (m) {
+				var a = [];
+				for (var k in m) {
+					a.push(k + '="' + m[k] + '"');
+				}
+				xml += '  <m ' + a.join(" ") + ' />\n';
+			});
+			xml += "</list>";
+
+			$("cmp_list").onchange = null;
+
+			$("cmp_list").value = xml;
+
+			$("cmp_list").onchange = function () {
+				updateList();
+			};
+
+			update();
+
+		}
+
+		function addNew() {
+			addM({
+				index: $("cmp_list_tbody").querySelectorAll("tr").length,
+				label: "",
+				src: "",
+				type: "",
+				lrc: ""
+			});
+		}
+
+
+		$("cmp_bt_add").addEventListener("click", function () {
+
+			addNew();
+			updateXml();
+
+		});
+
+
+
+		//============================================================================
+		var cmpId = "cmp" + Math.random().toString().substring(2, 10);
+
+		function update() {
+			var vars = ["url=", "lists=", "context_menu=2"];
+			//取得设置
+			if ($("cmp_auto_play").checked) {
+				vars.push("auto_play=1");
+			}
+			if ($("cmp_play_mode").checked) {
+				vars.push("play_mode=1");
+			}
+			var bgcolor = $("cmp_bgcolor").value;
+			if (bgcolor) {
+				vars.push("bgcolor=" + encodeURIComponent(bgcolor));
+			}
+
+			//取得音乐地址
+			var list = $("cmp_list").value;
+			if (list) {
+				$("listErr").innerHTML = "";
+				vars.push("list=" + encodeURIComponent(list));
+			} else {
+				$("listErr").innerHTML = "音乐列表不能为空";
+				errorHandler();
+				return;
+			}
+
+			//取得皮肤
+			var index = $("skinSelect").value;
+			var skin = skins[index];
+			if (skin) {
+				$("skinErr").innerHTML = "";
+				vars.push("skin=" + encodeURIComponent(skin.src));
+			} else {
+				$("skinErr").innerHTML = "请选择一个皮肤";
+				errorHandler();
+				return;
+			}
+			//生成代码
+			//宽高
+			var cmpw = parseInt($("cmp_width").value || skin.width);
+			var cmph = parseInt($("cmp_height").value || skin.height);
+			//参数
+			var flashvars = vars.join("&");
+			//生成html地址
+			//取得MP主程序地址，也可以自定义为绝对路径，默认使用同级目录下的cmp.swf
+			var cmpUrl = getUrl("cmp.swf");
+
+			var paramsStr = '{}';
+			var paramsObj = {};
+			if ($("cmp_wmode").checked) {
+				paramsStr = '{wmode:"transparent"}';
+				paramsObj = {
+					wmode: "transparent"
+				};
+			}
+			var htm = getcmp(cmpId, cmpw, cmph, cmpUrl, flashvars, paramsObj);
+
+			var js = '<script type="text/javascript" src="' + getUrl("cmp.js") + '"><' +
+				'/script>\n';
+			js += '<script type="text/javascript">\n';
+			js += 'CMP.write("' + cmpId + '", "' + cmpw + '", "' + cmph + '", "' + cmpUrl + '", "' + flashvars + '", ' +
+				paramsStr + ');\n';
+			js += '<' + '/script>';
+
+			var url = cmpUrl + "?" + flashvars;
+
+			$("htmlcode").value = htm;
+			$("jscode").value = js;
+			$("ubbcode").value = "[flash=" + cmpw + "," + cmph + "]" + url + "[/flash]";
+			$("flashcode").value = url + "&.swf";
+			showPreview();
+		}
+
+		function errorHandler() {
+			$("flashcode").value = "";
+			$("ubbcode").value = "";
+			$("htmlcode").value = "";
+			showPreview();
+		}
+
+		var last_preview_code = "";
+
+		function showPreview() {
+			if ($("checkPreview").checked) {
+				var preview_code = $("htmlcode").value;
+				if (preview_code === last_preview_code) {
+					return;
+				}
+				last_preview_code = preview_code;
+				$("preview").innerHTML = preview_code;
+			} else {
+				last_preview_code = "";
+				$("preview").innerHTML = "";
+			}
+		}
+
+		function getcmp(id, w, h, url, flashvars, params) {
+			var _params = {
+				allowfullscreen: "true",
+				allowscriptaccess: "always",
+				flashvars: flashvars
+			};
+			if (params && typeof params === "object") {
+				for (var k in params) {
+					_params[k] = params[k];
+				}
+			}
+			var htm = '<object type="application/x-shockwave-flash" data="' + url + '" width="' + w + '" height="' + h +
+				'" id="' + id + '">\n';
+			htm += '<param name="movie" value="' + url + '" />\n';
+			for (var p in _params) {
+				htm += '<param name="' + p + '" value="' + _params[p] + '" />\n';
+			}
+			htm += '</object>';
+			return htm;
+		}
+
+
+		//============================================================================
+		function $(s) {
+			return document.getElementById(s);
+		}
+
+		function getUrl(url) {
+			var path = window.location.href.split("?")[0];
+			if (path.lastIndexOf("\\") != -1) {
+				path = path.slice(0, path.lastIndexOf("\\") + 1);
+			} else {
+				path = path.slice(0, path.lastIndexOf("/") + 1);
+			}
+			return path + url;
+		}
+
+		window.addEventListener("load", function () {
+			updateList();
+		})
+	</script>
+</body>
+
+</html>
